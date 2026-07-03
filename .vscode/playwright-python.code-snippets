@@ -1,0 +1,113 @@
+{
+  "Playwright UI test": {
+    "scope": "python",
+    "prefix": "pw-ui-test",
+    "description": "Create a UI test with case metadata, steps, skip, and values",
+    "body": [
+      "import pytest",
+      "from playwright.sync_api import expect",
+      "",
+      "from framework.pages.home_page import HomePage",
+      "from framework.reporting import TestLogger",
+      "",
+      "",
+      "@pytest.mark.ui",
+      "@pytest.mark.skip(reason=\"Pending exercise: complete the TODOs and remove this marker\")",
+      "@pytest.mark.case(\"${1:UI-000}\", \"${2:Observable behavior}\")",
+      "def test_${3:behavior}(home: HomePage, test_log: TestLogger) -> None:",
+      "    with test_log.step(\"${4:Perform the action}\"):",
+      "        ${5:pytest.fail(\"TODO: implement action\")}",
+      "",
+      "    with test_log.step(\"${6:Validate the result}\"):",
+      "        ${7:expect(home.hero_title).to_be_visible()}",
+      "        test_log.values(observed_value=${8:\"...\"}, expected_value=${9:\"...\"})"
+    ]
+  },
+  "Playwright API test": {
+    "scope": "python",
+    "prefix": "pw-api-test",
+    "description": "Create an API test with case metadata, steps, skip, and values",
+    "body": [
+      "import pytest",
+      "",
+      "from framework.api.lumbre_api import LumbreApi",
+      "from framework.reporting import TestLogger",
+      "",
+      "",
+      "@pytest.mark.api",
+      "@pytest.mark.skip(reason=\"Pending exercise: complete the TODOs and remove this marker\")",
+      "@pytest.mark.case(\"${1:API-000}\", \"${2:Observable contract}\")",
+      "def test_${3:api_behavior}(api: LumbreApi, test_log: TestLogger) -> None:",
+      "    with test_log.step(\"${4:Send the request}\"):",
+      "        response = ${5:api.health()}",
+      "",
+      "    with test_log.step(\"${6:Validate the contract}\"):",
+      "        observed_value = ${7:response[\"status\"]}",
+      "        expected_value = ${8:\"ok\"}",
+      "        test_log.values(observed_value=observed_value, expected_value=expected_value)",
+      "        assert observed_value == expected_value"
+    ]
+  },
+  "Playwright test step": {
+    "scope": "python",
+    "prefix": "pw-step",
+    "description": "Insert a test step with logging",
+    "body": [
+      "with test_log.step(\"${1:Describe the step}\"):",
+      "    ${2:pass}"
+    ]
+  },
+  "Playwright log values": {
+    "scope": "python",
+    "prefix": "pw-values",
+    "description": "Record observed and expected values",
+    "body": [
+      "test_log.values(",
+      "    observed_${1:value}=${2:actual},",
+      "    expected_${1:value}=${3:expected},",
+      ")"
+    ]
+  },
+  "Playwright visible assertion": {
+    "scope": "python",
+    "prefix": "pw-visible",
+    "description": "Web-first visibility assertion",
+    "body": [
+      "expect(${1:locator}).to_be_visible()"
+    ]
+  },
+  "Playwright negative visible assertion": {
+    "scope": "python",
+    "prefix": "pw-not-visible",
+    "description": "Web-first negative visibility assertion",
+    "body": [
+      "expect(${1:locator}).not_to_be_visible()"
+    ]
+  },
+  "Playwright text assertion": {
+    "scope": "python",
+    "prefix": "pw-text",
+    "description": "Web-first exact text assertion",
+    "body": [
+      "expect(${1:locator}).to_have_text(${2:expected_text})"
+    ]
+  },
+  "Playwright component object": {
+    "scope": "python",
+    "prefix": "pw-component",
+    "description": "Create a Component Object structure",
+    "body": [
+      "from __future__ import annotations",
+      "",
+      "from playwright.sync_api import Locator, Page",
+      "",
+      "",
+      "class ${1:ExampleComponent}:",
+      "    def __init__(self, page: Page) -> None:",
+      "        self.root = page.get_by_role(\"${2:region}\", name=\"${3:Component}\")",
+      "",
+      "    def item_named(self, name: str) -> Locator:",
+      "        return self.root.get_by_text(name, exact=True)"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "cSpell.words": [
+    "Lumbre",
+    "Pytest"
+  ],
+  "python.defaultInterpreterPath": "${workspaceFolder}/test-framework/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/test-framework"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.cwd": "${workspaceFolder}/test-framework",
+  "python.testing.pytestArgs": [
+    "tests"
+  ]
+}

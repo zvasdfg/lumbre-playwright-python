@@ -1,0 +1,17 @@
+from __future__ import annotations
+
+from playwright.sync_api import Locator, Page
+
+
+class ExampleComponent:
+    def __init__(self, page: Page) -> None:
+        self.root = page.get_by_role("region", name="Component")
+        self.action_button = self.root.get_by_role("button", name="Run")
+
+    def item_named(self, name: str) -> Locator:
+        return self.root.get_by_role("listitem").filter(
+            has=self.root.get_by_text(name, exact=True)
+        )
+
+    def execute(self) -> None:
+        self.action_button.click()

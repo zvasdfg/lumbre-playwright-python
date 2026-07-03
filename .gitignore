@@ -1,0 +1,34 @@
+.DS_Store
+.idea/
+
+# Shared VS Code learning configuration
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/playwright-python.code-snippets
+!.vscode/settings.json
+
+# Local working files and generated dependencies
+tmp/
+*.egg-info/
+
+portal/node_modules/
+portal/.next/
+portal/dist/
+portal/.wrangler/
+portal/.npm-cache/
+portal/.env*
+portal/.vinext/
+
+# Local design source files; runtime-ready assets live in portal/public/brand
+portal/Lumbre/
+
+# Deployment configuration is outside the current local-only workflow
+portal/.openai/
+render.yaml
+
+test-framework/.venv/
+test-framework/.env
+test-framework/**/__pycache__/
+test-framework/.pytest_cache/
+test-framework/test-results/

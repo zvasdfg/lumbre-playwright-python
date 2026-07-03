@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lumbre-e2e"
+version = "0.1.0"
+description = "Educational Playwright framework using Python and Page Object Model"
+requires-python = ">=3.11"
+dependencies = [
+  "playwright>=1.49,<2",
+  "pytest>=8,<10",
+  "pytest-html>=4.1,<5",
+  "pytest-playwright>=0.6,<1",
+  "python-dotenv>=1,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.9,<1",
+  "mypy>=1.14,<2",
+]
+
+[tool.setuptools.packages.find]
+include = ["framework*"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers --tracing=retain-on-failure --screenshot=only-on-failure"
+testpaths = ["tests"]
+markers = [
+  "case(case_id, behavior): test case identity and executable behavior documentation",
+  "smoke: fast critical-path coverage",
+  "ui: browser-based test",
+  "api: direct API test",
+  "regression: extended functional coverage",
+]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s | %(message)s"
+log_cli_date_format = "%H:%M:%S"
+generate_report_on_test = true
+render_collapsed = ""
+environment_table_redact_list = [
+  ".*TOKEN.*",
+  ".*PASSWORD.*",
+  ".*SECRET.*",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

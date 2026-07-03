@@ -1,0 +1,61 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Pytest: current file",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "cwd": "${workspaceFolder}/test-framework",
+      "args": [
+        "${file}",
+        "-q",
+        "-s"
+      ],
+      "env": {
+        "BASE_URL": "http://localhost:3000"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Playwright: current file headed",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "cwd": "${workspaceFolder}/test-framework",
+      "args": [
+        "${file}",
+        "-q",
+        "-s",
+        "--headed",
+        "--slowmo",
+        "300"
+      ],
+      "env": {
+        "BASE_URL": "http://localhost:3000"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Playwright: Inspector",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "cwd": "${workspaceFolder}/test-framework",
+      "args": [
+        "${file}",
+        "-q",
+        "-s",
+        "--headed"
+      ],
+      "env": {
+        "BASE_URL": "http://localhost:3000",
+        "PWDEBUG": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

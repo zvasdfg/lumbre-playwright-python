@@ -1,0 +1,28 @@
+import pytest
+
+from framework.api.lumbre_api import LumbreApi
+from framework.reporting import TestLogger
+
+
+@pytest.mark.api
+@pytest.mark.skip(reason="Pending exercise: complete the TODOs and remove this marker")
+@pytest.mark.case(
+    "API-000",
+    "Describe the observable API contract",
+)
+def test_descriptive_api_behavior(
+    api: LumbreApi,
+    test_log: TestLogger,
+) -> None:
+    with test_log.step("Send the request"):
+        # TODO: call a LumbreApi method.
+        response = api.health()
+
+    with test_log.step("Record and validate the contract"):
+        observed_value = response["status"]
+        expected_value = "ok"
+        test_log.values(
+            observed_value=observed_value,
+            expected_value=expected_value,
+        )
+        assert observed_value == expected_value

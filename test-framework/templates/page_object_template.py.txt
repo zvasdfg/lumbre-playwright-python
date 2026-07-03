@@ -1,0 +1,22 @@
+from __future__ import annotations
+
+from playwright.sync_api import Locator, Page
+
+from framework.pages.base_page import BasePage
+
+
+class ExamplePage(BasePage):
+    path = "/example"
+
+    def __init__(self, page: Page, base_url: str) -> None:
+        super().__init__(page, base_url)
+        self.primary_action = page.get_by_role("button", name="Primary action")
+        self.result = page.get_by_role("status")
+
+    def perform_primary_action(self) -> None:
+        self.primary_action.click()
+
+    def item_named(self, name: str) -> Locator:
+        return self.page.get_by_role("listitem").filter(
+            has=self.page.get_by_text(name, exact=True)
+        )

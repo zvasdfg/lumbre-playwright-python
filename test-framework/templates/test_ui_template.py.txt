@@ -1,0 +1,25 @@
+import pytest
+from playwright.sync_api import expect
+
+from framework.pages.home_page import HomePage
+from framework.reporting import TestLogger
+
+
+@pytest.mark.ui
+@pytest.mark.skip(reason="Pending exercise: complete the TODOs and remove this marker")
+@pytest.mark.case(
+    "UI-000",
+    "Describe an observable behavior",
+)
+def test_descriptive_behavior_name(
+    home: HomePage,
+    test_log: TestLogger,
+) -> None:
+    with test_log.step("Prepare or perform the action"):
+        # TODO: act through the Page Object or Component Object.
+        pytest.fail("Implement the scenario action")
+
+    with test_log.step("Validate the observable result"):
+        # TODO: use a Playwright web-first assertion.
+        expect(home.hero_title).to_be_visible()
+        test_log.values(observed_value="...", expected_value="...")
