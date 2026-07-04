@@ -230,15 +230,16 @@ def return_server_error(route: Route) -> None:
     route.fulfill(
         status=500,
         content_type="application/json",
-        body='{"error":"unexpected error"}',
+        body='{"error":"Internal server error"}',
     )
 
 
-page.route("**/api/recipes**", return_server_error)
+page.route("**/api/members", return_server_error)
 ```
 
-Register the route before the action that sends the request. Route mocking is
-planned for `ERR-001`; it is not yet part of the automated baseline.
+Register the route before the action that sends the request. `ERR-001` uses
+this technique to prove that an HTTP 500 keeps the membership form open,
+re-enables submission, preserves entered data, and displays useful feedback.
 
 ## 13. Component Object pattern
 

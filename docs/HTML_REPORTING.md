@@ -31,7 +31,7 @@ Open it on macOS:
 open test-framework/reports/lumbre-report.html
 ```
 
-The current complete suite produces 18 result rows and 34 UI step screenshots.
+The current complete suite produces 19 result rows and 39 UI step screenshots.
 Counts will change as tests and steps are added.
 
 ## Incremental updates
@@ -60,6 +60,10 @@ Arguments after `report-local.sh` are forwarded to Pytest:
 # One UI test file; UI-011 produces two parameterized executions
 ./scripts/report-local.sh \
   tests/ui/test_ui_011_membership_modal_closes.py
+
+# One route-mocking UI test with five step screenshots
+./scripts/report-local.sh \
+  tests/ui/test_err_001_membership_server_error.py
 
 # One parameterized variant; quote brackets in zsh
 ./scripts/report-local.sh \

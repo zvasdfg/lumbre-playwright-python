@@ -49,7 +49,7 @@ test-framework/
 │   └── config.py
 ├── tests/
 │   ├── api/             API-001 through API-006
-│   ├── ui/              UI-001 through UI-011
+│   ├── ui/              UI-001 through UI-011 and ERR-001
 │   └── conftest.py
 ├── templates/
 └── pyproject.toml
@@ -69,7 +69,7 @@ Responsibilities:
 Every scenario has its own file:
 
 ```text
-test_<layer>_<id>_<behavior>.py
+test_<case-family>_<id>_<behavior>.py
 ```
 
 Every test declares layer and traceability markers and requests `test_log`:
@@ -126,6 +126,13 @@ Run one file:
   tests/api/test_api_006_member_created_with_valid_data.py
 ```
 
+Run the network-mocking scenario:
+
+```bash
+./scripts/test-local.sh -q \
+  tests/ui/test_err_001_membership_server_error.py
+```
+
 Run a parameterized variant:
 
 ```bash
@@ -147,7 +154,8 @@ BASE_URL=http://localhost:3000 .venv/bin/pytest -q tests/ui
 open test-framework/reports/lumbre-report.html
 ```
 
-The HTML report is regenerated after each completed test and includes case ID,
+When Pytest is launched with the HTML options used by `report-local.sh`, the
+HTML report is regenerated after each completed test. It includes case ID,
 behavior, duration, logs, values, environment metadata, and final UI URL.
 Every completed UI step adds a viewport screenshot. A failed UI test also adds
 a full-page screenshot and a local link to `trace.zip`.

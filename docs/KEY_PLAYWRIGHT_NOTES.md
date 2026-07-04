@@ -255,6 +255,22 @@ Role, label, and text locators represent user-visible contracts. When product
 copy changes, update the affected expectations. Do not replace semantic
 locators with CSS merely to avoid legitimate maintenance.
 
+## 25. Register network routes before the triggering action
+
+`page.route()` changes how matching browser requests are handled. Register it
+before the click or submission that sends the request:
+
+```python
+page.route("**/api/members", return_membership_server_error)
+home.membership.submit()
+```
+
+`route.fulfill()` returns a synthetic response without reaching the real
+server. This is useful for deterministic UI handling of failures that would be
+slow, unsafe, or difficult to reproduce through the deployed API. Keep the
+mock setup and behavioral assertions in the test; keep form interactions in
+the relevant Page or Component Object.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)

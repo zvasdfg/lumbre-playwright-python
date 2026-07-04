@@ -22,12 +22,15 @@ POM_Automation/
 ## Current automated coverage
 
 - 6 API test files: `API-001` through `API-006`.
-- 11 UI test files: `UI-001` through `UI-011`.
-- 18 Pytest executions because `UI-011` has two parameterized variants.
+- 12 browser test files: `UI-001` through `UI-011`, plus the `ERR-001`
+  network-mocking scenario.
+- 19 Pytest executions because `UI-011` has two parameterized variants.
 - Chromium is the default browser.
 - Every test has case metadata, structured steps, and diagnostic values.
 - Every UI step automatically captures a viewport screenshot for the HTML report.
 - Failure diagnostics include a full-page screenshot and Playwright trace.
+- `ERR-001` uses `page.route()` and `route.fulfill()` to validate recoverable UI
+  behavior when membership registration receives HTTP 500.
 
 See [Test strategy and learning guide](docs/TEST_STRATEGY_AND_PLAYWRIGHT_GUIDE.md)
 for the complete inventory and risk matrix.

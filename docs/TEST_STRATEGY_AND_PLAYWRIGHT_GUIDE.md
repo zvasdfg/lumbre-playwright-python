@@ -31,8 +31,8 @@ values when they are part of the actual product contract.
 The suite currently contains:
 
 - 6 API test files: `API-001` through `API-006`;
-- 11 UI test files: `UI-001` through `UI-011`;
-- 17 test files and 18 Pytest executions;
+- 12 browser test files: `UI-001` through `UI-011`, plus `ERR-001`;
+- 18 test files and 19 Pytest executions;
 - one parameterized scenario, `UI-011`, with button and backdrop variants;
 - 3 smoke executions: `API-001`, `UI-001`, and `UI-004`;
 - Chromium as the installed/default browser;
@@ -40,9 +40,10 @@ The suite currently contains:
 - structured case, step, value, timing, and result logs;
 - a viewport screenshot after every UI step;
 - retained Playwright trace and full-page screenshot on UI failure;
-- a self-contained `pytest-html` report updated after every completed test.
+- a self-contained `pytest-html` report updated after every completed test when
+  the suite is launched through `report-local.sh`.
 
-The latest validated baseline is **18 passed**.
+The latest validated baseline is **19 passed**.
 
 ## 3. Strategy principles
 
@@ -263,7 +264,7 @@ Priority definitions:
 | UI-010 | Event reservation confirms the selected event | P1 | E2E | Automated |
 | UI-011 | Membership modal closes by button and backdrop | P2 | UI parameterized | Automated |
 | UI-012 | Keyboard-only navigation preserves critical flows | P1 | Accessibility | Backlog |
-| ERR-001 | Recipe API failure displays a useful recovery state | P1 | Route mocking | Backlog |
+| ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route mocking | Automated |
 | BROWSER-001 | Smoke suite passes in Firefox and WebKit | P2 | Cross-browser | Backlog |
 
 ## 8. Current test inventory
@@ -287,6 +288,7 @@ Priority definitions:
 | `test_ui_009_cart_total_multiple_products.py` | Multiple products, looped assertions, and total oracle |
 | `test_ui_010_event_reservation_confirmation.py` | Scoped dialog and reservation confirmation |
 | `test_ui_011_membership_modal_closes.py` | Pytest parametrization and equivalent close mechanisms |
+| `test_err_001_membership_server_error.py` | `page.route()`, HTTP 500 fulfillment, and recoverable form state |
 
 ## 9. Rules for new tests
 
@@ -412,6 +414,10 @@ From the project root:
   tests/ui/test_ui_011_membership_modal_closes.py \
   --headed --slowmo 500
 
+# Route mocking and recoverable UI behavior
+./scripts/test-local.sh -q \
+  tests/ui/test_err_001_membership_server_error.py
+
 # One parameterized variant; quote the node ID in zsh
 ./scripts/test-local.sh -q \
   'tests/ui/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-backdrop]'
@@ -443,10 +449,11 @@ Completed foundation:
 4. Component Objects for cart, membership, and event interactions.
 5. APIRequestContext for positive, negative, filtered, and POST contracts.
 6. Pytest parametrization through `UI-011`.
+7. Network interception and synthetic HTTP failures through `ERR-001`.
 
 Recommended next exercises:
 
-1. `ERR-001`: intercept `/api/recipes` and validate a useful recovery state.
+1. Extend `ERR-001` with `page.expect_request()` to validate method and payload.
 2. `UI-012`: complete a critical flow with keyboard-only interaction.
 3. `BROWSER-001`: install Firefox/WebKit and run the smoke marker in each.
 4. Add API event coverage before adding another long UI journey.
