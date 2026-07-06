@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { events, products, recipes, type FireEvent, type Product } from "../lib/data";
+import FirePlannerModal from "./fire-planner-modal";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
@@ -19,6 +20,7 @@ export default function ClubPortal() {
   const [cart, setCart] = useState<Product[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
+  const [firePlannerOpen, setFirePlannerOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<FireEvent | null>(null);
   const [toast, setToast] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -94,6 +96,7 @@ export default function ClubPortal() {
           <p className="hero-description">Prendas, herramientas y experiencias para quienes no sólo cocinan al fuego: viven alrededor de él.</p>
           <div className="hero-actions">
             <a className="button button-primary" href="#recetas">Explorar recetas</a>
+            <button className="button button-quiet planner-trigger" type="button" onClick={() => setFirePlannerOpen(true)}>Planear mi fuego <span>↗</span></button>
             <a className="button button-quiet" href="#agenda">Ver próximos fuegos <span>↗</span></a>
           </div>
           <div className="member-proof">
@@ -199,6 +202,10 @@ export default function ClubPortal() {
             </form>
           </section>
         </div>
+      )}
+
+      {firePlannerOpen && (
+        <FirePlannerModal onClose={() => setFirePlannerOpen(false)} />
       )}
 
       {selectedEvent && (

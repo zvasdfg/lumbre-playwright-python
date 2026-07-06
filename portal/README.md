@@ -38,7 +38,8 @@ separate portal terminal is not required when using `scripts/test-local.sh` or
 - Hero and Lumbre identity.
 - Recipe category filters and search.
 - Product catalog and client-side cart.
-- Club membership modal and validation.
+- Club membership modal, validation, autofocus, and keyboard navigation.
+- Fire planner modal with fuel calculation and recoverable form state.
 - Outdoor event selection and reservation confirmation.
 - Status messages for observable user feedback.
 

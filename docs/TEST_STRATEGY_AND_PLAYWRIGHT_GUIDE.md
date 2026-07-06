@@ -31,8 +31,8 @@ values when they are part of the actual product contract.
 The suite currently contains:
 
 - 6 API test files: `API-001` through `API-006`;
-- 12 browser test files: `UI-001` through `UI-011`, plus `ERR-001`;
-- 18 test files and 19 Pytest executions;
+- 14 browser test files: `UI-001` through `UI-013`, plus `ERR-001`;
+- 20 test files and 21 Pytest executions;
 - one parameterized scenario, `UI-011`, with button and backdrop variants;
 - 3 smoke executions: `API-001`, `UI-001`, and `UI-004`;
 - Chromium as the installed/default browser;
@@ -43,7 +43,7 @@ The suite currently contains:
 - a self-contained `pytest-html` report updated after every completed test when
   the suite is launched through `report-local.sh`.
 
-The latest validated baseline is **19 passed**.
+The latest validated baseline is **21 passed**.
 
 ## 3. Strategy principles
 
@@ -263,7 +263,8 @@ Priority definitions:
 | UI-009 | Cart totals multiple products correctly | P1 | UI | Automated |
 | UI-010 | Event reservation confirms the selected event | P1 | E2E | Automated |
 | UI-011 | Membership modal closes by button and backdrop | P2 | UI parameterized | Automated |
-| UI-012 | Keyboard-only navigation preserves critical flows | P1 | Accessibility | Backlog |
+| UI-012 | Fire planner recommends fuel for a direct-fire gathering | P1 | UI Component Object | Automated |
+| UI-013 | Membership form follows a logical keyboard focus order | P1 | Accessibility | Automated |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route mocking | Automated |
 | BROWSER-001 | Smoke suite passes in Firefox and WebKit | P2 | Cross-browser | Backlog |
 
@@ -288,6 +289,8 @@ Priority definitions:
 | `test_ui_009_cart_total_multiple_products.py` | Multiple products, looped assertions, and total oracle |
 | `test_ui_010_event_reservation_confirmation.py` | Scoped dialog and reservation confirmation |
 | `test_ui_011_membership_modal_closes.py` | Pytest parametrization and equivalent close mechanisms |
+| `test_ui_012_fire_planner_recommends_fuel.py` | New Component Object, scoped dialog controls, and fuel oracle |
+| `test_ui_013_membership_keyboard_focus_order.py` | Keyboard activation, sequential typing, Tab order, and focus assertion |
 | `test_err_001_membership_server_error.py` | `page.route()`, HTTP 500 fulfillment, and recoverable form state |
 
 ## 9. Rules for new tests
@@ -450,14 +453,16 @@ Completed foundation:
 5. APIRequestContext for positive, negative, filtered, and POST contracts.
 6. Pytest parametrization through `UI-011`.
 7. Network interception and synthetic HTTP failures through `ERR-001`.
+8. New product-component discovery and integration through `UI-012`.
+9. Keyboard activation, sequential typing, focus order, and DOM evaluation
+   through `UI-013`.
 
 Recommended next exercises:
 
 1. Extend `ERR-001` with `page.expect_request()` to validate method and payload.
-2. `UI-012`: complete a critical flow with keyboard-only interaction.
-3. `BROWSER-001`: install Firefox/WebKit and run the smoke marker in each.
-4. Add API event coverage before adding another long UI journey.
-5. Add CI only after the local suite and artifact policy are stable.
+2. `BROWSER-001`: install Firefox/WebKit and run the smoke marker in each.
+3. Add a focused API schema-validation exercise without duplicating UI risk.
+4. Add CI only after the local suite and artifact policy are stable.
 
 ## 13. Review checklist
 

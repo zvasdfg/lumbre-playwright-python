@@ -271,6 +271,34 @@ slow, unsafe, or difficult to reproduce through the deployed API. Keep the
 mock setup and behavioral assertions in the test; keep form interactions in
 the relevant Page or Component Object.
 
+## 26. Keyboard behavior should use keyboard actions
+
+When the interaction method is part of the risk, do not replace it with a
+mouse click or direct value assignment. `UI-013` uses `focus()`,
+`press("Enter")`, `press_sequentially()`, and `press("Tab")` to exercise the
+actual keyboard path. Use `expect(locator).to_be_focused()` to validate focus
+with Playwright's retry behavior.
+
+## 27. Focus logging and focus assertions are different operations
+
+Playwright Python does not provide `Locator.is_focused()`. When a boolean is
+useful in diagnostic logs, a one-time DOM read can compare the locator's node
+with `document.activeElement`:
+
+```python
+observed_focused = locator.evaluate(
+    "element => element === document.activeElement"
+)
+```
+
+This does not replace the web-first assertion:
+
+```python
+expect(locator).to_be_focused()
+```
+
+Use the DOM read as evidence and the assertion as the test verdict.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)

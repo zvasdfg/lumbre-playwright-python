@@ -17,6 +17,9 @@ In a Python file, type a prefix and press Tab:
 | `pw-visible` | Visibility assertion |
 | `pw-not-visible` | Negative visibility assertion |
 | `pw-text` | Exact text assertion |
+| `pw-fill` | Fill a form control through a locator |
+| `pw-select` | Select an option by its stable value |
+| `pw-dialog` | Scoped dialog and child-control locators |
 | `pw-component` | Component Object scaffold |
 
 Equivalent copyable files exist in `test-framework/templates/`.
@@ -64,6 +67,10 @@ locator.click()
 locator.fill("coliflor")
 locator.check()
 locator.select_option("intermedio")
+locator.focus()
+locator.press("Enter")
+locator.press_sequentially("Ana Parrilla")
+locator.press("Tab")
 page.goto("http://localhost:3000")
 ```
 
@@ -135,6 +142,20 @@ assert name_is_missing is True
 
 The JavaScript executes in the page and serializes its result back to Python.
 Prefer dedicated Playwright APIs whenever one exists.
+
+For diagnostic logging of focus, compare the located DOM node with the
+browser's current `document.activeElement`:
+
+```python
+observed_email_focused = home.membership.email_input.evaluate(
+    "element => element === document.activeElement"
+)
+expect(home.membership.email_input).to_be_focused()
+```
+
+The `evaluate()` call is a one-time read for diagnostics. The `expect()` call
+is the retrying assertion that determines the test result. Playwright Python
+does not expose `Locator.is_focused()`.
 
 ## 8. API GET and parsed JSON
 

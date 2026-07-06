@@ -37,6 +37,7 @@ test-framework/
 │   │   ├── cart_drawer.py
 │   │   ├── event_reservation_modal.py
 │   │   ├── events_section.py
+│   │   ├── fire_planner_modal.py
 │   │   ├── header.py
 │   │   └── membership_modal.py
 │   ├── pages/
@@ -49,7 +50,7 @@ test-framework/
 │   └── config.py
 ├── tests/
 │   ├── api/             API-001 through API-006
-│   ├── ui/              UI-001 through UI-011 and ERR-001
+│   ├── ui/              UI-001 through UI-013 and ERR-001
 │   └── conftest.py
 ├── templates/
 └── pyproject.toml
@@ -133,6 +134,21 @@ Run the network-mocking scenario:
   tests/ui/test_err_001_membership_server_error.py
 ```
 
+Run the fire-planner Component Object scenario:
+
+```bash
+./scripts/test-local.sh -q \
+  tests/ui/test_ui_012_fire_planner_recommends_fuel.py
+```
+
+Run the keyboard focus-order scenario:
+
+```bash
+./scripts/test-local.sh -q \
+  tests/ui/test_ui_013_membership_keyboard_focus_order.py \
+  --headed --slowmo 500
+```
+
 Run a parameterized variant:
 
 ```bash
@@ -194,6 +210,9 @@ cd test-framework
 | `pw-visible` | Visibility assertion |
 | `pw-not-visible` | Negative visibility assertion |
 | `pw-text` | Exact text assertion |
+| `pw-fill` | Fill a form control through a locator |
+| `pw-select` | Select an option by its stable value |
+| `pw-dialog` | Scoped dialog and child-control locators |
 | `pw-component` | Component Object scaffold |
 
 Scaffolds remain skipped until their TODOs are completed. Never remove the
@@ -205,3 +224,5 @@ Scaffolds remain skipped until their TODOs are completed. Never remove the
 - [Key Playwright notes](../docs/KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](../docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
 - [HTML reporting guide](../docs/HTML_REPORTING.md)
+- [UI-012 completed fire planner exercise](../docs/UI_012_FIRE_PLANNER_EXERCISE.md)
+- [UI-013 completed keyboard focus exercise](../docs/UI_013_KEYBOARD_FOCUS_EXERCISE.md)

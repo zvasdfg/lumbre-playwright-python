@@ -5,6 +5,7 @@ from playwright.sync_api import Locator, Page
 from framework.components.cart_drawer import CartDrawer
 from framework.components.event_reservation_modal import EventReservationModal
 from framework.components.events_section import EventsSection
+from framework.components.fire_planner_modal import FirePlannerModal
 from framework.components.header import Header
 from framework.components.membership_modal import MembershipModal
 from framework.pages.base_page import BasePage
@@ -24,6 +25,7 @@ class HomePage(BasePage):
         self.recipe_cards = page.get_by_test_id("recipe-card")
         self.recipe_search = page.get_by_placeholder("Buscar receta...")
         self.status_message = page.get_by_role("status")
+        self.fire_planner = FirePlannerModal(page)
 
     def filter_recipes(self, label: str) -> None:
         self.page.get_by_role("button", name=label, exact=True).click()
@@ -48,3 +50,12 @@ class HomePage(BasePage):
 
     def recipe_named(self, name: str) -> Locator:
         return self.recipe_cards.filter(has=self.page.get_by_role("heading", name=name))
+
+    def open_fire_planner(self) -> None:
+        self.page.get_by_role(
+            "button",
+            name="Planear mi fuego",
+        ).click()
+
+    def open_membership_with_keyboard(self) -> None:
+        self.header.open_membership_with_keyboard()

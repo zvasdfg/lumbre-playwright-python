@@ -46,3 +46,11 @@ class MembershipModal:
             self.close_by_backdrop()
         else:
             raise ValueError(f"Unknown close method: {method}")
+
+    def enter_name_and_move_to_email_with_keyboard(
+        self,
+        *,
+        member_name: str,
+    ) -> None:
+        self.name_input.press_sequentially(member_name)
+        self.name_input.press("Tab")

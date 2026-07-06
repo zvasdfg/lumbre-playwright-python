@@ -22,15 +22,18 @@ POM_Automation/
 ## Current automated coverage
 
 - 6 API test files: `API-001` through `API-006`.
-- 12 browser test files: `UI-001` through `UI-011`, plus the `ERR-001`
+- 14 browser test files: `UI-001` through `UI-013`, plus the `ERR-001`
   network-mocking scenario.
-- 19 Pytest executions because `UI-011` has two parameterized variants.
+- 20 test files and 21 Pytest executions because `UI-011` has two
+  parameterized variants.
 - Chromium is the default browser.
 - Every test has case metadata, structured steps, and diagnostic values.
 - Every UI step automatically captures a viewport screenshot for the HTML report.
 - Failure diagnostics include a full-page screenshot and Playwright trace.
 - `ERR-001` uses `page.route()` and `route.fulfill()` to validate recoverable UI
   behavior when membership registration receives HTTP 500.
+- `UI-012` models a fire-planner dialog through a dedicated Component Object.
+- `UI-013` validates keyboard activation, sequential typing, and focus order.
 
 See [Test strategy and learning guide](docs/TEST_STRATEGY_AND_PLAYWRIGHT_GUIDE.md)
 for the complete inventory and risk matrix.
@@ -98,6 +101,8 @@ Additional arguments are forwarded to Pytest:
 - [Key Playwright notes](docs/KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
 - [HTML reporting guide](docs/HTML_REPORTING.md)
+- [UI-012 fire planner exercise](docs/UI_012_FIRE_PLANNER_EXERCISE.md)
+- [UI-013 keyboard focus exercise](docs/UI_013_KEYBOARD_FOCUS_EXERCISE.md)
 - [Portal reference](portal/README.md)
 - [Framework reference](test-framework/README.md)
 

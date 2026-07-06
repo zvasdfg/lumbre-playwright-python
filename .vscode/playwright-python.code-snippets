@@ -92,6 +92,31 @@
       "expect(${1:locator}).to_have_text(${2:expected_text})"
     ]
   },
+  "Playwright fill input": {
+    "scope": "python",
+    "prefix": "pw-fill",
+    "description": "Fill a form control through a locator",
+    "body": [
+      "${1:locator}.fill(${2:value})"
+    ]
+  },
+  "Playwright select option": {
+    "scope": "python",
+    "prefix": "pw-select",
+    "description": "Select an option by its stable value",
+    "body": [
+      "${1:locator}.select_option(${2:value})"
+    ]
+  },
+  "Playwright scoped dialog": {
+    "scope": "python",
+    "prefix": "pw-dialog",
+    "description": "Create a dialog locator and scope a child control",
+    "body": [
+      "${1:dialog} = page.get_by_role(\"dialog\", name=${2:dialog_name})",
+      "${3:control} = ${1:dialog}.get_by_label(${4:label})"
+    ]
+  },
   "Playwright component object": {
     "scope": "python",
     "prefix": "pw-component",

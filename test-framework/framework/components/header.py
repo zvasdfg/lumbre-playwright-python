@@ -14,3 +14,7 @@ class Header:
 
     def open_cart(self) -> None:
         self.cart_button.click()
+
+    def open_membership_with_keyboard(self) -> None:
+        self.join_button.focus()
+        self.join_button.press("Enter")
