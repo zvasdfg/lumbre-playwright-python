@@ -1,0 +1,20 @@
+{
+  "descripcion": "Hoja seca de eneldo con notas verdes, anisadas y cítricas; especialmente útil para pescado, pollo y vegetales.",
+  "familia": "Hierba",
+  "origen": "Anethum graveolens, Mediterráneo y Asia occidental.",
+  "disponibilidad_mexico": "Media-alta; supermercados grandes, mercados y tiendas de especias.",
+  "granularidad_recomendada": "hoja seca 1–3 mm",
+  "granularidades_probadas": ["propuesta: hoja seca"],
+  "perfil_sensorial": {"salado": 0, "dulce": 2, "acido": 0, "amargo": 1, "umami": 0, "picante": 0, "ahumado": 0, "herbal": 5, "citrico": 2, "terroso": 1},
+  "compuestos_principales": ["carvona", "limoneno", "alfa-felandreno", "dill éter"],
+  "comportamiento_termico": {"liberacion_aromatica": "Se activa al triturarse e hidratarse.", "degradacion": "Sus notas verdes y anisadas disminuyen con calor alto prolongado.", "comentarios": "Preferir aplicación tardía o en marinada protegida."},
+  "compatibilidad": {"res": 2, "cerdo": 3, "pollo": 5, "cordero": 3, "pescado": 5, "mariscos": 5, "vegetales": 5},
+  "aporte": {"costra": 1, "bark": 1, "color": 2, "aroma": 5},
+  "dosificacion": {"minimo": "0.2 g/kg", "recomendado": "1 g/kg", "maximo": "3 g/kg"},
+  "estabilidad": {"humedad": "Mantener seco.", "luz": "Proteger de luz.", "oxidacion": "Cerrar inmediatamente.", "vida_util": "12 meses"},
+  "proveedores": ["Tiendas de especias y cereales", "Supermercados grandes"],
+  "bibliografia": [{"titulo": "Aromatic plants for meat applications", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002745/"}, {"titulo": "Utah State University: culinary herbs", "url": "https://extension.usu.edu/boxelder/files/CulinaryHerbalPresentationFINALPDF2.pdf"}],
+  "experimentos": [{"id": "eneldo_seco_baseline_v1", "estado": "propuesto", "objetivo": "Medir retención aromática en pescado y calabacita.", "hipotesis": "La aplicación al final conservará mejor las notas anisadas.", "metodo": ["Preparar control y dos tiempos de aplicación.", "Cocinar muestras equivalentes.", "Evaluar aroma anisado, cítrico y balance."], "variables_controladas": ["masa", "dosis", "temperatura", "tiempo de aplicación"], "metricas": ["anisado 0–5", "cítrico 0–5", "balance 0–5"]}],
+  "notas_laboratorio": "No confundir hoja de eneldo con semilla de eneldo: cambian intensidad y perfil.",
+  "estado": "documentado_sin_validar", "id": "eneldo_seco", "nombre": "eneldo seco"
+}

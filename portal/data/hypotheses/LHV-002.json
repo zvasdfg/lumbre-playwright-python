@@ -1,0 +1,144 @@
+{
+  "schema_version": 5,
+  "id": "LHV-002",
+  "firma": "LHV:ajo_granulado+ajonjoli_blanco+cebolla_granulada+sal_kosher+shiitake_seco",
+  "objetivo": "Vegetales a las brasas",
+  "componentes": [
+    {
+      "id": "ajonjoli_blanco",
+      "nombre": "ajonjoli blanco",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "cebolla_granulada",
+      "nombre": "cebolla granulada",
+      "familia": "Allium"
+    },
+    {
+      "id": "shiitake_seco",
+      "nombre": "shiitake seco",
+      "familia": "Umami"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    }
+  ],
+  "hipotesis": "Sésamo y shiitake aumentarán tostado y umami; ajo y cebolla ampliarán el fondo sabroso de los vegetales sin depender de dulzor.",
+  "formula": {
+    "level": "close",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección es una variación cercana de “SPG clásico”, pero faltan pimienta (1). Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: tostado mediante ajonjoli blanco (añade notas tostadas, color y profundidad de bark); umami mediante shiitake seco (añade intensidad sabrosa y persistencia).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "ajo o cebolla (2/1)"
+    ],
+    "missing_roles": [
+      "pimienta (1)"
+    ],
+    "additional_profiles": [
+      {
+        "role": "tostado",
+        "ingredients": [
+          "ajonjoli blanco"
+        ],
+        "contribution": "añade notas tostadas, color y profundidad de bark"
+      },
+      {
+        "role": "umami",
+        "ingredients": [
+          "shiitake seco"
+        ],
+        "contribution": "añade intensidad sabrosa y persistencia"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "umami",
+      "intensity": 3,
+      "ingredients": [
+        "ajonjoli blanco",
+        "ajo granulado",
+        "cebolla granulada",
+        "shiitake seco"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 2.2,
+      "ingredients": [
+        "shiitake seco"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.8,
+      "ingredients": [
+        "ajonjoli blanco",
+        "cebolla granulada"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Umami de sésamo y shiitake según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-VEGETALES-UMAMI",
+    "nombre": "Umami de sésamo y shiitake",
+    "fundamento": "Simply Asia describe una mezcla de sésamo, ajo, cebolla, jengibre y shiitake para vegetales rostizados o a la parrilla.",
+    "adaptacion": "Se omite jengibre porque aún no existe en el catálogo y se añade sal para controlar la base salina. Las proporciones son una hipótesis de laboratorio.",
+    "proporciones": [
+      {
+        "ingrediente_id": "ajonjoli_blanco",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "cebolla_granulada",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "shiitake_seco",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Simply Asia Umami Ramen Japanese Style Seasoning",
+        "url": "https://www.mccormick.com/products/simply-asia-r-umami-ramen-japanese-style-seasoning-2-62-oz"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.695Z"
+}

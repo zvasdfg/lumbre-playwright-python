@@ -1,0 +1,105 @@
+{
+  "schema_version": 5,
+  "id": "LHC-002",
+  "firma": "LHC:ajo_negro+romero+sal_kosher+semilla_mostaza",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "ajo_negro",
+      "nombre": "ajo negro",
+      "familia": "Allium"
+    },
+    {
+      "id": "semilla_mostaza",
+      "nombre": "semilla mostaza",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "romero",
+      "nombre": "romero",
+      "familia": "Hierba"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    }
+  ],
+  "hipotesis": "La selección es una variación cercana de “Base herbal con allium”, pero la evidencia consultada corresponde a Pollo al fuego directo o Vegetales a las brasas, no a Costra para res. Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: umami mediante ajo negro (añade intensidad sabrosa y persistencia); terroso mediante semilla mostaza (añade profundidad terrosa y especiada).",
+  "formula": {
+    "level": "close",
+    "formula_id": "herbal_allium",
+    "formula_name": "Base herbal con allium",
+    "conclusion": "La selección es una variación cercana de “Base herbal con allium”, pero la evidencia consultada corresponde a Pollo al fuego directo o Vegetales a las brasas, no a Costra para res. Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: umami mediante ajo negro (añade intensidad sabrosa y persistencia); terroso mediante semilla mostaza (añade profundidad terrosa y especiada).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "ajo o cebolla (1/1)",
+      "herbal (1/1)"
+    ],
+    "missing_roles": [
+      "objetivo respaldado: Pollo al fuego directo o Vegetales a las brasas"
+    ],
+    "additional_profiles": [
+      {
+        "role": "umami",
+        "ingredients": [
+          "ajo negro"
+        ],
+        "contribution": "añade intensidad sabrosa y persistencia"
+      },
+      {
+        "role": "terroso",
+        "ingredients": [
+          "semilla mostaza"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Montreal Chicken: garlic, onion, salt, pepper and herbs",
+        "url": "https://www.mccormick.com/products/mccormick-r-grill-mates-r-montreal-chicken-seasoning-2-75-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.3,
+      "ingredients": [
+        "ajo negro",
+        "romero"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.5,
+      "ingredients": [
+        "ajo negro"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.5,
+      "ingredients": [
+        "romero"
+      ]
+    },
+    {
+      "attribute": "umami",
+      "intensity": 1.5,
+      "ingredients": [
+        "ajo negro"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar una segunda muestra con la fórmula de referencia más cercana cuando exista.",
+    "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+    "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
+    "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia."
+  ],
+  "estado": "borrador",
+  "creado_en": "2026-07-13T21:02:59.542Z"
+}

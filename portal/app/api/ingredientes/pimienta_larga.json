@@ -1,0 +1,105 @@
+{
+  "descripcion": "Espiga seca de Piper longum con picor persistente, notas dulces, amaderadas y cálidas; más compleja que la pimienta negra.",
+  "familia": "Pimienta",
+  "origen": "India y sudeste de Asia.",
+  "disponibilidad_mexico": "Baja; importadores, tiendas especializadas y comercio electrónico.",
+  "granularidad_recomendada": "media recién molida; la espiga requiere molino robusto",
+  "granularidades_probadas": [
+    "propuesta: media",
+    "propuesta: fina"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 2,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 1,
+    "picante": 4,
+    "ahumado": 1,
+    "herbal": 1,
+    "citrico": 1,
+    "terroso": 4
+  },
+  "compuestos_principales": [
+    "piperina",
+    "piperlongumina",
+    "aceites esenciales",
+    "sesquiterpenos"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda abre la espiga y libera aroma lentamente.",
+    "degradacion": "La piperina resiste mejor que los volátiles; el calor largo reduce notas dulces.",
+    "comentarios": "Funciona en bark de cocción larga, con refuerzo final opcional."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 5,
+    "pescado": 3,
+    "mariscos": 2,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 2,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.5 g/kg",
+    "recomendado": "1.5 g/kg",
+    "maximo": "3 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "18 meses entera; 6 meses molida"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Safety aspects and occurrence of piperine",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8467119/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "pimienta_larga_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "A 1.5 g/kg producirá picor más largo y un bark más cálido que pimienta negra a igual masa.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Su disponibilidad y potencia varían por lote; comparar contra pimienta negra con dosis menores.",
+  "estado": "documentado_sin_validar",
+  "id": "pimienta_larga",
+  "nombre": "pimienta larga"
+}

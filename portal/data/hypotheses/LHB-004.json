@@ -1,0 +1,157 @@
+{
+  "schema_version": 5,
+  "id": "LHB-004",
+  "firma": "LHB:ajo_granulado+azucar_morena+chile_arbol+comino+paprika_ahumada+sal_kosher",
+  "objetivo": "Bark para cocción lenta",
+  "componentes": [
+    {
+      "id": "azucar_morena",
+      "nombre": "azúcar morena",
+      "familia": "Endulzante"
+    },
+    {
+      "id": "paprika_ahumada",
+      "nombre": "paprika ahumada",
+      "familia": "Chile"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "comino",
+      "nombre": "comino",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "chile_arbol",
+      "nombre": "chile arbol",
+      "familia": "Chile"
+    }
+  ],
+  "hipotesis": "La base dulce-ahumada desarrollará color, mientras comino y chile de árbol añadirán un final terroso y picante para cortar el dulzor.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "sweet_smoky_rub",
+    "formula_name": "Rub dulce-ahumado",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “Rub dulce-ahumado” (base salina + endulzante + ahumado). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: chile mediante paprika ahumada, chile arbol (añade picor, color y notas de Capsicum); ajo o cebolla mediante ajo granulado (añade profundidad sulfurada y notas sabrosas); terroso mediante comino (añade profundidad terrosa y especiada).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "endulzante (1/1)",
+      "ahumado (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika ahumada",
+          "chile arbol"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      },
+      {
+        "role": "ajo o cebolla",
+        "ingredients": [
+          "ajo granulado"
+        ],
+        "contribution": "añade profundidad sulfurada y notas sabrosas"
+      },
+      {
+        "role": "terroso",
+        "ingredients": [
+          "comino"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Sweet & Smoky Rub: salt, sugar, chipotle, paprika, garlic and onion",
+        "url": "https://www.mccormick.com/products/mccormick-r-grill-mates-r-sweet-smoky-rub-5-37-oz"
+      },
+      {
+        "title": "McCormick Brown Sugar Bourbon: salt, brown sugar, garlic, onion and spices",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-brown-sugar-bourbon-seasoning-3-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.3,
+      "ingredients": [
+        "comino"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 2,
+      "ingredients": [
+        "azúcar morena",
+        "paprika ahumada"
+      ]
+    },
+    {
+      "attribute": "picante",
+      "intensity": 1.7,
+      "ingredients": [
+        "chile arbol"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Bark dulce, especiado y picante según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-BARK-DULCE-PICANTE",
+    "nombre": "Bark dulce, especiado y picante",
+    "fundamento": "Weber documenta una mezcla de costillas con azúcar morena, paprika ahumada, sal, ajo, comino, pimienta y cayena.",
+    "adaptacion": "Cebolla y pimienta se omiten por el límite de seis componentes; chile de árbol representa el papel de la cayena. Las partes son un punto de partida proporcional.",
+    "proporciones": [
+      {
+        "ingrediente_id": "azucar_morena",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "paprika_ahumada",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "comino",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "chile_arbol",
+        "partes": 0.5
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Sweet and Spicy BBQ Pork Ribs",
+        "url": "https://www.weber.com/AU/en/recipes/pork/sweet-and-spicy-bbq-pork-ribs/weber-190519.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.675Z"
+}

@@ -1,0 +1,20 @@
+{
+  "descripcion": "Hoja seca de salvia, resinosa, alcanforada y robusta; combina especialmente con cerdo, pollo y vegetales dulces.",
+  "familia": "Hierba",
+  "origen": "Salvia officinalis, Mediterráneo; cultivada globalmente.",
+  "disponibilidad_mexico": "Media-alta; supermercados, mercados y tiendas de especias.",
+  "granularidad_recomendada": "hoja frotada 1–3 mm",
+  "granularidades_probadas": ["propuesta: hoja frotada"],
+  "perfil_sensorial": {"salado": 0, "dulce": 1, "acido": 0, "amargo": 3, "umami": 0, "picante": 1, "ahumado": 0, "herbal": 5, "citrico": 0, "terroso": 4},
+  "compuestos_principales": ["tuyona", "alcanfor", "1,8-cineol", "borneol"],
+  "comportamiento_termico": {"liberacion_aromatica": "Sus aceites robustos toleran calor moderado mejor que hierbas delicadas.", "degradacion": "El contacto directo prolongado puede producir amargor y notas medicinales.", "comentarios": "Usar poca cantidad y evitar fragmentos expuestos a llama."},
+  "compatibilidad": {"res": 3, "cerdo": 5, "pollo": 5, "cordero": 4, "pescado": 2, "mariscos": 2, "vegetales": 5},
+  "aporte": {"costra": 1, "bark": 3, "color": 2, "aroma": 5},
+  "dosificacion": {"minimo": "0.1 g/kg", "recomendado": "0.6 g/kg", "maximo": "2 g/kg"},
+  "estabilidad": {"humedad": "Mantener seca.", "luz": "Conservar en oscuridad.", "oxidacion": "Usar envase hermético.", "vida_util": "18 meses"},
+  "proveedores": ["Tiendas de especias y cereales", "Supermercados grandes"],
+  "bibliografia": [{"titulo": "Aromatic plants for meat applications", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002745/"}, {"titulo": "Culinary herb volatilomic profiles", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12072151/"}],
+  "experimentos": [{"id": "salvia_seca_baseline_v1", "estado": "propuesto", "objetivo": "Definir dosis antes de notas medicinales en cerdo.", "hipotesis": "0.6 g/kg dará carácter herbal reconocible con amargor bajo.", "metodo": ["Preparar control y tres dosis.", "Cocinar muestras equivalentes.", "Evaluar herbal, alcanforado, medicinal y balance."], "variables_controladas": ["masa", "dosis", "temperatura"], "metricas": ["herbal 0–5", "medicinal 0–5", "amargor 0–5", "balance 0–5"]}],
+  "notas_laboratorio": "Hierba robusta: no combinar inicialmente con varias hierbas igualmente dominantes.",
+  "estado": "documentado_sin_validar", "id": "salvia_seca", "nombre": "salvia seca"
+}

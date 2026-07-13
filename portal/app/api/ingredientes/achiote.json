@@ -1,0 +1,20 @@
+{
+  "descripcion": "Semilla de achiote molida; aporta color rojo-anaranjado, perfil terroso suave y una identidad especialmente relevante para la cocina mexicana.",
+  "familia": "Semilla_aromatica",
+  "origen": "Bixa orellana, nativa de los neotrópicos; cultivada en Yucatán y Quintana Roo.",
+  "disponibilidad_mexico": "Alta; mercados, tiendas de especias, molinos y presentaciones en semilla o polvo.",
+  "granularidad_recomendada": "polvo fino o semilla hidratada y molida",
+  "granularidades_probadas": ["propuesta: polvo fino", "propuesta: semilla molida"],
+  "perfil_sensorial": {"salado": 0, "dulce": 1, "acido": 0, "amargo": 2, "umami": 1, "picante": 0, "ahumado": 0, "herbal": 1, "citrico": 0, "terroso": 4},
+  "compuestos_principales": ["bixina", "norbixina", "carotenoides", "tocotrienoles"],
+  "comportamiento_termico": {"liberacion_aromatica": "Los pigmentos se dispersan bien en grasa; la molienda facilita extracción.", "degradacion": "Luz, oxígeno y calor prolongado degradan carotenoides.", "comentarios": "La semilla entera es dura; moler correctamente o usar polvo trazable."},
+  "compatibilidad": {"res": 4, "cerdo": 5, "pollo": 5, "cordero": 3, "pescado": 5, "mariscos": 5, "vegetales": 5},
+  "aporte": {"costra": 3, "bark": 4, "color": 5, "aroma": 3},
+  "dosificacion": {"minimo": "0.5 g/kg", "recomendado": "2 g/kg", "maximo": "6 g/kg"},
+  "estabilidad": {"humedad": "Mantener seco.", "luz": "Proteger de luz.", "oxidacion": "Usar envase hermético.", "vida_util": "18 meses en semilla; 12 meses molido"},
+  "proveedores": ["Mercados y molinos en México", "Tiendas de especias y cereales"],
+  "bibliografia": [{"titulo": "SNICS: Achiote (Bixa orellana L.)", "url": "https://www.gob.mx/snics/acciones-y-programas/achiote-bixa-orellana-l"}, {"titulo": "Bixa orellana chemical constituents review", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4094728/"}],
+  "experimentos": [{"id": "achiote_baseline_v1", "estado": "propuesto", "objetivo": "Relacionar dosis con color y terrosidad en pollo y cerdo.", "hipotesis": "2 g/kg dará color evidente con perfil terroso equilibrado.", "metodo": ["Preparar control y tres dosis.", "Aplicar a muestras equivalentes.", "Evaluar color, terroso, amargor y adhesión."], "variables_controladas": ["masa", "dosis", "molienda", "temperatura"], "metricas": ["color 0–5", "terroso 0–5", "amargor 0–5", "adhesión 0–5"]}],
+  "notas_laboratorio": "No confundir achiote puro con recado rojo comercial, que contiene otras especias y acidulantes.",
+  "estado": "documentado_sin_validar", "id": "achiote", "nombre": "achiote"
+}

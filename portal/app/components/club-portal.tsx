@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { events, products, recipes, type FireEvent, type Product } from "../lib/data";
 import FirePlannerModal from "./fire-planner-modal";
+import IngredientLab from "./ingredient-lab";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
@@ -78,6 +79,7 @@ export default function ClubPortal() {
         <nav aria-label="Navegación principal">
           <a href="#club">El club</a>
           <a href="#recetas">Recetas</a>
+          <a href="#laboratorio">Laboratorio</a>
           <a href="#tienda">Tienda</a>
           <a href="#agenda">Agenda</a>
         </nav>
@@ -151,8 +153,10 @@ export default function ClubPortal() {
         ) : <p className="empty-state">No encontramos recetas con esos criterios. Prueba otra búsqueda.</p>}
       </section>
 
+      <IngredientLab />
+
       <section className="shop-section" id="tienda">
-        <div className="shop-heading"><p className="section-index">03 — LUMBRE SUPPLY</p><h2>Equipo de fuego.<br />Hecho para durar.</h2><p>Prendas y herramientas diseñadas para ensuciarse, resistir el calor y vivir afuera.</p></div>
+        <div className="shop-heading"><p className="section-index">04 — LUMBRE SUPPLY</p><h2>Equipo de fuego.<br />Hecho para durar.</h2><p>Prendas y herramientas diseñadas para ensuciarse, resistir el calor y vivir afuera.</p></div>
         <div className="product-grid">
           {products.map((product) => (
             <article className="product-card" key={product.id}>
@@ -168,7 +172,7 @@ export default function ClubPortal() {
       </section>
 
       <section className="events-section" id="agenda">
-        <div className="section-heading events-heading"><div><p className="section-index">04 — PRÓXIMOS FUEGOS</p><h2>Nos vemos<br />afuera.</h2></div><p>Talleres pequeños, cenas largas y espacios para equivocarnos juntos.</p></div>
+        <div className="section-heading events-heading"><div><p className="section-index">05 — PRÓXIMOS FUEGOS</p><h2>Nos vemos<br />afuera.</h2></div><p>Talleres pequeños, cenas largas y espacios para equivocarnos juntos.</p></div>
         <div className="event-list">
           {events.map((item) => (
             <article className="event-row" key={item.id}>
@@ -183,8 +187,8 @@ export default function ClubPortal() {
 
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
-        <div><p>Explora</p><a href="#recetas">Recetas</a><a href="#tienda">Tienda</a><a href="#agenda">Agenda</a></div>
-        <div><p>Comunidad</p><button type="button" onClick={() => setJoinOpen(true)}>Membresía</button><a href="/api/health">Estado del API</a><a href="/api/recipes">API de recetas</a></div>
+        <div><p>Explora</p><a href="#recetas">Recetas</a><a href="#laboratorio">Laboratorio</a><a href="#tienda">Tienda</a><a href="#agenda">Agenda</a></div>
+        <div><p>Comunidad</p><button type="button" onClick={() => setJoinOpen(true)}>Membresía</button><a href="/api/health">Estado del API</a><a href="/api/recipes">API de recetas</a><a href="/api/ingredientes">API de ingredientes</a></div>
         <small>© 2026 Lumbre · Diseñado alrededor del fuego en México.</small>
       </footer>
 

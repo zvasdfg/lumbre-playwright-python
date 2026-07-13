@@ -20,6 +20,9 @@ portal/.npm-cache/
 portal/.env*
 portal/.vinext/
 
+# Imported ingredient catalog archive; editable JSON sources are versioned instead
+portal/app/api/base_conocimiento_lumbre_ingredientes_v0_2.zip
+
 # Local design source files; runtime-ready assets live in portal/public/brand
 portal/Lumbre/
 

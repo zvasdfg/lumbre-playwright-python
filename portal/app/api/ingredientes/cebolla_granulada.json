@@ -1,0 +1,105 @@
+{
+  "descripcion": "Cebolla deshidratada en gránulos, dulce y sulfurada; aporta cuerpo, tostado y base aromática a rubs.",
+  "familia": "Allium",
+  "origen": "Allium cepa cultivada globalmente; deshidratada.",
+  "disponibilidad_mexico": "Alta; supermercados y proveedores de especias.",
+  "granularidad_recomendada": "gránulo 0.5–1.5 mm",
+  "granularidades_probadas": [
+    "propuesta: granulado",
+    "propuesta: polvo"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 3,
+    "acido": 0,
+    "amargo": 1,
+    "umami": 3,
+    "picante": 1,
+    "ahumado": 0,
+    "herbal": 1,
+    "citrico": 0,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "S-óxidos de cisteína",
+    "tiosulfinatos",
+    "azúcares reductores",
+    "pirazinas"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Se rehidrata y libera azúcares y precursores sulfurados.",
+    "degradacion": "Carameliza y participa en Maillard; se carboniza si queda expuesta a fuego muy alto.",
+    "comentarios": "El gránulo tolera mejor fuego directo que el polvo fino."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 4,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "2 g/kg",
+    "recomendado": "5 g/kg",
+    "maximo": "9 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener seco y hermético; la humedad causa apelmazamiento y pérdida de calidad.",
+    "luz": "Guardar en oscuridad para proteger color y volátiles.",
+    "oxidacion": "Minimizar aire y moler cerca del uso.",
+    "vida_util": "18 meses"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Influences of spices on food flavor",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10137762/"
+    },
+    {
+      "titulo": "Home Drying Foods: heat and light affect dried-food quality",
+      "url": "https://extension.usu.edu/preserve-the-harvest/research/home-drying-foods"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "cebolla_granulada_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y momento de aplicación en cocción a las brasas.",
+      "hipotesis": "El gránulo a 5 g/kg desarrollará dulzor tostado y mejor bark que el polvo a igual masa.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Revisar etiqueta: algunas mezclas comerciales añaden sal o antiaglomerantes.",
+  "estado": "documentado_sin_validar",
+  "id": "cebolla_granulada",
+  "nombre": "cebolla granulada"
+}

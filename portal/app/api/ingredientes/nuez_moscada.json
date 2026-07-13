@@ -1,0 +1,20 @@
+{
+  "descripcion": "Semilla de Myristica fragrans rallada o molida; perfil cálido, amaderado, dulce y ligeramente alcanforado.",
+  "familia": "Especia_calida",
+  "origen": "Islas Molucas; cultivada también en el Caribe y otras regiones tropicales.",
+  "disponibilidad_mexico": "Alta; entera o molida en supermercados, mercados y tiendas de especias.",
+  "granularidad_recomendada": "recién rallada o polvo fino",
+  "granularidades_probadas": ["propuesta: entera recién rallada", "propuesta: molida"],
+  "perfil_sensorial": {"salado": 0, "dulce": 3, "acido": 0, "amargo": 2, "umami": 0, "picante": 2, "ahumado": 0, "herbal": 2, "citrico": 1, "terroso": 4},
+  "compuestos_principales": ["sabinene", "alfa-pineno", "beta-pineno", "mirceno", "miristicina"],
+  "comportamiento_termico": {"liberacion_aromatica": "La grasa y el calor moderado liberan sus aceites esenciales.", "degradacion": "El molido y el calor prolongado aceleran la pérdida de volátiles.", "comentarios": "Usar en dosis muy baja; domina rápidamente mezclas para carne o vegetales."},
+  "compatibilidad": {"res": 3, "cerdo": 5, "pollo": 4, "cordero": 4, "pescado": 2, "mariscos": 2, "vegetales": 5},
+  "aporte": {"costra": 1, "bark": 2, "color": 1, "aroma": 5},
+  "dosificacion": {"minimo": "0.05 g/kg", "recomendado": "0.25 g/kg", "maximo": "0.7 g/kg"},
+  "estabilidad": {"humedad": "Mantener seca.", "luz": "Proteger de luz.", "oxidacion": "Preferir semilla entera y rallar al uso.", "vida_util": "24 meses entera; 12 meses molida"},
+  "proveedores": ["Supermercados", "Mercados y tiendas de especias en México"],
+  "bibliografia": [{"titulo": "Spice phenolic compounds review", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11591358/"}],
+  "experimentos": [{"id": "nuez_moscada_baseline_v1", "estado": "propuesto", "objetivo": "Definir el umbral aromático en cerdo y vegetales.", "hipotesis": "0.25 g/kg será reconocible sin dominar.", "metodo": ["Rallar y pesar tres dosis.", "Cocinar muestras equivalentes.", "Evaluar reconocimiento, calidez y balance."], "variables_controladas": ["masa", "dosis", "frescura", "temperatura"], "metricas": ["aroma 0–5", "calidez 0–5", "balance 0–5"]}],
+  "notas_laboratorio": "La dosificación propuesta es culinaria y conservadora; evitar concentraciones altas.",
+  "estado": "documentado_sin_validar", "id": "nuez_moscada", "nombre": "nuez moscada"
+}

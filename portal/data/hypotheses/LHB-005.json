@@ -1,0 +1,172 @@
+{
+  "schema_version": 5,
+  "id": "LHB-005",
+  "firma": "LHB:ajo_granulado+azucar_morena+cafe_molido+paprika_ahumada+pimienta_negra+sal_kosher",
+  "objetivo": "Bark para cocción lenta",
+  "componentes": [
+    {
+      "id": "cafe_molido",
+      "nombre": "cafe molido",
+      "familia": "Tostado"
+    },
+    {
+      "id": "azucar_morena",
+      "nombre": "azúcar morena",
+      "familia": "Endulzante"
+    },
+    {
+      "id": "paprika_ahumada",
+      "nombre": "paprika ahumada",
+      "familia": "Chile"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    }
+  ],
+  "hipotesis": "El café profundizará el color y el tostado; azúcar y paprika formarán el eje dulce-ahumado, equilibrado por sal, pimienta y ajo.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: tostado mediante cafe molido (añade notas tostadas, color y profundidad de bark); endulzante mediante azúcar morena (añade dulzor, color y potencial de caramelización); ahumado mediante paprika ahumada (añade humo, color y carácter de cocción lenta); chile mediante paprika ahumada (añade picor, color y notas de Capsicum).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "tostado",
+        "ingredients": [
+          "cafe molido"
+        ],
+        "contribution": "añade notas tostadas, color y profundidad de bark"
+      },
+      {
+        "role": "endulzante",
+        "ingredients": [
+          "azúcar morena"
+        ],
+        "contribution": "añade dulzor, color y potencial de caramelización"
+      },
+      {
+        "role": "ahumado",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade humo, color y carácter de cocción lenta"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.3,
+      "ingredients": [
+        "cafe molido",
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 2.2,
+      "ingredients": [
+        "azúcar morena",
+        "paprika ahumada"
+      ]
+    },
+    {
+      "attribute": "ahumado",
+      "intensity": 1.7,
+      "ingredients": [
+        "cafe molido",
+        "paprika ahumada"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.5,
+      "ingredients": [
+        "cafe molido"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Bark de café para costillas según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-BARK-CAFE",
+    "nombre": "Bark de café para costillas",
+    "fundamento": "Weber publica estos seis componentes y sus cantidades como rub para baby back ribs cocinadas durante varias horas.",
+    "adaptacion": "No se omiten ni sustituyen componentes. Las partes convierten las cantidades a medias cucharaditas para conservar incluso el ajo de 1/2 cucharadita.",
+    "proporciones": [
+      {
+        "ingrediente_id": "cafe_molido",
+        "partes": 12
+      },
+      {
+        "ingrediente_id": "azucar_morena",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "paprika_ahumada",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 4
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Coffee-Rubbed Ribs",
+        "url": "https://www.weber.com/US/en/recipes/pork/coffee-rubbed-ribs/weber-12514.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.090Z"
+}

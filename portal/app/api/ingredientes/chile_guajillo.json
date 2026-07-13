@@ -1,0 +1,105 @@
+{
+  "descripcion": "Chile mirasol seco de picor medio-bajo, rojo brillante, frutal y ligeramente ácido con notas de té.",
+  "familia": "Chile",
+  "origen": "México; Capsicum annuum secado.",
+  "disponibilidad_mexico": "Alta en México; mercados, molinos y supermercados.",
+  "granularidad_recomendada": "polvo medio o pasta colada",
+  "granularidades_probadas": [
+    "propuesta: polvo medio",
+    "propuesta: pasta hidratada"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 2,
+    "acido": 2,
+    "amargo": 2,
+    "umami": 1,
+    "picante": 3,
+    "ahumado": 1,
+    "herbal": 1,
+    "citrico": 2,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "capsaicinoides",
+    "capsantina",
+    "capsorrubina",
+    "volátiles frutales"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Hidratado libera color y notas frutales; en polvo se integra en rub.",
+    "degradacion": "El calor alto prolongado oscurece pigmentos y puede volver amarga la piel.",
+    "comentarios": "Para pasta, retirar tallo y semillas, hidratar y colar; para rub, moler sin quemar."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 4,
+    "color": 5,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "2 g/kg",
+    "recomendado": "5 g/kg",
+    "maximo": "10 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener seco y hermético; la humedad causa apelmazamiento y pérdida de calidad.",
+    "luz": "Guardar en oscuridad para proteger color y volátiles.",
+    "oxidacion": "Minimizar aire y moler cerca del uso.",
+    "vida_util": "12 meses entero; 6 meses molido"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Thermal drying and red-pepper aroma",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11245976/"
+    },
+    {
+      "titulo": "Home Drying Foods: heat and light affect dried-food quality",
+      "url": "https://extension.usu.edu/preserve-the-harvest/research/home-drying-foods"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "chile_guajillo_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y momento de aplicación en cocción a las brasas.",
+      "hipotesis": "A 5 g/kg aportará rojo y fruta al pollo con picor más limpio que chile ancho.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Comparar polvo y pasta como tratamientos distintos por su agua y adhesión.",
+  "estado": "documentado_sin_validar",
+  "id": "chile_guajillo",
+  "nombre": "chile guajillo"
+}

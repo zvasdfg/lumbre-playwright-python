@@ -1,0 +1,20 @@
+{
+  "descripcion": "Botón floral seco de clavo; extremadamente aromático, cálido, dulce, fenólico y ligeramente anestésico.",
+  "familia": "Especia_calida",
+  "origen": "Syzygium aromaticum, originario de las Molucas y cultivado en regiones tropicales.",
+  "disponibilidad_mexico": "Alta; entero o molido en mercados y tiendas de especias.",
+  "granularidad_recomendada": "molido fino inmediatamente antes del uso",
+  "granularidades_probadas": ["propuesta: entero molido al momento", "propuesta: polvo"],
+  "perfil_sensorial": {"salado": 0, "dulce": 4, "acido": 0, "amargo": 3, "umami": 0, "picante": 3, "ahumado": 0, "herbal": 2, "citrico": 0, "terroso": 4},
+  "compuestos_principales": ["eugenol", "acetato de eugenilo", "beta-cariofileno"],
+  "comportamiento_termico": {"liberacion_aromatica": "El calor moderado libera eugenol con rapidez.", "degradacion": "El molido, aire y calor prolongado reducen volátiles y pueden acentuar amargor.", "comentarios": "Trabajar en décimas de gramo; es un acento, no una base."},
+  "compatibilidad": {"res": 2, "cerdo": 5, "pollo": 3, "cordero": 4, "pescado": 1, "mariscos": 1, "vegetales": 3},
+  "aporte": {"costra": 1, "bark": 3, "color": 2, "aroma": 5},
+  "dosificacion": {"minimo": "0.02 g/kg", "recomendado": "0.1 g/kg", "maximo": "0.35 g/kg"},
+  "estabilidad": {"humedad": "Mantener seco.", "luz": "Conservar en oscuridad.", "oxidacion": "Preferir entero y hermético.", "vida_util": "24 meses entero; 12 meses molido"},
+  "proveedores": ["Mercados", "Tiendas de especias y cereales en México"],
+  "bibliografia": [{"titulo": "Clove composition and eugenol review", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11591358/"}],
+  "experimentos": [{"id": "clavo_olor_baseline_v1", "estado": "propuesto", "objetivo": "Encontrar una dosis de fondo para bark de cerdo.", "hipotesis": "0.1 g/kg añadirá calidez sin sabor medicinal dominante.", "metodo": ["Moler clavo entero.", "Preparar control y microdosis.", "Evaluar aroma, carácter fenólico y balance."], "variables_controladas": ["masa", "dosis", "molienda", "temperatura"], "metricas": ["aroma 0–5", "fenólico 0–5", "balance 0–5"]}],
+  "notas_laboratorio": "Usar báscula de 0.01 g o preparar una premezcla para dosificar de forma repetible.",
+  "estado": "documentado_sin_validar", "id": "clavo_olor", "nombre": "clavo de olor"
+}

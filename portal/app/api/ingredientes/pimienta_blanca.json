@@ -1,0 +1,104 @@
+{
+  "descripcion": "Semilla madura de Piper nigrum sin pericarpio; picor directo, menos cítrico y con notas terrosas o fermentadas.",
+  "familia": "Pimienta",
+  "origen": "Sur y sudeste de Asia; procesada por remojo y retiro de la cubierta.",
+  "disponibilidad_mexico": "Alta en supermercados grandes y tiendas de especias.",
+  "granularidad_recomendada": "fina a media, molida al momento",
+  "granularidades_probadas": [
+    "propuesta: fina",
+    "propuesta: media"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 1,
+    "picante": 4,
+    "ahumado": 0,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 4
+  },
+  "compuestos_principales": [
+    "piperina",
+    "3-metilindol y compuestos de fermentación variables",
+    "beta-cariofileno"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda libera picor con menor intensidad aromática que la negra.",
+    "degradacion": "El calor prolongado reduce volátiles; la piperina permanece parcialmente.",
+    "comentarios": "Útil cuando se desea picor sin puntos negros ni perfil cítrico marcado."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 4,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 5,
+    "mariscos": 4,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 3,
+    "color": 1,
+    "aroma": 3
+  },
+  "dosificacion": {
+    "minimo": "0.8 g/kg",
+    "recomendado": "2 g/kg",
+    "maximo": "4 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "18 meses entera; 6 meses molida"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Pulverizing black, white and green pepper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5976597/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "pimienta_blanca_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "A 2 g/kg aportará picor limpio al pollo y pescado sin dominar el color de la superficie.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Evaluar olor del lote antes de usar: el procesamiento puede producir notas fermentadas intensas.",
+  "estado": "documentado_sin_validar",
+  "id": "pimienta_blanca",
+  "nombre": "pimienta blanca"
+}

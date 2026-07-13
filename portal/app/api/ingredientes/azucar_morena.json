@@ -1,0 +1,105 @@
+{
+  "descripcion": "Azúcar de caña con melaza; aporta dulzor, color y una superficie caramelizada, pero requiere control térmico para evitar quemado y amargor.",
+  "familia": "Endulzante",
+  "origen": "Sacarosa de caña con contenido de melaza; producida y utilizada globalmente.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados y proveedores de repostería.",
+  "granularidad_recomendada": "cristal fino uniforme",
+  "granularidades_probadas": [
+    "propuesta: azúcar morena fina",
+    "propuesta: azúcar mascabado tamizada"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 5,
+    "acido": 0,
+    "amargo": 0,
+    "umami": 0,
+    "picante": 0,
+    "ahumado": 1,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "sacarosa",
+    "glucosa",
+    "fructosa",
+    "compuestos de melaza"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La humedad superficial disuelve los cristales y distribuye la melaza antes de concentrarse durante la cocción.",
+    "degradacion": "Se carameliza y oscurece con el calor; la exposición intensa o prolongada puede producir notas quemadas y amargas.",
+    "comentarios": "Preferir calor indirecto o cocción lenta; vigilar especialmente aplicaciones con llama directa."
+  },
+  "compatibilidad": {
+    "res": 3,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 2,
+    "pescado": 3,
+    "mariscos": 3,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 5,
+    "aroma": 3
+  },
+  "dosificacion": {
+    "minimo": "3 g/kg",
+    "recomendado": "10 g/kg",
+    "maximo": "25 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener hermética; absorbe humedad y forma terrones.",
+    "luz": "Guardar lejos de calor y luz directa para conservar calidad.",
+    "oxidacion": "La oxidación no es el riesgo principal; proteger de humedad, olores y contaminación.",
+    "vida_util": "24 meses para mejor calidad en recipiente hermético"
+  },
+  "proveedores": [
+    "Supermercados y mercados en México",
+    "Proveedor de azúcar de caña con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "McCormick Grill Mates Sweet & Smoky Rub: published ingredient formula",
+      "url": "https://www.mccormick.com/products/mccormick-r-grill-mates-r-sweet-smoky-rub-5-37-oz"
+    },
+    {
+      "titulo": "McCormick Grill Mates Brown Sugar Bourbon Seasoning: published ingredient formula",
+      "url": "https://www.mccormick.com/products/mccormick-grill-mates-brown-sugar-bourbon-seasoning-3-oz"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "azucar_morena_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y límite térmico en un rub dulce-ahumado.",
+      "hipotesis": "A 10 g/kg y calor indirecto aumentará color y bark sin producir amargor quemado.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas con calor indirecto.",
+        "Evaluar a ciegas dulzor, amargor, color, adhesión y bark."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura superficial",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "dulzor 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "adhesión 0–5",
+        "bark 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "No tratar especias de aroma dulce como sustitutos de un endulzante; validar por separado el riesgo de quemado.",
+  "estado": "documentado_sin_validar",
+  "id": "azucar_morena",
+  "nombre": "azúcar morena"
+}

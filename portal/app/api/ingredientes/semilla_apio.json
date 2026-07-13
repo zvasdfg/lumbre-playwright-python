@@ -1,0 +1,104 @@
+{
+  "descripcion": "Semilla pequeña, intensa, salina-aromática, herbal y ligeramente amarga.",
+  "familia": "Semilla_aromatica",
+  "origen": "Mediterráneo/Asia; Apium graveolens.",
+  "disponibilidad_mexico": "Media.",
+  "granularidad_recomendada": "fina o media recién molida",
+  "granularidades_probadas": [
+    "propuesta: fina o media recién molida"
+  ],
+  "perfil_sensorial": {
+    "salado": 2,
+    "dulce": 0,
+    "acido": 0,
+    "amargo": 4,
+    "umami": 2,
+    "picante": 1,
+    "ahumado": 0,
+    "herbal": 5,
+    "citrico": 1,
+    "terroso": 4
+  },
+  "compuestos_principales": [
+    "limoneno",
+    "beta-selineno",
+    "ftálidos",
+    "sedanólido"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda libera ácidos, aceites o compuestos aromáticos según el ingrediente.",
+    "degradacion": "Calor, luz y oxígeno pueden reducir aroma y color.",
+    "comentarios": "Validar en dosis pequeñas antes de integrar a una fórmula."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 4,
+    "mariscos": 3,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 4,
+    "color": 2,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.1 g/kg",
+    "recomendado": "0.5 g/kg",
+    "maximo": "1.5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for semilla apio",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11066118/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "semilla_apio_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "0.5 g/kg aumentará sensación sabrosa en cerdo sin amargor.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "No es sal de apio; contabilizar cualquier sal añadida por separado. Alérgeno reconocido en algunas jurisdicciones.",
+  "estado": "documentado_sin_validar",
+  "id": "semilla_apio",
+  "nombre": "semilla apio"
+}

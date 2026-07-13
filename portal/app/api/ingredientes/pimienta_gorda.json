@@ -1,0 +1,105 @@
+{
+  "descripcion": "Baya seca de Pimenta dioica que recuerda simultáneamente a clavo, canela y nuez moscada; dulce, cálida y resinosa.",
+  "familia": "Especia_calida",
+  "origen": "Caribe y Mesoamérica; México es zona productora.",
+  "disponibilidad_mexico": "Alta en mercados mexicanos y tiendas de especias.",
+  "granularidad_recomendada": "fina a media recién molida",
+  "granularidades_probadas": [
+    "propuesta: media",
+    "propuesta: fina"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 3,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 0,
+    "picante": 2,
+    "ahumado": 1,
+    "herbal": 2,
+    "citrico": 1,
+    "terroso": 3
+  },
+  "compuestos_principales": [
+    "eugenol",
+    "metileugenol",
+    "beta-cariofileno",
+    "1,8-cineol"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El eugenol y terpenos se liberan al moler.",
+    "degradacion": "El calor moderado integra el perfil; exposición intensa puede volverlo medicinal o amargo.",
+    "comentarios": "Usar dosis baja en rubs dulces y cocciones largas."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 5,
+    "pescado": 3,
+    "mariscos": 2,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 4,
+    "color": 3,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.3 g/kg",
+    "recomendado": "1 g/kg",
+    "maximo": "2 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "24 meses entera; 8 meses molida"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Review of plant essential oils and food components",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4321600/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "pimienta_gorda_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "A 1 g/kg añadirá profundidad tipo clavo-canela a cerdo sin que el eugenol domine el humo.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "No confundir con una mezcla de especias. Moler justo antes de usar y controlar la nota de eugenol.",
+  "estado": "documentado_sin_validar",
+  "id": "pimienta_gorda",
+  "nombre": "pimienta gorda"
+}

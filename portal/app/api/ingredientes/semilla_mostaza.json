@@ -1,0 +1,104 @@
+{
+  "descripcion": "Semilla entera con notas de nuez; al romper e hidratar desarrolla picor de isotiocianatos.",
+  "familia": "Semilla_aromatica",
+  "origen": "Brassica/Sinapis spp.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "quebrada para rub o entera para textura",
+  "granularidades_probadas": [
+    "propuesta: quebrada para rub o entera para textura"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 2,
+    "acido": 1,
+    "amargo": 2,
+    "umami": 1,
+    "picante": 3,
+    "ahumado": 0,
+    "herbal": 1,
+    "citrico": 0,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "glucosinolatos",
+    "mirosinasa",
+    "isotiocianatos",
+    "aceite fijo"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Tostar suavemente y moler libera aceites y aldehídos.",
+    "degradacion": "El calor excesivo destruye volátiles y aumenta amargor.",
+    "comentarios": "Controlar tostado y molienda como variables."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 4,
+    "color": 3,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.5 g/kg",
+    "recomendado": "2 g/kg",
+    "maximo": "5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for semilla mostaza",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "semilla_mostaza_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "Quebrada a 2 g/kg añadirá textura y picor más gradual que polvo.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Comparar entera, quebrada e hidratada como tratamientos separados.",
+  "estado": "documentado_sin_validar",
+  "id": "semilla_mostaza",
+  "nombre": "semilla mostaza"
+}

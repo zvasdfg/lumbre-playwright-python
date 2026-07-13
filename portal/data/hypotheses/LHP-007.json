@@ -1,0 +1,173 @@
+{
+  "schema_version": 5,
+  "id": "LHP-007",
+  "firma": "LHP:ajo_granulado+oregano_mexicano+paprika_ahumada+pimienta_negra+sal_kosher+sumac",
+  "objetivo": "Pollo al fuego directo",
+  "componentes": [
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "paprika_ahumada",
+      "nombre": "paprika ahumada",
+      "familia": "Chile"
+    },
+    {
+      "id": "sumac",
+      "nombre": "sumac",
+      "familia": "Citrico"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "oregano_mexicano",
+      "nombre": "oregano mexicano",
+      "familia": "Hierba"
+    }
+  ],
+  "hipotesis": "Paprika ahumada y ajo construirán color y fondo, mientras sumac y orégano levantarán el perfil con acidez aromática y notas herbales.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: ahumado mediante paprika ahumada (añade humo, color y carácter de cocción lenta); chile mediante paprika ahumada (añade picor, color y notas de Capsicum); cítrico mediante sumac (añade elevación aromática y contraste cítrico); herbal mediante oregano mexicano (añade frescura resinosa o vegetal).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "ahumado",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade humo, color y carácter de cocción lenta"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      },
+      {
+        "role": "cítrico",
+        "ingredients": [
+          "sumac"
+        ],
+        "contribution": "añade elevación aromática y contraste cítrico"
+      },
+      {
+        "role": "herbal",
+        "ingredients": [
+          "oregano mexicano"
+        ],
+        "contribution": "añade frescura resinosa o vegetal"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.3,
+      "ingredients": [
+        "pimienta negra",
+        "sumac",
+        "oregano mexicano"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.7,
+      "ingredients": [
+        "sumac",
+        "oregano mexicano"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.5,
+      "ingredients": [
+        "paprika ahumada"
+      ]
+    },
+    {
+      "attribute": "cítrico",
+      "intensity": 1.5,
+      "ingredients": [
+        "sumac",
+        "oregano mexicano"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Pollo ahumado con sumac y orégano según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-POLLO-SPATCHCOCK",
+    "nombre": "Pollo ahumado con sumac y orégano",
+    "fundamento": "Weber publica estos componentes dentro del rub de su Ultimate Spatchcocked Chicken cocinado a calor directo medio.",
+    "adaptacion": "Orégano mexicano sustituye al griego. Se omiten comino y cayena por el límite de seis componentes; las cantidades restantes conservan la relación publicada.",
+    "proporciones": [
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 12
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "paprika_ahumada",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "sumac",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "oregano_mexicano",
+        "partes": 2
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Ultimate Spatchcocked Chicken",
+        "url": "https://www.weber.com/US/en/recipes/poultry/the-ultimate-spatchcocked-chicken/weber-2445247.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.148Z"
+}

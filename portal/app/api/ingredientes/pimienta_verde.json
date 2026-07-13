@@ -1,0 +1,105 @@
+{
+  "descripcion": "Fruto inmaduro de Piper nigrum conservado por secado o liofilización; perfil fresco, herbal y menos intenso.",
+  "familia": "Pimienta",
+  "origen": "Sur y sudeste de Asia; el método de conservación define su calidad.",
+  "disponibilidad_mexico": "Media; tiendas gourmet y proveedores de especias.",
+  "granularidad_recomendada": "quebrada de 1–2 mm; rehidratar si el producto lo indica",
+  "granularidades_probadas": [
+    "propuesta: quebrada",
+    "propuesta: entera rehidratada"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 1,
+    "amargo": 1,
+    "umami": 1,
+    "picante": 3,
+    "ahumado": 0,
+    "herbal": 4,
+    "citrico": 2,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "piperina",
+    "limoneno",
+    "beta-pineno",
+    "beta-cariofileno"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Los compuestos verdes y monoterpenos son volátiles.",
+    "degradacion": "El calor intenso y largo aplana el carácter fresco.",
+    "comentarios": "Agregar cerca del final o incorporar en salsa; revisar si viene en salmuera."
+  },
+  "compatibilidad": {
+    "res": 3,
+    "cerdo": 4,
+    "pollo": 5,
+    "cordero": 3,
+    "pescado": 5,
+    "mariscos": 5,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 2,
+    "color": 1,
+    "aroma": 4
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg",
+    "recomendado": "2.5 g/kg",
+    "maximo": "4 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "12 meses seca; seguir etiqueta si está en salmuera"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Volatiles of Black Pepper Fruits",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6930617/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "pimienta_verde_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "Agregada al final a 2.5 g/kg conservará una nota herbal más clara que si se aplica antes de la cocción.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "No comparar producto seco contra producto en salmuera sin ajustar agua y sal.",
+  "estado": "documentado_sin_validar",
+  "id": "pimienta_verde",
+  "nombre": "pimienta verde"
+}

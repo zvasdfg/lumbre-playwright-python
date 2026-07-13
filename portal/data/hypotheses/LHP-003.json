@@ -1,0 +1,160 @@
+{
+  "schema_version": 5,
+  "id": "LHP-003",
+  "firma": "LHP:ajo_granulado+cascara_limon+pimienta_negra+romero+sal_kosher+tomillo",
+  "objetivo": "Pollo al fuego directo",
+  "componentes": [
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "cascara_limon",
+      "nombre": "cascara limon",
+      "familia": "Citrico"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "tomillo",
+      "nombre": "tomillo",
+      "familia": "Hierba"
+    },
+    {
+      "id": "romero",
+      "nombre": "romero",
+      "familia": "Hierba"
+    }
+  ],
+  "hipotesis": "Limón y hierbas producirán un perfil aromático alto; ajo, pimienta y sal formarán una base sabrosa adecuada para pollo a fuego directo.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: cítrico mediante cascara limon (añade elevación aromática y contraste cítrico); herbal mediante tomillo, romero (añade frescura resinosa o vegetal).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "cítrico",
+        "ingredients": [
+          "cascara limon"
+        ],
+        "contribution": "añade elevación aromática y contraste cítrico"
+      },
+      {
+        "role": "herbal",
+        "ingredients": [
+          "tomillo",
+          "romero"
+        ],
+        "contribution": "añade frescura resinosa o vegetal"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "herbal",
+      "intensity": 2.2,
+      "ingredients": [
+        "tomillo",
+        "romero"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 2,
+      "ingredients": [
+        "pimienta negra",
+        "tomillo",
+        "romero"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.8,
+      "ingredients": [
+        "tomillo",
+        "romero"
+      ]
+    },
+    {
+      "attribute": "cítrico",
+      "intensity": 1.7,
+      "ingredients": [
+        "cascara limon"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Ajo, limón y hierbas según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-POLLO-HERBAL",
+    "nombre": "Ajo, limón y hierbas",
+    "fundamento": "La marinada Lawry's combina limón, sal, ajo, pimienta, tomillo y extracto de romero, y está indicada para pollo a la parrilla.",
+    "adaptacion": "Se convierte una marinada húmeda en mezcla seca. Las proporciones son una formulación inicial y deben validarse contra una versión hidratada.",
+    "proporciones": [
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "cascara_limon",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "tomillo",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "romero",
+        "partes": 0.5
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Lawry's Herb & Garlic with Lemon Marinade",
+        "url": "https://www.mccormick.com/products/lawrys-r-herb-garlic-with-lemon-marinade-12-fl-oz"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.682Z"
+}

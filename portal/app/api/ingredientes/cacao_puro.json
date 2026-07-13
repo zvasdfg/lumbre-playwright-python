@@ -1,0 +1,104 @@
+{
+  "descripcion": "Cacao en polvo sin azúcar, amargo, tostado, frutal y terroso; oscurece rubs.",
+  "familia": "Tostado",
+  "origen": "Theobroma cacao de América tropical; fermentado, tostado y molido.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "polvo fino sin azúcar",
+  "granularidades_probadas": [
+    "propuesta: polvo fino sin azúcar"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 2,
+    "amargo": 5,
+    "umami": 2,
+    "picante": 0,
+    "ahumado": 2,
+    "herbal": 0,
+    "citrico": 1,
+    "terroso": 5
+  },
+  "compuestos_principales": [
+    "teobromina",
+    "polifenoles",
+    "pirazinas",
+    "melanoidinas"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El polvo libera aroma tostado y absorbe grasa/humedad.",
+    "degradacion": "Ya contiene productos de tostado y puede amargar al carbonizar.",
+    "comentarios": "Preferir cocción indirecta o capa fina."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 3,
+    "cordero": 5,
+    "pescado": 2,
+    "mariscos": 1,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 5,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg",
+    "recomendado": "4 g/kg",
+    "maximo": "8 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for cacao puro",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873847/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "cacao_puro_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "4 g/kg dará color y fondo tostado a res sin percibirse como chocolate.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Confirmar 100% cacao y si está alcalinizado; cambia acidez, color y aroma.",
+  "estado": "documentado_sin_validar",
+  "id": "cacao_puro",
+  "nombre": "cacao puro"
+}

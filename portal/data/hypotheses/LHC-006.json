@@ -1,0 +1,134 @@
+{
+  "schema_version": 5,
+  "id": "LHC-006",
+  "firma": "LHC:ajo_granulado+cebolla_granulada+paprika_dulce+pimienta_negra+sal_kosher",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "cebolla_granulada",
+      "nombre": "cebolla granulada",
+      "familia": "Allium"
+    },
+    {
+      "id": "paprika_dulce",
+      "nombre": "paprika dulce",
+      "familia": "Chile"
+    }
+  ],
+  "hipotesis": "La pimienta dominará textura y pungencia, mientras paprika dulce reforzará color y dulzor vegetal sin introducir humo adicional.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: chile mediante paprika dulce (añade picor, color y notas de Capsicum).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (2/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika dulce"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.8,
+      "ingredients": [
+        "cebolla granulada",
+        "paprika dulce"
+      ]
+    },
+    {
+      "attribute": "umami",
+      "intensity": 1.8,
+      "ingredients": [
+        "ajo granulado",
+        "cebolla granulada"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Steak rub Weber con paprika dulce según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-COSTRA-PAPRIKA-DULCE",
+    "nombre": "Steak rub Weber con paprika dulce",
+    "fundamento": "Weber publica su Grill Master Steak Rub con tres moliendas de pimienta negra, sal kosher, ajo granulado, cebolla y paprika.",
+    "adaptacion": "Se consolidan las tres moliendas como pimienta negra y se interpreta la paprika no especificada como paprika dulce. Las partes conservan los volúmenes publicados.",
+    "proporciones": [
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 12
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 5.33
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 4
+      },
+      {
+        "ingrediente_id": "cebolla_granulada",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "paprika_dulce",
+        "partes": 2
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Grill Master Steak Rub",
+        "url": "https://www.weber.com/CA/en/blog/grilling-inspiration/grilling-inspiration-ultimate-backyard-grilled-nachos-1-2-3/weber-2009382.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.073Z"
+}

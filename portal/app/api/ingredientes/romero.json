@@ -1,0 +1,105 @@
+{
+  "descripcion": "Hierba resinosa y balsámica, con pino, alcanfor y cítrico; soporta carnes grasas y humo.",
+  "familia": "Hierba",
+  "origen": "Cuenca mediterránea; cultivado en México.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "hoja triturada 1–3 mm",
+  "granularidades_probadas": [
+    "propuesta: hoja triturada 1–3 mm"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 0,
+    "acido": 0,
+    "amargo": 3,
+    "umami": 0,
+    "picante": 1,
+    "ahumado": 1,
+    "herbal": 5,
+    "citrico": 2,
+    "terroso": 3
+  },
+  "compuestos_principales": [
+    "1,8-cineol",
+    "alcanfor",
+    "alfa-pineno",
+    "borneol",
+    "ácido rosmarínico"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La trituración libera aceites esenciales.",
+    "degradacion": "Los monoterpenos se volatilizan y oxidan con calor prolongado.",
+    "comentarios": "Dividir aplicación entre rub y final para conservar aroma."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 4,
+    "mariscos": 3,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 2,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.3 g/kg",
+    "recomendado": "1 g/kg",
+    "maximo": "2.5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for romero",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4321600/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "romero_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "1 g/kg reforzará res y cordero sin volver medicinal el humo.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Triturarlo; las agujas enteras pueden resultar duras. Evitar exceso alcanforado.",
+  "estado": "documentado_sin_validar",
+  "id": "romero",
+  "nombre": "romero"
+}

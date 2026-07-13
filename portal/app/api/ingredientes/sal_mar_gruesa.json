@@ -1,0 +1,103 @@
+{
+  "descripcion": "Cristales grandes de sal marina para molienda, costra o acabado; su disolución lenta produce puntos de sal perceptibles.",
+  "familia": "Sal",
+  "origen": "Evaporación de agua de mar en salinas; procedencia variable.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados y tiendas gourmet.",
+  "granularidad_recomendada": "cristal grueso de 3–6 mm; moler antes de integrar en rub",
+  "granularidades_probadas": [
+    "propuesta: gruesa de acabado",
+    "propuesta: media recién molida"
+  ],
+  "perfil_sensorial": {
+    "salado": 5,
+    "dulce": 0,
+    "acido": 0,
+    "amargo": 0,
+    "umami": 1,
+    "picante": 0,
+    "ahumado": 0,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 1
+  },
+  "compuestos_principales": [
+    "cloruro de sodio (NaCl)",
+    "trazas minerales variables según origen"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Los cristales gruesos liberan sal conforme captan humedad.",
+    "degradacion": "Térmicamente estable; no aporta humo ni caramelización.",
+    "comentarios": "En rub seco conviene moler para evitar distribución irregular y desprendimiento."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 4,
+    "pollo": 4,
+    "cordero": 4,
+    "pescado": 5,
+    "mariscos": 5,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 0,
+    "aroma": 1
+  },
+  "dosificacion": {
+    "minimo": "6 g/kg",
+    "recomendado": "9 g/kg",
+    "maximo": "13 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "36 meses o la fecha del fabricante"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Review: sodium chloride and meat product quality",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8145339/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "sal_mar_gruesa_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "La molienda media distribuirá mejor 9 g/kg que el cristal entero sin perder percepción de textura en superficie.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Reservar el cristal entero para acabado; para sazón previa, comparar siempre por masa y no por volumen.",
+  "estado": "documentado_sin_validar",
+  "id": "sal_mar_gruesa",
+  "nombre": "sal mar gruesa"
+}

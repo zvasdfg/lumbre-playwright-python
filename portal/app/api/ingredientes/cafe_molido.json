@@ -1,0 +1,105 @@
+{
+  "descripcion": "Café tostado molido con amargor, acidez, caramelo, nuez y humo según tueste.",
+  "familia": "Tostado",
+  "origen": "Coffea spp.; origen y tueste variables.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "media-fina; tueste medio",
+  "granularidades_probadas": [
+    "propuesta: media-fina; tueste medio"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 2,
+    "acido": 3,
+    "amargo": 5,
+    "umami": 1,
+    "picante": 0,
+    "ahumado": 4,
+    "herbal": 0,
+    "citrico": 1,
+    "terroso": 4
+  },
+  "compuestos_principales": [
+    "cafeína",
+    "ácidos clorogénicos",
+    "furfurales",
+    "pirazinas",
+    "melanoidinas"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El polvo libera aroma tostado y absorbe grasa/humedad.",
+    "degradacion": "Ya contiene productos de tostado y puede amargar al carbonizar.",
+    "comentarios": "Preferir cocción indirecta o capa fina."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 3,
+    "cordero": 5,
+    "pescado": 2,
+    "mariscos": 1,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 5,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.5 g/kg",
+    "recomendado": "2 g/kg",
+    "maximo": "5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for cafe molido",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11477549/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "cafe_molido_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "2 g/kg de tueste medio intensificará bark de res sin amargor quemado.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Registrar origen, especie y tueste; oscuro se amarga antes. Usar café fresco.",
+  "estado": "documentado_sin_validar",
+  "id": "cafe_molido",
+  "nombre": "cafe molido"
+}

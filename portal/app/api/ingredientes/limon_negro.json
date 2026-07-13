@@ -1,0 +1,105 @@
+{
+  "descripcion": "Lima o limón pequeño deshidratado entero hasta oscurecer; ofrece acidez aromática, fermento, té y notas terrosas.",
+  "familia": "Citrico",
+  "origen": "Golfo Pérsico; conocido como loomi, dried lime u Omani lime.",
+  "disponibilidad_mexico": "Baja; tiendas de Medio Oriente, importadores y comercio electrónico.",
+  "granularidad_recomendada": "polvo fino sin semillas amargas o fruto perforado para infusión",
+  "granularidades_probadas": [
+    "propuesta: polvo sin semillas",
+    "propuesta: infusión con fruto entero"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 5,
+    "amargo": 3,
+    "umami": 2,
+    "picante": 0,
+    "ahumado": 1,
+    "herbal": 1,
+    "citrico": 5,
+    "terroso": 4
+  },
+  "compuestos_principales": [
+    "ácido cítrico",
+    "limoneno",
+    "gamma-terpineno",
+    "productos de oxidación y secado"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "En polvo libera acidez y aroma rápido; entero requiere líquido y tiempo.",
+    "degradacion": "Volátiles cítricos disminuyen con cocción, mientras acidez y notas terrosas permanecen.",
+    "comentarios": "Retirar semillas y comparar polvo seco contra infusión por separado."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 3,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.5 g/kg",
+    "recomendado": "2 g/kg",
+    "maximo": "4 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener seco y hermético; la humedad causa apelmazamiento y pérdida de calidad.",
+    "luz": "Guardar en oscuridad para proteger color y volátiles.",
+    "oxidacion": "Minimizar aire y moler cerca del uso.",
+    "vida_util": "18 meses entero; 8 meses molido"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Lime essential oils and volatile compounds",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6770194/"
+    },
+    {
+      "titulo": "Home Drying Foods: heat and light affect dried-food quality",
+      "url": "https://extension.usu.edu/preserve-the-harvest/research/home-drying-foods"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "limon_negro_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y momento de aplicación en cocción a las brasas.",
+      "hipotesis": "A 2 g/kg aportará acidez seca y profundidad terrosa a cordero sin añadir líquido.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Ingrediente de investigación: confirmar que sea cítrico seco culinario, no producto tratado para decoración.",
+  "estado": "documentado_sin_validar",
+  "id": "limon_negro",
+  "nombre": "limon negro"
+}

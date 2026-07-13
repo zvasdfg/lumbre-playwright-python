@@ -1,0 +1,104 @@
+{
+  "descripcion": "Hongo seco con umami alto, azufre suave y madera; rico en guanilato desarrollado al secar.",
+  "familia": "Umami",
+  "origen": "Asia oriental; Lentinula edodes cultivado globalmente.",
+  "disponibilidad_mexico": "Media-alta.",
+  "granularidad_recomendada": "polvo fino o lámina rehidratada",
+  "granularidades_probadas": [
+    "propuesta: polvo fino o lámina rehidratada"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 5,
+    "picante": 0,
+    "ahumado": 1,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 4
+  },
+  "compuestos_principales": [
+    "5'-guanosina monofosfato",
+    "glutamato",
+    "lentionina",
+    "1-octen-3-ol"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El polvo se hidrata y dispersa compuestos sabrosos.",
+    "degradacion": "Glutamato y nucleótidos son relativamente estables, pero el aroma se pierde y el polvo se quema.",
+    "comentarios": "Aplicar capa fina y evitar llama directa."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 4,
+    "mariscos": 3,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 4,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg",
+    "recomendado": "4 g/kg",
+    "maximo": "8 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for shiitake seco",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8622265/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "shiitake_seco_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "4 g/kg aumentará umami de pollo sin dominar con aroma a hongo.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Para polvo, usar hongo limpio y totalmente seco; registrar método de secado.",
+  "estado": "documentado_sin_validar",
+  "id": "shiitake_seco",
+  "nombre": "shiitake seco"
+}

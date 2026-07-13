@@ -1,0 +1,104 @@
+{
+  "descripcion": "Hongo seco intenso, umami, terroso y de bosque; en polvo refuerza carne.",
+  "familia": "Umami",
+  "origen": "Boletus edulis y especies afines de Europa, Asia o América.",
+  "disponibilidad_mexico": "Media-baja.",
+  "granularidad_recomendada": "polvo fino tamizado",
+  "granularidades_probadas": [
+    "propuesta: polvo fino tamizado"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 5,
+    "picante": 0,
+    "ahumado": 1,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 5
+  },
+  "compuestos_principales": [
+    "glutamato",
+    "5'-guanosina monofosfato",
+    "1-octen-3-ol",
+    "aminoácidos"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El polvo se hidrata y dispersa compuestos sabrosos.",
+    "degradacion": "Glutamato y nucleótidos son relativamente estables, pero el aroma se pierde y el polvo se quema.",
+    "comentarios": "Aplicar capa fina y evitar llama directa."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 5,
+    "pescado": 3,
+    "mariscos": 2,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 4,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg",
+    "recomendado": "4 g/kg",
+    "maximo": "8 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for porcini seco",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4515277/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "porcini_seco_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "4 g/kg elevará umami de res y bark sin sabor evidente a hongo.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Verificar especie, limpieza y proveedor; tamizar arena o partículas.",
+  "estado": "documentado_sin_validar",
+  "id": "porcini_seco",
+  "nombre": "porcini seco"
+}

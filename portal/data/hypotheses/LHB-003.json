@@ -1,0 +1,158 @@
+{
+  "schema_version": 5,
+  "id": "LHB-003",
+  "firma": "LHB:ajo_granulado+azucar_morena+chile_ancho+comino+sal_kosher+tomillo",
+  "objetivo": "Bark para cocción lenta",
+  "componentes": [
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "chile_ancho",
+      "nombre": "chile ancho",
+      "familia": "Chile"
+    },
+    {
+      "id": "azucar_morena",
+      "nombre": "azúcar morena",
+      "familia": "Endulzante"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "tomillo",
+      "nombre": "tomillo",
+      "familia": "Hierba"
+    },
+    {
+      "id": "comino",
+      "nombre": "comino",
+      "familia": "Semilla_aromatica"
+    }
+  ],
+  "hipotesis": "El chile ancho y el comino aportarán profundidad terrosa, el tomillo una salida herbal y el azúcar ayudará al color, sobre una base de sal y ajo.",
+  "formula": {
+    "level": "close",
+    "formula_id": "herbal_allium",
+    "formula_name": "Base herbal con allium",
+    "conclusion": "La selección es una variación cercana de “Base herbal con allium”, pero la evidencia consultada corresponde a Pollo al fuego directo o Vegetales a las brasas, no a Bark para cocción lenta. Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: terroso mediante chile ancho, comino (añade profundidad terrosa y especiada); chile mediante chile ancho (añade picor, color y notas de Capsicum); endulzante mediante azúcar morena (añade dulzor, color y potencial de caramelización).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "ajo o cebolla (1/1)",
+      "herbal (1/1)"
+    ],
+    "missing_roles": [
+      "objetivo respaldado: Pollo al fuego directo o Vegetales a las brasas"
+    ],
+    "additional_profiles": [
+      {
+        "role": "terroso",
+        "ingredients": [
+          "chile ancho",
+          "comino"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "chile ancho"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      },
+      {
+        "role": "endulzante",
+        "ingredients": [
+          "azúcar morena"
+        ],
+        "contribution": "añade dulzor, color y potencial de caramelización"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Montreal Chicken: garlic, onion, salt, pepper and herbs",
+        "url": "https://www.mccormick.com/products/mccormick-r-grill-mates-r-montreal-chicken-seasoning-2-75-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.8,
+      "ingredients": [
+        "chile ancho",
+        "tomillo",
+        "comino"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.8,
+      "ingredients": [
+        "chile ancho",
+        "azúcar morena"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.5,
+      "ingredients": [
+        "tomillo",
+        "comino"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Bark ancho para low and slow según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-BARK-ANCHO",
+    "nombre": "Bark ancho para low and slow",
+    "fundamento": "Weber publica una mezcla para spareribs ahumadas que combina sal, ancho, azúcar morena, ajo, tomillo y comino, entre otros componentes.",
+    "adaptacion": "Se limita la receta a seis componentes para el protocolo Lumbre; paprika, apio y pimienta de la receta original quedan fuera y deben probarse como variante posterior.",
+    "proporciones": [
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 9
+      },
+      {
+        "ingrediente_id": "chile_ancho",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "azucar_morena",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "tomillo",
+        "partes": 4
+      },
+      {
+        "ingrediente_id": "comino",
+        "partes": 4
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Slow-Smoked Spareribs",
+        "url": "https://www.weber.com/ID/en/recipes/pork/slow-smoked-spareribs/weber-2598.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.656Z"
+}

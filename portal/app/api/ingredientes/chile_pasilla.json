@@ -1,0 +1,20 @@
+{
+  "descripcion": "Chile chilaca maduro y seco, de color oscuro; ofrece fruta seca, cacao, tierra y picor moderado-bajo.",
+  "familia": "Chile",
+  "origen": "México; Capsicum annuum secado en madurez.",
+  "disponibilidad_mexico": "Alta; mercados, centrales de abasto y tiendas de chiles y especias.",
+  "granularidad_recomendada": "hojuelas o polvo medio recién molido",
+  "granularidades_probadas": ["propuesta: chile entero tostado y molido", "propuesta: polvo"],
+  "perfil_sensorial": {"salado": 0, "dulce": 3, "acido": 1, "amargo": 2, "umami": 2, "picante": 2, "ahumado": 1, "herbal": 1, "citrico": 0, "terroso": 5},
+  "compuestos_principales": ["capsaicinoides", "capsantina", "capsorrubina", "pirazinas de tostado"],
+  "comportamiento_termico": {"liberacion_aromatica": "Un tostado breve despierta fruta seca y cacao.", "degradacion": "El tostado excesivo quema piel y semillas y produce amargor.", "comentarios": "Retirar semillas y controlar segundos de tostado antes de moler."},
+  "compatibilidad": {"res": 5, "cerdo": 5, "pollo": 4, "cordero": 5, "pescado": 3, "mariscos": 3, "vegetales": 5},
+  "aporte": {"costra": 3, "bark": 5, "color": 4, "aroma": 5},
+  "dosificacion": {"minimo": "0.5 g/kg", "recomendado": "2.5 g/kg", "maximo": "7 g/kg"},
+  "estabilidad": {"humedad": "Mantener seco y revisar plagas.", "luz": "Proteger de luz.", "oxidacion": "Preferir entero y moler al uso.", "vida_util": "12 meses entero; 6 meses molido"},
+  "proveedores": ["Mercados y centrales de abasto en México", "Tiendas de especias y cereales"],
+  "bibliografia": [{"titulo": "Capsicum carotenoids and thermal stability", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4348314/"}],
+  "experimentos": [{"id": "chile_pasilla_baseline_v1", "estado": "propuesto", "objetivo": "Comparar tostado breve contra polvo sin tostado.", "hipotesis": "El tostado breve elevará cacao y fruta seca sin aumentar amargor.", "metodo": ["Desvenar y dividir un mismo lote.", "Tostar una parte por tiempo controlado.", "Moler, aplicar y comparar."], "variables_controladas": ["lote", "masa", "dosis", "tiempo de tostado"], "metricas": ["fruta seca 0–5", "cacao 0–5", "amargor 0–5", "picor 0–5"]}],
+  "notas_laboratorio": "Verificar nombre regional con proveedor: pasilla y ancho se etiquetan incorrectamente en algunos mercados fuera de México.",
+  "estado": "documentado_sin_validar", "id": "chile_pasilla", "nombre": "chile pasilla"
+}

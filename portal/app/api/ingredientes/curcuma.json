@@ -1,0 +1,20 @@
+{
+  "descripcion": "Rizoma seco y molido de cúrcuma; aporta color amarillo intenso, notas terrosas y amargor moderado.",
+  "familia": "Especia_calida",
+  "origen": "Curcuma longa, sur y sudeste de Asia; cultivada en regiones tropicales.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados, tiendas naturistas y de especias.",
+  "granularidad_recomendada": "polvo fino 250–500 µm",
+  "granularidades_probadas": ["propuesta: polvo fino"],
+  "perfil_sensorial": {"salado": 0, "dulce": 0, "acido": 0, "amargo": 3, "umami": 0, "picante": 1, "ahumado": 0, "herbal": 1, "citrico": 0, "terroso": 5},
+  "compuestos_principales": ["curcumina", "demetoxicurcumina", "bisdemetoxicurcumina", "turmeronas"],
+  "comportamiento_termico": {"liberacion_aromatica": "Se dispersa mejor en grasa y colorea rápidamente la superficie.", "degradacion": "Curcuminoides y volátiles se degradan con luz, oxidación y calor prolongado.", "comentarios": "Una dosis alta vuelve terrosa y amarga la mezcla; usar como acento de color."},
+  "compatibilidad": {"res": 2, "cerdo": 3, "pollo": 5, "cordero": 5, "pescado": 4, "mariscos": 4, "vegetales": 5},
+  "aporte": {"costra": 2, "bark": 2, "color": 5, "aroma": 3},
+  "dosificacion": {"minimo": "0.2 g/kg", "recomendado": "1 g/kg", "maximo": "3 g/kg"},
+  "estabilidad": {"humedad": "Mantener seca.", "luz": "Proteger estrictamente de luz.", "oxidacion": "Usar envase hermético.", "vida_util": "12 meses"},
+  "proveedores": ["Tiendas de especias y cereales", "Supermercados y mercados en México"],
+  "bibliografia": [{"titulo": "Turmeric botany and phytochemistry review", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13118882/"}],
+  "experimentos": [{"id": "curcuma_baseline_v1", "estado": "propuesto", "objetivo": "Determinar color útil antes de que aparezca amargor.", "hipotesis": "1 g/kg producirá color visible con amargor bajo.", "metodo": ["Preparar control y tres dosis.", "Aplicar a pollo y coliflor.", "Evaluar color, terroso y amargor."], "variables_controladas": ["masa", "dosis", "temperatura"], "metricas": ["color 0–5", "terroso 0–5", "amargor 0–5"]}],
+  "notas_laboratorio": "Pigmenta utensilios y superficies; registrar color bajo iluminación constante.",
+  "estado": "documentado_sin_validar", "id": "curcuma", "nombre": "cúrcuma"
+}

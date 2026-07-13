@@ -1,0 +1,148 @@
+{
+  "schema_version": 5,
+  "id": "LHC-005",
+  "firma": "LHC:ajo_granulado+chile_arbol+oregano_mexicano+pimienta_negra+sal_kosher",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "oregano_mexicano",
+      "nombre": "oregano mexicano",
+      "familia": "Hierba"
+    },
+    {
+      "id": "chile_arbol",
+      "nombre": "chile arbol",
+      "familia": "Chile"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    }
+  ],
+  "hipotesis": "Sobre una base salina y picante, el orégano dará un frente herbal y el ajo prolongará el carácter sabroso de una costra inspirada en chimichurri.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: herbal mediante oregano mexicano (añade frescura resinosa o vegetal); chile mediante chile arbol (añade picor, color y notas de Capsicum).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "herbal",
+        "ingredients": [
+          "oregano mexicano"
+        ],
+        "contribution": "añade frescura resinosa o vegetal"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "chile arbol"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "picante",
+      "intensity": 2.4,
+      "ingredients": [
+        "pimienta negra",
+        "chile arbol"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 2.2,
+      "ingredients": [
+        "pimienta negra",
+        "oregano mexicano"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.6,
+      "ingredients": [
+        "oregano mexicano"
+      ]
+    },
+    {
+      "attribute": "herbal",
+      "intensity": 1.6,
+      "ingredients": [
+        "oregano mexicano"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Costra seca estilo chimichurri según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-COSTRA-CHIMICHURRI",
+    "nombre": "Costra seca estilo chimichurri",
+    "fundamento": "Weber sazona ribeye con sal, pimienta, orégano, chile seco y ajo granulado antes de acompañarlo con chimichurri.",
+    "adaptacion": "La fuente respalda la composición, no una proporción de rub aislada. Se propone 2:2:1:0.5:1 para la primera corrida controlada.",
+    "proporciones": [
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "oregano_mexicano",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "chile_arbol",
+        "partes": 0.5
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Griddled Ribeyes with Chimichurri",
+        "url": "https://www.weber.com/US/en/recipes/griddled-ribeyes/weber-2447452.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.651Z"
+}

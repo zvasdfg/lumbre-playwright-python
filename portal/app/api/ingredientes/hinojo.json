@@ -1,0 +1,104 @@
+{
+  "descripcion": "Semilla dulce, anisada y fresca; corta grasa y combina con cerdo.",
+  "familia": "Semilla_aromatica",
+  "origen": "Mediterráneo; Foeniculum vulgare.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "quebrada o media",
+  "granularidades_probadas": [
+    "propuesta: quebrada o media"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 4,
+    "acido": 0,
+    "amargo": 1,
+    "umami": 0,
+    "picante": 1,
+    "ahumado": 0,
+    "herbal": 3,
+    "citrico": 2,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "trans-anetol",
+    "fenchona",
+    "limoneno",
+    "estragol"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Tostar suavemente y moler libera aceites y aldehídos.",
+    "degradacion": "El calor excesivo destruye volátiles y aumenta amargor.",
+    "comentarios": "Controlar tostado y molienda como variables."
+  },
+  "compatibilidad": {
+    "res": 3,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 4,
+    "pescado": 5,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 2,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.3 g/kg",
+    "recomendado": "1.5 g/kg",
+    "maximo": "4 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for hinojo",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11066118/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "hinojo_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "1.5 g/kg equilibrará grasa de cerdo con dulzor anisado.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Quebrar justo antes; entera libera poco y polvo fino domina.",
+  "estado": "documentado_sin_validar",
+  "id": "hinojo",
+  "nombre": "hinojo"
+}

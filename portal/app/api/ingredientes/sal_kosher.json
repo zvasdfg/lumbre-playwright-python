@@ -1,0 +1,102 @@
+{
+  "descripcion": "Sal de cristales ligeros y tamaño irregular, diseñada para dosificar con la mano y adherirse de forma uniforme; ideal como base de salmuera seca.",
+  "familia": "Sal",
+  "origen": "Sal mineral o marina recristalizada; el origen depende de la marca.",
+  "disponibilidad_mexico": "Alta; supermercados, clubes de precio y tiendas gastronómicas.",
+  "granularidad_recomendada": "cristal medio de 1–3 mm",
+  "granularidades_probadas": [
+    "propuesta: cristal medio",
+    "propuesta: molido fino para mezclas"
+  ],
+  "perfil_sensorial": {
+    "salado": 5,
+    "dulce": 0,
+    "acido": 0,
+    "amargo": 0,
+    "umami": 1,
+    "picante": 0,
+    "ahumado": 0,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 1
+  },
+  "compuestos_principales": [
+    "cloruro de sodio (NaCl)"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Se disuelve con la humedad superficial antes de la cocción.",
+    "degradacion": "No se degrada a temperaturas culinarias; el agua se evapora y la sal se concentra.",
+    "comentarios": "Aplicada con anticipación favorece una salmuera superficial que puede reabsorberse; pesarla porque la densidad por volumen cambia entre marcas."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 0,
+    "aroma": 1
+  },
+  "dosificacion": {
+    "minimo": "7 g/kg",
+    "recomendado": "10 g/kg",
+    "maximo": "14 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "36 meses o la fecha del fabricante"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "USDA FSIS: Poultry—Basting, Brining, and Marinating",
+      "url": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/poultry/poultry-basting-brining-and-marinating"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "sal_kosher_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "Una aplicación de 10 g/kg con 12–24 h de reposo sazonará de forma más uniforme que la misma dosis aplicada justo antes del fuego.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Pesar, no medir por cucharadas. Verificar si la carne ya fue inyectada o salmuerada para evitar exceso de sodio.",
+  "estado": "documentado_sin_validar",
+  "id": "sal_kosher",
+  "nombre": "sal kosher"
+}

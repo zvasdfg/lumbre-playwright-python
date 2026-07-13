@@ -1,0 +1,106 @@
+{
+  "descripcion": "Fruto inmaduro fermentado y secado de Piper nigrum; combina picor cálido con notas cítricas, resinosas y leñosas.",
+  "familia": "Pimienta",
+  "origen": "Sur y sudeste de Asia; hoy se cultiva en regiones tropicales.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados y proveedores de especias.",
+  "granularidad_recomendada": "quebrada de 0.8–1.5 mm para bark; fina sólo para mezclas de cocción corta",
+  "granularidades_probadas": [
+    "propuesta: quebrada",
+    "propuesta: fina recién molida"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 1,
+    "picante": 4,
+    "ahumado": 1,
+    "herbal": 1,
+    "citrico": 2,
+    "terroso": 3
+  },
+  "compuestos_principales": [
+    "piperina",
+    "beta-cariofileno",
+    "limoneno",
+    "sabineno",
+    "pineno"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda libera aceites volátiles de inmediato.",
+    "degradacion": "La piperina tolera calor moderado, pero los monoterpenos se pierden con exposición larga y alta.",
+    "comentarios": "Añadir una parte al inicio para bark y otra recién molida al final para conservar aroma."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 4,
+    "mariscos": 3,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 5,
+    "color": 2,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg",
+    "recomendado": "2.5 g/kg",
+    "maximo": "5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "18 meses entera; 6 meses molida para mejor aroma"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Volatiles of Black Pepper Fruits",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6930617/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "pimienta_negra_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "La molienda quebrada a 2.5 g/kg conservará más aroma y formará mejor textura de bark que la molienda fina.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Moler por lote justo antes de mezclar. En fuego muy alto puede amargar si la capa superficial se carboniza.",
+  "estado": "documentado_sin_validar",
+  "id": "pimienta_negra",
+  "nombre": "pimienta negra"
+}

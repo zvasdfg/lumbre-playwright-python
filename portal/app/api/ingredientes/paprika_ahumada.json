@@ -1,0 +1,105 @@
+{
+  "descripcion": "Pimiento rojo seco, molido y ahumado; ofrece color rojo, dulzor y humo con picor bajo a variable.",
+  "familia": "Chile",
+  "origen": "Tradición ibérica; Capsicum annuum secado con humo.",
+  "disponibilidad_mexico": "Alta en supermercados grandes y tiendas gourmet.",
+  "granularidad_recomendada": "polvo fino uniforme",
+  "granularidades_probadas": [
+    "propuesta: polvo fino"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 3,
+    "acido": 0,
+    "amargo": 1,
+    "umami": 1,
+    "picante": 1,
+    "ahumado": 4,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "capsantina",
+    "capsorrubina",
+    "carotenoides",
+    "guayacol",
+    "siringol"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El polvo colorea rápidamente grasa y superficie húmeda.",
+    "degradacion": "Pigmentos y volátiles se degradan con luz, oxígeno y calor excesivo; el polvo se quema con facilidad.",
+    "comentarios": "Mezclar con componentes más gruesos y cocinar indirectamente cuando sea posible."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 4,
+    "color": 5,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "2 g/kg",
+    "recomendado": "5 g/kg",
+    "maximo": "10 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener seco y hermético; la humedad causa apelmazamiento y pérdida de calidad.",
+    "luz": "Guardar en oscuridad para proteger color y volátiles.",
+    "oxidacion": "Minimizar aire y moler cerca del uso.",
+    "vida_util": "12 meses; 6 meses para mejor color"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Thermal drying and red-pepper aroma",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11245976/"
+    },
+    {
+      "titulo": "Home Drying Foods: heat and light affect dried-food quality",
+      "url": "https://extension.usu.edu/preserve-the-harvest/research/home-drying-foods"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "paprika_ahumada_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y momento de aplicación en cocción a las brasas.",
+      "hipotesis": "A 5 g/kg aumentará color y humo en pollo sin aportar el picor de chipotle.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Confirmar en etiqueta si es dulce o picante y si contiene sal.",
+  "estado": "documentado_sin_validar",
+  "id": "paprika_ahumada",
+  "nombre": "paprika ahumada"
+}

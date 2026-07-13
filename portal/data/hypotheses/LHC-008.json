@@ -1,0 +1,162 @@
+{
+  "schema_version": 5,
+  "id": "LHC-008",
+  "firma": "LHC:comino+curcuma+pimienta_gorda+pimienta_negra+sal_kosher+semilla_cilantro",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "semilla_cilantro",
+      "nombre": "semilla cilantro",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "comino",
+      "nombre": "comino",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "pimienta_gorda",
+      "nombre": "pimienta gorda",
+      "familia": "Especia_calida"
+    },
+    {
+      "id": "curcuma",
+      "nombre": "cúrcuma",
+      "familia": "Especia_calida"
+    }
+  ],
+  "hipotesis": "Cilantro y comino aportarán el cuerpo terroso; pimienta gorda y cúrcuma añadirán calidez y color sobre una base equilibrada de sal y pimienta.",
+  "formula": {
+    "level": "close",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección es una variación cercana de “SPG clásico”, pero faltan ajo o cebolla (1). Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: terroso mediante semilla cilantro, comino, cúrcuma (añade profundidad terrosa y especiada); especia de aroma dulce mediante pimienta gorda (añade aroma cálido; no sustituye el dulzor de un azúcar).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)"
+    ],
+    "missing_roles": [
+      "ajo o cebolla (1)"
+    ],
+    "additional_profiles": [
+      {
+        "role": "terroso",
+        "ingredients": [
+          "semilla cilantro",
+          "comino",
+          "cúrcuma"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      },
+      {
+        "role": "especia de aroma dulce",
+        "ingredients": [
+          "pimienta gorda"
+        ],
+        "contribution": "añade aroma cálido; no sustituye el dulzor de un azúcar"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 3.2,
+      "ingredients": [
+        "comino",
+        "pimienta negra",
+        "pimienta gorda",
+        "cúrcuma"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.8,
+      "ingredients": [
+        "comino",
+        "cúrcuma"
+      ]
+    },
+    {
+      "attribute": "picante",
+      "intensity": 1.7,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "cítrico",
+      "intensity": 1.5,
+      "ingredients": [
+        "semilla cilantro"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Costra cálida inspirada en kofta según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-COSTRA-KOFTA",
+    "nombre": "Costra cálida inspirada en kofta",
+    "fundamento": "La fórmula de kofta de res de Weber combina cilantro, comino, sal, pimienta, pimienta gorda, cardamomo, cúrcuma, ajo y perejil.",
+    "adaptacion": "Se conservan seis especias con sus cantidades publicadas; ajo, cardamomo y perejil se reservan para una variante por el límite del protocolo.",
+    "proporciones": [
+      {
+        "ingrediente_id": "semilla_cilantro",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "comino",
+        "partes": 1.5
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 1.5
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 0.5
+      },
+      {
+        "ingrediente_id": "pimienta_gorda",
+        "partes": 0.5
+      },
+      {
+        "ingrediente_id": "curcuma",
+        "partes": 0.25
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Kofta in Pita Pockets",
+        "url": "https://www.weber.com/CA/en/beef-kofta-1/weber-2013375.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.085Z"
+}

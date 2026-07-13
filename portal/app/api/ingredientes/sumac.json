@@ -1,0 +1,104 @@
+{
+  "descripcion": "Fruto molido ácido, frutal y tánico; añade acidez seca y rojo oscuro sin líquido.",
+  "familia": "Citrico",
+  "origen": "Mediterráneo y Asia occidental; Rhus coriaria.",
+  "disponibilidad_mexico": "Baja-media.",
+  "granularidad_recomendada": "polvo grueso tamizado",
+  "granularidades_probadas": [
+    "propuesta: polvo grueso tamizado"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 2,
+    "acido": 5,
+    "amargo": 3,
+    "umami": 1,
+    "picante": 0,
+    "ahumado": 0,
+    "herbal": 1,
+    "citrico": 4,
+    "terroso": 3
+  },
+  "compuestos_principales": [
+    "ácido málico",
+    "taninos",
+    "antocianinas",
+    "flavonoides"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda libera ácidos, aceites o compuestos aromáticos según el ingrediente.",
+    "degradacion": "Calor, luz y oxígeno pueden reducir aroma y color.",
+    "comentarios": "Validar en dosis pequeñas antes de integrar a una fórmula."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 5,
+    "mariscos": 5,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 3,
+    "color": 5,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg",
+    "recomendado": "4 g/kg",
+    "maximo": "8 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for sumac",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "sumac_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "4 g/kg dará acidez perceptible al cordero sin humedecer la costra.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Confirmar Rhus culinario y ausencia de sal añadida; el color se degrada con luz.",
+  "estado": "documentado_sin_validar",
+  "id": "sumac",
+  "nombre": "sumac"
+}

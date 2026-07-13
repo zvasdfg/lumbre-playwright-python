@@ -1,0 +1,105 @@
+{
+  "descripcion": "Flavedo de naranja deshidratado, dulce, floral y cítrico; redondea chile, cacao y especias cálidas.",
+  "familia": "Citrico",
+  "origen": "Citrus sinensis; origen agrícola variable.",
+  "disponibilidad_mexico": "Media; producción casera controlada y proveedores de especias.",
+  "granularidad_recomendada": "hojuela fina o polvo grueso",
+  "granularidades_probadas": [
+    "propuesta: hojuela fina",
+    "propuesta: polvo grueso"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 3,
+    "acido": 2,
+    "amargo": 2,
+    "umami": 0,
+    "picante": 0,
+    "ahumado": 0,
+    "herbal": 1,
+    "citrico": 5,
+    "terroso": 0
+  },
+  "compuestos_principales": [
+    "D-limoneno",
+    "linalool",
+    "mirceno",
+    "aldehídos cítricos"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Libera aceite al triturar y al contacto con grasa.",
+    "degradacion": "Limoneno y compuestos oxigenados se oxidan y volatilizan con calor largo.",
+    "comentarios": "Combinar una fracción en rub y otra en acabado."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 2,
+    "color": 3,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.5 g/kg",
+    "recomendado": "2 g/kg",
+    "maximo": "5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener seco y hermético; la humedad causa apelmazamiento y pérdida de calidad.",
+    "luz": "Guardar en oscuridad para proteger color y volátiles.",
+    "oxidacion": "Minimizar aire y moler cerca del uso.",
+    "vida_util": "12 meses"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Citrus peel volatile profiles",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9015143/"
+    },
+    {
+      "titulo": "Home Drying Foods: heat and light affect dried-food quality",
+      "url": "https://extension.usu.edu/preserve-the-harvest/research/home-drying-foods"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "cascara_naranja_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y momento de aplicación en cocción a las brasas.",
+      "hipotesis": "A 2 g/kg equilibrará cacao y chile ancho en cerdo con una nota cítrica dulce.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Evitar albedo abundante y almacenar lejos de luz para conservar aroma y color.",
+  "estado": "documentado_sin_validar",
+  "id": "cascara_naranja",
+  "nombre": "cascara naranja"
+}

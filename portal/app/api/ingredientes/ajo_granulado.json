@@ -1,0 +1,105 @@
+{
+  "descripcion": "Ajo deshidratado en gránulos; aporta base sulfurada, dulzor cocido y buena adhesión sin la humedad del ajo fresco.",
+  "familia": "Allium",
+  "origen": "Allium sativum cultivado globalmente; deshidratado y granulado.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados y mayoristas.",
+  "granularidad_recomendada": "gránulo 0.5–1.5 mm",
+  "granularidades_probadas": [
+    "propuesta: granulado",
+    "propuesta: polvo"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 2,
+    "acido": 0,
+    "amargo": 1,
+    "umami": 3,
+    "picante": 2,
+    "ahumado": 0,
+    "herbal": 1,
+    "citrico": 0,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "aliína",
+    "derivados de alicina",
+    "sulfuros de dialilo",
+    "pirazinas al calentarse"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Se rehidrata con humedad superficial y libera compuestos sulfurados.",
+    "degradacion": "Los tiosulfinatos se degradan con calor; aparecen sulfuros, pirazinas y notas tostadas.",
+    "comentarios": "Evitar capa gruesa en fuego directo porque el ajo seco se amarga al quemarse."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 4,
+    "color": 3,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg",
+    "recomendado": "3 g/kg",
+    "maximo": "6 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener seco y hermético; la humedad causa apelmazamiento y pérdida de calidad.",
+    "luz": "Guardar en oscuridad para proteger color y volátiles.",
+    "oxidacion": "Minimizar aire y moler cerca del uso.",
+    "vida_util": "18 meses"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Volatile compounds of fresh and processed garlic",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6966211/"
+    },
+    {
+      "titulo": "Home Drying Foods: heat and light affect dried-food quality",
+      "url": "https://extension.usu.edu/preserve-the-harvest/research/home-drying-foods"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "ajo_granulado_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y momento de aplicación en cocción a las brasas.",
+      "hipotesis": "El gránulo a 3 g/kg dará aroma de ajo más limpio y menos amargor que el polvo en fuego directo.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Comparar gránulo y polvo: no son equivalentes por superficie ni velocidad de quemado.",
+  "estado": "documentado_sin_validar",
+  "id": "ajo_granulado",
+  "nombre": "ajo granulado"
+}

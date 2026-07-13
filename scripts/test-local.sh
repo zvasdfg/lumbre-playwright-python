@@ -9,7 +9,7 @@ export NO_PROXY="localhost,127.0.0.1,::1"
 export no_proxy="$NO_PROXY"
 
 cd "$ROOT_DIR/portal"
-npm run dev -- --host localhost --port "$PORT" >"$SERVER_LOG" 2>&1 &
+npm run dev -- --hostname localhost --port "$PORT" >"$SERVER_LOG" 2>&1 &
 SERVER_PID=$!
 
 cleanup() {

@@ -1,0 +1,104 @@
+{
+  "descripcion": "Semilla de sésamo oscura, más terrosa y visualmente contrastante, con grasa y notas de nuez.",
+  "familia": "Semilla_aromatica",
+  "origen": "Sesamum indicum, cultivares de semilla negra.",
+  "disponibilidad_mexico": "Media-alta.",
+  "granularidad_recomendada": "entera o quebrada",
+  "granularidades_probadas": [
+    "propuesta: entera o quebrada"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 2,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 3,
+    "picante": 0,
+    "ahumado": 2,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 4
+  },
+  "compuestos_principales": [
+    "sesamina",
+    "sesamolina",
+    "antocianinas/pigmentos fenólicos",
+    "ácido linoleico"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El polvo libera aroma tostado y absorbe grasa/humedad.",
+    "degradacion": "Ya contiene productos de tostado y puede amargar al carbonizar.",
+    "comentarios": "Preferir cocción indirecta o capa fina."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 4,
+    "pescado": 5,
+    "mariscos": 5,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 4,
+    "color": 5,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "2 g/kg",
+    "recomendado": "8 g/kg",
+    "maximo": "20 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for ajonjoli negro",
+      "url": "https://www.fda.gov/consumers/consumer-updates/allergic-sesame-food-labels-now-must-list-sesame-allergen"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "ajonjoli_negro_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "8 g/kg dará contraste y perfil más terroso que sésamo blanco.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Alérgeno mayor. El color dificulta juzgar tostado; usar tiempo y temperatura.",
+  "estado": "documentado_sin_validar",
+  "id": "ajonjoli_negro",
+  "nombre": "ajonjoli negro"
+}

@@ -1,0 +1,105 @@
+{
+  "descripcion": "Hierba seca intensa, terrosa y ligeramente mentolada, con carácter fenólico.",
+  "familia": "Hierba",
+  "origen": "Mediterráneo; cultivado globalmente.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "hoja fina sin tallos",
+  "granularidades_probadas": [
+    "propuesta: hoja fina sin tallos"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 0,
+    "acido": 0,
+    "amargo": 3,
+    "umami": 0,
+    "picante": 1,
+    "ahumado": 0,
+    "herbal": 5,
+    "citrico": 1,
+    "terroso": 3
+  },
+  "compuestos_principales": [
+    "timol",
+    "carvacrol",
+    "p-cimeno",
+    "gamma-terpineno",
+    "linalool"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La trituración libera aceites esenciales.",
+    "degradacion": "Los monoterpenos se volatilizan y oxidan con calor prolongado.",
+    "comentarios": "Dividir aplicación entre rub y final para conservar aroma."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 5,
+    "pescado": 5,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 1,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.2 g/kg",
+    "recomendado": "0.8 g/kg",
+    "maximo": "2 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for tomillo",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7571078/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "tomillo_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "0.8 g/kg dará persistencia herbal al pollo sin dominar.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Dosis altas dominan y recuerdan productos medicinales.",
+  "estado": "documentado_sin_validar",
+  "id": "tomillo",
+  "nombre": "tomillo"
+}

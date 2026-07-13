@@ -1,0 +1,103 @@
+{
+  "descripcion": "Sal marina mexicana de las salinas de Cuyutlán, tradicionalmente evaporada al sol; funciona como sal base o de acabado según molienda.",
+  "familia": "Sal",
+  "origen": "Laguna de Cuyutlán, Colima, México.",
+  "disponibilidad_mexico": "Media en México; productores de Colima, tiendas gourmet y comercio electrónico.",
+  "granularidad_recomendada": "media de 1–3 mm para rub; gruesa para acabado",
+  "granularidades_probadas": [
+    "propuesta: media",
+    "propuesta: gruesa"
+  ],
+  "perfil_sensorial": {
+    "salado": 5,
+    "dulce": 0,
+    "acido": 0,
+    "amargo": 0,
+    "umami": 1,
+    "picante": 0,
+    "ahumado": 0,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 1
+  },
+  "compuestos_principales": [
+    "cloruro de sodio (NaCl)",
+    "trazas minerales propias del lote"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Se disuelve con la humedad de la carne.",
+    "degradacion": "Estable al calor; la concentración percibida aumenta al perder agua el alimento.",
+    "comentarios": "La variación artesanal de cristal exige dosificar por masa y registrar lote."
+  },
+  "compatibilidad": {
+    "res": 5,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 5,
+    "mariscos": 5,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 0,
+    "aroma": 1
+  },
+  "dosificacion": {
+    "minimo": "7 g/kg",
+    "recomendado": "10 g/kg",
+    "maximo": "14 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "36 meses o la fecha del productor"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Sal Real de Colima: products",
+      "url": "https://salrealdecolima.com/productos/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "sal_colima_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "A igual masa, la sal de Colima media producirá sazón equivalente a la kosher, con posible diferencia de textura sólo en acabado.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Registrar productor, lote y humedad. No atribuir diferencias sensoriales a minerales sin una comparación ciega.",
+  "estado": "documentado_sin_validar",
+  "id": "sal_colima",
+  "nombre": "sal colima"
+}

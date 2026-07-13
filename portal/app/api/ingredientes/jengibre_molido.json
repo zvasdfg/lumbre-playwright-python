@@ -1,0 +1,20 @@
+{
+  "descripcion": "Rizoma de jengibre seco y molido; aporta pungencia cálida, notas cítricas y un dulzor aromático distinto al chile.",
+  "familia": "Especia_calida",
+  "origen": "Zingiber officinale, originario de Asia y cultivado en regiones tropicales.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados, tiendas naturistas y de especias.",
+  "granularidad_recomendada": "polvo fino 250–500 µm",
+  "granularidades_probadas": ["propuesta: polvo fino"],
+  "perfil_sensorial": {"salado": 0, "dulce": 2, "acido": 1, "amargo": 1, "umami": 0, "picante": 4, "ahumado": 0, "herbal": 2, "citrico": 3, "terroso": 2},
+  "compuestos_principales": ["gingeroles", "shogaoles", "zingerona", "zingibereno"],
+  "comportamiento_termico": {"liberacion_aromatica": "Libera volátiles cítricos al hidratarse o calentarse en grasa.", "degradacion": "El secado y el calor transforman gingeroles; aumenta el carácter cálido de shogaoles y zingerona.", "comentarios": "Dosificar con cautela en rubs secos porque su pungencia se acumula."},
+  "compatibilidad": {"res": 3, "cerdo": 5, "pollo": 5, "cordero": 4, "pescado": 5, "mariscos": 5, "vegetales": 5},
+  "aporte": {"costra": 2, "bark": 3, "color": 2, "aroma": 5},
+  "dosificacion": {"minimo": "0.3 g/kg", "recomendado": "1.5 g/kg", "maximo": "4 g/kg"},
+  "estabilidad": {"humedad": "Mantener seco y hermético.", "luz": "Conservar en oscuridad.", "oxidacion": "Evitar almacenamiento abierto.", "vida_util": "18 meses"},
+  "proveedores": ["Tiendas de especias y cereales", "Supermercados y mercados en México"],
+  "bibliografia": [{"titulo": "Ginger bioactives and food applications", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10669910/"}],
+  "experimentos": [{"id": "jengibre_molido_baseline_v1", "estado": "propuesto", "objetivo": "Definir pungencia útil para pollo y vegetales.", "hipotesis": "1.5 g/kg añadirá calor aromático sin dominar el perfil.", "metodo": ["Preparar control y tres dosis.", "Cocinar en condiciones equivalentes.", "Evaluar aroma, pungencia y balance."], "variables_controladas": ["masa", "dosis", "temperatura"], "metricas": ["aroma 0–5", "pungencia 0–5", "balance 0–5"]}],
+  "notas_laboratorio": "Comparar más adelante contra jengibre fresco; no son equivalentes en humedad ni perfil volátil.",
+  "estado": "documentado_sin_validar", "id": "jengibre_molido", "nombre": "jengibre molido"
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": 5,
+  "id": "LHV-001",
+  "firma": "LHV:ajo_granulado+azucar_morena+cascara_limon+pimienta_negra+sal_kosher+tomillo",
+  "objetivo": "Vegetales a las brasas",
+  "componentes": [
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "cascara_limon",
+      "nombre": "cascara limon",
+      "familia": "Citrico"
+    },
+    {
+      "id": "azucar_morena",
+      "nombre": "azúcar morena",
+      "familia": "Endulzante"
+    },
+    {
+      "id": "tomillo",
+      "nombre": "tomillo",
+      "familia": "Hierba"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    }
+  ],
+  "hipotesis": "El limón y el tomillo mantendrán un perfil fresco sobre las notas tostadas de los vegetales; ajo, sal y pimienta darán estructura y el azúcar apoyará el dorado.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: cítrico mediante cascara limon (añade elevación aromática y contraste cítrico); endulzante mediante azúcar morena (añade dulzor, color y potencial de caramelización); herbal mediante tomillo (añade frescura resinosa o vegetal).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "cítrico",
+        "ingredients": [
+          "cascara limon"
+        ],
+        "contribution": "añade elevación aromática y contraste cítrico"
+      },
+      {
+        "role": "endulzante",
+        "ingredients": [
+          "azúcar morena"
+        ],
+        "contribution": "añade dulzor, color y potencial de caramelización"
+      },
+      {
+        "role": "herbal",
+        "ingredients": [
+          "tomillo"
+        ],
+        "contribution": "añade frescura resinosa o vegetal"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 1.8,
+      "ingredients": [
+        "tomillo",
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.5,
+      "ingredients": [
+        "azúcar morena"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Vegetales cítricos con ajo y hierbas según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-VEGETALES-CITRICO",
+    "nombre": "Vegetales cítricos con ajo y hierbas",
+    "fundamento": "El sazonador para vegetales de McCormick declara sal marina, hierbas, ajo, azúcar y cáscara de limón para vegetales asados o a la parrilla.",
+    "adaptacion": "Tomillo y pimienta concretan las hierbas y especias no detalladas por la fuente. La proporción propuesta no reproduce un producto comercial.",
+    "proporciones": [
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "cascara_limon",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "azucar_morena",
+        "partes": 0.5
+      },
+      {
+        "ingrediente_id": "tomillo",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "McCormick Flavor Maker Veggie Topping Seasoning",
+        "url": "https://www.mccormick.com/products/mccormick-flavor-maker-veggie-topping-seasoning-2-75-oz"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.690Z"
+}

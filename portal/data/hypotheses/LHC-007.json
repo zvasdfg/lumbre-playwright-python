@@ -1,0 +1,172 @@
+{
+  "schema_version": 5,
+  "id": "LHC-007",
+  "firma": "LHC:azucar_morena+cafe_molido+chile_ancho+comino+paprika_ahumada+sal_kosher",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "cafe_molido",
+      "nombre": "cafe molido",
+      "familia": "Tostado"
+    },
+    {
+      "id": "azucar_morena",
+      "nombre": "azúcar morena",
+      "familia": "Endulzante"
+    },
+    {
+      "id": "chile_ancho",
+      "nombre": "chile ancho",
+      "familia": "Chile"
+    },
+    {
+      "id": "comino",
+      "nombre": "comino",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "paprika_ahumada",
+      "nombre": "paprika ahumada",
+      "familia": "Chile"
+    }
+  ],
+  "hipotesis": "Café y ancho construirán una costra oscura y profunda; azúcar apoyará el dorado y comino, sal y paprika completarán el perfil terroso-ahumado.",
+  "formula": {
+    "level": "close",
+    "formula_id": "sweet_smoky_rub",
+    "formula_name": "Rub dulce-ahumado",
+    "conclusion": "La selección es una variación cercana de “Rub dulce-ahumado”, pero la evidencia consultada corresponde a Bark para cocción lenta o Pollo al fuego directo, no a Costra para res. Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: tostado mediante cafe molido (añade notas tostadas, color y profundidad de bark); terroso mediante chile ancho, comino (añade profundidad terrosa y especiada); chile mediante chile ancho, paprika ahumada (añade picor, color y notas de Capsicum).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "endulzante (1/1)",
+      "ahumado (1/1)"
+    ],
+    "missing_roles": [
+      "objetivo respaldado: Bark para cocción lenta o Pollo al fuego directo"
+    ],
+    "additional_profiles": [
+      {
+        "role": "tostado",
+        "ingredients": [
+          "cafe molido"
+        ],
+        "contribution": "añade notas tostadas, color y profundidad de bark"
+      },
+      {
+        "role": "terroso",
+        "ingredients": [
+          "chile ancho",
+          "comino"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "chile ancho",
+          "paprika ahumada"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Sweet & Smoky Rub: salt, sugar, chipotle, paprika, garlic and onion",
+        "url": "https://www.mccormick.com/products/mccormick-r-grill-mates-r-sweet-smoky-rub-5-37-oz"
+      },
+      {
+        "title": "McCormick Brown Sugar Bourbon: salt, brown sugar, garlic, onion and spices",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-brown-sugar-bourbon-seasoning-3-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 3,
+      "ingredients": [
+        "cafe molido",
+        "chile ancho",
+        "comino"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 2.3,
+      "ingredients": [
+        "azúcar morena",
+        "chile ancho",
+        "paprika ahumada"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.8,
+      "ingredients": [
+        "cafe molido",
+        "comino"
+      ]
+    },
+    {
+      "attribute": "ahumado",
+      "intensity": 1.8,
+      "ingredients": [
+        "cafe molido",
+        "paprika ahumada"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Costra de café y chile ancho según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-COSTRA-CAFE-CHILE",
+    "nombre": "Costra de café y chile ancho",
+    "fundamento": "Weber publica exactamente estos seis componentes para el rub de un tri-tip asado con café y chile.",
+    "adaptacion": "No se sustituyen componentes. Las partes convierten cucharadas y cucharaditas publicadas a una unidad común de cucharadita.",
+    "proporciones": [
+      {
+        "ingrediente_id": "cafe_molido",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "azucar_morena",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "chile_ancho",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "comino",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "paprika_ahumada",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Tri-Tip Roast with Coffee-Chile Rub",
+        "url": "https://www.weber.com/US/en/recipes/red-meat/tri-tip-roast/weber-2071757.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.080Z"
+}

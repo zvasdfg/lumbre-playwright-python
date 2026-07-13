@@ -1,0 +1,152 @@
+{
+  "schema_version": 5,
+  "id": "LHV-005",
+  "firma": "LHV:ajo_granulado+chile_guajillo+curcuma+jengibre_molido+sal_kosher+semilla_cilantro",
+  "objetivo": "Vegetales a las brasas",
+  "componentes": [
+    {
+      "id": "jengibre_molido",
+      "nombre": "jengibre molido",
+      "familia": "Especia_calida"
+    },
+    {
+      "id": "curcuma",
+      "nombre": "cúrcuma",
+      "familia": "Especia_calida"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "chile_guajillo",
+      "nombre": "chile guajillo",
+      "familia": "Chile"
+    },
+    {
+      "id": "semilla_cilantro",
+      "nombre": "semilla cilantro",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    }
+  ],
+  "hipotesis": "Jengibre, cúrcuma y chile formarán un perfil cálido y colorido; ajo y cilantro aportarán profundidad sobre una base salina.",
+  "formula": {
+    "level": "close",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección es una variación cercana de “SPG clásico”, pero faltan pimienta (1). Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: terroso mediante cúrcuma, semilla cilantro (añade profundidad terrosa y especiada); chile mediante chile guajillo (añade picor, color y notas de Capsicum).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [
+      "pimienta (1)"
+    ],
+    "additional_profiles": [
+      {
+        "role": "terroso",
+        "ingredients": [
+          "cúrcuma",
+          "semilla cilantro"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "chile guajillo"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.3,
+      "ingredients": [
+        "cúrcuma"
+      ]
+    },
+    {
+      "attribute": "picante",
+      "intensity": 1.8,
+      "ingredients": [
+        "jengibre molido",
+        "chile guajillo"
+      ]
+    },
+    {
+      "attribute": "cítrico",
+      "intensity": 1.5,
+      "ingredients": [
+        "jengibre molido",
+        "semilla cilantro"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Vegetales tikka de jengibre y cúrcuma según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-VEGETALES-TIKKA",
+    "nombre": "Vegetales tikka de jengibre y cúrcuma",
+    "fundamento": "Weber usa jengibre, cúrcuma, ajo, chile, cilantro y sal en su marinada de paneer, cebolla y pimientos asados.",
+    "adaptacion": "Jengibre, ajo y cilantro secos sustituyen versiones frescas; guajillo sustituye Kashmiri chile. Las partes son una formulación inicial porque la fuente mezcla unidades y usa garam masala adicional.",
+    "proporciones": [
+      {
+        "ingrediente_id": "jengibre_molido",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "curcuma",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "chile_guajillo",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "semilla_cilantro",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Paneer Tikka",
+        "url": "https://www.weber.com/TH/en/recipes/veggies/paneer-tikka/weber-1475289.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.160Z"
+}

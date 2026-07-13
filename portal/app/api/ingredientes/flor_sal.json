@@ -1,0 +1,102 @@
+{
+  "descripcion": "Capa fina de cristales frágiles recolectada en la superficie de salinas; ofrece textura crujiente y salinidad rápida como acabado.",
+  "familia": "Sal",
+  "origen": "Salinas costeras por evaporación solar; existe producción artesanal en Cuyutlán, Colima.",
+  "disponibilidad_mexico": "Media; tiendas gourmet, productores regionales y comercio electrónico.",
+  "granularidad_recomendada": "escama o cristal frágil; usar sin moler al final",
+  "granularidades_probadas": [
+    "propuesta: escama de acabado"
+  ],
+  "perfil_sensorial": {
+    "salado": 5,
+    "dulce": 0,
+    "acido": 0,
+    "amargo": 0,
+    "umami": 1,
+    "picante": 0,
+    "ahumado": 0,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 1
+  },
+  "compuestos_principales": [
+    "cloruro de sodio (NaCl)",
+    "trazas minerales e humedad residual variables"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Se disuelve rápidamente sobre superficies húmedas.",
+    "degradacion": "Térmicamente estable, pero pierde su ventaja textural si se aplica antes de una cocción larga.",
+    "comentarios": "Aplicar después del reposo o en el emplatado."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 4,
+    "pollo": 4,
+    "cordero": 4,
+    "pescado": 5,
+    "mariscos": 5,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 1,
+    "bark": 1,
+    "color": 0,
+    "aroma": 1
+  },
+  "dosificacion": {
+    "minimo": "1 g/kg de acabado",
+    "recomendado": "2 g/kg de acabado",
+    "maximo": "4 g/kg de acabado"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "24 meses para mejor textura"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Sal Real de Colima: products",
+      "url": "https://salrealdecolima.com/productos/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "flor_sal_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "Un acabado de 2 g/kg después del reposo aumentará el contraste salino y la textura sin sobresalar en la salinidad total.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "No sustituye la sal base en una prueba: usarla como variable de acabado. Mantener completamente seca para conservar la escama.",
+  "estado": "documentado_sin_validar",
+  "id": "flor_sal",
+  "nombre": "flor sal"
+}

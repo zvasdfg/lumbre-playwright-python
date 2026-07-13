@@ -1,0 +1,104 @@
+{
+  "descripcion": "Chile seco pequeño de picor alto, directo y persistente, con perfil limpio, vegetal y ligeramente tostado.",
+  "familia": "Chile",
+  "origen": "México; cultivares de Capsicum annuum.",
+  "disponibilidad_mexico": "Alta en México; mercados y supermercados.",
+  "granularidad_recomendada": "hojuela o polvo medio; dosificar con precisión",
+  "granularidades_probadas": [
+    "propuesta: hojuelas",
+    "propuesta: polvo medio"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 0,
+    "picante": 5,
+    "ahumado": 1,
+    "herbal": 1,
+    "citrico": 0,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "capsaicina",
+    "dihidrocapsaicina",
+    "carotenoides"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda expone capsaicinoides y libera aroma rápidamente.",
+    "degradacion": "Los aromas se pierden y la piel amarga al carbonizar; el picor permanece.",
+    "comentarios": "Usar fracción pequeña y evitar aerosolizar el polvo; manipular con guantes."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 4,
+    "pescado": 2,
+    "mariscos": 3,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 3,
+    "color": 4,
+    "aroma": 4
+  },
+  "dosificacion": {
+    "minimo": "0.2 g/kg",
+    "recomendado": "0.8 g/kg",
+    "maximo": "2 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Mantener seco y hermético; la humedad causa apelmazamiento y pérdida de calidad.",
+    "luz": "Guardar en oscuridad para proteger color y volátiles.",
+    "oxidacion": "Minimizar aire y moler cerca del uso.",
+    "vida_util": "12 meses entero; 6 meses molido"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Thermal drying and red-pepper aroma",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11245976/"
+    },
+    {
+      "titulo": "Home Drying Foods: heat and light affect dried-food quality",
+      "url": "https://extension.usu.edu/preserve-the-harvest/research/home-drying-foods"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "chile_arbol_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis y momento de aplicación en cocción a las brasas.",
+      "hipotesis": "A 0.8 g/kg elevará el picor de cerdo sin ocultar humo ni dulzor del rub.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima por masa.",
+        "Cocinar bajo condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Evitar inhalación y contacto ocular. El máximo es un punto experimental, no una recomendación universal.",
+  "estado": "documentado_sin_validar",
+  "id": "chile_arbol",
+  "nombre": "chile arbol"
+}

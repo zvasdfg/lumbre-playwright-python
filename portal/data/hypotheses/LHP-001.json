@@ -1,0 +1,118 @@
+{
+  "schema_version": 5,
+  "id": "LHP-001",
+  "firma": "LHP:ajo_granulado+cascara_limon+cebolla_granulada+comino+flor_sal+pimienta_negra",
+  "objetivo": "Pollo al fuego directo",
+  "componentes": [
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "cebolla_granulada",
+      "nombre": "cebolla granulada",
+      "familia": "Allium"
+    },
+    {
+      "id": "flor_sal",
+      "nombre": "flor sal",
+      "familia": "Sal"
+    },
+    {
+      "id": "cascara_limon",
+      "nombre": "cascara limon",
+      "familia": "Citrico"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "comino",
+      "nombre": "comino",
+      "familia": "Semilla_aromatica"
+    }
+  ],
+  "hipotesis": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: cítrico mediante cascara limon (añade elevación aromática y contraste cítrico); terroso mediante comino (añade profundidad terrosa y especiada).",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: cítrico mediante cascara limon (añade elevación aromática y contraste cítrico); terroso mediante comino (añade profundidad terrosa y especiada).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (2/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "cítrico",
+        "ingredients": [
+          "cascara limon"
+        ],
+        "contribution": "añade elevación aromática y contraste cítrico"
+      },
+      {
+        "role": "terroso",
+        "ingredients": [
+          "comino"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.2,
+      "ingredients": [
+        "pimienta negra",
+        "comino"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.5,
+      "ingredients": [
+        "comino"
+      ]
+    },
+    {
+      "attribute": "umami",
+      "intensity": 1.5,
+      "ingredients": [
+        "ajo granulado",
+        "cebolla granulada"
+      ]
+    },
+    {
+      "attribute": "picante",
+      "intensity": 1.5,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar una segunda muestra con la estructura de referencia SPG clásico.",
+    "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+    "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
+    "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia."
+  ],
+  "estado": "borrador",
+  "creado_en": "2026-07-13T21:38:40.233Z"
+}

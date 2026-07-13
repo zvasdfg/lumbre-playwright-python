@@ -1,0 +1,130 @@
+{
+  "schema_version": 5,
+  "id": "LHV-004",
+  "firma": "LHV:ajo_granulado+albahaca_seca+pimienta_negra+sal_kosher",
+  "objetivo": "Vegetales a las brasas",
+  "componentes": [
+    {
+      "id": "albahaca_seca",
+      "nombre": "albahaca seca",
+      "familia": "Hierba"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    }
+  ],
+  "hipotesis": "Albahaca y ajo elevarán el aroma de vegetales dorados, mientras sal y pimienta mantendrán una estructura simple que permita leer el efecto de la hierba.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: herbal mediante albahaca seca (añade frescura resinosa o vegetal).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "herbal",
+        "ingredients": [
+          "albahaca seca"
+        ],
+        "contribution": "añade frescura resinosa o vegetal"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "herbal",
+      "intensity": 1.8,
+      "ingredients": [
+        "albahaca seca"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 1.8,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.5,
+      "ingredients": [
+        "albahaca seca"
+      ]
+    },
+    {
+      "attribute": "picante",
+      "intensity": 1.5,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Vegetales con albahaca, ajo y pimienta según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-VEGETALES-ALBAHACA",
+    "nombre": "Vegetales con albahaca, ajo y pimienta",
+    "fundamento": "Weber combina albahaca, ajo, sal y pimienta con berenjena, calabacita y pimientos cocinados a la parrilla.",
+    "adaptacion": "La fuente usa albahaca y ajo frescos; Lumbre emplea sus versiones secas. La proporción propuesta es un punto de partida, no una conversión directa.",
+    "proporciones": [
+      {
+        "ingrediente_id": "albahaca_seca",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Grilled Vegetable Gratin with Ricotta & Basil",
+        "url": "https://www.weber.com/IE/en/recipes/vegetarian/grilled-vegetable-gratin-with-ricotta-basil/weber-189687.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.154Z"
+}

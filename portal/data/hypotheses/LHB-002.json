@@ -1,0 +1,140 @@
+{
+  "schema_version": 5,
+  "id": "LHB-002",
+  "firma": "LHB:ajo_granulado+azucar_morena+paprika_ahumada+pimienta_negra+sal_kosher",
+  "objetivo": "Bark para cocción lenta",
+  "componentes": [
+    {
+      "id": "azucar_morena",
+      "nombre": "azúcar morena",
+      "familia": "Endulzante"
+    },
+    {
+      "id": "paprika_ahumada",
+      "nombre": "paprika ahumada",
+      "familia": "Chile"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    }
+  ],
+  "hipotesis": "Azúcar morena y paprika ahumada favorecerán color y carácter de cocción lenta; sal, ajo y pimienta evitarán que el perfil quede solamente dulce.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. Los perfiles adicionales son: endulzante mediante azúcar morena (añade dulzor, color y potencial de caramelización); ahumado mediante paprika ahumada (añade humo, color y carácter de cocción lenta); chile mediante paprika ahumada (añade picor, color y notas de Capsicum).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [
+      {
+        "role": "endulzante",
+        "ingredients": [
+          "azúcar morena"
+        ],
+        "contribution": "añade dulzor, color y potencial de caramelización"
+      },
+      {
+        "role": "ahumado",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade humo, color y carácter de cocción lenta"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "dulce",
+      "intensity": 2.2,
+      "ingredients": [
+        "azúcar morena",
+        "paprika ahumada"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 2,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Bark clásico dulce y ahumado según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-BARK-CLASICO",
+    "nombre": "Bark clásico dulce y ahumado",
+    "fundamento": "La receta de costillas clásicas de Weber publica estos cinco componentes como su mezcla seca.",
+    "adaptacion": "Se conservan los componentes y su relación volumétrica publicada; la sal kosher sustituye a la sal marina y se normaliza la fórmula en partes.",
+    "proporciones": [
+      {
+        "ingrediente_id": "azucar_morena",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "paprika_ahumada",
+        "partes": 5
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 4
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "pimienta_negra",
+        "partes": 2
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Classic Saucy Pork Ribs",
+        "url": "https://www.weber.com/AU/en/recipes/pork/classic-saucy-pork-ribs/weber-2367499.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.654Z"
+}

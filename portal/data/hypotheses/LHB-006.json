@@ -1,0 +1,165 @@
+{
+  "schema_version": 5,
+  "id": "LHB-006",
+  "firma": "LHB:ajo_granulado+chile_ancho+mostaza_polvo+paprika_ahumada+sal_kosher+tomillo",
+  "objetivo": "Bark para cocción lenta",
+  "componentes": [
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "paprika_ahumada",
+      "nombre": "paprika ahumada",
+      "familia": "Chile"
+    },
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "chile_ancho",
+      "nombre": "chile ancho",
+      "familia": "Chile"
+    },
+    {
+      "id": "mostaza_polvo",
+      "nombre": "mostaza polvo",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "tomillo",
+      "nombre": "tomillo",
+      "familia": "Hierba"
+    }
+  ],
+  "hipotesis": "Chile, paprika y ajo construirán color y fondo; mostaza y tomillo añadirán pungencia y un contraste herbal en un bark deliberadamente poco dulce.",
+  "formula": {
+    "level": "close",
+    "formula_id": "herbal_allium",
+    "formula_name": "Base herbal con allium",
+    "conclusion": "La selección es una variación cercana de “Base herbal con allium”, pero la evidencia consultada corresponde a Pollo al fuego directo o Vegetales a las brasas, no a Bark para cocción lenta. Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: ahumado mediante paprika ahumada (añade humo, color y carácter de cocción lenta); chile mediante paprika ahumada, chile ancho (añade picor, color y notas de Capsicum); terroso mediante chile ancho, mostaza polvo (añade profundidad terrosa y especiada).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "ajo o cebolla (1/1)",
+      "herbal (1/1)"
+    ],
+    "missing_roles": [
+      "objetivo respaldado: Pollo al fuego directo o Vegetales a las brasas"
+    ],
+    "additional_profiles": [
+      {
+        "role": "ahumado",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade humo, color y carácter de cocción lenta"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika ahumada",
+          "chile ancho"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      },
+      {
+        "role": "terroso",
+        "ingredients": [
+          "chile ancho",
+          "mostaza polvo"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Montreal Chicken: garlic, onion, salt, pepper and herbs",
+        "url": "https://www.mccormick.com/products/mccormick-r-grill-mates-r-montreal-chicken-seasoning-2-75-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.3,
+      "ingredients": [
+        "chile ancho",
+        "tomillo"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.7,
+      "ingredients": [
+        "mostaza polvo",
+        "tomillo"
+      ]
+    },
+    {
+      "attribute": "picante",
+      "intensity": 1.7,
+      "ingredients": [
+        "mostaza polvo"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.5,
+      "ingredients": [
+        "paprika ahumada",
+        "chile ancho"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Bark salado de chile, mostaza y tomillo según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-BARK-BEST-BLOCK",
+    "nombre": "Bark salado de chile, mostaza y tomillo",
+    "fundamento": "Weber documenta esta estructura dentro de su rub Best on the Block para baby back ribs con humo de hickory.",
+    "adaptacion": "El chile ancho representa el chile puro de la fuente. Se omiten comino, semilla de apio y pimienta por el límite de seis componentes; las cantidades incluidas permanecen intactas.",
+    "proporciones": [
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 6
+      },
+      {
+        "ingrediente_id": "paprika_ahumada",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "chile_ancho",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "mostaza_polvo",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "tomillo",
+        "partes": 2
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Best on the Block Baby Back Ribs",
+        "url": "https://www.weber.com/US/en/blog/best-on-the-block-baby-back-ribs"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.108Z"
+}

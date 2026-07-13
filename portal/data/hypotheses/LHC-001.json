@@ -1,0 +1,84 @@
+{
+  "schema_version": 5,
+  "id": "LHC-001",
+  "firma": "LHC:pimienta_blanca+pimienta_negra+pimienta_rosa+pimienta_verde+sal_kosher",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "pimienta_blanca",
+      "nombre": "pimienta blanca",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "pimienta_rosa",
+      "nombre": "pimienta rosa",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "pimienta_verde",
+      "nombre": "pimienta verde",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    }
+  ],
+  "hipotesis": "La selección reproduce los roles de la fórmula documentada “Base salina con medley de pimientas” (base salina + al menos tres pimientas). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. No contiene perfiles fuera de la estructura de referencia.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "peppercorn_medley",
+    "formula_name": "Base salina con medley de pimientas",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “Base salina con medley de pimientas” (base salina + al menos tres pimientas). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. No contiene perfiles fuera de la estructura de referencia.",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (4/3)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [],
+    "sources": [
+      {
+        "title": "McCormick Peppercorn Medley: black, white, green and pink peppercorns",
+        "url": "https://www.mccormick.com/products/mccormick-peppercorn-medley-grinder-0-85-oz"
+      },
+      {
+        "title": "McCormick Coarse Black Pepper & Flake Salt seasoning",
+        "url": "https://www.mccormick.com/grill-mates/flavors/seasoning-blends/grill-mates-coarse-black-pepper-and-flake-salt-house-blend"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "picante",
+      "intensity": 2.6,
+      "ingredients": [
+        "pimienta blanca",
+        "pimienta verde",
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 2.2,
+      "ingredients": [
+        "pimienta blanca",
+        "pimienta negra"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar una segunda muestra con la estructura de referencia Base salina con medley de pimientas.",
+    "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+    "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
+    "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia."
+  ],
+  "estado": "borrador",
+  "creado_en": "2026-07-13T19:43:39.937Z"
+}

@@ -1,0 +1,106 @@
+{
+  "descripcion": "Semilla de Aframomum melegueta con picor corto, cítrico y notas de cardamomo; útil para levantar mezclas grasas.",
+  "familia": "Pimienta",
+  "origen": "África occidental, especialmente la región del golfo de Guinea.",
+  "disponibilidad_mexico": "Baja; importadores y tiendas de especias especializadas.",
+  "granularidad_recomendada": "media recién molida",
+  "granularidades_probadas": [
+    "propuesta: media",
+    "propuesta: quebrada"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 1,
+    "acido": 1,
+    "amargo": 2,
+    "umami": 0,
+    "picante": 4,
+    "ahumado": 0,
+    "herbal": 2,
+    "citrico": 3,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "6-paradol",
+    "6-gingerol",
+    "6-shogaol",
+    "humuleno",
+    "cariofileno"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El triturado libera compuestos picantes y aceites aromáticos.",
+    "degradacion": "Los volátiles cítricos disminuyen con cocción larga; el picor permanece más.",
+    "comentarios": "Dividir la dosis entre rub y acabado para evaluar persistencia."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 5,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 3,
+    "color": 1,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.4 g/kg",
+    "recomendado": "1.2 g/kg",
+    "maximo": "2.5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "18 meses entera"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Safety aspects and occurrence of piperine",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8467119/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "granos_paraiso_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "A 1.2 g/kg reducirá la sensación grasa de cerdo mediante un picor cítrico sin dominar como chile de árbol.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Ingrediente de investigación: confirmar identidad botánica, frescura y ausencia de adulteración.",
+  "estado": "documentado_sin_validar",
+  "id": "granos_paraiso",
+  "nombre": "granos paraiso"
+}

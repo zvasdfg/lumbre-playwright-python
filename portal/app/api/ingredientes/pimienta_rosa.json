@@ -1,0 +1,105 @@
+{
+  "descripcion": "Baya aromática de Schinus spp., no Piper nigrum; dulce, floral y resinosa, con picor leve y color rosado.",
+  "familia": "Pimienta",
+  "origen": "Sudamérica; Schinus terebinthifolia o Schinus molle según proveedor.",
+  "disponibilidad_mexico": "Media; tiendas gourmet y mezclas comerciales de pimientas.",
+  "granularidad_recomendada": "quebrada suavemente; evitar pulverizar",
+  "granularidades_probadas": [
+    "propuesta: quebrada",
+    "propuesta: entera de acabado"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 3,
+    "acido": 1,
+    "amargo": 1,
+    "umami": 0,
+    "picante": 2,
+    "ahumado": 0,
+    "herbal": 2,
+    "citrico": 3,
+    "terroso": 1
+  },
+  "compuestos_principales": [
+    "alfa-pineno",
+    "limoneno",
+    "beta-cariofileno",
+    "monoterpenos variables"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "Su cáscara frágil libera aroma al romperse.",
+    "degradacion": "Los aromas florales se pierden rápido con calor alto.",
+    "comentarios": "Usar al final o en una capa protegida; se quema con facilidad."
+  },
+  "compatibilidad": {
+    "res": 3,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 3,
+    "pescado": 4,
+    "mariscos": 4,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 2,
+    "color": 3,
+    "aroma": 4
+  },
+  "dosificacion": {
+    "minimo": "0.5 g/kg",
+    "recomendado": "1.5 g/kg",
+    "maximo": "3 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Muy sensible: mantener en envase hermético y usar utensilios secos.",
+    "luz": "Guardar en lugar oscuro; la luz acelera pérdida de color y aroma cuando aplica.",
+    "oxidacion": "Reducir aire de cabeza y preferir el ingrediente entero antes que molido.",
+    "vida_util": "12 meses entera"
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con trazabilidad de lote"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Review: different spices called pepper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12073208/"
+    },
+    {
+      "titulo": "Processes to Preserve Spice and Herb Quality and Sensory Integrity",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "pimienta_rosa_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir una dosis inicial para cocción a las brasas.",
+      "hipotesis": "Una aplicación final de 1.5 g/kg aportará aroma floral y color sin desarrollar amargor por carbonización.",
+      "metodo": [
+        "Preparar control y tres muestras de 250 g.",
+        "Aplicar las dosis mínima, recomendada y máxima por masa.",
+        "Cocinar todas las muestras con idéntico combustible, temperatura y punto interno.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura de superficie",
+        "punto interno",
+        "tiempo de reposo"
+      ],
+      "metricas": [
+        "intensidad aromática 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Confirmar especie y advertencias del proveedor; pertenece a Anacardiaceae y puede ser relevante para personas sensibles a miembros de esa familia.",
+  "estado": "documentado_sin_validar",
+  "id": "pimienta_rosa",
+  "nombre": "pimienta rosa"
+}

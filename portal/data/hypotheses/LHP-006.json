@@ -1,0 +1,160 @@
+{
+  "schema_version": 5,
+  "id": "LHP-006",
+  "firma": "LHP:cardamomo+comino+curcuma+paprika_dulce+sal_kosher+semilla_cilantro",
+  "objetivo": "Pollo al fuego directo",
+  "componentes": [
+    {
+      "id": "comino",
+      "nombre": "comino",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "semilla_cilantro",
+      "nombre": "semilla cilantro",
+      "familia": "Semilla_aromatica"
+    },
+    {
+      "id": "paprika_dulce",
+      "nombre": "paprika dulce",
+      "familia": "Chile"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "curcuma",
+      "nombre": "cúrcuma",
+      "familia": "Especia_calida"
+    },
+    {
+      "id": "cardamomo",
+      "nombre": "cardamomo",
+      "familia": "Especia_calida"
+    }
+  ],
+  "hipotesis": "Comino y cilantro darán estructura terrosa, paprika y cúrcuma color, y cardamomo una salida aromática alta en una mezcla salina para fuego directo.",
+  "formula": {
+    "level": "experimental",
+    "formula_id": null,
+    "formula_name": "Sin fórmula de referencia",
+    "conclusion": "La selección no cubre suficientemente una fórmula de referencia. Su combinación debe tratarse como experimental y compararse contra un control antes de atribuirle un resultado esperado. Los perfiles adicionales son: terroso mediante comino, semilla cilantro, cúrcuma (añade profundidad terrosa y especiada); chile mediante paprika dulce (añade picor, color y notas de Capsicum); especia de aroma dulce mediante cardamomo (añade aroma cálido; no sustituye el dulzor de un azúcar).",
+    "matched_roles": [
+      "base salina (1/1)"
+    ],
+    "missing_roles": [
+      "pimienta (3)",
+      "objetivo respaldado: Costra para res o Bark para cocción lenta"
+    ],
+    "additional_profiles": [
+      {
+        "role": "terroso",
+        "ingredients": [
+          "comino",
+          "semilla cilantro",
+          "cúrcuma"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika dulce"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      },
+      {
+        "role": "especia de aroma dulce",
+        "ingredients": [
+          "cardamomo"
+        ],
+        "contribution": "añade aroma cálido; no sustituye el dulzor de un azúcar"
+      }
+    ],
+    "sources": []
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2.7,
+      "ingredients": [
+        "comino",
+        "cúrcuma"
+      ]
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.7,
+      "ingredients": [
+        "comino",
+        "cúrcuma"
+      ]
+    },
+    {
+      "attribute": "cítrico",
+      "intensity": 1.7,
+      "ingredients": [
+        "semilla cilantro",
+        "cardamomo"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.5,
+      "ingredients": [
+        "paprika dulce",
+        "cardamomo"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Pollo tandoori de seis especias según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-POLLO-TANDOORI",
+    "nombre": "Pollo tandoori de seis especias",
+    "fundamento": "Weber publica estas seis especias, más cayena, para brochetas de pollo tandoori asadas a fuego directo medio.",
+    "adaptacion": "Se omite únicamente la cayena por el límite de seis componentes. Las proporciones conservan exactamente las cantidades publicadas de los ingredientes incluidos.",
+    "proporciones": [
+      {
+        "ingrediente_id": "comino",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "semilla_cilantro",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "paprika_dulce",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "curcuma",
+        "partes": 0.5
+      },
+      {
+        "ingrediente_id": "cardamomo",
+        "partes": 0.5
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "Weber Tandoori Chicken Skewers",
+        "url": "https://www.weber.com/US/en/recipes/poultry/tandoori-chicken-skewers/weber-2193784.html"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T22:19:52.127Z"
+}

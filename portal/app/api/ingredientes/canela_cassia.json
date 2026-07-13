@@ -1,0 +1,104 @@
+{
+  "descripcion": "Corteza dulce, cálida y picante, más robusta y rica en cumarina que canela de Ceilán.",
+  "familia": "Especia_calida",
+  "origen": "China y sudeste asiático; Cinnamomum cassia.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "polvo fino o trozo para infusión",
+  "granularidades_probadas": [
+    "propuesta: polvo fino o trozo para infusión"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 5,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 0,
+    "picante": 2,
+    "ahumado": 1,
+    "herbal": 2,
+    "citrico": 1,
+    "terroso": 3
+  },
+  "compuestos_principales": [
+    "cinamaldehído",
+    "cumarina",
+    "ácido cinámico",
+    "eugenol"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda libera aceites aromáticos potentes.",
+    "degradacion": "Los volátiles disminuyen con calor largo; la superficie quemada amarga.",
+    "comentarios": "Usar dosis baja y proteger del fuego directo."
+  },
+  "compatibilidad": {
+    "res": 4,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 5,
+    "pescado": 2,
+    "mariscos": 1,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 3,
+    "bark": 4,
+    "color": 4,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.1 g/kg",
+    "recomendado": "0.5 g/kg",
+    "maximo": "1.5 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for canela cassia",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6804248/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "canela_cassia_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "0.5 g/kg redondeará cacao y chile en cerdo sin percibirse como postre.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Dosis culinaria baja; registrar especie por la diferencia de cumarina.",
+  "estado": "documentado_sin_validar",
+  "id": "canela_cassia",
+  "nombre": "canela cassia"
+}

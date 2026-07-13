@@ -1,0 +1,20 @@
+{
+  "descripcion": "Hoja seca de albahaca; aporta notas verdes, florales, anisadas y ligeramente dulces.",
+  "familia": "Hierba",
+  "origen": "Ocimum basilicum, originaria de Asia tropical y cultivada globalmente.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados y tiendas de especias.",
+  "granularidad_recomendada": "hoja frotada 1–3 mm",
+  "granularidades_probadas": ["propuesta: hoja seca frotada"],
+  "perfil_sensorial": {"salado": 0, "dulce": 3, "acido": 0, "amargo": 1, "umami": 0, "picante": 0, "ahumado": 0, "herbal": 5, "citrico": 1, "terroso": 1},
+  "compuestos_principales": ["linalool", "eugenol", "estragol", "1,8-cineol"],
+  "comportamiento_termico": {"liberacion_aromatica": "Libera volátiles al triturarse e hidratarse.", "degradacion": "Pierde notas florales con calor alto y prolongado.", "comentarios": "En fuego directo conviene incorporarla protegida en una mezcla o añadirla cerca del final."},
+  "compatibilidad": {"res": 3, "cerdo": 4, "pollo": 5, "cordero": 3, "pescado": 4, "mariscos": 4, "vegetales": 5},
+  "aporte": {"costra": 1, "bark": 2, "color": 2, "aroma": 5},
+  "dosificacion": {"minimo": "0.3 g/kg", "recomendado": "1.5 g/kg", "maximo": "4 g/kg"},
+  "estabilidad": {"humedad": "Mantener seca.", "luz": "Guardar en oscuridad.", "oxidacion": "Conservar hoja entera y triturar al uso.", "vida_util": "12 meses"},
+  "proveedores": ["Supermercados", "Tiendas de especias y cereales"],
+  "bibliografia": [{"titulo": "Aromatic plants for meat applications", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002745/"}, {"titulo": "Utah State University: drying herbs", "url": "https://extension.usu.edu/utah/4h/files/Drying.pdf"}],
+  "experimentos": [{"id": "albahaca_seca_baseline_v1", "estado": "propuesto", "objetivo": "Comparar aplicación temprana y final en vegetales.", "hipotesis": "La aplicación final conservará más aroma floral.", "metodo": ["Preparar control y dos tiempos de aplicación.", "Cocinar muestras equivalentes.", "Evaluar aroma herbal, amargor y color."], "variables_controladas": ["masa", "dosis", "temperatura", "tiempo de aplicación"], "metricas": ["aroma herbal 0–5", "amargor 0–5", "color 0–5"]}],
+  "notas_laboratorio": "No asumir equivalencia 1:1 con albahaca fresca.",
+  "estado": "documentado_sin_validar", "id": "albahaca_seca", "nombre": "albahaca seca"
+}

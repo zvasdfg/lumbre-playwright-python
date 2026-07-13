@@ -1,0 +1,104 @@
+{
+  "descripcion": "Semilla oleosa suave y de nuez; tostada desarrolla pirazinas y textura.",
+  "familia": "Semilla_aromatica",
+  "origen": "África/Asia; Sesamum indicum cultivado globalmente.",
+  "disponibilidad_mexico": "Alta.",
+  "granularidad_recomendada": "entera o quebrada",
+  "granularidades_probadas": [
+    "propuesta: entera o quebrada"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 3,
+    "acido": 0,
+    "amargo": 1,
+    "umami": 3,
+    "picante": 0,
+    "ahumado": 2,
+    "herbal": 0,
+    "citrico": 0,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "sesamina",
+    "sesamolina",
+    "ácido linoleico",
+    "pirazinas al tostar"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "El polvo libera aroma tostado y absorbe grasa/humedad.",
+    "degradacion": "Ya contiene productos de tostado y puede amargar al carbonizar.",
+    "comentarios": "Preferir cocción indirecta o capa fina."
+  },
+  "compatibilidad": {
+    "res": 3,
+    "cerdo": 5,
+    "pollo": 5,
+    "cordero": 3,
+    "pescado": 5,
+    "mariscos": 5,
+    "vegetales": 5
+  },
+  "aporte": {
+    "costra": 4,
+    "bark": 3,
+    "color": 3,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "2 g/kg",
+    "recomendado": "8 g/kg",
+    "maximo": "20 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for ajonjoli blanco",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10878863/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "ajonjoli_blanco_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "8 g/kg tostado aportará nuez y textura a pollo sin sabor quemado.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Alérgeno mayor. Tostar controladamente; la semilla expuesta puede desprenderse o quemarse.",
+  "estado": "documentado_sin_validar",
+  "id": "ajonjoli_blanco",
+  "nombre": "ajonjoli blanco"
+}

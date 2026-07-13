@@ -1,0 +1,104 @@
+{
+  "descripcion": "Fruto dulce y potente con aroma a regaliz; aporta trans-anetol y calidez.",
+  "familia": "Especia_calida",
+  "origen": "China y Vietnam; Illicium verum.",
+  "disponibilidad_mexico": "Media-alta.",
+  "granularidad_recomendada": "polvo fino en dosis baja o pieza para infusión",
+  "granularidades_probadas": [
+    "propuesta: polvo fino en dosis baja o pieza para infusión"
+  ],
+  "perfil_sensorial": {
+    "salado": 0,
+    "dulce": 5,
+    "acido": 0,
+    "amargo": 2,
+    "umami": 0,
+    "picante": 1,
+    "ahumado": 0,
+    "herbal": 3,
+    "citrico": 1,
+    "terroso": 2
+  },
+  "compuestos_principales": [
+    "trans-anetol",
+    "anisaldehído",
+    "estragol",
+    "linalool"
+  ],
+  "comportamiento_termico": {
+    "liberacion_aromatica": "La molienda libera aceites aromáticos potentes.",
+    "degradacion": "Los volátiles disminuyen con calor largo; la superficie quemada amarga.",
+    "comentarios": "Usar dosis baja y proteger del fuego directo."
+  },
+  "compatibilidad": {
+    "res": 3,
+    "cerdo": 5,
+    "pollo": 4,
+    "cordero": 4,
+    "pescado": 3,
+    "mariscos": 2,
+    "vegetales": 4
+  },
+  "aporte": {
+    "costra": 2,
+    "bark": 3,
+    "color": 2,
+    "aroma": 5
+  },
+  "dosificacion": {
+    "minimo": "0.1 g/kg",
+    "recomendado": "0.4 g/kg",
+    "maximo": "1 g/kg"
+  },
+  "estabilidad": {
+    "humedad": "Envase hermético y utensilios secos.",
+    "luz": "Lugar oscuro y fresco.",
+    "oxidacion": "Preferir entero y moler al uso cuando sea posible.",
+    "vida_util": "12 meses molido; 18–24 meses entero, limitado por la etiqueta y pérdida aromática."
+  },
+  "proveedores": [
+    "Mercados y tiendas de especias en México",
+    "Proveedor especializado con lote y origen verificables"
+  ],
+  "bibliografia": [
+    {
+      "titulo": "Technical reference for anis estrella",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8839413/"
+    },
+    {
+      "titulo": "Spice and herb quality during processing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435955/"
+    }
+  ],
+  "experimentos": [
+    {
+      "id": "anis_estrella_baseline_v1",
+      "estado": "propuesto",
+      "objetivo": "Definir dosis inicial para brasas.",
+      "hipotesis": "0.4 g/kg dará dulzor aromático a cerdo sin perfil de regaliz dominante.",
+      "metodo": [
+        "Preparar control y muestras de 250 g.",
+        "Aplicar dosis mínima, recomendada y máxima.",
+        "Cocinar en condiciones idénticas.",
+        "Evaluar a ciegas aroma, balance, amargor, color y costra."
+      ],
+      "variables_controladas": [
+        "masa",
+        "temperatura",
+        "punto interno",
+        "reposo"
+      ],
+      "metricas": [
+        "aroma 0–5",
+        "balance 0–5",
+        "amargor 0–5",
+        "color 0–5",
+        "costra 0–5"
+      ]
+    }
+  ],
+  "notas_laboratorio": "Comprar especie culinaria identificada; no confundir con anís estrellado japonés tóxico.",
+  "estado": "documentado_sin_validar",
+  "id": "anis_estrella",
+  "nombre": "anis estrella"
+}

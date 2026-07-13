@@ -1,0 +1,20 @@
+{
+  "descripcion": "Hoja seca de perejil de perfil verde, limpio y moderado; útil para levantar mezclas sin dominar.",
+  "familia": "Hierba",
+  "origen": "Petroselinum crispum, Mediterráneo; cultivado globalmente.",
+  "disponibilidad_mexico": "Alta; supermercados, mercados y tiendas de especias.",
+  "granularidad_recomendada": "hoja 1–3 mm",
+  "granularidades_probadas": ["propuesta: hoja seca"],
+  "perfil_sensorial": {"salado": 0, "dulce": 1, "acido": 0, "amargo": 1, "umami": 0, "picante": 0, "ahumado": 0, "herbal": 4, "citrico": 1, "terroso": 1},
+  "compuestos_principales": ["apiol", "miristicina", "alfa-pineno", "beta-felandreno"],
+  "comportamiento_termico": {"liberacion_aromatica": "Aporta aroma verde al hidratarse.", "degradacion": "Sus volátiles suaves disminuyen rápidamente con calor intenso.", "comentarios": "Funciona mejor en acabados, mantequillas o mezclas protegidas del contacto directo con llama."},
+  "compatibilidad": {"res": 4, "cerdo": 4, "pollo": 5, "cordero": 4, "pescado": 5, "mariscos": 5, "vegetales": 5},
+  "aporte": {"costra": 1, "bark": 1, "color": 3, "aroma": 3},
+  "dosificacion": {"minimo": "0.5 g/kg", "recomendado": "2 g/kg", "maximo": "6 g/kg"},
+  "estabilidad": {"humedad": "Mantener seco.", "luz": "Proteger de luz para conservar color.", "oxidacion": "Usar envase hermético.", "vida_util": "12 meses"},
+  "proveedores": ["Supermercados", "Tiendas de especias y cereales"],
+  "bibliografia": [{"titulo": "Aromatic plants for meat applications", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002745/"}, {"titulo": "Utah State University: drying herbs", "url": "https://extension.usu.edu/utah/4h/files/Drying.pdf"}],
+  "experimentos": [{"id": "perejil_seco_baseline_v1", "estado": "propuesto", "objetivo": "Evaluar su valor como nota verde de terminación.", "hipotesis": "2 g/kg aplicado al final aumentará frescura percibida sin amargor.", "metodo": ["Preparar control y dos tiempos de aplicación.", "Cocinar muestras equivalentes.", "Evaluar aroma verde y color."], "variables_controladas": ["masa", "dosis", "temperatura", "tiempo de aplicación"], "metricas": ["aroma verde 0–5", "color 0–5", "balance 0–5"]}],
+  "notas_laboratorio": "La hoja seca es suave; verificar frescura del lote antes de aumentar dosis.",
+  "estado": "documentado_sin_validar", "id": "perejil_seco", "nombre": "perejil seco"
+}

@@ -1,0 +1,140 @@
+{
+  "schema_version": 5,
+  "id": "LHP-004",
+  "firma": "LHP:ajo_granulado+cascara_limon+comino+paprika_ahumada+sal_kosher",
+  "objetivo": "Pollo al fuego directo",
+  "componentes": [
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "cascara_limon",
+      "nombre": "cascara limon",
+      "familia": "Citrico"
+    },
+    {
+      "id": "sal_kosher",
+      "nombre": "sal kosher",
+      "familia": "Sal"
+    },
+    {
+      "id": "paprika_ahumada",
+      "nombre": "paprika ahumada",
+      "familia": "Chile"
+    },
+    {
+      "id": "comino",
+      "nombre": "comino",
+      "familia": "Semilla_aromatica"
+    }
+  ],
+  "hipotesis": "Ajo y limón dominarán el frente aromático; paprika y comino aportarán color y calidez, con sal como soporte del conjunto.",
+  "formula": {
+    "level": "close",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección es una variación cercana de “SPG clásico”, pero faltan pimienta (1). Puede funcionar como hipótesis, no como fórmula confirmada, hasta comparar contra la referencia completa. Los perfiles adicionales son: cítrico mediante cascara limon (añade elevación aromática y contraste cítrico); ahumado mediante paprika ahumada (añade humo, color y carácter de cocción lenta); chile mediante paprika ahumada (añade picor, color y notas de Capsicum); terroso mediante comino (añade profundidad terrosa y especiada).",
+    "matched_roles": [
+      "base salina (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [
+      "pimienta (1)"
+    ],
+    "additional_profiles": [
+      {
+        "role": "cítrico",
+        "ingredients": [
+          "cascara limon"
+        ],
+        "contribution": "añade elevación aromática y contraste cítrico"
+      },
+      {
+        "role": "ahumado",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade humo, color y carácter de cocción lenta"
+      },
+      {
+        "role": "chile",
+        "ingredients": [
+          "paprika ahumada"
+        ],
+        "contribution": "añade picor, color y notas de Capsicum"
+      },
+      {
+        "role": "terroso",
+        "ingredients": [
+          "comino"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      }
+    ],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 2,
+      "ingredients": [
+        "comino"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar la mezcla recomendada Pollo inspirado en toum según sus partes relativas.",
+    "Convertir las partes volumétricas a gramos para el lote real y registrar esa conversión.",
+    "Aplicar control y mezcla en muestras equivalentes; registrar dosis, temperatura y tiempo.",
+    "Comparar aroma, color, costra o bark, balance y perfiles esperados; documentar cualquier desviación."
+  ],
+  "estado": "recomendado_sin_validar",
+  "tipo_registro": "recomendacion_investigada",
+  "recomendacion": {
+    "id": "REC-POLLO-TOUM",
+    "nombre": "Pollo inspirado en toum",
+    "fundamento": "McCormick acompaña pollo con toum de ajo, limón y sal, y sazona el ave con paprika, comino y sal.",
+    "adaptacion": "Se integran salsa y sazonado en una sola mezcla seca. La paprika ahumada añade humo no especificado en la receta y deberá compararse contra paprika dulce.",
+    "proporciones": [
+      {
+        "ingrediente_id": "ajo_granulado",
+        "partes": 3
+      },
+      {
+        "ingrediente_id": "cascara_limon",
+        "partes": 1
+      },
+      {
+        "ingrediente_id": "sal_kosher",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "paprika_ahumada",
+        "partes": 2
+      },
+      {
+        "ingrediente_id": "comino",
+        "partes": 1
+      }
+    ],
+    "fuentes": [
+      {
+        "titulo": "McCormick Roasted Chicken with Toum",
+        "url": "https://www.mccormick.com/blogs/recipes/roasted-chicken-with-toum"
+      }
+    ]
+  },
+  "creado_en": "2026-07-13T21:56:59.686Z"
+}
