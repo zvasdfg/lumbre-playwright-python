@@ -324,12 +324,10 @@ Priority definitions:
 | `test_api_011_hypothesis_registry_has_research_provenance.py` | Registry-wide uniqueness, ordering, and source provenance |
 | `test_api_012_classic_spg_duplicate_increments_counter.py` | `GET /api/hipotesis/:id`, duplicate POST, and isolated JSON persistence |
 | `test_api_013_new_hypothesis_is_persisted.py` | Dynamic unused signature selection, `201`, and resource persistence |
-| `test_api_014_unknown_hypothesis_returns_not_found.py` | Individual-resource `404` contract |
+| `test_api_014_resource_not_found_contracts.py` | Parameterized hypothesis and ingredient `404` contracts (`API-014`, `API-016`) |
 | `test_api_015_malformed_hypothesis_does_not_mutate_registry.py` | Raw byte body and before/after mutation guard |
-| `test_api_016_unknown_ingredient_returns_not_found.py` | Query-resource `404` contract |
-| `test_api_017_products_collection_contract.py` | Collection count and required-field subset assertions |
+| `test_api_017_collection_contracts.py` | Parameterized product and event collection contracts (`API-017`, `API-019`) |
 | `test_api_018_valid_product_is_created.py` | Positive POST representation contract |
-| `test_api_019_events_collection_contract.py` | Event collection schema and availability assertions |
 | `test_api_020_invalid_membership_is_rejected.py` | Parameterized API validation variants |
 | `test_ui_001_home_communicates_club_purpose.py` | Smoke visibility and visible brand contract |
 | `test_ui_002_recipe_filters_matching_cards.py` | Filter action, locator collection, and count retry |
@@ -337,12 +335,12 @@ Priority definitions:
 | `test_ui_004_member_joins_club.py` | Full membership journey and accessible form controls |
 | `test_ui_005_product_added_to_cart.py` | Toast feedback and persistent cart count |
 | `test_ui_006_recipe_search_finds_recipe.py` | Positive search and filtered locator |
-| `test_ui_007_membership_form_validations.py` | Native browser validation through `evaluate()` |
+| `test_ui_007_membership_constraint_validations.py` | Parameterized name, email, and terms validation through `evaluate()` (`UI-007`, `UI-027`) |
 | `test_ui_008_cart_removes_product.py` | Component Object and negative visibility |
 | `test_ui_009_cart_total_multiple_products.py` | Multiple products, looped assertions, and total oracle |
 | `test_ui_010_event_reservation_confirmation.py` | Scoped dialog and reservation confirmation |
 | `test_ui_011_membership_modal_closes.py` | Pytest parametrization and equivalent close mechanisms |
-| `test_ui_012_fire_planner_recommends_fuel.py` | New Component Object, scoped dialog controls, and fuel oracle |
+| `test_ui_012_fire_planner_cooking_styles.py` | Parameterized direct and slow cooking-style fuel oracles (`UI-012`, `UI-023`) |
 | `test_ui_013_membership_keyboard_focus_order.py` | Keyboard activation, sequential typing, Tab order, and focus assertion |
 | `test_ui_014_membership_submits_expected_request.py` | `page.expect_request()` and browser-to-API payload contract |
 | `test_ui_015_ingredient_catalog_combines_filters.py` | Select and search interaction with locator collection assertions |
@@ -353,21 +351,22 @@ Priority definitions:
 | `test_ui_020_formula_requires_two_ingredients.py` | Minimum boundary and disabled-state assertions |
 | `test_ui_021_selected_ingredient_can_be_removed.py` | Component removal and dependent state update |
 | `test_ui_022_registry_opens_complete_hypothesis.py` | Registry-card identity and full technical-sheet sections |
-| `test_ui_023_fire_planner_calculates_slow_cooking.py` | Alternate calculation branch oracle |
 | `test_ui_024_vegetable_reserve_changes_fuel.py` | Before/after calculation-state comparison |
 | `test_ui_025_checkout_communicates_completion.py` | Cart-to-feedback integration |
 | `test_ui_026_recipe_action_identifies_selection.py` | Scoped recipe action and exact identity feedback |
-| `test_ui_027_membership_email_and_terms_validations.py` | Parameterized native constraint validation |
 | `test_ui_028_mobile_viewport_keeps_critical_content_usable.py` | Runtime viewport change and DOM overflow measurement |
 | `test_browser_001_smoke_engines.py` | Direct Chromium, Firefox, and WebKit engine lifecycle |
 | `test_err_001_membership_server_error.py` | `page.route()`, HTTP 500 fulfillment, and recoverable form state |
 
 ## 9. Rules for new tests
 
-### One behavior per file
+### One behavior or contract family per file
+
+Keep unrelated behaviors isolated. Closely equivalent contracts may share one
+parameterized file when every dataset retains its own case marker and Pytest ID.
 
 ```text
-test_<layer>_<id>_<behavior>.py
+test_<layer>_<first_id>_<behavior_or_contract_family>.py
 ```
 
 Do not add unrelated `test_*` functions to an existing scenario file. Shared

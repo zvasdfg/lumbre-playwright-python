@@ -1,7 +1,7 @@
 # UI-012 Completed Fire Planner Exercise
 
 > Status: completed and automated in
-> `test-framework/tests/ui/test_ui_012_fire_planner_recommends_fuel.py`.
+> `test-framework/tests/ui/test_ui_012_fire_planner_cooking_styles.py`.
 
 ## Behavioral objective
 
@@ -97,17 +97,17 @@ the home page; `FirePlannerModal` owns controls inside the dialog.
 
 ## Phase 4 - Create a normalized test
 
-The completed exercise added one behavior file:
+The completed exercise is now part of one parameterized contract-family file:
 
 ```text
-test-framework/tests/ui/test_ui_012_fire_planner_recommends_fuel.py
+test-framework/tests/ui/test_ui_012_fire_planner_cooking_styles.py
 ```
 
 Use the `pw-ui-test` snippet with:
 
 - case: `UI-012`;
 - behavior: `The fire planner recommends fuel for a direct-fire gathering`;
-- function: `test_fire_planner_recommends_fuel`.
+- function: `test_fire_planner_cooking_style`.
 
 Keep the standard `home: HomePage` and `test_log: TestLogger` fixtures. Use
 these snippets as building blocks:
@@ -134,7 +134,7 @@ scenario with:
 
 ```bash
 ./scripts/test-local.sh -q \
-  tests/ui/test_ui_012_fire_planner_recommends_fuel.py \
+  'tests/ui/test_ui_012_fire_planner_cooking_styles.py::test_fire_planner_cooking_style[chromium-direct-fire]' \
   --headed --slowmo 500
 ```
 

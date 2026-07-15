@@ -150,7 +150,7 @@ Run the fire-planner Component Object scenario:
 
 ```bash
 ./scripts/test-local.sh -q \
-  tests/ui/test_ui_012_fire_planner_recommends_fuel.py
+  tests/ui/test_ui_012_fire_planner_cooking_styles.py
 ```
 
 Run the keyboard focus-order scenario:
