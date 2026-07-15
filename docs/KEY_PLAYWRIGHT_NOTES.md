@@ -114,14 +114,16 @@ assert response.status == 422
 assert body["error"] == "name, category and a positive price are required"
 ```
 
-## 11. Every scenario has one file
+## 11. Keep one behavior or equivalent contract family per file
 
 ```text
-test_<layer>_<id>_<behavior>.py
+test_<layer>_<first_id>_<behavior_or_contract_family>.py
 ```
 
-One file tells one behavioral story. Shared code belongs in fixtures, Page
-Objects, Component Objects, or API clients.
+One file tells one behavioral story. Closely equivalent variants may share a
+parameterized file when each dataset retains stable case metadata and a Pytest
+ID. Shared mechanics belong in fixtures, Page Objects, Component Objects, or
+API clients.
 
 ## 12. Every test declares traceability
 

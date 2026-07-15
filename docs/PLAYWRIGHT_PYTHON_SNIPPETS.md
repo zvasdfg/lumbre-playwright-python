@@ -280,61 +280,7 @@ class ExampleComponent:
 
 Scope all component locators to `root` whenever possible.
 
-## 14. Daily commands
-
-From the project root:
-
-```bash
-# Complete suite with automatic portal startup and shutdown
-./scripts/test-local.sh -q
-
-# Complete suite with incremental HTML report
-./scripts/report-local.sh
-
-# Layers and smoke
-./scripts/test-local.sh -q -m ui
-./scripts/test-local.sh -q -m api
-./scripts/test-local.sh -q -m smoke
-
-# One file
-./scripts/test-local.sh -q \
-  tests/api/test_api_006_member_created_with_valid_data.py
-
-# Headed and slowed UI execution
-./scripts/test-local.sh -q \
-  tests/ui/test_ui_011_membership_modal_closes.py \
-  --headed --slowmo 500
-
-# One parameterized node ID; quote brackets in zsh
-./scripts/test-local.sh -q \
-  'tests/ui/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-backdrop]'
-```
-
-Against an already-running portal:
-
-```bash
-cd test-framework
-BASE_URL=http://localhost:3000 .venv/bin/pytest -q tests/ui
-```
-
-Playwright Inspector:
-
-```bash
-cd test-framework
-PWDEBUG=1 BASE_URL=http://localhost:3000 .venv/bin/pytest -s \
-  tests/ui/test_ui_010_event_reservation_confirmation.py --headed
-```
-
-Static quality:
-
-```bash
-cd test-framework
-.venv/bin/ruff format --check framework tests
-.venv/bin/ruff check framework tests
-.venv/bin/mypy framework tests
-```
-
-## 15. Trace Viewer
+## 14. Trace Viewer
 
 The framework retains a trace when a test fails:
 
@@ -345,7 +291,7 @@ cd test-framework
 
 Inspect the failed action, locator, before/after DOM, console, and network.
 
-## 16. Codegen for exploration
+## 15. Codegen for exploration
 
 ```bash
 cd test-framework
@@ -355,3 +301,7 @@ cd test-framework
 Codegen output is a draft. Move reusable actions into Page/Component Objects,
 remove arbitrary waits, prefer semantic locators, and keep business assertions
 visible in the test.
+
+Execution, reporting, Inspector, and static-quality commands are maintained in
+the root [README](../README.md) and the
+[framework README](../test-framework/README.md).

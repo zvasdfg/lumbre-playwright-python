@@ -1,9 +1,12 @@
 # Lumbre Playwright Python Framework
 
-Educational test automation framework for the Spanish-language Lumbre portal.
-It uses Python, Pytest, Playwright Sync API, Page Object Model, Component
-Objects, API clients, structured test steps, automatic screenshots, traces,
-and a self-contained HTML report.
+Python automation package for the Spanish-language Lumbre portal. It combines
+Pytest, Playwright Sync API, Page Object Model, Component Objects, direct API
+testing, structured evidence, traces, and self-contained HTML reports.
+
+Project context, validated counts, and the complete quick start live in the
+root [README](../README.md). System boundaries and dependency direction live in
+[Architecture](../docs/ARCHITECTURE.md).
 
 ## Installation
 
@@ -16,7 +19,7 @@ playwright install chromium firefox webkit
 cp .env.example .env
 ```
 
-Configuration in `.env`:
+Local configuration:
 
 ```dotenv
 BASE_URL=http://127.0.0.1:3000
@@ -24,156 +27,76 @@ HEADLESS=true
 DEFAULT_TIMEOUT_MS=10000
 ```
 
-`BASE_URL` is used by page navigation and `APIRequestContext`. The root-level
-scripts override it automatically with their managed local server URL.
+`BASE_URL` is shared by browser navigation and `APIRequestContext`. The managed
+root runner overrides it with its temporary portal URL.
 
-## Architecture
+## Package layout
 
 ```text
 test-framework/
 ├── framework/
-│   ├── api/lumbre_api.py
-│   ├── components/
-│   │   ├── cart_drawer.py
-│   │   ├── event_reservation_modal.py
-│   │   ├── events_section.py
-│   │   ├── fire_planner_modal.py
-│   │   ├── header.py
-│   │   ├── ingredient_lab.py
-│   │   └── membership_modal.py
-│   ├── pages/
-│   │   ├── base_page.py
-│   │   └── home_page.py
-│   ├── reporting/
-│   │   ├── html_report.py
-│   │   ├── lumbre_report.css
-│   │   └── test_logger.py
-│   └── config.py
+│   ├── api/lumbre_api.py       Domain API operations
+│   ├── components/             Bounded widget models
+│   ├── pages/                  Page composition and navigation
+│   ├── reporting/              Steps, evidence, and pytest-html hooks
+│   └── config.py               Environment settings
 ├── tests/
-│   ├── api/             API-001 through API-020
-│   ├── ui/              UI-001 through UI-028, ERR-001, and BROWSER-001
-│   └── conftest.py
-├── templates/
-└── pyproject.toml
+│   ├── api/                    API-001 through API-020
+│   ├── ui/                     UI-001 through UI-028, ERR-001, BROWSER-001
+│   └── conftest.py             Fixtures and lifecycle
+├── templates/                  Learning scaffolds
+└── pyproject.toml              Dependencies and Pytest configuration
 ```
 
-Responsibilities:
+## Conventions
 
-- Tests describe behavior, assertions, and relevant diagnostic values.
-- Page Objects expose page-level domain actions and reusable locators.
-- Component Objects model reusable widgets such as modals and the cart.
-- `LumbreApi` hides repeated HTTP transport details.
-- Fixtures own resource lifecycle, state reset, locale, and viewport.
-- Reporting code owns steps, screenshots, metadata, and HTML customization.
+- Tests own behavior, test data, assertions, and diagnostic values.
+- Page Objects own page-level entry points and composition.
+- Component Objects own locators and actions inside bounded widgets.
+- `LumbreApi` owns repeated HTTP routes and transport details.
+- Fixtures own lifecycle, context settings, and deterministic reset.
+- Reporting hooks own screenshots, metadata, URLs, and traces.
 
-## Test conventions
-
-Every scenario has its own file:
+One behavior or equivalent parameterized contract family belongs in each file:
 
 ```text
-test_<case-family>_<id>_<behavior>.py
+test_<layer>_<first_id>_<behavior_or_contract_family>.py
 ```
 
-Every test declares layer and traceability markers and requests `test_log`:
-
-```python
-@pytest.mark.ui
-@pytest.mark.case("UI-000", "Observable behavior description")
-def test_example(home: HomePage, test_log: TestLogger) -> None:
-    with test_log.step("Perform an observable action"):
-        # Act through a Page Object or Component Object.
-        ...
-
-    with test_log.step("Validate the expected result"):
-        # Keep the business expectation visible in the test.
-        ...
-        test_log.values(
-            observed_value="actual value",
-            expected_value="test oracle",
-        )
-```
-
-Use English for automation code, metadata, step names, comments, and technical
-messages. Preserve Spanish only when a locator, expected message, API domain
-value, recipe, product, or event must match the Spanish product.
+Every dataset retains stable case metadata and a Pytest ID. Automation code and
+technical messages use English; locators and expectations preserve Spanish when
+they match the product contract.
 
 ## Fixtures and isolation
 
-- `page`: provided by `pytest-playwright`; a clean browser context per test.
-- `browser_context_args`: Spanish-Mexico locale and `1440x1000` viewport.
-- `api_request_context`: session-scoped Playwright API context.
-- `api`: domain wrapper around the API context.
-- `home`: opens a ready `HomePage`.
-- `test_log`: case narrative, step timing, values, and UI screenshots.
-- `reset_scenario`: autouse API reset before every test.
+| Fixture | Responsibility |
+| --- | --- |
+| `page` | Clean Playwright browser context per UI test |
+| `browser_context_args` | `es-MX` locale and `1440x1000` viewport |
+| `api_request_context` | Session-scoped direct HTTP context |
+| `api` | Domain wrapper around APIRequestContext |
+| `home` | Ready `HomePage` opened at the configured base URL |
+| `test_log` | Case narrative, steps, values, timing, and screenshots |
+| `reset_scenario` | Deterministic API reset before each test |
 
-`test-local.sh` starts the portal with a temporary copy of the hypothesis JSON
-registry. Persistence scenarios can therefore write and verify data without
-changing `portal/data/hypotheses`.
-
-Tests must not depend on execution order or state produced by another test.
+`scripts/test-local.sh` copies version-controlled hypothesis JSON into a
+temporary directory before starting the portal. Persistence scenarios therefore
+write real files without changing repository seed data.
 
 ## Running tests
 
-From the project root, with automatic portal lifecycle:
+From the project root:
 
 ```bash
+# Full managed suite
 ./scripts/test-local.sh -q
-./scripts/test-local.sh -q -m smoke
+
+# Layer selection
 ./scripts/test-local.sh -q -m api
 ./scripts/test-local.sh -q -m ui
+
+# Visible learning or investigation run
 ./scripts/test-local.sh -q -m ui --headed --slowmo 500
-```
-
-Run one file:
-
-```bash
-./scripts/test-local.sh -q \
-  tests/api/test_api_006_member_created_with_valid_data.py
-```
-
-Run the Classic SPG duplicate-counter scenario:
-
-```bash
-./scripts/test-local.sh -q \
-  tests/api/test_api_012_classic_spg_duplicate_increments_counter.py
-```
-
-Run the network-mocking scenario:
-
-```bash
-./scripts/test-local.sh -q \
-  tests/ui/test_err_001_membership_server_error.py
-```
-
-Run the fire-planner Component Object scenario:
-
-```bash
-./scripts/test-local.sh -q \
-  tests/ui/test_ui_012_fire_planner_cooking_styles.py
-```
-
-Run the keyboard focus-order scenario:
-
-```bash
-./scripts/test-local.sh -q \
-  tests/ui/test_ui_013_membership_keyboard_focus_order.py \
-  --headed --slowmo 500
-```
-
-Run representative ingredient laboratory coverage:
-
-```bash
-./scripts/test-local.sh -q \
-  tests/api/test_api_007_ingredients_filter_combines_family_and_query.py \
-  tests/ui/test_ui_015_ingredient_catalog_combines_filters.py
-```
-
-Run a parameterized variant:
-
-```bash
-./scripts/test-local.sh -q \
-  'tests/ui/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-close-button]'
 ```
 
 Against an already-running portal:
@@ -183,72 +106,69 @@ cd test-framework
 BASE_URL=http://localhost:3000 .venv/bin/pytest -q tests/ui
 ```
 
-## Reporting and diagnostics
+Quote a parameterized node ID in zsh:
 
 ```bash
-./scripts/report-local.sh
+./scripts/test-local.sh -q \
+  'tests/ui/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-close-button]'
+```
+
+## Reporting and diagnostics
+
+Each normal managed run writes a timestamped report:
+
+```text
+reports/runs/lumbre-report-YYYY-MM-DD_HH-MM-SS.html
+```
+
+The newest result is also copied to `reports/lumbre-report.html`. Pytest-html
+updates the active file after each completed test, not after each individual
+`test_log.step()`.
+
+Every result includes case metadata, behavior, duration, steps, and values. UI
+results also include the final URL and a viewport screenshot after each step.
+UI failures add a full-page screenshot and a link to the retained trace. API
+tests do not produce screenshots because they do not create a `Page`.
+
+Open the latest report:
+
+```bash
 open test-framework/reports/lumbre-report.html
 ```
 
-Each execution is archived independently in `reports/runs/` using a timestamped
-filename such as `lumbre-report-2026-07-15_12-45-30.html`. The stable
-`reports/lumbre-report.html` file is refreshed with the latest execution, while
-previous run reports remain unchanged.
-
-When Pytest is launched with the HTML options used by `report-local.sh`, the
-HTML report is regenerated after each completed test. It includes case ID,
-behavior, duration, logs, values, environment metadata, and final UI URL.
-Every completed UI step adds a viewport screenshot. A failed UI test also adds
-a full-page screenshot and a local link to `trace.zip`.
-
-Pytest defaults retain traces and failure screenshots:
-
-```text
---tracing=retain-on-failure
---screenshot=only-on-failure
-```
-
-Open a trace with:
+Open a retained failure trace:
 
 ```bash
 cd test-framework
 .venv/bin/playwright show-trace test-results/<test-directory>/trace.zip
 ```
 
-## Static quality checks
+Reports remain local because embedded Base64 screenshots can make a full-suite
+HTML file exceed 20 MB.
+
+## Static quality
 
 ```bash
 cd test-framework
-.venv/bin/ruff format --check framework tests
-.venv/bin/ruff check framework tests
+.venv/bin/ruff format --check .
+.venv/bin/ruff check .
 .venv/bin/mypy framework tests
 ```
 
 ## VS Code snippets
 
-| Prefix | Generates |
-| --- | --- |
-| `pw-ui-test` | Complete UI test scaffold |
-| `pw-api-test` | Complete API test scaffold |
-| `pw-step` | Structured test step |
-| `pw-values` | Observed/expected diagnostic values |
-| `pw-visible` | Visibility assertion |
-| `pw-not-visible` | Negative visibility assertion |
-| `pw-text` | Exact text assertion |
-| `pw-fill` | Fill a form control through a locator |
-| `pw-select` | Select an option by its stable value |
-| `pw-dialog` | Scoped dialog and child-control locators |
-| `pw-component` | Component Object scaffold |
+The shared workspace exposes scaffolds for UI tests, API tests, structured
+steps, diagnostic values, locators, assertions, dialogs, and Component Objects.
+Generated tests remain skipped until every TODO is implemented; placeholders
+must never create a false pass.
 
-Scaffolds remain skipped until their TODOs are completed. Never remove the
-`skip` marker while a placeholder could produce a false positive.
+See [Playwright Python snippets](../docs/PLAYWRIGHT_PYTHON_SNIPPETS.md) for the
+available prefixes and examples.
 
-## Detailed documentation
+## References
 
-- [Test strategy and learning guide](../docs/TEST_STRATEGY_AND_PLAYWRIGHT_GUIDE.md)
-- [Test coverage growth plan](../docs/TEST_COVERAGE_GROWTH_PLAN.md)
+- [Test strategy and risk catalog](../docs/TEST_STRATEGY.md)
+- [Architecture](../docs/ARCHITECTURE.md)
+- [Engineering case studies](../docs/ENGINEERING_CASE_STUDIES.md)
 - [Key Playwright notes](../docs/KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](../docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
-- [HTML reporting guide](../docs/HTML_REPORTING.md)
-- [UI-012 completed fire planner exercise](../docs/UI_012_FIRE_PLANNER_EXERCISE.md)
-- [UI-013 completed keyboard focus exercise](../docs/UI_013_KEYBOARD_FOCUS_EXERCISE.md)

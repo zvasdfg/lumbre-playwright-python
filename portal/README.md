@@ -1,19 +1,16 @@
 # Lumbre Portal
 
-Local web application and API used as the system under test for the Playwright
-learning framework. Lumbre represents an outdoor fire-cooking community with
-recipes, products, events, a shopping cart, club membership, and an ingredient
-experimentation laboratory.
+Local Next.js web application and API used as the system under test. Lumbre is
+a Mexican outdoor-fire cooking community with recipes, products, events,
+membership, cart, fire planning, and an ingredient experimentation laboratory.
 
-The visible product copy is intentionally in Spanish. Test locators therefore
-use Spanish accessible names and labels when they reference the real UI.
-
-## Requirements
-
-- Node.js `>=22.13.0`
-- Dependencies installed with `npm ci`
+Visible product copy is intentionally written in Spanish. Automation locators
+therefore preserve Spanish accessible names and labels when they represent the
+real user contract.
 
 ## Run the portal
+
+Requirements: Node.js `>=22.13.0` and dependencies installed with `npm ci`.
 
 ```bash
 cd portal
@@ -21,124 +18,81 @@ npm ci
 npm run dev
 ```
 
-The default development URL is `http://localhost:3000`. The API index is
-available at `http://localhost:3000/api`.
-
-For a specific local port:
+The default URL is `http://localhost:3000`; the API discovery route is
+`http://localhost:3000/api`.
 
 ```bash
+# Use a specific port
 npm run dev -- --hostname localhost --port 3100
 ```
 
-The root-level test scripts start and stop the portal automatically, so a
-separate portal terminal is not required when using `scripts/test-local.sh` or
-`scripts/report-local.sh`.
+The root `scripts/test-local.sh` runner manages its own portal lifecycle, so a
+separate portal terminal is unnecessary during isolated automated runs.
 
 ## Product areas
 
-- Hero and Lumbre identity.
-- Recipe category filters and search.
-- Product catalog and client-side cart.
-- Club membership modal, validation, autofocus, and keyboard navigation.
-- Fire planner modal with fuel calculation and recoverable form state.
-- Ingredient laboratory with 60 components, search, family filtering, detail
-  sheets, family-grouped browsing, a 2-to-6 ingredient experiment bench, and
-  generated protocols.
-- Outdoor event selection and reservation confirmation.
-- Status messages for observable user feedback.
+- Lumbre identity and outdoor-fire community content.
+- Recipe category filters, search, and recipe feedback.
+- Product catalog, cart state, totals, removal, and demonstration checkout.
+- Membership validation, keyboard navigation, API submission, and recovery.
+- Fire planning with cooking-style and vegetable-reserve calculations.
+- Ingredient catalog with research detail, family filters, and search.
+- Two-to-six-component experiment bench and generated technical hypotheses.
+- Registered technical sheets for crust, bark, chicken, and vegetables.
+- Outdoor event selection and reservation feedback.
 
-## API contract
+## API contract and coverage
 
-| Method | Route | Purpose | Tested by |
+| Method | Route | Purpose | Automated by |
 | --- | --- | --- | --- |
-| `GET` | `/api` | API route index | Manual reference |
+| `GET` | `/api` | API discovery | Informational; not committed |
 | `GET` | `/api/health` | Service health and seed version | `API-001` |
-| `GET` | `/api/recipes` | List, search, and filter recipes | `API-002`, `API-005` |
-| `GET` | `/api/products` | Product catalog | Available to future tests |
-| `POST` | `/api/products` | Product payload validation | `API-004` |
-| `GET` | `/api/events` | Outdoor event catalog | Available to future tests |
-| `GET` | `/api/ingredientes` | Ingredient catalog, search, filters, and detail | `API-007`, `API-008` |
-| `GET` | `/api/hipotesis` | Registered technical hypothesis collection | `API-011` |
-| `GET` | `/api/hipotesis/:id` | One hypothesis, including its duplicate counter | `API-012` |
-| `POST` | `/api/hipotesis` | Validate, create, deduplicate, and count repeated formulas | `API-009`, `API-010`, `API-012` |
-| `POST` | `/api/members` | Membership registration | `API-006`, indirectly `UI-004` |
+| `GET` | `/api/recipes` | Recipe collection and filters | `API-002`, `API-005` |
+| `GET` | `/api/products` | Product collection | `API-017` |
+| `POST` | `/api/products` | Product creation and validation | `API-004`, `API-018` |
+| `GET` | `/api/events` | Event collection | `API-019` |
+| `GET` | `/api/ingredientes` | Ingredient catalog, filters, and detail | `API-007`, `API-008`, `API-016` |
+| `GET` | `/api/hipotesis` | Technical hypothesis registry | `API-011` |
+| `GET` | `/api/hipotesis/:id` | One hypothesis and duplicate counter | `API-012`, `API-014` |
+| `POST` | `/api/hipotesis` | Validate, create, deduplicate, and count | `API-009`, `API-010`, `API-012`, `API-013`, `API-015` |
+| `POST` | `/api/members` | Membership registration and validation | `API-006`, `API-020`, `UI-004` |
 | `POST` | `/api/test/reset` | Restore deterministic demo state | `API-003`, autouse fixture |
 
-Recipes accept the optional query parameters `category` and `q`. Ingredients
-accept `q`, `familia`, `estado`, and `id`. Creating a hypothesis requires an
-`objective` and between two and six unique `ingredient_ids`. Write operations
-validate their payloads and return realistic HTTP status codes, but the demo
-does not require a database.
+Recipes accept `category` and `q`. Ingredients accept `q`, `familia`, `estado`,
+and `id`. Hypothesis creation requires an objective and two to six ingredient
+IDs. Write operations return realistic status and error contracts.
 
-Hypotheses are persisted locally as independent JSON resources in
-`data/hypotheses`. The API validates every requested ingredient before it
-writes, canonicalizes the ingredient order, and returns the existing sheet
-instead of creating a duplicate. A new sheet starts with
-`contador_repeticiones: 0`; each duplicate POST increments this persisted
-counter exactly once. Catalog and recommendation reads do not increment it,
-and the counter is intentionally not rendered by the portal. Technical IDs use `LHC` for beef crust,
-`LHB` for low-and-slow bark, `LHV` for vegetables, and `LHP` for direct-fire
-chicken. The portal lists these records under **Registered technical sheets**
-at the bottom of the flavor laboratory and opens the complete hypothesis,
-validated components, and proposed method in a detail dialog. This filesystem
-behavior requires the default Node-based `npm run
-dev`. Use `npm run dev:cloudflare` only to exercise the Worker runtime, where a
-persistent D1 or R2 implementation is required before hypothesis writes can be
-enabled.
+## Hypothesis persistence
 
-Automated runs copy the JSON registry to a temporary directory through
-`LUMBRE_HYPOTHESIS_DIR`. This allows persistence and counter tests without
-modifying the developer's real technical sheets.
+Hypotheses are independent JSON resources under `data/hypotheses`. The API
+validates each ingredient, canonicalizes ingredient order, reuses an existing
+sheet instead of duplicating it, and increments a persisted repetition counter
+for duplicate submissions.
 
-The local registry is initialized with 24 researched recommendations: six
-beef-crust formulas, six low-and-slow bark formulas, six direct-fire chicken
-formulas, and six ember-cooked vegetable formulas. Each record is
-stored as a normal technical-sheet JSON and includes:
+Technical IDs use:
 
-- a stable recommendation identifier and a protocol-specific `LH*` sheet ID;
-- a non-generic, testable hypothesis;
-- relative volumetric parts for an initial batch;
-- the published culinary basis and a direct source link;
-- an explicit Lumbre adaptation note whenever ingredients were substituted or
-  omitted to respect the six-component limit.
+- `LHC`: beef crust;
+- `LHB`: low-and-slow bark;
+- `LHV`: ember-cooked vegetables;
+- `LHP`: direct-fire chicken.
 
-These records use `recomendado_sin_validar`: their structures are based on
-published Weber or McCormick formulas, but Lumbre has not executed the proposed
-kitchen trials. User-created combinations remain `borrador`. Loading
-`GET /api/hipotesis` safely seeds missing recommendations and
-refreshes only existing researched recommendations; it never overwrites a
-user hypothesis.
+Automated runs set `LUMBRE_HYPOTHESIS_DIR` to a temporary copy of the registry,
+allowing real persistence assertions without modifying source JSON.
 
-The second research set expands the laboratory with sweet paprika, ground
-ginger, turmeric, annatto, dried basil, coffee, cocoa, pasilla/ancho chile,
-sumac, warm spices, and aromatic seeds. It includes documented Weber formulas
-for coffee-chile tri-tip, coffee-rubbed ribs, Moroccan and tandoori chicken,
-spatchcock chicken, kofta, grilled basil vegetables, paneer tikka, and a short
-mole rub used on grilled vegetables. Adapted records state every substitution
-or omitted component instead of presenting the Lumbre version as an exact copy.
+Filesystem writes require the Node development runtime. The Cloudflare worker
+runtime needs a persistent D1 or R2 implementation before write operations can
+be enabled outside the local environment.
 
-All 60 ingredient records contain researched origin, compounds, thermal
-behavior, editorial sensory and compatibility scores, starting dosage ranges,
-storage guidance, sourcing channels, bibliography, and a proposed experiment.
-They are marked `documentado_sin_validar`: literature curation is complete,
-but the proposed Lumbre kitchen trials have not been executed. The scales and
-evidence rules are documented in `app/api/ingredientes/METHODOLOGY.md`.
+## Research data
 
-The catalog uses culinary families instead of mixing taxonomy with sensory
-roles or research maturity. Its 11 current families are `Sal`, `Allium`,
-`Pimienta`, `Chile`, `Hierba`, `Semilla_aromatica`, `Especia_calida`,
-`Citrico`, `Umami`, `Tostado`, and `Endulzante`. The 12 pantry additions are
-sweet paprika, ground ginger, turmeric, nutmeg, clove, annatto, dried basil,
-dried parsley, dried dill, dried sage, pasilla chile, and morita chile.
+Ingredient records include origin, compounds, thermal behavior, sensory and
+compatibility scores, starting dosage, storage, sourcing, bibliography, and a
+proposed experiment. They remain `documentado_sin_validar` until Lumbre runs the
+corresponding kitchen trial. Recommended formulas likewise distinguish
+researched adaptations from user-created drafts.
 
-Hypotheses use researched formula-role templates rather than concatenating
-ingredient names. The current references cover classic salt-pepper-allium,
-salt with a peppercorn medley, pepper with a toasted component, sweet-smoky
-rubs, and herbal-allium blends. A result is classified as `referenced`,
-`close`, or `experimental`; the technical sheet records covered roles, missing
-roles, additional flavor contributions, expected sensory intensity, and source
-links. Sweet aromatic spices are deliberately separate from the `sweetener`
-role, which is represented by brown sugar.
+- [Ingredient evidence and taxonomy](app/api/ingredientes/METHODOLOGY.md)
+- [Hypothesis registry behavior](data/hypotheses/README.md)
 
 ## Development commands
 
@@ -151,5 +105,5 @@ npm run start
 ```
 
 `npm run build` produces the current vinext/Cloudflare-compatible build. The
-project is presently exercised locally; hosted deployment is outside the
-current test-learning scope.
+repository currently validates the portal locally; hosted persistence remains a
+separate deployment concern.
