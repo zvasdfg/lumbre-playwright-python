@@ -41,8 +41,14 @@ test-framework/
 │   ├── reporting/              Steps, evidence, and pytest-html hooks
 │   └── config.py               Environment settings
 ├── tests/
-│   ├── api/                    API-001 through API-020
-│   ├── ui/                     UI-001 through UI-028, ERR-001, BROWSER-001
+│   ├── api/                    Domain folders for API-001 through API-020
+│   │   ├── contracts/          Equivalent cross-domain contracts
+│   │   ├── hypotheses/         Validation, deduplication, and persistence
+│   │   └── ...                 Ingredients, membership, products, recipes, system
+│   ├── ui/                     Domain folders for UI, ERR, and BROWSER cases
+│   │   ├── ingredient_lab/     Laboratory and technical-sheet workflows
+│   │   ├── membership/         Form, keyboard, request, and recovery behavior
+│   │   └── ...                 Commerce, events, fire planner, home, recipes
 │   └── conftest.py             Fixtures and lifecycle
 ├── templates/                  Learning scaffolds
 └── pyproject.toml              Dependencies and Pytest configuration
@@ -110,7 +116,7 @@ Quote a parameterized node ID in zsh:
 
 ```bash
 ./scripts/test-local.sh -q \
-  'tests/ui/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-close-button]'
+  'tests/ui/membership/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-close-button]'
 ```
 
 ## Reporting and diagnostics

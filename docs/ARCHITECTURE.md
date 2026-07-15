@@ -59,6 +59,21 @@ the reporting lifecycle.
 | Reporting | `framework/reporting/` | Attach metadata, logs, screenshots, URLs, and traces |
 | Local orchestration | `scripts/` | Start services, isolate data, invoke Pytest, archive reports |
 
+Tests are organized first by execution layer and then by functional ownership:
+
+```text
+tests/
+├── api/
+│   ├── system, recipes, products, membership, ingredients, hypotheses
+│   └── contracts
+└── ui/
+    ├── home, recipes, membership, commerce, events, fire_planner
+    └── ingredient_lab
+```
+
+Execution categories such as smoke, regression, and cross-browser remain
+Pytest markers rather than directories because they cut across domains.
+
 ### Dependency direction
 
 ```mermaid

@@ -208,7 +208,7 @@ Useful focused commands:
 
 # One case file
 ./scripts/test-local.sh -q \
-  tests/ui/test_ui_018_existing_formula_reuses_hypothesis.py
+  tests/ui/ingredient_lab/test_ui_018_existing_formula_reuses_hypothesis.py
 ```
 
 Run static quality checks:
