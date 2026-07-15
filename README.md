@@ -11,8 +11,8 @@ framework used to validate it.
 
 Lumbre demonstrates test architecture, Page Object Model, Component Objects,
 API contracts, browser-network control, deterministic test data, cross-browser
-validation, diagnostic reporting, and risk-based test strategy in one runnable
-project.
+validation, diagnostic reporting, risk-based test strategy, and explicit
+environment boundaries in one runnable project.
 
 > The product experience is written in Mexican Spanish as part of the Lumbre
 > identity. Framework code and engineering documentation are written in English.
@@ -21,17 +21,17 @@ project.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 50 |
-| Automated functional risks | 50 |
-| Pytest executions | 56 |
-| Test files | 46 |
-| API cases / executions | 20 / 22 |
+| Committed functional risks | 54 |
+| Automated functional risks | 54 |
+| Pytest executions | 70 |
+| Test files | 50 |
+| API cases / executions | 24 / 36 |
 | Browser cases / executions | 30 / 34 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 91.7% (11/12) |
-| Latest full-suite result | 56 passed |
+| API route-operation coverage | 100% (12/12) |
+| Latest full-suite result | 70 passed |
 
-**100% refers to the repository's 50-item committed functional-risk catalog.**
+**100% refers to the repository's 54-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -56,7 +56,9 @@ Lumbre is a cooking-at-the-fire portal with:
 - an experiment bench supporting formulas of up to six components;
 - technical hypotheses for beef crust, bark, chicken, and vegetables;
 - duplicate-formula detection and persisted repetition counters;
-- JSON APIs used directly by API tests and indirectly by UI workflows.
+- JSON APIs used directly by API tests and indirectly by UI workflows;
+- mutable local development and test environments plus a read-only production
+  mode prepared for a future public demo.
 
 ## Architecture at a glance
 
@@ -120,6 +122,8 @@ lumbre-playwright-python/
 ### API and integration coverage
 
 - Positive and negative contracts through `APIRequestContext`.
+- A remotely discovered OpenAPI 3.1 contract validated before use.
+- Reusable JSON Schema 2020-12 request/response validation with exact JSON-path diagnostics.
 - Filtering, malformed payloads, resource creation, and `404` contracts.
 - Hypothesis validation, canonical signatures, deduplication, and persistence.
 - Browser-to-API payload validation with `page.expect_request()`.
@@ -135,6 +139,13 @@ lumbre-playwright-python/
 - Self-contained HTML reports archived with a timestamp after every run.
 
 ## Featured engineering stories
+
+### The contract suite is portable across environments
+
+The framework fetches the OpenAPI document from the active `BASE_URL`, validates
+the description itself, and then checks live payloads by operation and status.
+It never depends on a repository-relative contract path, so the same checks can
+run locally, in CI, or against a remote environment.
 
 ### A test exposed a real frontend race
 
@@ -224,7 +235,7 @@ cd test-framework
 
 ### Portfolio report preview
 
-![Lumbre Pytest and Playwright report showing 56 passing executions](docs/assets/lumbre-test-report-summary.png)
+![Lumbre Pytest and Playwright report showing 70 passing executions](docs/assets/lumbre-test-report-summary.png)
 
 The versioned preview shows the full-suite summary, environment, case metadata,
 behavior, and structured logs. It provides portfolio evidence without adding a
@@ -272,7 +283,10 @@ status.
 
 The repository currently optimizes for deterministic local execution. A public
 portal deployment and CI artifact publishing are natural next steps; they are
-not presented as completed capabilities here.
+not presented as completed capabilities here. The production build is prepared
+as a read-only public demo: only `GET` API operations are exposed, mutation
+routes are rejected, test-only reset is hidden, and no personal data is
+collected through the membership UI.
 
 ## Author
 

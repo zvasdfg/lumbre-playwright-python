@@ -2,7 +2,7 @@
 
 > Perspective: Staff QA architecture
 > Stack: Python, Pytest, Playwright Sync API, Page Object Model, Component
-> Objects, and APIRequestContext
+> Objects, APIRequestContext, OpenAPI 3.1, and JSON Schema 2020-12
 
 ## 1. Purpose
 
@@ -24,13 +24,13 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 20 / 22 |
+| API case IDs / executions | 24 / 36 |
 | Browser case IDs / executions | 30 / 34 |
-| Unique committed risks | 50 |
-| Total Pytest executions | 56 |
-| Test files | 46 |
+| Unique committed risks | 54 |
+| Total Pytest executions | 70 |
+| Test files | 50 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 56 passed |
+| Latest validation | 70 passed |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior.
@@ -47,14 +47,15 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 17 | 17 | 100% |
-| P1 | 28 | 28 | 100% |
+| P0 | 20 | 20 | 100% |
+| P1 | 29 | 29 | 100% |
 | P2 | 5 | 5 | 100% |
-| **Total** | **50** | **50** | **100%** |
+| **Total** | **54** | **54** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `11/12 = 91.7%`; the uncovered
-operation is the informational `GET /api` discovery route.
+secondary API route-operation signal is `12/12 = 100%`. Contract
+parametrization adds execution depth without inflating the functional-risk
+denominator.
 
 ## 3. Strategy principles
 
@@ -100,6 +101,7 @@ mental model and implementation principles.
 | Layer | Use it for | Avoid using it for |
 | --- | --- | --- |
 | API | Contracts, validation, filtering, creation, persistence | Browser rendering or accessibility |
+| OpenAPI contract | Description integrity, request and status-specific response schemas | Business outcomes already owned by focused API tests |
 | UI component | Widget behavior, state transitions, keyboard and feedback | Server rules already proven by API |
 | E2E | A small number of critical browser-to-server journeys | Exhaustive data combinations |
 | Cross-browser | Focused compatibility contracts | Repeating the entire deep suite by default |
@@ -135,6 +137,10 @@ Priority definitions:
 | API-018 | Valid product creation returns `201` and its representation | P1 | API positive |
 | API-019 | Event collection count and item contract remain consistent | P2 | API contract |
 | API-020 | Invalid membership variants return a stable `422` contract | P0 | API negative |
+| CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
+| CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
+| CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
+| CONTRACT-004 | Contract failures identify the exact JSON path and expectation | P1 | Framework diagnostic |
 | UI-001 | Home communicates Lumbre's purpose | P1 | UI + smoke |
 | UI-002 | Category filter displays matching recipe cards only | P1 | UI |
 | UI-003 | Empty recipe search explains that no matches exist | P1 | UI |

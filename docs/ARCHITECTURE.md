@@ -13,7 +13,8 @@ only a collection of executable scripts. Its goals are:
 3. test API contracts without requiring a browser;
 4. preserve diagnostic evidence without adding logging code to every test;
 5. isolate mutable hypothesis data from version-controlled seed files;
-6. keep local execution reproducible across supported Playwright engines.
+6. keep local execution reproducible across supported Playwright engines;
+7. separate mutable test behavior from a safe, read-only production boundary.
 
 ## 2. System context
 
@@ -28,6 +29,7 @@ flowchart TB
 
     Pytest --> UI[UI tests]
     Pytest --> API[API tests]
+    Pytest --> Contracts[OpenAPI contract tests]
     Pytest --> Evidence[Reporting hooks]
 
     UI --> POM[Page and Component Objects]
@@ -37,6 +39,9 @@ flowchart TB
     API --> Client[LumbreApi]
     Client --> RequestContext[Playwright APIRequestContext]
     RequestContext --> DevServer
+
+    Contracts --> ContractAdapter[OpenApiContract]
+    ContractAdapter --> RequestContext
 
     DevServer --> TempData
     Evidence --> Report[Timestamped HTML report]
@@ -55,6 +60,7 @@ the reporting lifecycle.
 | Page Objects | `framework/pages/` | Own page-level navigation, composition, and entry points |
 | Component Objects | `framework/components/` | Own locators and actions inside bounded UI widgets |
 | API client | `framework/api/lumbre_api.py` | Express domain API operations through `APIRequestContext` |
+| Contract adapter | `framework/contracts/openapi.py` | Validate remote OpenAPI descriptions and live JSON payloads |
 | Configuration | `framework/config.py` and fixtures | Resolve base URL, browser, locale, and execution settings |
 | Reporting | `framework/reporting/` | Attach metadata, logs, screenshots, URLs, and traces |
 | Local orchestration | `scripts/` | Start services, isolate data, invoke Pytest, archive reports |
@@ -80,10 +86,12 @@ Pytest markers rather than directories because they cut across domains.
 flowchart LR
     Tests --> PageObjects[Page Objects]
     Tests --> ApiClient[API client]
+    Tests --> ContractAdapter[OpenAPI contract adapter]
     PageObjects --> Components[Component Objects]
     PageObjects --> PlaywrightPage[Playwright Page]
     Components --> PlaywrightPage
     ApiClient --> APIRequestContext
+    ContractAdapter --> APIRequestContext
     Reporting --> Tests
 ```
 
@@ -169,6 +177,33 @@ Read-only convenience methods return parsed JSON when the response body is the
 primary result. Mutation and negative-test methods preserve `APIResponse` when
 status, headers, or raw body are part of the contract.
 
+### Executable contract boundary
+
+The contract adapter downloads the OpenAPI description through the active
+`BASE_URL`; it never reads the portal repository directly. This keeps the
+automation framework portable across local, CI, and remote targets.
+
+```mermaid
+sequenceDiagram
+    participant Test as Contract test
+    participant API as LumbreApi
+    participant SUT as Active BASE_URL
+    participant Contract as OpenApiContract
+
+    Test->>API: Fetch /openapi/lumbre.openapi.json
+    API->>SUT: GET contract
+    SUT-->>API: OpenAPI 3.1 document
+    Test->>Contract: Validate description
+    Test->>SUT: Execute operation
+    SUT-->>Test: Status and JSON body
+    Test->>Contract: Validate path + method + status + body
+    Contract-->>Test: Pass or exact JSON-path violations
+```
+
+OpenAPI describes operation ownership and status-specific payloads. JSON Schema
+Draft 2020-12 performs the instance validation. Focused API tests still own the
+business oracle; schema checks complement rather than replace them.
+
 ## 7. Mutable-data isolation
 
 Hypothesis creation and duplicate counters intentionally persist to JSON so the
@@ -189,7 +224,27 @@ flowchart LR
 This makes mutation tests repeatable and prevents an interrupted learning run
 from silently changing the repository baseline.
 
-## 8. Reporting architecture
+## 8. Environment boundary
+
+The portal resolves one of three explicit environments. The local runner owns
+the test selection instead of relying on the framework's generic Node mode.
+
+| Environment | Mutation policy | Test-only routes | Registry implementation |
+| --- | --- | --- | --- |
+| `development` | Enabled for local exploration | Hidden | Local JSON files |
+| `test` | Enabled for contract and persistence tests | Enabled | Temporary JSON files |
+| `production` | Rejected at both route and store boundaries | Hidden as `404` | Bundled immutable seeds |
+
+Production uses defense in depth: the UI does not collect membership data or
+offer hypothesis creation, API discovery lists only reads, mutation handlers
+return `405`, and the hypothesis store refuses write operations. The public
+registry does not depend on a writable filesystem.
+
+`LUMBRE_ENV` selects server behavior. `NEXT_PUBLIC_LUMBRE_ENV` selects the
+matching browser experience and is fixed when the client bundle is built. Both
+must represent the same environment.
+
+## 9. Reporting architecture
 
 `TestLogger` owns case identity, named steps, observed values, and screenshot
 evidence. Pytest hooks enrich the HTML row with:
@@ -205,14 +260,14 @@ The runner creates a self-contained timestamped report in `reports/runs/` and
 copies the newest result to `reports/lumbre-report.html`. Historical reports
 remain local and are excluded from Git because screenshots make them large.
 
-## 9. Cross-browser strategy
+## 10. Cross-browser strategy
 
 Chromium is the default engine for functional UI depth. `BROWSER-001` launches
 Chromium, Firefox, and WebKit directly and validates the critical home contract
 in each engine. This separates broad Chromium regression depth from a focused
 compatibility signal.
 
-## 10. Design decisions and trade-offs
+## 11. Design decisions and trade-offs
 
 ### Synchronous Playwright API
 
@@ -239,12 +294,12 @@ validate different risks, preserving isolation and failure diagnosis.
 
 ### Local-first orchestration
 
-The current architecture prioritizes deterministic local learning. CI and a
-public deployment can consume the same `BASE_URL` boundary later, but neither
-is represented as complete until artifact retention and persistent production
-storage are defined.
+The current architecture prioritizes deterministic local learning. A future
+public deployment can use the read-only production build without persistent
+storage. CI, authentication, and hosted mutation storage remain deliberately
+outside the completed scope.
 
-## 11. Extension rules
+## 12. Extension rules
 
 When adding a capability:
 

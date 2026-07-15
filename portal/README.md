@@ -21,6 +21,10 @@ npm run dev
 The default URL is `http://localhost:3000`; the API discovery route is
 `http://localhost:3000/api`.
 
+The machine-readable OpenAPI 3.1 contract is published at
+`http://localhost:3000/openapi/lumbre.openapi.json`. Its Schema Objects use
+JSON Schema Draft 2020-12 and are exercised by the automation framework.
+
 ```bash
 # Use a specific port
 npm run dev -- --hostname localhost --port 3100
@@ -28,6 +32,32 @@ npm run dev -- --hostname localhost --port 3100
 
 The root `scripts/test-local.sh` runner manages its own portal lifecycle, so a
 separate portal terminal is unnecessary during isolated automated runs.
+
+## Environments and access policy
+
+Lumbre has an explicit product environment boundary:
+
+| Environment | Default use | API access | Hypothesis source |
+| --- | --- | --- | --- |
+| `development` | Local product development | Public reads and business writes; test reset hidden | Editable local JSON registry |
+| `test` | Automated local suite | Current read/write behavior plus the test reset hook | Temporary JSON copy created by the runner |
+| `production` | Deployment-ready public demo | Only `GET`; mutation routes return `405` and test reset returns `404` | Bundled, immutable technical sheets |
+
+`npm run dev` defaults to `development`. A production build defaults to
+`production`. `scripts/test-local.sh` explicitly sets both `LUMBRE_ENV=test`
+and `NEXT_PUBLIC_LUMBRE_ENV=test`, so the existing learning and persistence
+tests keep their current behavior.
+
+Use [`.env.example`](.env.example) only when an explicit local override is
+useful. Keep its server and browser-facing values aligned; the public value is
+embedded into the client bundle at build time.
+
+In production, the membership form is replaced with a privacy notice, the
+experiment creation control is disabled, API discovery advertises only `GET`
+operations, and route handlers reject direct mutation attempts. The hypothesis
+registry remains browsable from bundled seed data without filesystem access.
+This makes the portal suitable for a future public demonstration while
+preserving the richer mutable system under test locally.
 
 ## Product areas
 
@@ -60,7 +90,9 @@ separate portal terminal is unnecessary during isolated automated runs.
 
 Recipes accept `category` and `q`. Ingredients accept `q`, `familia`, `estado`,
 and `id`. Hypothesis creation requires an objective and two to six ingredient
-IDs. Write operations return realistic status and error contracts.
+IDs. Write operations return realistic status and error contracts in
+`development` and `test`; production enforces the read-only policy described
+above.
 
 ## Hypothesis persistence
 
@@ -79,9 +111,10 @@ Technical IDs use:
 Automated runs set `LUMBRE_HYPOTHESIS_DIR` to a temporary copy of the registry,
 allowing real persistence assertions without modifying source JSON.
 
-Filesystem writes require the Node development runtime. The Cloudflare worker
-runtime needs a persistent D1 or R2 implementation before write operations can
-be enabled outside the local environment.
+Filesystem writes are intentionally limited to local `development` and `test`
+runtimes. Production serves its bundled registry read-only. A future hosted
+write capability would require authenticated endpoints and persistent storage
+such as D1 or R2; neither is enabled by this change.
 
 ## Research data
 
@@ -105,5 +138,5 @@ npm run start
 ```
 
 `npm run build` produces the current vinext/Cloudflare-compatible build. The
-repository currently validates the portal locally; hosted persistence remains a
-separate deployment concern.
+production result is a read-only public-demo candidate; no deployment is
+performed or represented as complete by this repository.

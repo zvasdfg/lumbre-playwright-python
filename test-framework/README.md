@@ -2,7 +2,8 @@
 
 Python automation package for the Spanish-language Lumbre portal. It combines
 Pytest, Playwright Sync API, Page Object Model, Component Objects, direct API
-testing, structured evidence, traces, and self-contained HTML reports.
+testing, executable OpenAPI/JSON Schema contracts, structured evidence, traces,
+and self-contained HTML reports.
 
 Project context, validated counts, and the complete quick start live in the
 root [README](../README.md). System boundaries and dependency direction live in
@@ -37,6 +38,7 @@ test-framework/
 ├── framework/
 │   ├── api/lumbre_api.py       Domain API operations
 │   ├── components/             Bounded widget models
+│   ├── contracts/              OpenAPI and JSON Schema validation adapter
 │   ├── pages/                  Page composition and navigation
 │   ├── reporting/              Steps, evidence, and pytest-html hooks
 │   └── config.py               Environment settings
@@ -81,13 +83,16 @@ they match the product contract.
 | `browser_context_args` | `es-MX` locale and `1440x1000` viewport |
 | `api_request_context` | Session-scoped direct HTTP context |
 | `api` | Domain wrapper around APIRequestContext |
+| `openapi_contract` | Contract downloaded from the active `BASE_URL` |
 | `home` | Ready `HomePage` opened at the configured base URL |
 | `test_log` | Case narrative, steps, values, timing, and screenshots |
 | `reset_scenario` | Deterministic API reset before each test |
 
 `scripts/test-local.sh` copies version-controlled hypothesis JSON into a
 temporary directory before starting the portal. Persistence scenarios therefore
-write real files without changing repository seed data.
+write real files without changing repository seed data. The runner also sets
+the portal environment explicitly to `test`; mutation contracts and
+`/api/test/reset` are never enabled by a production build.
 
 ## Running tests
 
@@ -100,6 +105,7 @@ From the project root:
 # Layer selection
 ./scripts/test-local.sh -q -m api
 ./scripts/test-local.sh -q -m ui
+./scripts/test-local.sh -q -m contract
 
 # Visible learning or investigation run
 ./scripts/test-local.sh -q -m ui --headed --slowmo 500
@@ -111,6 +117,26 @@ Against an already-running portal:
 cd test-framework
 BASE_URL=http://localhost:3000 .venv/bin/pytest -q tests/ui
 ```
+
+## Executable API contracts
+
+The SUT publishes its OpenAPI 3.1 description at
+`/openapi/lumbre.openapi.json`. `OpenApiContract` obtains that document through
+Playwright's `APIRequestContext`, validates the description, resolves local
+schema references, and validates request or response payloads with JSON Schema
+Draft 2020-12.
+
+The adapter selects response schemas by path, method, and actual HTTP status.
+A divergence reports actionable locations such as:
+
+```text
+Schema violation in response 200 from GET /api/health:
+$.timestamp: 12345 is not of type 'string'
+```
+
+This boundary is intentionally independent of repository paths. Contract tests
+can target any environment by changing `BASE_URL`; the portal is merely the
+current system under test.
 
 Quote a parameterized node ID in zsh:
 

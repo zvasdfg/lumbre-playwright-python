@@ -155,7 +155,7 @@ New behavior: message B cancels timer A ─────> owns its full display w
 
 ### Outcome
 
-The same test passed individually and in the complete 56-execution suite. The
+The same test passed individually and in the complete 70-execution suite. The
 test remained unchanged because its observable expectation was correct; the
 product state management was fixed.
 
@@ -165,3 +165,46 @@ Headed mode and slow motion are learning and investigation tools, not stability
 mechanisms. Timing changes can reveal product races, but synchronization should
 still be based on observable state. A failing test should not be weakened until
 the product behavior and evidence have been investigated.
+
+## 5. Turning OpenAPI into an executable framework boundary
+
+### Risk
+
+Handwritten assertions can validate a few important fields while silently
+accepting undocumented status codes, missing nested properties, invalid formats,
+or response drift elsewhere in the payload. Reading a contract directly from
+the repository would also prevent the framework from running unchanged against
+a remote environment.
+
+### Decision
+
+The SUT publishes an OpenAPI 3.1 document, but the automation framework owns the
+execution capability. `OpenApiContract` downloads the description through the
+active `BASE_URL`, validates the document, resolves local references, and uses
+JSON Schema Draft 2020-12 for request and response instances.
+
+Response selection uses the complete operation identity:
+
+```text
+path + HTTP method + actual status -> JSON Schema -> payload validation
+```
+
+### Outcome
+
+`CONTRACT-001` through `CONTRACT-004` add 14 executions covering description
+integrity, all public reads, three mutation families, and diagnostic quality.
+The informational `GET /api` gap is now covered, bringing route-operation
+coverage to `12/12`.
+
+An intentional mismatch proves that failures identify the useful location:
+
+```text
+$.timestamp: 12345 is not of type 'string'
+```
+
+### Lesson
+
+The OpenAPI file is not the portfolio feature by itself. The reusable adapter,
+environment portability, status-aware validation, and actionable diagnostics
+are the quality-engineering product. Schema tests complement focused business
+assertions; they do not replace them.
