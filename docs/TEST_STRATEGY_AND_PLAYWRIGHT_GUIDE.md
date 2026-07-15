@@ -30,10 +30,12 @@ values when they are part of the actual product contract.
 
 The suite currently contains:
 
-- 6 API test files: `API-001` through `API-006`;
-- 14 browser test files: `UI-001` through `UI-013`, plus `ERR-001`;
-- 20 test files and 21 Pytest executions;
-- one parameterized scenario, `UI-011`, with button and backdrop variants;
+- 20 API test files: `API-001` through `API-020`;
+- 30 browser-oriented test files: `UI-001` through `UI-028`, `ERR-001`,
+  and `BROWSER-001`;
+- 50 unique case IDs and 56 Pytest executions;
+- parameterized variants for `API-020`, `UI-011`, `UI-027`, and
+  `BROWSER-001`;
 - 3 smoke executions: `API-001`, `UI-001`, and `UI-004`;
 - Chromium as the installed/default browser;
 - automatic deterministic data reset before every test;
@@ -42,8 +44,10 @@ The suite currently contains:
 - retained Playwright trace and full-page screenshot on UI failure;
 - a self-contained `pytest-html` report updated after every completed test when
   the suite is launched through `report-local.sh`.
+- an explicit smoke contract executed in Chromium, Firefox, and WebKit;
+- 100% coverage of the 50-risk committed functional catalog.
 
-The latest validated baseline is **21 passed**.
+The latest validated baseline is **56 passed**.
 
 ## 3. Strategy principles
 
@@ -144,6 +148,7 @@ test-framework/
 │   │   ├── membership_modal.py
 │   │   ├── cart_drawer.py
 │   │   ├── events_section.py
+│   │   ├── ingredient_lab.py
 │   │   └── event_reservation_modal.py
 │   └── reporting/
 │       ├── test_logger.py
@@ -238,6 +243,11 @@ API tests do not create a page and therefore do not produce step screenshots.
 
 ## 7. Coverage and risk matrix
 
+The table below is the automated test inventory; it is not, by itself, the
+coverage denominator. The independent committed-risk catalog, current 100%
+baseline, calculation method, and completed growth plan are documented in
+[`TEST_COVERAGE_GROWTH_PLAN.md`](TEST_COVERAGE_GROWTH_PLAN.md).
+
 Priority definitions:
 
 - **P0:** breaks a core user or system objective.
@@ -252,6 +262,20 @@ Priority definitions:
 | API-004 | Product creation rejects a non-positive price | P1 | API negative | Automated |
 | API-005 | Recipe filtering combines category and query | P1 | API | Automated |
 | API-006 | Valid membership data creates a member with `201` | P0 | API | Automated |
+| API-007 | Ingredient filtering combines family and text query | P1 | API | Automated |
+| API-008 | Ingredient detail contains research and experiment data | P1 | API contract | Automated |
+| API-009 | Formula validation reports duplicate and unknown items by position | P0 | API negative | Automated |
+| API-010 | Ingredient order does not create a duplicate hypothesis | P0 | API persistence | Automated |
+| API-011 | Registry ids remain unique and researched formulas retain sources | P1 | API integrity | Automated |
+| API-012 | Dedicated hypothesis resource persists the Classic SPG duplicate counter | P1 | API persistence | Automated |
+| API-013 | A unique formula creates and persists a new hypothesis with `201` | P0 | API persistence | Automated |
+| API-014 | An unknown hypothesis returns a stable `404` contract | P1 | API negative | Automated |
+| API-015 | Malformed hypothesis JSON is rejected without registry mutation | P0 | API negative | Automated |
+| API-016 | An unknown ingredient returns a stable `404` contract | P1 | API negative | Automated |
+| API-017 | Product collection count and item contracts remain consistent | P2 | API contract | Automated |
+| API-018 | Valid product creation returns `201` and its representation | P1 | API positive | Automated |
+| API-019 | Event collection count and item contracts remain consistent | P2 | API contract | Automated |
+| API-020 | Invalid membership variants return the stable `422` contract | P0 | API parameterized negative | Automated |
 | UI-001 | Home communicates Lumbre's purpose | P1 | UI + smoke | Automated |
 | UI-002 | Category filter displays matching recipe cards only | P1 | UI | Automated |
 | UI-003 | Empty recipe search explains that no matches exist | P1 | UI | Automated |
@@ -265,8 +289,23 @@ Priority definitions:
 | UI-011 | Membership modal closes by button and backdrop | P2 | UI parameterized | Automated |
 | UI-012 | Fire planner recommends fuel for a direct-fire gathering | P1 | UI Component Object | Automated |
 | UI-013 | Membership form follows a logical keyboard focus order | P1 | Accessibility | Automated |
+| UI-014 | Membership submission sends the expected API request | P0 | UI network | Automated |
+| UI-015 | Ingredient catalog combines family and search filters | P1 | UI | Automated |
+| UI-016 | Ingredient sheet exposes research and adds to the formula | P1 | UI Component Object | Automated |
+| UI-017 | Experiment bench enforces the six-component limit | P0 | UI boundary | Automated |
+| UI-018 | Known formula reuses its existing technical sheet | P0 | E2E deduplication | Automated |
+| UI-019 | A unique formula creates and displays a new technical sheet | P0 | E2E persistence | Automated |
+| UI-020 | Fewer than two ingredients cannot create a technical sheet | P0 | UI boundary | Automated |
+| UI-021 | Removing a selected ingredient updates the experiment bench | P1 | UI state | Automated |
+| UI-022 | The registry opens the selected complete technical sheet | P1 | UI Component Object | Automated |
+| UI-023 | Slow-cooking mode applies its distinct fuel rate | P1 | UI calculation | Automated |
+| UI-024 | The vegetable reserve changes the fuel recommendation | P1 | UI calculation | Automated |
+| UI-025 | Demonstration checkout communicates its completion state | P2 | UI | Automated |
+| UI-026 | Recipe feedback identifies the selected recipe | P2 | UI | Automated |
+| UI-027 | Email and terms constraints prevent invalid membership submission | P0 | UI parameterized validation | Automated |
+| UI-028 | Critical content remains usable without mobile horizontal overflow | P1 | Responsive UI | Automated |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route mocking | Automated |
-| BROWSER-001 | Smoke suite passes in Firefox and WebKit | P2 | Cross-browser | Backlog |
+| BROWSER-001 | Critical home smoke contract passes in Chromium, Firefox, and WebKit | P1 | Cross-browser | Automated |
 
 ## 8. Current test inventory
 
@@ -278,6 +317,20 @@ Priority definitions:
 | `test_api_004_product_rejects_non_positive_price.py` | Expected negative response and raw `APIResponse` |
 | `test_api_005_recipes_filter_combines_category_and_query.py` | Multiple query parameters and diagnostic assertion message |
 | `test_api_006_member_created_with_valid_data.py` | POST payload, `201`, body contract, and returned identity |
+| `test_api_007_ingredients_filter_combines_family_and_query.py` | Domain-specific query parameters and filtered collection contract |
+| `test_api_008_ingredient_detail_exposes_research_data.py` | Nested JSON contract and experiment-readiness assertions |
+| `test_api_009_hypothesis_validates_each_ingredient.py` | Negative POST and position-specific validation diagnostics |
+| `test_api_010_hypothesis_deduplicates_ingredient_order.py` | Canonical signature and idempotent persistence behavior |
+| `test_api_011_hypothesis_registry_has_research_provenance.py` | Registry-wide uniqueness, ordering, and source provenance |
+| `test_api_012_classic_spg_duplicate_increments_counter.py` | `GET /api/hipotesis/:id`, duplicate POST, and isolated JSON persistence |
+| `test_api_013_new_hypothesis_is_persisted.py` | Dynamic unused signature selection, `201`, and resource persistence |
+| `test_api_014_unknown_hypothesis_returns_not_found.py` | Individual-resource `404` contract |
+| `test_api_015_malformed_hypothesis_does_not_mutate_registry.py` | Raw byte body and before/after mutation guard |
+| `test_api_016_unknown_ingredient_returns_not_found.py` | Query-resource `404` contract |
+| `test_api_017_products_collection_contract.py` | Collection count and required-field subset assertions |
+| `test_api_018_valid_product_is_created.py` | Positive POST representation contract |
+| `test_api_019_events_collection_contract.py` | Event collection schema and availability assertions |
+| `test_api_020_invalid_membership_is_rejected.py` | Parameterized API validation variants |
 | `test_ui_001_home_communicates_club_purpose.py` | Smoke visibility and visible brand contract |
 | `test_ui_002_recipe_filters_matching_cards.py` | Filter action, locator collection, and count retry |
 | `test_ui_003_recipe_search_empty_state.py` | Negative UI state and zero results |
@@ -291,6 +344,22 @@ Priority definitions:
 | `test_ui_011_membership_modal_closes.py` | Pytest parametrization and equivalent close mechanisms |
 | `test_ui_012_fire_planner_recommends_fuel.py` | New Component Object, scoped dialog controls, and fuel oracle |
 | `test_ui_013_membership_keyboard_focus_order.py` | Keyboard activation, sequential typing, Tab order, and focus assertion |
+| `test_ui_014_membership_submits_expected_request.py` | `page.expect_request()` and browser-to-API payload contract |
+| `test_ui_015_ingredient_catalog_combines_filters.py` | Select and search interaction with locator collection assertions |
+| `test_ui_016_ingredient_sheet_adds_to_formula.py` | Scoped ingredient dialog and cross-component state update |
+| `test_ui_017_ingredient_formula_enforces_six_component_limit.py` | Boundary-value selection and disabled-state assertion |
+| `test_ui_018_existing_formula_reuses_hypothesis.py` | `page.expect_response()`, deduplication, and technical-sheet integration |
+| `test_ui_019_unique_formula_creates_hypothesis.py` | Dynamic data selection, browser `201` observation, and registry persistence |
+| `test_ui_020_formula_requires_two_ingredients.py` | Minimum boundary and disabled-state assertions |
+| `test_ui_021_selected_ingredient_can_be_removed.py` | Component removal and dependent state update |
+| `test_ui_022_registry_opens_complete_hypothesis.py` | Registry-card identity and full technical-sheet sections |
+| `test_ui_023_fire_planner_calculates_slow_cooking.py` | Alternate calculation branch oracle |
+| `test_ui_024_vegetable_reserve_changes_fuel.py` | Before/after calculation-state comparison |
+| `test_ui_025_checkout_communicates_completion.py` | Cart-to-feedback integration |
+| `test_ui_026_recipe_action_identifies_selection.py` | Scoped recipe action and exact identity feedback |
+| `test_ui_027_membership_email_and_terms_validations.py` | Parameterized native constraint validation |
+| `test_ui_028_mobile_viewport_keeps_critical_content_usable.py` | Runtime viewport change and DOM overflow measurement |
+| `test_browser_001_smoke_engines.py` | Direct Chromium, Firefox, and WebKit engine lifecycle |
 | `test_err_001_membership_server_error.py` | `page.route()`, HTTP 500 fulfillment, and recoverable form state |
 
 ## 9. Rules for new tests
@@ -456,13 +525,26 @@ Completed foundation:
 8. New product-component discovery and integration through `UI-012`.
 9. Keyboard activation, sequential typing, focus order, and DOM evaluation
    through `UI-013`.
+10. Browser request observation and payload validation through `UI-014`.
+11. Ingredient-laboratory Component Object, nested API contracts, boundary
+    values, canonical deduplication, and response observation through
+    `API-007`–`API-011` and `UI-015`–`UI-018`.
+12. Isolated filesystem persistence and before/after counter verification
+    through `API-012`.
+13. Positive creation, malformed payloads, stable `404` contracts, and
+    collection schemas through `API-013`–`API-020`.
+14. Dynamic new-record creation, minimum and removal boundaries, registry
+    detail, calculation branches, native validation, and responsive layout
+    through `UI-019`–`UI-028`.
+15. Explicit browser-engine lifecycle and compatibility through
+    `BROWSER-001` in Chromium, Firefox, and WebKit.
 
 Recommended next exercises:
 
-1. Extend `ERR-001` with `page.expect_request()` to validate method and payload.
-2. `BROWSER-001`: install Firefox/WebKit and run the smoke marker in each.
-3. Add a focused API schema-validation exercise without duplicating UI risk.
-4. Add CI only after the local suite and artifact policy are stable.
+1. Add automated accessibility scanning while preserving semantic assertions.
+2. Introduce targeted visual regression for the large technical-sheet dialog.
+3. Add CI browser lanes only after defining artifact retention and retry policy.
+4. Reassess the risk denominator whenever a new product behavior is added.
 
 ## 13. Review checklist
 

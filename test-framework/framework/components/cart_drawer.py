@@ -11,6 +11,7 @@ class CartDrawer:
         self.items = self.root.locator("li")
         self.total = self.root.locator(".cart-total strong")
         self.empty_state = self.root.get_by_text("Todavía no agregas nada. El fuego puede esperar.")
+        self.checkout_button = self.root.get_by_role("button", name="Continuar compra")
 
     def product_named(self, product_name: str) -> Locator:
         return self.root.get_by_text(product_name, exact=True)
@@ -20,3 +21,6 @@ class CartDrawer:
             "button",
             name=f"Eliminar {product_name}",
         ).click()
+
+    def checkout(self) -> None:
+        self.checkout_button.click()

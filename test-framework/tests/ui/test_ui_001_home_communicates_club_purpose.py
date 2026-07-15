@@ -18,7 +18,7 @@ def test_home_communicates_the_club_purpose(home: HomePage, test_log: TestLogger
         )
 
     with test_log.step("Validate the club value proposition"):
-        expected_proposition = "Fuego · Comunidad · Vida outdoor"
+        expected_proposition = "Fuego · Comunidad · Vida al aire libre"
         proposition = home.page.get_by_text(expected_proposition)
         expect(proposition).to_be_visible()
         test_log.values(

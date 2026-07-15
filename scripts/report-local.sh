@@ -7,12 +7,7 @@ REPORT_PATH="$REPORT_DIR/lumbre-report.html"
 
 mkdir -p "$REPORT_DIR"
 
-if "$ROOT_DIR/scripts/test-local.sh" \
-  -q \
-  --html=reports/lumbre-report.html \
-  --self-contained-html \
-  --css=framework/reporting/lumbre_report.css \
-  "$@"; then
+if "$ROOT_DIR/scripts/test-local.sh" -q "$@"; then
   TEST_STATUS=0
 else
   TEST_STATUS=$?

@@ -12,7 +12,7 @@ cd test-framework
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
-playwright install chromium
+playwright install chromium firefox webkit
 cp .env.example .env
 ```
 
@@ -39,6 +39,7 @@ test-framework/
 │   │   ├── events_section.py
 │   │   ├── fire_planner_modal.py
 │   │   ├── header.py
+│   │   ├── ingredient_lab.py
 │   │   └── membership_modal.py
 │   ├── pages/
 │   │   ├── base_page.py
@@ -49,8 +50,8 @@ test-framework/
 │   │   └── test_logger.py
 │   └── config.py
 ├── tests/
-│   ├── api/             API-001 through API-006
-│   ├── ui/              UI-001 through UI-013 and ERR-001
+│   ├── api/             API-001 through API-020
+│   ├── ui/              UI-001 through UI-028, ERR-001, and BROWSER-001
 │   └── conftest.py
 ├── templates/
 └── pyproject.toml
@@ -106,6 +107,10 @@ value, recipe, product, or event must match the Spanish product.
 - `test_log`: case narrative, step timing, values, and UI screenshots.
 - `reset_scenario`: autouse API reset before every test.
 
+`test-local.sh` starts the portal with a temporary copy of the hypothesis JSON
+registry. Persistence scenarios can therefore write and verify data without
+changing `portal/data/hypotheses`.
+
 Tests must not depend on execution order or state produced by another test.
 
 ## Running tests
@@ -125,6 +130,13 @@ Run one file:
 ```bash
 ./scripts/test-local.sh -q \
   tests/api/test_api_006_member_created_with_valid_data.py
+```
+
+Run the Classic SPG duplicate-counter scenario:
+
+```bash
+./scripts/test-local.sh -q \
+  tests/api/test_api_012_classic_spg_duplicate_increments_counter.py
 ```
 
 Run the network-mocking scenario:
@@ -149,6 +161,14 @@ Run the keyboard focus-order scenario:
   --headed --slowmo 500
 ```
 
+Run representative ingredient laboratory coverage:
+
+```bash
+./scripts/test-local.sh -q \
+  tests/api/test_api_007_ingredients_filter_combines_family_and_query.py \
+  tests/ui/test_ui_015_ingredient_catalog_combines_filters.py
+```
+
 Run a parameterized variant:
 
 ```bash
@@ -169,6 +189,11 @@ BASE_URL=http://localhost:3000 .venv/bin/pytest -q tests/ui
 ./scripts/report-local.sh
 open test-framework/reports/lumbre-report.html
 ```
+
+Each execution is archived independently in `reports/runs/` using a timestamped
+filename such as `lumbre-report-2026-07-15_12-45-30.html`. The stable
+`reports/lumbre-report.html` file is refreshed with the latest execution, while
+previous run reports remain unchanged.
 
 When Pytest is launched with the HTML options used by `report-local.sh`, the
 HTML report is regenerated after each completed test. It includes case ID,
@@ -221,6 +246,7 @@ Scaffolds remain skipped until their TODOs are completed. Never remove the
 ## Detailed documentation
 
 - [Test strategy and learning guide](../docs/TEST_STRATEGY_AND_PLAYWRIGHT_GUIDE.md)
+- [Test coverage growth plan](../docs/TEST_COVERAGE_GROWTH_PLAN.md)
 - [Key Playwright notes](../docs/KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](../docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
 - [HTML reporting guide](../docs/HTML_REPORTING.md)

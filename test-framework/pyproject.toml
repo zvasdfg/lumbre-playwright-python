@@ -33,6 +33,7 @@ markers = [
   "ui: browser-based test",
   "api: direct API test",
   "regression: extended functional coverage",
+  "cross_browser: explicit compatibility coverage across Playwright browser engines",
 ]
 log_cli = true
 log_cli_level = "INFO"

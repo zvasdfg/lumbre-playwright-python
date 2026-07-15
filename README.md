@@ -61,7 +61,7 @@ cd test-framework
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
-playwright install chromium
+playwright install chromium firefox webkit
 cp .env.example .env
 cd ..
 ```
@@ -81,6 +81,10 @@ From the project root:
 open test-framework/reports/lumbre-report.html
 ```
 
+Every execution is also preserved as a timestamped self-contained report under
+`test-framework/reports/runs/`. The stable `lumbre-report.html` file always
+contains the most recent execution.
+
 The orchestration scripts use port `3100` by default. Override it when needed:
 
 ```bash
@@ -98,6 +102,7 @@ Additional arguments are forwarded to Pytest:
 ## Documentation
 
 - [Test strategy and learning guide](docs/TEST_STRATEGY_AND_PLAYWRIGHT_GUIDE.md)
+- [Test coverage growth plan](docs/TEST_COVERAGE_GROWTH_PLAN.md)
 - [Key Playwright notes](docs/KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
 - [HTML reporting guide](docs/HTML_REPORTING.md)

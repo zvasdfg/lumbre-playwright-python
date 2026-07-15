@@ -19,6 +19,9 @@ class LumbreApi:
     def health(self) -> dict[str, Any]:
         return self._json(self._request.get("/api/health"))
 
+    def api_index(self) -> dict[str, Any]:
+        return self._json(self._request.get("/api"))
+
     def recipes(self, *, category: str | None = None, query: str | None = None) -> dict[str, Any]:
         params: dict[str, str | float | bool] = {}
         if category:
@@ -30,6 +33,9 @@ class LumbreApi:
     def products(self) -> dict[str, Any]:
         return self._json(self._request.get("/api/products"))
 
+    def events(self) -> dict[str, Any]:
+        return self._json(self._request.get("/api/events"))
+
     def reset_demo_data(self) -> dict[str, Any]:
         return self._json(self._request.post("/api/test/reset"))
 
@@ -38,3 +44,38 @@ class LumbreApi:
 
     def create_member(self, payload: dict[str, Any]) -> APIResponse:
         return self._request.post("/api/members", data=payload)
+
+    def ingredients(
+        self,
+        *,
+        family: str | None = None,
+        status: str | None = None,
+        query: str | None = None,
+    ) -> dict[str, Any]:
+        params: dict[str, str | float | bool] = {}
+        if family:
+            params["familia"] = family
+        if status:
+            params["estado"] = status
+        if query:
+            params["q"] = query
+        return self._json(self._request.get("/api/ingredientes", params=params))
+
+    def ingredient(self, ingredient_id: str) -> APIResponse:
+        return self._request.get("/api/ingredientes", params={"id": ingredient_id})
+
+    def hypotheses(self) -> dict[str, Any]:
+        return self._json(self._request.get("/api/hipotesis"))
+
+    def hypothesis(self, hypothesis_id: str) -> APIResponse:
+        return self._request.get(f"/api/hipotesis/{hypothesis_id}")
+
+    def create_hypothesis(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.post("/api/hipotesis", data=payload)
+
+    def create_hypothesis_raw(self, body: str) -> APIResponse:
+        return self._request.post(
+            "/api/hipotesis",
+            data=body.encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
