@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { events, products, recipes, type FireEvent, type Product } from "../lib/data";
+import { isPublicProductionReadOnly } from "../lib/environment";
 import FirePlannerModal from "./fire-planner-modal";
 import IngredientLab from "./ingredient-lab";
 
@@ -20,6 +21,7 @@ function productCategoryLabel(category: Product["category"]) {
 }
 
 export default function ClubPortal() {
+  const readOnlyProduction = isPublicProductionReadOnly();
   const appRef = useRef<HTMLElement>(null);
   const [recipeFilter, setRecipeFilter] = useState<RecipeFilter>("todos");
   const [search, setSearch] = useState("");
@@ -71,6 +73,8 @@ export default function ClubPortal() {
 
   async function submitMembership(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (readOnlyProduction) return;
+
     setSubmitting(true);
     const form = new FormData(event.currentTarget);
     const response = await fetch("/api/members", {
@@ -108,6 +112,13 @@ export default function ClubPortal() {
           <button className="header-cta" type="button" onClick={() => setJoinOpen(true)}>Únete al fuego</button>
         </div>
       </header>
+
+      {readOnlyProduction && (
+        <aside className="public-demo-banner" aria-label="Entorno público de demostración">
+          <strong>Demostración pública de solo lectura.</strong>
+          <span>Explora el laboratorio y sus fichas sin enviar información personal.</span>
+        </aside>
+      )}
 
       <section className="hero" id="inicio">
         <div className="hero-copy">
@@ -215,13 +226,23 @@ export default function ClubPortal() {
           <section className="modal" role="dialog" aria-modal="true" aria-labelledby="join-title">
             <button className="modal-close" type="button" onClick={() => setJoinOpen(false)} aria-label="Cerrar">×</button>
             <p className="section-index">MEMBRESÍA GRATUITA</p><h2 id="join-title">Enciende tu primera brasa.</h2><p>Recibe una receta nueva cada semana y acceso anticipado a encuentros.</p>
-            <form onSubmit={submitMembership}>
-              <label>Nombre completo<input name="name" required minLength={2} autoFocus /></label>
-              <label>Correo electrónico<input name="email" type="email" required /></label>
-              <label>Experiencia<select name="experience" defaultValue="inicial"><option value="inicial">Estoy empezando</option><option value="intermedio">Ya controlo el fuego</option><option value="avanzado">Vivo entre brasas</option></select></label>
-              <label className="checkbox"><input name="terms" type="checkbox" required /> Acepto recibir novedades del club.</label>
-              <button className="button button-primary" type="submit" disabled={submitting}>{submitting ? "Encendiendo..." : "Unirme al club"}</button>
-            </form>
+            {readOnlyProduction ? (
+              <div className="read-only-message" role="note">
+                <strong>Registro desactivado en la demostración pública.</strong>
+                <p>
+                  Este entorno no recibe nombres, correos ni solicitudes de membresía. El flujo
+                  completo permanece disponible en el laboratorio local de pruebas.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={submitMembership}>
+                <label>Nombre completo<input name="name" required minLength={2} autoFocus /></label>
+                <label>Correo electrónico<input name="email" type="email" required /></label>
+                <label>Experiencia<select name="experience" defaultValue="inicial"><option value="inicial">Estoy empezando</option><option value="intermedio">Ya controlo el fuego</option><option value="avanzado">Vivo entre brasas</option></select></label>
+                <label className="checkbox"><input name="terms" type="checkbox" required /> Acepto recibir novedades del club.</label>
+                <button className="button button-primary" type="submit" disabled={submitting}>{submitting ? "Encendiendo..." : "Unirme al club"}</button>
+              </form>
+            )}
           </section>
         </div>
       )}

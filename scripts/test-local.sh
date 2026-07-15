@@ -8,6 +8,8 @@ SERVER_LOG="${TMPDIR:-/tmp}/lumbre-portal-${PORT}.log"
 HYPOTHESIS_DIR="$(mktemp -d "${TMPDIR:-/tmp}/lumbre-test-hypotheses.XXXXXX")"
 export NO_PROXY="localhost,127.0.0.1,::1"
 export no_proxy="$NO_PROXY"
+export LUMBRE_ENV="test"
+export NEXT_PUBLIC_LUMBRE_ENV="test"
 export LUMBRE_HYPOTHESIS_DIR="$HYPOTHESIS_DIR"
 
 cp "$ROOT_DIR"/portal/data/hypotheses/*.json "$HYPOTHESIS_DIR"/

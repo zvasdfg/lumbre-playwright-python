@@ -1,10 +1,13 @@
 import { products } from "../../lib/data";
+import { isProductionReadOnly, readOnlyResponse } from "../../lib/environment";
 
 export async function GET() {
   return Response.json({ data: products, count: products.length });
 }
 
 export async function POST(request: Request) {
+  if (isProductionReadOnly()) return readOnlyResponse();
+
   const body = await request.json() as { name?: string; category?: string; price?: number };
   if (!body.name || !body.category || !body.price || body.price <= 0) {
     return Response.json({ error: "name, category and a positive price are required" }, { status: 422 });

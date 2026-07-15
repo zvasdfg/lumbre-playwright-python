@@ -1,4 +1,5 @@
 import { createExperimentProtocol, ingredients } from "../../lib/ingredients";
+import { isProductionReadOnly, readOnlyResponse } from "../../lib/environment";
 import {
   ensureRecommendedHypotheses,
   experimentObjectives,
@@ -29,6 +30,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (isProductionReadOnly()) return readOnlyResponse();
+
   let body: HypothesisRequest;
   try {
     body = (await request.json()) as HypothesisRequest;

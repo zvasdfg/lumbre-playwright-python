@@ -5,6 +5,8 @@ import {
   ingredients,
   type ExperimentProtocol,
 } from "./ingredients";
+import { isProductionReadOnly } from "./environment";
+import { hypothesisSeeds } from "./hypothesis-seeds";
 import { recommendedFormulas } from "./recommended-formulas";
 
 export const experimentObjectives = {
@@ -17,6 +19,8 @@ export const experimentObjectives = {
 export type ExperimentObjective = keyof typeof experimentObjectives;
 
 export async function ensureRecommendedHypotheses() {
+  if (isProductionReadOnly()) return;
+
   for (const recommendation of recommendedFormulas) {
     const selectedIngredients = recommendation.ingredientIds.map((ingredientId) => {
       const ingredient = ingredients.find((candidate) => candidate.id === ingredientId);
@@ -71,6 +75,12 @@ async function ensureStorageDirectory() {
 }
 
 export async function listHypotheses(): Promise<ExperimentProtocol[]> {
+  if (isProductionReadOnly()) {
+    return hypothesisSeeds
+      .map((record) => structuredClone(record))
+      .sort((left, right) => left.id.localeCompare(right.id));
+  }
+
   const directory = await ensureStorageDirectory();
   const entries = await readdir(directory);
   const records = await Promise.all(
@@ -104,6 +114,10 @@ export async function findOrCreateHypothesis(
   buildRecord: (id: string) => ExperimentProtocol,
   options: { refreshRecommended?: boolean; incrementDuplicateCount?: boolean } = {},
 ) {
+  if (isProductionReadOnly()) {
+    throw new Error("The production hypothesis registry is read-only");
+  }
+
   const directory = await ensureStorageDirectory();
   const { handle, lockPath } = await acquireWriteLock(directory);
   try {

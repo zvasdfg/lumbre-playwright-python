@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { isPublicProductionReadOnly } from "../lib/environment";
 
 type Ingredient = {
   id: string;
@@ -127,6 +128,7 @@ function formulaNameLabel(name: string) {
 }
 
 export default function IngredientLab() {
+  const readOnlyProduction = isPublicProductionReadOnly();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [families, setFamilies] = useState<string[]>([]);
   const [search, setSearch] = useState("");
@@ -243,6 +245,11 @@ export default function IngredientLab() {
   }
 
   async function createProtocol() {
+    if (readOnlyProduction) {
+      setError("La creación de fichas está disponible únicamente en el entorno de pruebas.");
+      return;
+    }
+
     setCreating(true);
     setError("");
     try {
@@ -382,7 +389,11 @@ export default function IngredientLab() {
         <aside className="experiment-bench" aria-labelledby="bench-title">
           <p className="section-index">MESA DE PRUEBA</p>
           <h3 id="bench-title">Fórmula experimental</h3>
-          <p>Selecciona entre 2 y 6 componentes. Cada combinación única se registra como ficha técnica local.</p>
+          <p>
+            {readOnlyProduction
+              ? "Explora combinaciones de 2 a 6 componentes. La creación de fichas está desactivada en esta demostración pública."
+              : "Selecciona entre 2 y 6 componentes. Cada combinación única se registra como ficha técnica local."}
+          </p>
 
           <ol className="selected-ingredients" aria-label="Componentes seleccionados">
             {selectedIngredients.map((ingredient, index) => (
@@ -406,11 +417,16 @@ export default function IngredientLab() {
           <button
             className="button button-primary create-protocol"
             type="button"
-            disabled={!hydrated || selectedIds.length < 2 || creating}
+            disabled={readOnlyProduction || !hydrated || selectedIds.length < 2 || creating}
             onClick={createProtocol}
           >
-            {creating ? "Documentando..." : "Crear protocolo"}
+            {readOnlyProduction ? "Entorno de solo lectura" : creating ? "Documentando..." : "Crear protocolo"}
           </button>
+          {readOnlyProduction && (
+            <small className="read-only-note">
+              Las fichas publicadas pueden consultarse, pero este entorno no modifica el registro.
+            </small>
+          )}
           {selectedIds.length === 6 && <small className="bench-limit">La mesa admite un máximo de 6 componentes.</small>}
 
           {protocol && (
@@ -431,7 +447,9 @@ export default function IngredientLab() {
       >
         <div className="registry-heading">
           <div>
-            <p className="section-index">ARCHIVO LOCAL DE EXPERIMENTOS</p>
+            <p className="section-index">
+              {readOnlyProduction ? "ARCHIVO PÚBLICO DE EXPERIMENTOS" : "ARCHIVO LOCAL DE EXPERIMENTOS"}
+            </p>
             <h3 id="hypothesis-registry-title">Fichas técnicas registradas</h3>
           </div>
           <span aria-live="polite">

@@ -18,6 +18,7 @@ portal/dist/
 portal/.wrangler/
 portal/.npm-cache/
 portal/.env*
+!portal/.env.example
 portal/.vinext/
 
 # Imported ingredient catalog archive; editable JSON sources are versioned instead
