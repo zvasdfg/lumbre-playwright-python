@@ -7,6 +7,7 @@ from playwright.sync_api import APIRequestContext, Page, Playwright
 
 from framework.api.lumbre_api import LumbreApi
 from framework.config import settings
+from framework.contracts import OpenApiContract
 from framework.pages.home_page import HomePage
 from framework.reporting import TestLogger
 
@@ -37,6 +38,12 @@ def api_request_context(playwright: Playwright, app_url: str) -> Iterator[APIReq
 @pytest.fixture
 def api(api_request_context: APIRequestContext) -> LumbreApi:
     return LumbreApi(api_request_context)
+
+
+@pytest.fixture(scope="session")
+def openapi_contract(api_request_context: APIRequestContext) -> OpenApiContract:
+    api_client = LumbreApi(api_request_context)
+    return OpenApiContract(api_client.openapi_document())
 
 
 @pytest.fixture

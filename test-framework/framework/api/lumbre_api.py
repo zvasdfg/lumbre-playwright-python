@@ -22,6 +22,9 @@ class LumbreApi:
     def api_index(self) -> dict[str, Any]:
         return self._json(self._request.get("/api"))
 
+    def openapi_document(self) -> dict[str, Any]:
+        return self._json(self._request.get("/openapi/lumbre.openapi.json"))
+
     def recipes(self, *, category: str | None = None, query: str | None = None) -> dict[str, Any]:
         params: dict[str, str | float | bool] = {}
         if category:

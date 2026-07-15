@@ -3,6 +3,7 @@ import { getLumbreEnvironment } from "../lib/environment";
 export async function GET() {
   const environment = getLumbreEnvironment();
   const readEndpoints = [
+    "GET /openapi/lumbre.openapi.json",
     "GET /api/health",
     "GET /api/recipes?category=directo&q=entraña",
     "GET /api/products",

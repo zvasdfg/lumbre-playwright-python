@@ -8,6 +8,8 @@ version = "0.1.0"
 description = "Educational Playwright framework using Python and Page Object Model"
 requires-python = ">=3.11"
 dependencies = [
+  "jsonschema[format]>=4.23,<5",
+  "openapi-spec-validator>=0.7,<1",
   "playwright>=1.49,<2",
   "pytest>=8,<10",
   "pytest-html>=4.1,<5",
@@ -19,6 +21,7 @@ dependencies = [
 dev = [
   "ruff>=0.9,<1",
   "mypy>=1.14,<2",
+  "types-jsonschema>=4.23,<5",
 ]
 
 [tool.setuptools.packages.find]
@@ -32,6 +35,7 @@ markers = [
   "smoke: fast critical-path coverage",
   "ui: browser-based test",
   "api: direct API test",
+  "contract: OpenAPI and JSON Schema contract validation",
   "regression: extended functional coverage",
   "cross_browser: explicit compatibility coverage across Playwright browser engines",
 ]
