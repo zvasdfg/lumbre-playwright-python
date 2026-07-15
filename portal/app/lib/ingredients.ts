@@ -119,6 +119,7 @@ export type ExperimentProtocol = {
     }>;
     fuentes: Array<{ titulo: string; url: string }>;
   };
+  contador_repeticiones: number;
   creado_en: string;
 };
 
@@ -233,6 +234,7 @@ export function createExperimentProtocol(
     estado: options.status ?? "borrador",
     tipo_registro: options.registryType ?? "hipotesis_usuario",
     ...(options.recommendation ? { recomendacion: options.recommendation } : {}),
+    contador_repeticiones: 0,
     creado_en: new Date().toISOString(),
   };
 }

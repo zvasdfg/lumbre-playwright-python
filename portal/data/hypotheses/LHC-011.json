@@ -1,0 +1,84 @@
+{
+  "schema_version": 5,
+  "id": "LHC-011",
+  "firma": "LHC:ajo_granulado+ajo_negro",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "ajo_negro",
+      "nombre": "ajo negro",
+      "familia": "Allium"
+    }
+  ],
+  "hipotesis": "La selección no cubre suficientemente una fórmula de referencia. Su combinación debe tratarse como experimental y compararse contra un control antes de atribuirle un resultado esperado. Los perfiles adicionales son: umami mediante ajo negro (añade intensidad sabrosa y persistencia).",
+  "formula": {
+    "level": "experimental",
+    "formula_id": null,
+    "formula_name": "Sin fórmula de referencia",
+    "conclusion": "La selección no cubre suficientemente una fórmula de referencia. Su combinación debe tratarse como experimental y compararse contra un control antes de atribuirle un resultado esperado. Los perfiles adicionales son: umami mediante ajo negro (añade intensidad sabrosa y persistencia).",
+    "matched_roles": [
+      "ajo o cebolla (2/1)"
+    ],
+    "missing_roles": [
+      "base salina (1)",
+      "pimienta (1)"
+    ],
+    "additional_profiles": [
+      {
+        "role": "umami",
+        "ingredients": [
+          "ajo negro"
+        ],
+        "contribution": "añade intensidad sabrosa y persistencia"
+      }
+    ],
+    "sources": []
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "umami",
+      "intensity": 3.5,
+      "ingredients": [
+        "ajo granulado",
+        "ajo negro"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 3,
+      "ingredients": [
+        "ajo negro"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 2.5,
+      "ingredients": [
+        "ajo negro"
+      ]
+    },
+    {
+      "attribute": "ácido",
+      "intensity": 1.5,
+      "ingredients": [
+        "ajo negro"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar una segunda muestra con la fórmula de referencia más cercana cuando exista.",
+    "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+    "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
+    "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia."
+  ],
+  "estado": "borrador",
+  "tipo_registro": "hipotesis_usuario",
+  "contador_repeticiones": 0,
+  "creado_en": "2026-07-15T18:40:05.240Z"
+}

@@ -73,7 +73,18 @@ const objectives = [
 ];
 
 function familyLabel(family: string) {
-  return family.replaceAll("_", " ");
+  const labels: Record<string, string> = {
+    Allium: "Ajo y cebolla",
+    Citrico: "Cítricos",
+    Endulzante: "Endulzantes",
+    Especia_calida: "Especias cálidas",
+    Hierba: "Hierbas",
+    Pimienta: "Pimientas",
+    Sal: "Sales",
+    Semilla_aromatica: "Semillas aromáticas",
+    Tostado: "Ingredientes tostados",
+  };
+  return labels[family] ?? family.replaceAll("_", " ");
 }
 
 function statusLabel(status: string) {
@@ -86,6 +97,33 @@ function evidenceLabel(level?: "referenced" | "close" | "experimental") {
   if (level === "referenced") return "Fórmula respaldada";
   if (level === "close") return "Variación cercana";
   return "Experimental";
+}
+
+function objectiveLabel(objective: string) {
+  return objective.replaceAll("Bark", "Corteza");
+}
+
+function visibleText(value: string) {
+  return value
+    .replaceAll("low and slow", "cocción lenta")
+    .replaceAll("low-and-slow", "cocción lenta")
+    .replaceAll("Lemon pepper", "Limón con pimienta")
+    .replaceAll("lemon pepper", "limón con pimienta")
+    .replaceAll("Steak rub", "Mezcla seca para carne")
+    .replaceAll("steakhouse", "casa de cortes")
+    .replaceAll("medley", "mezcla")
+    .replaceAll("alliums", "ajo y cebolla")
+    .replaceAll("allium", "ajo y cebolla")
+    .replaceAll("Allium", "Ajo y cebolla")
+    .replaceAll("Bark", "Corteza")
+    .replaceAll("bark", "corteza")
+    .replaceAll("Rub", "Mezcla seca")
+    .replaceAll("rub", "mezcla seca");
+}
+
+function formulaNameLabel(name: string) {
+  if (name === "SPG clásico") return "Sal, pimienta y ajo (SPG) clásico";
+  return visibleText(name);
 }
 
 export default function IngredientLab() {
@@ -135,7 +173,7 @@ export default function IngredientLab() {
 
   async function refreshHypotheses(signal?: AbortSignal) {
     try {
-      const response = await fetch("/api/ingredientes?hipotesis=true", { signal });
+      const response = await fetch("/api/hipotesis", { signal });
       if (!response.ok) throw new Error("No fue posible consultar las fichas registradas.");
       const registry = (await response.json()) as HypothesisResponse;
       setHypotheses(registry.data);
@@ -150,7 +188,7 @@ export default function IngredientLab() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/ingredientes?hipotesis=true", { signal: controller.signal })
+    fetch("/api/hipotesis", { signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error("No fue posible consultar las fichas registradas.");
         return (await response.json()) as HypothesisResponse;
@@ -208,7 +246,7 @@ export default function IngredientLab() {
     setCreating(true);
     setError("");
     try {
-      const response = await fetch("/api/ingredientes", {
+      const response = await fetch("/api/hipotesis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ingredient_ids: selectedIds, objective }),
@@ -219,7 +257,7 @@ export default function IngredientLab() {
         created?: boolean;
       };
       if (!response.ok || !result.data) {
-        throw new Error(result.error ?? "No fue posible crear el protocolo.");
+        throw new Error("No fue posible crear la ficha técnica. Revisa los componentes seleccionados.");
       }
       setProtocol(result.data);
       setProtocolCreated(result.created ?? false);
@@ -362,7 +400,7 @@ export default function IngredientLab() {
           <label className="experiment-objective">
             <span>Objetivo de la prueba</span>
             <select value={objective} onChange={(event) => { setObjective(event.target.value); setProtocol(null); setProtocolCreated(null); }}>
-              {objectives.map((item) => <option key={item}>{item}</option>)}
+              {objectives.map((item) => <option key={item} value={item}>{objectiveLabel(item)}</option>)}
             </select>
           </label>
           <button
@@ -377,10 +415,10 @@ export default function IngredientLab() {
 
           {protocol && (
             <div className="protocol-result" role="region" aria-live="polite" aria-labelledby="protocol-title">
-              <span>{protocol.id} · {protocol.estado}</span>
+              <span>{protocol.id} · {statusLabel(protocol.estado)}</span>
               <h4 id="protocol-title">{protocolCreated ? "Hipótesis registrada" : "Hipótesis existente"}</h4>
-              <p>{protocol.hipotesis}</p>
-              <ol>{protocol.metodo.map((step) => <li key={step}>{step}</li>)}</ol>
+              <p>{visibleText(protocol.hipotesis)}</p>
+              <ol>{protocol.metodo.map((step) => <li key={step}>{visibleText(step)}</li>)}</ol>
             </div>
           )}
         </aside>
@@ -415,15 +453,15 @@ export default function IngredientLab() {
                 <strong>{hypothesis.id}</strong>
                 <span>{statusLabel(hypothesis.estado)}</span>
               </div>
-              <p className="hypothesis-objective">{hypothesis.objetivo}</p>
+              <p className="hypothesis-objective">{objectiveLabel(hypothesis.objetivo)}</p>
               {hypothesis.recomendacion && (
                 <p className="formula-badge formula-referenced">
-                  Recomendada · {hypothesis.recomendacion.nombre}
+                  Recomendada · {visibleText(hypothesis.recomendacion.nombre)}
                 </p>
               )}
               {hypothesis.formula && !hypothesis.recomendacion && (
                 <p className={`formula-badge formula-${hypothesis.formula.level}`}>
-                  {evidenceLabel(hypothesis.formula.level)} · {hypothesis.formula.formula_name}
+                  {evidenceLabel(hypothesis.formula.level)} · {formulaNameLabel(hypothesis.formula.formula_name)}
                 </p>
               )}
               <ul aria-label={`Componentes de ${hypothesis.id}`}>
@@ -453,7 +491,7 @@ export default function IngredientLab() {
             <p className="section-index">FICHA DE COMPONENTE · {statusLabel(inspectedIngredient.estado)}</p>
             <h2 id="ingredient-title">{inspectedIngredient.nombre}</h2>
             <span className="ingredient-family">{familyLabel(inspectedIngredient.familia)}</span>
-            <p>{inspectedIngredient.descripcion || "Este componente todavía no tiene una descripción validada en laboratorio."}</p>
+            <p>{visibleText(inspectedIngredient.descripcion) || "Este componente todavía no tiene una descripción validada en laboratorio."}</p>
             <dl className="ingredient-data-status">
               <div><dt>Perfil sensorial</dt><dd>{Object.values(inspectedIngredient.perfil_sensorial).filter((value) => value !== null).length} / {Object.keys(inspectedIngredient.perfil_sensorial).length}</dd></div>
               <div><dt>Compatibilidades</dt><dd>{Object.values(inspectedIngredient.compatibilidad).filter((value) => value !== null).length} / {Object.keys(inspectedIngredient.compatibilidad).length}</dd></div>
@@ -491,12 +529,12 @@ export default function IngredientLab() {
             </button>
             <p className="section-index">FICHA TÉCNICA · {statusLabel(inspectedHypothesis.estado)}</p>
             <h2 id="hypothesis-sheet-title">{inspectedHypothesis.id}</h2>
-            <span className="hypothesis-sheet-objective">{inspectedHypothesis.objetivo}</span>
+            <span className="hypothesis-sheet-objective">{objectiveLabel(inspectedHypothesis.objetivo)}</span>
             {inspectedHypothesis.recomendacion && (
               <section className="formula-evidence formula-referenced">
                 <span>RECOMENDACIÓN INVESTIGADA · AÚN NO VALIDADA POR LUMBRE</span>
-                <h3>{inspectedHypothesis.recomendacion.nombre}</h3>
-                <p>{inspectedHypothesis.recomendacion.fundamento}</p>
+                <h3>{visibleText(inspectedHypothesis.recomendacion.nombre)}</h3>
+                <p>{visibleText(inspectedHypothesis.recomendacion.fundamento)}</p>
                 <h4>Proporción inicial</h4>
                 <ul>
                   {inspectedHypothesis.recomendacion.proporciones.map((proportion) => {
@@ -511,23 +549,23 @@ export default function IngredientLab() {
                   })}
                 </ul>
                 <h4>Adaptación de Lumbre</h4>
-                <p>{inspectedHypothesis.recomendacion.adaptacion}</p>
+                <p>{visibleText(inspectedHypothesis.recomendacion.adaptacion)}</p>
               </section>
             )}
-            <p>{inspectedHypothesis.hipotesis}</p>
+            <p>{visibleText(inspectedHypothesis.hipotesis)}</p>
             {inspectedHypothesis.formula && !inspectedHypothesis.recomendacion && (
               <section className={`formula-evidence formula-${inspectedHypothesis.formula.level}`}>
                 <span>{evidenceLabel(inspectedHypothesis.formula.level)}</span>
-                <h3>{inspectedHypothesis.formula.formula_name}</h3>
+                <h3>{formulaNameLabel(inspectedHypothesis.formula.formula_name)}</h3>
                 <dl>
                   <div>
                     <dt>Roles cubiertos</dt>
-                    <dd>{inspectedHypothesis.formula.matched_roles.join(" · ") || "Ninguno"}</dd>
+                    <dd>{inspectedHypothesis.formula.matched_roles.map(visibleText).join(" · ") || "Ninguno"}</dd>
                   </div>
                   {inspectedHypothesis.formula.missing_roles.length > 0 && (
                     <div>
                       <dt>Roles faltantes</dt>
-                      <dd>{inspectedHypothesis.formula.missing_roles.join(" · ")}</dd>
+                      <dd>{inspectedHypothesis.formula.missing_roles.map(visibleText).join(" · ")}</dd>
                     </div>
                   )}
                 </dl>
@@ -536,7 +574,7 @@ export default function IngredientLab() {
                     <h4>Aportes fuera de la fórmula estándar</h4>
                     {inspectedHypothesis.formula.additional_profiles.map((profile) => (
                       <p key={profile.role}>
-                        <strong>{profile.role}:</strong> {profile.ingredients.join(", ")} — {profile.contribution}.
+                        <strong>{visibleText(profile.role)}:</strong> {profile.ingredients.join(", ")} — {visibleText(profile.contribution)}.
                       </p>
                     ))}
                   </div>
@@ -549,7 +587,7 @@ export default function IngredientLab() {
                 <div>
                   {inspectedHypothesis.perfil_esperado.map((profile) => (
                     <article key={profile.attribute}>
-                      <span>{profile.attribute}</span>
+                      <span>{visibleText(profile.attribute)}</span>
                       <strong>{profile.intensity} / 5</strong>
                       <small>{profile.ingredients.join(", ") || "Aporte distribuido"}</small>
                     </article>
@@ -568,15 +606,15 @@ export default function IngredientLab() {
             </ol>
             <h3>Método propuesto</h3>
             <ol className="hypothesis-method">
-              {inspectedHypothesis.metodo.map((step) => <li key={step}>{step}</li>)}
+              {inspectedHypothesis.metodo.map((step) => <li key={step}>{visibleText(step)}</li>)}
             </ol>
             {inspectedHypothesis.formula && !inspectedHypothesis.recomendacion && inspectedHypothesis.formula.sources.length > 0 && (
               <section className="formula-sources">
                 <h3>Referencias de la fórmula</h3>
                 <ul>
-                  {inspectedHypothesis.formula.sources.map((source) => (
+                  {inspectedHypothesis.formula.sources.map((source, index) => (
                     <li key={source.url}>
-                      <a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>
+                      <a href={source.url} target="_blank" rel="noreferrer">Referencia externa {index + 1}</a>
                     </li>
                   ))}
                 </ul>
@@ -586,9 +624,9 @@ export default function IngredientLab() {
               <section className="formula-sources">
                 <h3>Fuentes de la recomendación</h3>
                 <ul>
-                  {inspectedHypothesis.recomendacion.fuentes.map((source) => (
+                  {inspectedHypothesis.recomendacion.fuentes.map((source, index) => (
                     <li key={source.url}>
-                      <a href={source.url} target="_blank" rel="noreferrer">{source.titulo}</a>
+                      <a href={source.url} target="_blank" rel="noreferrer">Fuente de investigación {index + 1}</a>
                     </li>
                   ))}
                 </ul>

@@ -14,6 +14,11 @@ const currency = new Intl.NumberFormat("es-MX", {
   maximumFractionDigits: 0,
 });
 
+function productCategoryLabel(category: Product["category"]) {
+  if (category === "outdoor") return "aire libre";
+  return category;
+}
+
 export default function ClubPortal() {
   const appRef = useRef<HTMLElement>(null);
   const [recipeFilter, setRecipeFilter] = useState<RecipeFilter>("todos");
@@ -25,6 +30,7 @@ export default function ClubPortal() {
   const [selectedEvent, setSelectedEvent] = useState<FireEvent | null>(null);
   const [toast, setToast] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const toastTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
 
   const filteredRecipes = useMemo(() => {
     const normalized = search.trim().toLocaleLowerCase("es");
@@ -39,11 +45,23 @@ export default function ClubPortal() {
 
   useEffect(() => {
     appRef.current?.setAttribute("data-app-ready", "true");
+
+    return () => {
+      if (toastTimeoutRef.current !== null) {
+        window.clearTimeout(toastTimeoutRef.current);
+      }
+    };
   }, []);
 
   function showToast(message: string) {
+    if (toastTimeoutRef.current !== null) {
+      window.clearTimeout(toastTimeoutRef.current);
+    }
     setToast(message);
-    window.setTimeout(() => setToast(""), 3200);
+    toastTimeoutRef.current = window.setTimeout(() => {
+      setToast("");
+      toastTimeoutRef.current = null;
+    }, 3200);
   }
 
   function addToCart(product: Product) {
@@ -93,7 +111,7 @@ export default function ClubPortal() {
 
       <section className="hero" id="inicio">
         <div className="hero-copy">
-          <p className="eyebrow">Fuego · Comunidad · Vida outdoor</p>
+          <p className="eyebrow">Fuego · Comunidad · Vida al aire libre</p>
           <h1>El fuego nos<br /><em>reúne.</em></h1>
           <p className="hero-description">Prendas, herramientas y experiencias para quienes no sólo cocinan al fuego: viven alrededor de él.</p>
           <div className="hero-actions">
@@ -156,7 +174,7 @@ export default function ClubPortal() {
       <IngredientLab />
 
       <section className="shop-section" id="tienda">
-        <div className="shop-heading"><p className="section-index">04 — LUMBRE SUPPLY</p><h2>Equipo de fuego.<br />Hecho para durar.</h2><p>Prendas y herramientas diseñadas para ensuciarse, resistir el calor y vivir afuera.</p></div>
+        <div className="shop-heading"><p className="section-index">04 — PROVISIONES LUMBRE</p><h2>Equipo de fuego.<br />Hecho para durar.</h2><p>Prendas y herramientas diseñadas para ensuciarse, resistir el calor y vivir afuera.</p></div>
         <div className="product-grid">
           {products.map((product) => (
             <article className="product-card" key={product.id}>
@@ -164,7 +182,7 @@ export default function ClubPortal() {
                 {product.badge && <span className="product-badge">{product.badge}</span>}
                 <i aria-hidden="true" />
               </div>
-              <p>{product.category}</p><h3>{product.name}</h3>
+              <p>{productCategoryLabel(product.category)}</p><h3>{product.name}</h3>
               <div><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => addToCart(product)} aria-label={`Agregar ${product.name} a la canasta`}>+</button></div>
             </article>
           ))}
@@ -188,7 +206,7 @@ export default function ClubPortal() {
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
         <div><p>Explora</p><a href="#recetas">Recetas</a><a href="#laboratorio">Laboratorio</a><a href="#tienda">Tienda</a><a href="#agenda">Agenda</a></div>
-        <div><p>Comunidad</p><button type="button" onClick={() => setJoinOpen(true)}>Membresía</button><a href="/api/health">Estado del API</a><a href="/api/recipes">API de recetas</a><a href="/api/ingredientes">API de ingredientes</a></div>
+        <div><p>Comunidad</p><button type="button" onClick={() => setJoinOpen(true)}>Membresía</button><a href="/api/health">Estado de la API</a><a href="/api/recipes">API de recetas</a><a href="/api/ingredientes">API de ingredientes</a></div>
         <small>© 2026 Lumbre · Diseñado alrededor del fuego en México.</small>
       </footer>
 
@@ -229,7 +247,7 @@ export default function ClubPortal() {
             <p className="section-index">LA DESPENSA</p><h2 id="cart-title">Tu canasta</h2>
             {cart.length ? <ul>{cart.map((product, index) => <li key={`${product.id}-${index}`}><span>{product.name}</span><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => setCart((current) => current.filter((_, itemIndex) => itemIndex !== index))} aria-label={`Eliminar ${product.name}`}>×</button></li>)}</ul> : <p className="empty-cart">Todavía no agregas nada. El fuego puede esperar.</p>}
             <div className="cart-total"><span>Total</span><strong>{currency.format(cartTotal)}</strong></div>
-            <button className="button button-primary full" type="button" disabled={!cart.length} onClick={() => showToast("Checkout de demostración listo para automatizar.")}>Continuar compra</button>
+            <button className="button button-primary full" type="button" disabled={!cart.length} onClick={() => showToast("El proceso de compra de demostración está listo para automatizarse.")}>Continuar compra</button>
           </aside>
         </div>
       )}

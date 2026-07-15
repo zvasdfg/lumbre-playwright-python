@@ -80,5 +80,6 @@
     "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia."
   ],
   "estado": "borrador",
+  "contador_repeticiones": 0,
   "creado_en": "2026-07-13T19:43:39.937Z"
 }

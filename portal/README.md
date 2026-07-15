@@ -57,22 +57,26 @@ separate portal terminal is not required when using `scripts/test-local.sh` or
 | `GET` | `/api/products` | Product catalog | Available to future tests |
 | `POST` | `/api/products` | Product payload validation | `API-004` |
 | `GET` | `/api/events` | Outdoor event catalog | Available to future tests |
-| `GET` | `/api/ingredientes` | Ingredient catalog, search, filters, and detail | Available to future tests |
-| `GET` | `/api/ingredientes?hipotesis=true` | Registered technical hypothesis sheets | Available to future tests |
-| `POST` | `/api/ingredientes` | Validate a formula and create an experiment protocol | Available to future tests |
+| `GET` | `/api/ingredientes` | Ingredient catalog, search, filters, and detail | `API-007`, `API-008` |
+| `GET` | `/api/hipotesis` | Registered technical hypothesis collection | `API-011` |
+| `GET` | `/api/hipotesis/:id` | One hypothesis, including its duplicate counter | `API-012` |
+| `POST` | `/api/hipotesis` | Validate, create, deduplicate, and count repeated formulas | `API-009`, `API-010`, `API-012` |
 | `POST` | `/api/members` | Membership registration | `API-006`, indirectly `UI-004` |
 | `POST` | `/api/test/reset` | Restore deterministic demo state | `API-003`, autouse fixture |
 
 Recipes accept the optional query parameters `category` and `q`. Ingredients
-accept `q`, `familia`, `estado`, and `id`. Creating a protocol requires an
+accept `q`, `familia`, `estado`, and `id`. Creating a hypothesis requires an
 `objective` and between two and six unique `ingredient_ids`. Write operations
 validate their payloads and return realistic HTTP status codes, but the demo
 does not require a database.
 
-Ingredient protocols are persisted locally as JSON files in
+Hypotheses are persisted locally as independent JSON resources in
 `data/hypotheses`. The API validates every requested ingredient before it
 writes, canonicalizes the ingredient order, and returns the existing sheet
-instead of creating a duplicate. Technical IDs use `LHC` for beef crust,
+instead of creating a duplicate. A new sheet starts with
+`contador_repeticiones: 0`; each duplicate POST increments this persisted
+counter exactly once. Catalog and recommendation reads do not increment it,
+and the counter is intentionally not rendered by the portal. Technical IDs use `LHC` for beef crust,
 `LHB` for low-and-slow bark, `LHV` for vegetables, and `LHP` for direct-fire
 chicken. The portal lists these records under **Registered technical sheets**
 at the bottom of the flavor laboratory and opens the complete hypothesis,
@@ -81,6 +85,10 @@ behavior requires the default Node-based `npm run
 dev`. Use `npm run dev:cloudflare` only to exercise the Worker runtime, where a
 persistent D1 or R2 implementation is required before hypothesis writes can be
 enabled.
+
+Automated runs copy the JSON registry to a temporary directory through
+`LUMBRE_HYPOTHESIS_DIR`. This allows persistence and counter tests without
+modifying the developer's real technical sheets.
 
 The local registry is initialized with 24 researched recommendations: six
 beef-crust formulas, six low-and-slow bark formulas, six direct-fire chicken
@@ -97,7 +105,7 @@ stored as a normal technical-sheet JSON and includes:
 These records use `recomendado_sin_validar`: their structures are based on
 published Weber or McCormick formulas, but Lumbre has not executed the proposed
 kitchen trials. User-created combinations remain `borrador`. Loading
-`GET /api/ingredientes?hipotesis=true` safely seeds missing recommendations and
+`GET /api/hipotesis` safely seeds missing recommendations and
 refreshes only existing researched recommendations; it never overwrites a
 user hypothesis.
 

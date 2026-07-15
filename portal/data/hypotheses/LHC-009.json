@@ -1,0 +1,88 @@
+{
+  "schema_version": 5,
+  "id": "LHC-009",
+  "firma": "LHC:ajo_granulado+pimienta_negra+sal_mar_gruesa",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "pimienta_negra",
+      "nombre": "pimienta negra",
+      "familia": "Pimienta"
+    },
+    {
+      "id": "sal_mar_gruesa",
+      "nombre": "sal mar gruesa",
+      "familia": "Sal"
+    }
+  ],
+  "hipotesis": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. No contiene perfiles fuera de la estructura de referencia.",
+  "formula": {
+    "level": "referenced",
+    "formula_id": "classic_spg",
+    "formula_name": "SPG clásico",
+    "conclusion": "La selección reproduce los roles de la fórmula documentada “SPG clásico” (base salina + pimienta + ajo o cebolla). La estructura tiene precedentes culinarios publicados, aunque Lumbre todavía debe validar proporciones, temperatura y resultado sensorial. No contiene perfiles fuera de la estructura de referencia.",
+    "matched_roles": [
+      "base salina (1/1)",
+      "pimienta (1/1)",
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [],
+    "additional_profiles": [],
+    "sources": [
+      {
+        "title": "McCormick Butcher All Purpose: sea salt, garlic and black pepper",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-cracked-pepper-garlic-sea-salt-seasoning-6-03-oz"
+      },
+      {
+        "title": "McCormick Signature Blend: sea salt, garlic, black pepper and celery seed",
+        "url": "https://www.mccormick.com/products/mccormick-grill-mates-signature-blend-seasoning-6-53-oz"
+      }
+    ]
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "picante",
+      "intensity": 2,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "terroso",
+      "intensity": 2,
+      "ingredients": [
+        "pimienta negra"
+      ]
+    },
+    {
+      "attribute": "salado",
+      "intensity": 1.7,
+      "ingredients": [
+        "sal mar gruesa"
+      ]
+    },
+    {
+      "attribute": "umami",
+      "intensity": 1.7,
+      "ingredients": [
+        "ajo granulado"
+      ]
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar una segunda muestra con la estructura de referencia SPG clásico.",
+    "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+    "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
+    "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia."
+  ],
+  "estado": "borrador",
+  "tipo_registro": "hipotesis_usuario",
+  "contador_repeticiones": 0,
+  "creado_en": "2026-07-15T17:44:30.040Z"
+}

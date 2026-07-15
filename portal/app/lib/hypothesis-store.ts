@@ -1,6 +1,11 @@
 import { mkdir, open, readFile, readdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { ExperimentProtocol } from "./ingredients";
+import {
+  createExperimentProtocol,
+  ingredients,
+  type ExperimentProtocol,
+} from "./ingredients";
+import { recommendedFormulas } from "./recommended-formulas";
 
 export const experimentObjectives = {
   "Costra para res": { prefix: "LHC", subject: "una costra equilibrada para res" },
@@ -10,6 +15,50 @@ export const experimentObjectives = {
 } as const;
 
 export type ExperimentObjective = keyof typeof experimentObjectives;
+
+export async function ensureRecommendedHypotheses() {
+  for (const recommendation of recommendedFormulas) {
+    const selectedIngredients = recommendation.ingredientIds.map((ingredientId) => {
+      const ingredient = ingredients.find((candidate) => candidate.id === ingredientId);
+      if (!ingredient) {
+        throw new Error(
+          `Recommended formula '${recommendation.id}' references missing ingredient '${ingredientId}'`,
+        );
+      }
+      return ingredient;
+    });
+    const prefix = experimentObjectives[recommendation.objective].prefix;
+    const signature = `${prefix}:${[...recommendation.ingredientIds].sort().join("+")}`;
+    await findOrCreateHypothesis(
+      signature,
+      recommendation.objective,
+      (id) =>
+        createExperimentProtocol(
+          id,
+          signature,
+          selectedIngredients,
+          recommendation.objective,
+          {
+            status: "recomendado_sin_validar",
+            registryType: "recomendacion_investigada",
+            hypothesis: recommendation.hypothesis,
+            recommendation: {
+              id: recommendation.id,
+              nombre: recommendation.name,
+              fundamento: recommendation.rationale,
+              adaptacion: recommendation.adaptation,
+              proporciones: recommendation.proportions.map(({ ingredientId, parts }) => ({
+                ingrediente_id: ingredientId,
+                partes: parts,
+              })),
+              fuentes: recommendation.sources.map(({ title, url }) => ({ titulo: title, url })),
+            },
+          },
+        ),
+      { refreshRecommended: true },
+    );
+  }
+}
 
 function storageDirectory() {
   return process.env.LUMBRE_HYPOTHESIS_DIR ?? path.join(process.cwd(), "data", "hypotheses");
@@ -53,7 +102,7 @@ export async function findOrCreateHypothesis(
   signature: string,
   objective: ExperimentObjective,
   buildRecord: (id: string) => ExperimentProtocol,
-  options: { refreshRecommended?: boolean } = {},
+  options: { refreshRecommended?: boolean; incrementDuplicateCount?: boolean } = {},
 ) {
   const directory = await ensureStorageDirectory();
   const { handle, lockPath } = await acquireWriteLock(directory);
@@ -61,17 +110,31 @@ export async function findOrCreateHypothesis(
     const records = await listHypotheses();
     const existing = records.find((record) => record.firma === signature);
     if (existing) {
-      if (
+      const shouldRefresh =
         existing.schema_version !== 5 ||
-        (options.refreshRecommended && existing.tipo_registro === "recomendacion_investigada")
-      ) {
-        const upgraded = { ...buildRecord(existing.id), creado_en: existing.creado_en };
-        await writeFile(path.join(directory, `${existing.id}.json`), `${JSON.stringify(upgraded, null, 2)}\n`, {
+        (options.refreshRecommended && existing.tipo_registro === "recomendacion_investigada");
+      const currentDuplicateCount = existing.contador_repeticiones ?? 0;
+      let resolvedRecord = shouldRefresh
+        ? {
+            ...buildRecord(existing.id),
+            creado_en: existing.creado_en,
+            contador_repeticiones: currentDuplicateCount,
+          }
+        : { ...existing, contador_repeticiones: currentDuplicateCount };
+
+      if (options.incrementDuplicateCount) {
+        resolvedRecord = {
+          ...resolvedRecord,
+          contador_repeticiones: currentDuplicateCount + 1,
+        };
+      }
+
+      if (shouldRefresh || options.incrementDuplicateCount) {
+        await writeFile(path.join(directory, `${existing.id}.json`), `${JSON.stringify(resolvedRecord, null, 2)}\n`, {
           encoding: "utf8",
         });
-        return { record: upgraded, created: false };
       }
-      return { record: existing, created: false };
+      return { record: resolvedRecord, created: false };
     }
 
     const { prefix } = experimentObjectives[objective];

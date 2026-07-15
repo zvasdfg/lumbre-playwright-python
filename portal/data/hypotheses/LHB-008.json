@@ -133,5 +133,6 @@
   ],
   "estado": "borrador",
   "tipo_registro": "hipotesis_usuario",
+  "contador_repeticiones": 0,
   "creado_en": "2026-07-13T23:34:27.839Z"
 }

@@ -1,0 +1,79 @@
+{
+  "schema_version": 5,
+  "id": "LHC-012",
+  "firma": "LHC:achiote+ajo_granulado",
+  "objetivo": "Costra para res",
+  "componentes": [
+    {
+      "id": "ajo_granulado",
+      "nombre": "ajo granulado",
+      "familia": "Allium"
+    },
+    {
+      "id": "achiote",
+      "nombre": "achiote",
+      "familia": "Semilla_aromatica"
+    }
+  ],
+  "hipotesis": "La selección no cubre suficientemente una fórmula de referencia. Su combinación debe tratarse como experimental y compararse contra un control antes de atribuirle un resultado esperado. Los perfiles adicionales son: terroso mediante achiote (añade profundidad terrosa y especiada).",
+  "formula": {
+    "level": "experimental",
+    "formula_id": null,
+    "formula_name": "Sin fórmula de referencia",
+    "conclusion": "La selección no cubre suficientemente una fórmula de referencia. Su combinación debe tratarse como experimental y compararse contra un control antes de atribuirle un resultado esperado. Los perfiles adicionales son: terroso mediante achiote (añade profundidad terrosa y especiada).",
+    "matched_roles": [
+      "ajo o cebolla (1/1)"
+    ],
+    "missing_roles": [
+      "base salina (1)",
+      "pimienta (1)"
+    ],
+    "additional_profiles": [
+      {
+        "role": "terroso",
+        "ingredients": [
+          "achiote"
+        ],
+        "contribution": "añade profundidad terrosa y especiada"
+      }
+    ],
+    "sources": []
+  },
+  "perfil_esperado": [
+    {
+      "attribute": "terroso",
+      "intensity": 3,
+      "ingredients": [
+        "achiote"
+      ]
+    },
+    {
+      "attribute": "umami",
+      "intensity": 2,
+      "ingredients": [
+        "ajo granulado"
+      ]
+    },
+    {
+      "attribute": "dulce",
+      "intensity": 1.5,
+      "ingredients": []
+    },
+    {
+      "attribute": "amargo",
+      "intensity": 1.5,
+      "ingredients": []
+    }
+  ],
+  "metodo": [
+    "Preparar una muestra control sin sazonador.",
+    "Preparar una segunda muestra con la fórmula de referencia más cercana cuando exista.",
+    "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+    "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
+    "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia."
+  ],
+  "estado": "borrador",
+  "tipo_registro": "hipotesis_usuario",
+  "contador_repeticiones": 0,
+  "creado_en": "2026-07-15T18:42:14.697Z"
+}
