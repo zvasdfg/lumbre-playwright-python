@@ -1,7 +1,7 @@
-# Lumbre Test Architecture
+# Playwright Automation Architecture
 
-> Scope: portal, API, Playwright framework, local orchestration, and evidence
-> generation.
+> Scope: reusable automation core, project adapters, the Lumbre reference SUT,
+> local orchestration, and evidence generation.
 
 ## 1. Architectural goals
 
@@ -15,6 +15,8 @@ only a collection of executable scripts. Its goals are:
 5. isolate mutable hypothesis data from version-controlled seed files;
 6. keep local execution reproducible across supported Playwright engines;
 7. separate mutable test behavior from a safe, read-only production boundary.
+8. prevent reusable infrastructure from depending on one product's selectors,
+   routes, test data, or business language.
 
 ## 2. System context
 
@@ -27,9 +29,10 @@ flowchart TB
     Runner --> Pytest[Pytest]
     Runner --> TempData[(Temporary hypothesis data)]
 
-    Pytest --> UI[UI tests]
-    Pytest --> API[API tests]
-    Pytest --> Contracts[OpenAPI contract tests]
+    Pytest --> Unit[Framework unit tests]
+    Pytest --> UI[Lumbre UI tests]
+    Pytest --> API[Lumbre API tests]
+    Pytest --> Contracts[Lumbre OpenAPI contract tests]
     Pytest --> Evidence[Reporting hooks]
 
     UI --> POM[Page and Component Objects]
@@ -50,31 +53,36 @@ flowchart TB
 
 The same Playwright installation drives both browser automation and direct API
 requests. Pytest supplies execution, fixtures, parametrization, markers, and
-the reporting lifecycle.
+the reporting lifecycle. Framework unit tests validate reusable behavior
+without starting Lumbre or any other SUT.
 
 ## 3. Framework layers
 
 | Layer | Location | Responsibility |
 | --- | --- | --- |
-| Test cases | `test-framework/tests/` | Arrange data, execute behavior, assert outcomes |
-| Page Objects | `framework/pages/` | Own page-level navigation, composition, and entry points |
-| Component Objects | `framework/components/` | Own locators and actions inside bounded UI widgets |
-| API client | `framework/api/lumbre_api.py` | Express domain API operations through `APIRequestContext` |
-| Contract adapter | `framework/contracts/openapi.py` | Validate remote OpenAPI descriptions and live JSON payloads |
-| Configuration | `framework/config.py` and fixtures | Resolve base URL, browser, locale, and execution settings |
-| Reporting | `framework/reporting/` | Attach metadata, logs, screenshots, URLs, and traces |
+| Framework unit tests | `test-framework/tests/framework/` | Validate configuration, diagnostics, and evidence independently of a SUT |
+| Generic core | `test-framework/automation/core/` | Own configuration, contracts, reporting, and diagnostics |
+| Playwright adapter | `test-framework/automation/adapters/playwright/` | Supply generic browser, request-context, URL, and logging fixtures |
+| Lumbre functional tests | `test-framework/projects/lumbre/tests/` | Arrange Lumbre data, execute behavior, and assert outcomes |
+| Lumbre Page Objects | `test-framework/projects/lumbre/pages/` | Own product navigation, composition, and entry points |
+| Lumbre Component Objects | `test-framework/projects/lumbre/components/` | Own locators and actions inside product widgets |
+| Lumbre API client | `test-framework/projects/lumbre/api/lumbre_api.py` | Express product routes through `APIRequestContext` |
+| Lumbre fixtures | `test-framework/projects/lumbre/conftest.py` | Own product lifecycle, reset, contract, and POM composition |
 | Local orchestration | `scripts/` | Start services, isolate data, invoke Pytest, archive reports |
 
 Tests are organized first by execution layer and then by functional ownership:
 
 ```text
-tests/
-├── api/
-│   ├── system, recipes, products, membership, ingredients, hypotheses
-│   └── contracts
-└── ui/
-    ├── home, recipes, membership, commerce, events, fire_planner
-    └── ingredient_lab
+test-framework/
+├── automation/
+│   ├── core/
+│   └── adapters/playwright/
+├── projects/lumbre/
+│   ├── api, pages, components
+│   └── tests/
+│       ├── api/
+│       └── ui/
+└── tests/framework/
 ```
 
 Execution categories such as smoke, regression, and cross-browser remain
@@ -84,22 +92,37 @@ Pytest markers rather than directories because they cut across domains.
 
 ```mermaid
 flowchart LR
-    Tests --> PageObjects[Page Objects]
-    Tests --> ApiClient[API client]
-    Tests --> ContractAdapter[OpenAPI contract adapter]
+    FrameworkTests[Framework unit tests] --> Core[automation.core]
+    FrameworkTests --> Adapter[Playwright adapter]
+    LumbreTests[Lumbre tests] --> PageObjects[Page Objects]
+    LumbreTests --> ApiClient[API client]
+    LumbreTests --> Core
+    LumbreTests --> Adapter
     PageObjects --> Components[Component Objects]
     PageObjects --> PlaywrightPage[Playwright Page]
     Components --> PlaywrightPage
     ApiClient --> APIRequestContext
-    ContractAdapter --> APIRequestContext
-    Reporting --> Tests
+    Adapter --> Core
+    Adapter --> Playwright[Playwright/Pytest]
+    Core --> Libraries[Generic libraries]
 ```
 
-Tests may consume Page Objects, Component Objects exposed by a Page Object, the
-API client, and reporting utilities. Page and Component Objects never import
-test modules. Portal code does not depend on the automation framework.
+The dependency rule is one-way: projects may consume `automation`, while
+`automation` must never import `projects`. Product names, routes, locators,
+fixtures, test data, and business workflows remain inside their project.
+Portal code does not depend on the automation framework.
 
-## 4. Page and Component Object ownership
+### Project registration boundary
+
+The root `conftest.py` loads only generic plugins. Each project's `conftest.py`
+composes its API client, Page Objects, reset strategy, and optional contracts.
+`pyproject.toml` registers project test roots for discovery. This means a new
+project can reuse execution and evidence without modifying the core.
+
+The complete procedure and copy-ready examples are in
+[Adding a project](ADDING_A_PROJECT.md).
+
+## 4. Lumbre Page and Component Object ownership
 
 `HomePage` is the composition root for the portal. It owns page-level elements
 and exposes bounded components:
@@ -112,7 +135,8 @@ HomePage
 ├── EventsSection
 ├── EventReservationModal
 ├── FirePlannerModal
-└── IngredientLab
+├── IngredientLab
+└── ToastNotification
 ```
 
 The ownership rule is based on DOM responsibility:
@@ -153,7 +177,7 @@ Playwright locators remain lazy queries. Assertions retry until their condition
 passes or the configured timeout expires. The framework therefore avoids
 `time.sleep()` and fixed explicit waits.
 
-## 6. API execution flow
+## 6. Lumbre API execution flow
 
 ```mermaid
 sequenceDiagram
@@ -301,7 +325,7 @@ outside the completed scope.
 
 ## 12. Extension rules
 
-When adding a capability:
+When adding a product capability:
 
 1. identify the risk and assign stable case metadata;
 2. add locators to the object that owns the DOM region;
@@ -311,3 +335,8 @@ When adding a capability:
 6. record important inputs and observed outputs;
 7. isolate mutable data;
 8. update the risk catalog and architecture documentation if a boundary changes.
+
+When adding a reusable capability, implement it under `automation`, prove it
+with a SUT-independent test under `tests/framework`, and keep project-specific
+configuration behind fixtures or explicit settings. When onboarding another
+SUT, follow [Adding a project](ADDING_A_PROJECT.md); do not duplicate the core.

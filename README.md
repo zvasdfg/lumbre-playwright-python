@@ -2,17 +2,16 @@
   <img src="portal/public/brand/lumbre-logo-primary.png" alt="Lumbre" width="120" />
 </p>
 
-# Lumbre Quality Engineering Lab
+# Playwright Python Automation Framework
 
-An end-to-end quality engineering portfolio project built with **Python,
-Pytest, and Playwright**. The repository includes both the system under test—a
-Next.js portal and API for Mexican outdoor-fire cooking—and the automation
-framework used to validate it.
+Reusable quality-engineering portfolio framework built with **Python, Pytest,
+and Playwright**. Lumbre, a Next.js portal and API for Mexican outdoor-fire
+cooking, is the reference system under test and demonstrates how a product
+project consumes the independent automation core.
 
-Lumbre demonstrates test architecture, Page Object Model, Component Objects,
-API contracts, browser-network control, deterministic test data, cross-browser
-validation, diagnostic reporting, risk-based test strategy, and explicit
-environment boundaries in one runnable project.
+The framework demonstrates project isolation, Page Object Model, Component
+Objects, API contracts, browser-network control, deterministic test data,
+cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 > The product experience is written in Mexican Spanish as part of the Lumbre
 > identity. Framework code and engineering documentation are written in English.
@@ -21,27 +20,28 @@ environment boundaries in one runnable project.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 54 |
-| Automated functional risks | 54 |
-| Pytest executions | 70 |
-| Test files | 50 |
+| Committed functional risks | 55 |
+| Automated functional risks | 55 |
+| Pytest executions | 79 |
+| Test files | 54 |
 | API cases / executions | 24 / 36 |
-| Browser cases / executions | 30 / 34 |
+| Browser cases / executions | 31 / 35 |
+| Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (12/12) |
-| Latest full-suite result | 70 passed |
+| Latest full-suite result | 79 passed |
 
-**100% refers to the repository's 54-item committed functional-risk catalog.**
+**100% refers to the repository's 55-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
 ## Why this project exists
 
 The project was designed to make a transition from Selenium + TypeScript to
-Playwright + Python observable through working software. It provides:
+Playwright + Python observable through reusable engineering. It provides:
 
-- a realistic portal with UI workflows and API contracts;
-- a maintainable automation framework instead of isolated demo scripts;
+- an automation core that does not import Lumbre product code;
+- a reference project with realistic UI workflows and API contracts;
 - explicit test steps, observed values, screenshots, traces, and HTML reports;
 - examples of Playwright-specific capabilities such as web-first assertions,
   locators, request/response observation, routing, and multi-engine execution;
@@ -66,12 +66,16 @@ Lumbre is a cooking-at-the-fire portal with:
 flowchart LR
     Runner[Local test runner] --> Pytest[Pytest orchestration]
 
-    subgraph Framework[Playwright test framework]
-        Pytest --> Fixtures[Fixtures and configuration]
-        Fixtures --> Pages[Page Objects]
+    subgraph Core[Reusable automation core]
+        Pytest --> Fixtures[Playwright adapter fixtures]
+        Pytest --> Contracts[OpenAPI contracts]
+        Pytest --> Reporting[Steps, values and evidence]
+    end
+
+    subgraph Project[Lumbre reference project]
+        Pytest --> Pages[Page Objects]
         Pages --> Components[Component Objects]
         Pytest --> ApiClient[Lumbre API client]
-        Pytest --> Reporting[Steps, values and evidence]
     end
 
     Components --> Browser[Playwright browser]
@@ -82,10 +86,10 @@ flowchart LR
     Reporting --> Html[Timestamped HTML report]
 ```
 
-Page Objects own page-level navigation and composition. Component Objects own
-bounded widgets such as membership, cart, events, fire planning, and the
-ingredient laboratory. Tests express behavior and assertions without leaking
-selectors into the test body.
+The core owns configuration, contracts, reporting, diagnostics, and generic
+Playwright fixtures. Lumbre owns every selector, route, Page Object, Component
+Object, lifecycle fixture, and functional test. The dependency points from the
+project toward the core; the core never imports the project.
 
 See [Architecture and design decisions](docs/ARCHITECTURE.md) for component
 ownership, execution flows, isolation, and trade-offs.
@@ -96,14 +100,9 @@ ownership, execution flows, isolation, and trade-offs.
 lumbre-playwright-python/
 ├── portal/                 Next.js product UI, API routes, and JSON data
 ├── test-framework/
-│   ├── framework/
-│   │   ├── api/            APIRequestContext client
-│   │   ├── components/     Reusable Component Objects
-│   │   ├── pages/          Page Objects
-│   │   └── reporting/      Logs, screenshots, metadata, and HTML hooks
-│   └── tests/
-│       ├── api/            API contracts and persistence behavior
-│       └── ui/             UI, network, responsive, and browser coverage
+│   ├── automation/         Reusable core and Playwright adapter
+│   ├── projects/lumbre/    Product models, fixtures, and functional tests
+│   └── tests/framework/    Isolated unit tests for reusable behavior
 ├── docs/                   Strategy, architecture, notes, and exercises
 ├── scripts/                Local orchestration and report generation
 └── .vscode/                Playwright/Python learning snippets
@@ -219,7 +218,7 @@ Useful focused commands:
 
 # One case file
 ./scripts/test-local.sh -q \
-  tests/ui/ingredient_lab/test_ui_018_existing_formula_reuses_hypothesis.py
+  projects/lumbre/tests/ui/ingredient_lab/test_ui_018_existing_formula_reuses_hypothesis.py
 ```
 
 Run static quality checks:
@@ -228,14 +227,14 @@ Run static quality checks:
 cd test-framework
 .venv/bin/ruff format --check .
 .venv/bin/ruff check .
-.venv/bin/mypy framework tests
+.venv/bin/mypy automation projects tests
 ```
 
 ## Reports and failure analysis
 
 ### Portfolio report preview
 
-![Lumbre Pytest and Playwright report showing 70 passing executions](docs/assets/lumbre-test-report-summary.png)
+![Playwright framework report showing 79 passing executions](docs/assets/lumbre-test-report-summary.png)
 
 The versioned preview shows the full-suite summary, environment, case metadata,
 behavior, and structured logs. It provides portfolio evidence without adding a
@@ -274,6 +273,8 @@ status.
 - [Test strategy and complete catalog](docs/TEST_STRATEGY.md)
 - [Engineering case studies](docs/ENGINEERING_CASE_STUDIES.md)
 - [Architecture and design decisions](docs/ARCHITECTURE.md)
+- [Adding another automation project](docs/ADDING_A_PROJECT.md)
+- [Guided UI test creation protocol](docs/GUIDED_UI_TEST_PROTOCOL.md)
 - [Key Playwright notes](docs/KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
 - [Framework reference](test-framework/README.md)

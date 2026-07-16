@@ -155,7 +155,7 @@ New behavior: message B cancels timer A ─────> owns its full display w
 
 ### Outcome
 
-The same test passed individually and in the complete 70-execution suite. The
+The same test passed individually and in the complete 79-execution suite. The
 test remained unchanged because its observable expectation was correct; the
 product state management was fixed.
 
@@ -208,3 +208,41 @@ The OpenAPI file is not the portfolio feature by itself. The reusable adapter,
 environment portability, status-aware validation, and actionable diagnostics
 are the quality-engineering product. Schema tests complement focused business
 assertions; they do not replace them.
+
+## 6. Separating the automation product from the reference SUT
+
+### Risk
+
+The original package mixed generic reporting and contract utilities with
+Lumbre selectors, API routes, fixtures, and tests. A second project would have
+required copying the package or adding product conditionals to shared code.
+Either choice would make the portfolio claim of a reusable framework difficult
+to defend.
+
+### Decision
+
+The repository now enforces three explicit ownership zones:
+
+```text
+automation/             reusable core and Playwright adapters
+projects/lumbre/        Lumbre client, objects, fixtures, and functional tests
+tests/framework/        SUT-independent tests of the automation product
+```
+
+The root Pytest plugin registration is generic. Lumbre composes its own domain
+fixtures in `projects/lumbre/conftest.py`, while `pyproject.toml` registers both
+the framework and project test roots. Dependencies flow from a project into the
+core, never from the core into a project.
+
+### Outcome
+
+The original 70 Lumbre executions remain intact, and eight focused executions
+now protect settings resolution, OpenAPI diagnostics, and evidence logging.
+Adding a new SUT has a documented path that does not require editing core
+modules or copying reporting infrastructure.
+
+### Lesson
+
+Folders alone do not create a framework boundary. Reuse becomes credible when
+dependency direction, fixture ownership, discovery, configuration, and
+SUT-independent tests all express the same separation.

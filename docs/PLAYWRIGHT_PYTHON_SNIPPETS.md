@@ -4,6 +4,10 @@ Practical reference for the Lumbre framework. Examples use Playwright Sync API,
 Pytest, Page Objects, Component Objects, structured test steps, and web-first
 assertions.
 
+Use these snippets inside the review checkpoints defined by the
+[Guided UI test creation protocol](GUIDED_UI_TEST_PROTOCOL.md). A scaffold is a
+starting point, not a substitute for selecting a risk and designing an oracle.
+
 ## 1. Generate scaffolds in VS Code
 
 In a Python file, type a prefix and press Tab:

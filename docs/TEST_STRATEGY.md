@@ -25,15 +25,18 @@ in locators and expected values when it is part of the product contract.
 | Signal | Current result |
 | --- | ---: |
 | API case IDs / executions | 24 / 36 |
-| Browser case IDs / executions | 30 / 34 |
-| Unique committed risks | 54 |
-| Total Pytest executions | 70 |
-| Test files | 50 |
+| Browser case IDs / executions | 31 / 35 |
+| Framework unit case IDs / executions | 3 / 8 |
+| Unique committed risks | 55 |
+| Total Pytest executions | 79 |
+| Test files | 54 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 70 passed |
+| Latest validation | 79 passed |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
-runs two close mechanisms but protects one committed behavior.
+runs two close mechanisms but protects one committed behavior. Framework unit
+checks measure automation-product quality and are intentionally excluded from
+the Lumbre functional-risk denominator.
 
 ### Coverage definition
 
@@ -49,13 +52,24 @@ the catalog below.
 | --- | ---: | ---: | ---: |
 | P0 | 20 | 20 | 100% |
 | P1 | 29 | 29 | 100% |
-| P2 | 5 | 5 | 100% |
-| **Total** | **54** | **54** | **100%** |
+| P2 | 6 | 6 | 100% |
+| **Total** | **55** | **55** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
 secondary API route-operation signal is `12/12 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
+
+### Framework quality catalog
+
+| ID | Reusable behavior protected | Executions |
+| --- | --- | ---: |
+| FRAMEWORK-001 | Environment settings resolve typed defaults and overrides | 3 |
+| FRAMEWORK-002 | OpenAPI violations preserve actionable JSON-path diagnostics | 4 |
+| FRAMEWORK-003 | Test evidence records case context, values, and step outcomes | 1 |
+
+These tests run without starting Lumbre. A reusable capability is incomplete
+until it has a focused SUT-independent check here.
 
 ## 3. Strategy principles
 
@@ -95,6 +109,11 @@ See [Architecture](ARCHITECTURE.md) for dependency direction, component
 ownership, execution flows, and persistence isolation. See
 [Key Playwright Notes](KEY_PLAYWRIGHT_NOTES.md) for the Selenium-to-Playwright
 mental model and implementation principles.
+
+Project onboarding and the ownership rules for fixtures, clients, objects, and
+tests are documented in [Adding a project](ADDING_A_PROJECT.md).
+New browser behaviors should follow the checkpoint-based
+[Guided UI test creation protocol](GUIDED_UI_TEST_PROTOCOL.md).
 
 ## 4. Layer model
 
@@ -169,6 +188,7 @@ Priority definitions:
 | UI-026 | Recipe feedback identifies the selected recipe | P2 | UI |
 | UI-027 | Email and terms constraints prevent invalid submission | P0 | UI validation |
 | UI-028 | Critical content remains usable without mobile overflow | P1 | Responsive UI |
+| UI-029 | Recipe feedback can be dismissed through its accessible close control | P2 | UI component |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 
@@ -243,6 +263,8 @@ A new test is ready when:
 ## References
 
 - [Architecture](ARCHITECTURE.md)
+- [Adding a project](ADDING_A_PROJECT.md)
+- [Guided UI test creation protocol](GUIDED_UI_TEST_PROTOCOL.md)
 - [Engineering case studies](ENGINEERING_CASE_STUDIES.md)
 - [Key Playwright notes](KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](PLAYWRIGHT_PYTHON_SNIPPETS.md)

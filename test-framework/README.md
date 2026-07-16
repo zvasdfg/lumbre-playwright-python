@@ -1,7 +1,7 @@
-# Lumbre Playwright Python Framework
+# Playwright Python Automation Framework
 
-Python automation package for the Spanish-language Lumbre portal. It combines
-Pytest, Playwright Sync API, Page Object Model, Component Objects, direct API
+Reusable Python automation core with a Lumbre reference project. It combines
+Pytest, Playwright Sync API, project-owned Page and Component Objects, direct API
 testing, executable OpenAPI/JSON Schema contracts, structured evidence, traces,
 and self-contained HTML reports.
 
@@ -26,6 +26,10 @@ Local configuration:
 BASE_URL=http://127.0.0.1:3000
 HEADLESS=true
 DEFAULT_TIMEOUT_MS=10000
+AUTOMATION_PROJECT=Lumbre
+LOCALE=es-MX
+VIEWPORT_WIDTH=1440
+VIEWPORT_HEIGHT=1000
 ```
 
 `BASE_URL` is shared by browser navigation and `APIRequestContext`. The managed
@@ -35,35 +39,28 @@ root runner overrides it with its temporary portal URL.
 
 ```text
 test-framework/
-├── framework/
-│   ├── api/lumbre_api.py       Domain API operations
-│   ├── components/             Bounded widget models
-│   ├── contracts/              OpenAPI and JSON Schema validation adapter
-│   ├── pages/                  Page composition and navigation
-│   ├── reporting/              Steps, evidence, and pytest-html hooks
-│   └── config.py               Environment settings
-├── tests/
-│   ├── api/                    Domain folders for API-001 through API-020
-│   │   ├── contracts/          Equivalent cross-domain contracts
-│   │   ├── hypotheses/         Validation, deduplication, and persistence
-│   │   └── ...                 Ingredients, membership, products, recipes, system
-│   ├── ui/                     Domain folders for UI, ERR, and BROWSER cases
-│   │   ├── ingredient_lab/     Laboratory and technical-sheet workflows
-│   │   ├── membership/         Form, keyboard, request, and recovery behavior
-│   │   └── ...                 Commerce, events, fire planner, home, recipes
-│   └── conftest.py             Fixtures and lifecycle
+├── automation/
+│   ├── core/                   Configuration, contracts, reporting, diagnostics
+│   └── adapters/playwright/    Generic Playwright Pytest fixtures
+├── projects/
+│   └── lumbre/
+│       ├── api/                Domain APIRequestContext client
+│       ├── components/         Product-owned Component Objects
+│       ├── pages/              Product-owned Page Objects
+│       ├── conftest.py         Lumbre lifecycle and domain fixtures
+│       └── tests/              API, UI, network, and browser contracts
+├── tests/framework/            Unit tests for reusable framework behavior
 ├── templates/                  Learning scaffolds
 └── pyproject.toml              Dependencies and Pytest configuration
 ```
 
 ## Conventions
 
-- Tests own behavior, test data, assertions, and diagnostic values.
-- Page Objects own page-level entry points and composition.
-- Component Objects own locators and actions inside bounded widgets.
-- `LumbreApi` owns repeated HTTP routes and transport details.
-- Fixtures own lifecycle, context settings, and deterministic reset.
-- Reporting hooks own screenshots, metadata, URLs, and traces.
+- `automation` must not import from `projects`.
+- Projects own tests, Page Objects, Component Objects, API clients, and product fixtures.
+- The core owns configuration, contracts, reporting, and generic tool adapters.
+- `LumbreApi` owns Lumbre routes and transport details inside its project.
+- Reporting hooks own screenshots, metadata, URLs, and traces without knowing the SUT.
 
 One behavior or equivalent parameterized contract family belongs in each file:
 
@@ -88,6 +85,11 @@ they match the product contract.
 | `test_log` | Case narrative, steps, values, timing, and screenshots |
 | `reset_scenario` | Deterministic API reset before each test |
 
+`app_url`, `browser_context_args`, `api_request_context`, and `test_log` are
+supplied by the reusable Playwright adapter. `api`, `openapi_contract`, `home`,
+and `reset_scenario` belong to Lumbre and demonstrate the fixtures a consuming
+project may define.
+
 `scripts/test-local.sh` copies version-controlled hypothesis JSON into a
 temporary directory before starting the portal. Persistence scenarios therefore
 write real files without changing repository seed data. The runner also sets
@@ -109,13 +111,17 @@ From the project root:
 
 # Visible learning or investigation run
 ./scripts/test-local.sh -q -m ui --headed --slowmo 500
+
+# Framework unit tests do not start or require the Lumbre portal
+cd test-framework
+.venv/bin/pytest -q tests/framework -m framework_unit
 ```
 
 Against an already-running portal:
 
 ```bash
 cd test-framework
-BASE_URL=http://localhost:3000 .venv/bin/pytest -q tests/ui
+BASE_URL=http://localhost:3000 .venv/bin/pytest -q projects/lumbre/tests/ui
 ```
 
 ## Executable API contracts
@@ -142,7 +148,7 @@ Quote a parameterized node ID in zsh:
 
 ```bash
 ./scripts/test-local.sh -q \
-  'tests/ui/membership/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-close-button]'
+  'projects/lumbre/tests/ui/membership/test_ui_011_membership_modal_closes.py::test_membership_modal_closes[chromium-close-button]'
 ```
 
 ## Reporting and diagnostics
@@ -184,7 +190,7 @@ HTML file exceed 20 MB.
 cd test-framework
 .venv/bin/ruff format --check .
 .venv/bin/ruff check .
-.venv/bin/mypy framework tests
+.venv/bin/mypy automation projects tests
 ```
 
 ## VS Code snippets
@@ -201,6 +207,8 @@ available prefixes and examples.
 
 - [Test strategy and risk catalog](../docs/TEST_STRATEGY.md)
 - [Architecture](../docs/ARCHITECTURE.md)
+- [Adding a new automation project](../docs/ADDING_A_PROJECT.md)
+- [Guided UI test creation protocol](../docs/GUIDED_UI_TEST_PROTOCOL.md)
 - [Engineering case studies](../docs/ENGINEERING_CASE_STUDIES.md)
 - [Key Playwright notes](../docs/KEY_PLAYWRIGHT_NOTES.md)
 - [Playwright Python snippets](../docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
