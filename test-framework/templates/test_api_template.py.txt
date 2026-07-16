@@ -1,7 +1,7 @@
 import pytest
 
-from framework.api.lumbre_api import LumbreApi
-from framework.reporting import TestLogger
+from projects.lumbre.api.lumbre_api import LumbreApi
+from automation.core.reporting import TestLogger
 
 
 @pytest.mark.api

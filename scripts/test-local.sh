@@ -65,7 +65,7 @@ if [[ "$HTML_REPORT_REQUESTED" == false ]]; then
   REPORT_ARGS=(
     --html="$GENERATED_REPORT_PATH"
     --self-contained-html
-    --css=framework/reporting/lumbre_report.css
+    --css=automation/core/reporting/report.css
   )
 fi
 

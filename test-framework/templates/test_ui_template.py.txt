@@ -1,8 +1,8 @@
 import pytest
 from playwright.sync_api import expect
 
-from framework.pages.home_page import HomePage
-from framework.reporting import TestLogger
+from projects.lumbre.pages.home_page import HomePage
+from automation.core.reporting import TestLogger
 
 
 @pytest.mark.ui

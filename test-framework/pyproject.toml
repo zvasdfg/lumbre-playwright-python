@@ -3,9 +3,9 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lumbre-e2e"
-version = "0.1.0"
-description = "Educational Playwright framework using Python and Page Object Model"
+name = "playwright-automation-core"
+version = "0.2.0"
+description = "Reusable Python automation core with Playwright project adapters"
 requires-python = ">=3.11"
 dependencies = [
   "jsonschema[format]>=4.23,<5",
@@ -25,17 +25,18 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["framework*"]
+include = ["automation*", "projects*"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --strict-markers --tracing=retain-on-failure --screenshot=only-on-failure"
-testpaths = ["tests"]
+testpaths = ["tests/framework", "projects/lumbre/tests"]
 markers = [
   "case(case_id, behavior): test case identity and executable behavior documentation",
   "smoke: fast critical-path coverage",
   "ui: browser-based test",
   "api: direct API test",
   "contract: OpenAPI and JSON Schema contract validation",
+  "framework_unit: isolated validation of reusable framework behavior",
   "regression: extended functional coverage",
   "cross_browser: explicit compatibility coverage across Playwright browser engines",
 ]
