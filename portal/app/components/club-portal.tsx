@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { events, products, recipes, type FireEvent, type Product } from "../lib/data";
 import { isPublicProductionReadOnly } from "../lib/environment";
-import FirePlannerModal from "./fire-planner-modal";
+import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
@@ -17,7 +17,21 @@ const currency = new Intl.NumberFormat("es-MX", {
 
 function productCategoryLabel(category: Product["category"]) {
   if (category === "outdoor") return "aire libre";
+  if (category === "blends") return "mezcla de protocolo";
   return category;
+}
+
+function productImage(productId: number) {
+  const images: Record<number, string> = {
+    101: "/editorial/products/pinzas-forja-45.jpg",
+    102: "/editorial/products/mandil-lumbre-01.jpg",
+    103: "/editorial/products/gorra-brasa-baja-v2.jpg",
+    104: "/editorial/products/playera-despues-del-humo-v2.jpg",
+    111: "/editorial/blend-spg.jpg",
+    112: "/editorial/blend-pollo-ahumado.jpg",
+    113: "/editorial/blend-umami.jpg",
+  };
+  return images[productId];
 }
 
 export default function ClubPortal() {
@@ -28,11 +42,10 @@ export default function ClubPortal() {
   const [cart, setCart] = useState<Product[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
-  const [firePlannerOpen, setFirePlannerOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<FireEvent | null>(null);
   const [toast, setToast] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const toastTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const toastTimeoutRef = useRef<number | null>(null);
 
   const filteredRecipes = useMemo(() => {
     const normalized = search.trim().toLocaleLowerCase("es");
@@ -99,10 +112,11 @@ export default function ClubPortal() {
           <span className="brand-wordmark">LUMBRE</span>
         </a>
         <nav aria-label="Navegación principal">
-          <a href="#club">El club</a>
+          <a href="#metodo">Método</a>
+          <a href="#planificador">Planificador</a>
           <a href="#recetas">Recetas</a>
           <a href="#laboratorio">Laboratorio</a>
-          <a href="#tienda">Tienda</a>
+          <a href="#tienda">Provisiones</a>
           <a href="#agenda">Agenda</a>
         </nav>
         <div className="header-actions">
@@ -124,39 +138,55 @@ export default function ClubPortal() {
         <div className="hero-copy">
           <p className="eyebrow">Fuego · Comunidad · Vida al aire libre</p>
           <h1>El fuego nos<br /><em>reúne.</em></h1>
-          <p className="hero-description">Prendas, herramientas y experiencias para quienes no sólo cocinan al fuego: viven alrededor de él.</p>
+          <p className="hero-description">Un laboratorio abierto para entender la brasa, diseñar mezclas y cocinar con intención. Aquí cada fuego deja conocimiento para el siguiente.</p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#recetas">Explorar recetas</a>
-            <button className="button button-quiet planner-trigger" type="button" onClick={() => setFirePlannerOpen(true)}>Planear mi fuego <span>↗</span></button>
-            <a className="button button-quiet" href="#agenda">Ver próximos fuegos <span>↗</span></a>
+            <a className="button button-primary" href="#laboratorio">Entrar al laboratorio</a>
+            <button className="button button-quiet planner-trigger" type="button" onClick={() => document.getElementById("planificador")?.scrollIntoView({ behavior: "smooth" })}>Planear mi fuego <span>↗</span></button>
+            <a className="button button-quiet" href="#recetas">Explorar recetas <span>↗</span></a>
           </div>
-          <div className="member-proof">
-            <span className="avatar-stack" aria-hidden="true"><i>LM</i><i>AR</i><i>JP</i></span>
-            <span><strong>2,480</strong> parrilleros ya son parte</span>
+          <div className="hero-proof" aria-label="Alcance del laboratorio">
+            <span><strong>60</strong> componentes</span>
+            <span><strong>11</strong> familias</span>
+            <span><strong>4</strong> protocolos</span>
           </div>
         </div>
         <div className="hero-visual" role="img" aria-label="Parrilla encendida frente a montañas al atardecer">
-          <div className="sun" /><div className="mountain mountain-back" /><div className="mountain mountain-front" />
-          <div className="grill"><span className="grill-lid" /><span className="grill-body" /><span className="grill-leg leg-one" /><span className="grill-leg leg-two" /></div>
-          <div className="smoke smoke-one" /><div className="smoke smoke-two" />
+          <Image className="hero-photo" src="/editorial/lumbre-hero-v2.jpg" alt="" fill priority sizes="(max-width: 850px) 100vw, 52vw" />
           <div className="hero-stamp" aria-hidden="true"><Image src="/brand/lumbre-mark-red.png" alt="" width={58} height={58} unoptimized /><span>HECHO PARA<br />VIVIR AFUERA</span></div>
-          <p className="visual-note"><span>01</span> Paciencia, humo<br />y buena compañía.</p>
+          <p className="visual-note"><span>CUADERNO 01</span> Observar. Formular.<br />Encender. Registrar.</p>
         </div>
       </section>
 
-      <section className="intro" id="club">
-        <p className="section-index">01 — MANIFIESTO</p>
-        <p className="intro-statement">Vestimos el fuego.<br />Compartimos el oficio.</p>
+      <section className="intro" id="metodo">
+        <p className="section-index">01 — MÉTODO LUMBRE</p>
+        <p className="intro-statement">El fuego también<br />se puede leer.</p>
         <div>
-          <p className="intro-copy">Lumbre es una comunidad para aprender haciendo: elegir la leña, dominar el calor y salir con equipo hecho para durar.</p>
-          <button className="text-link light" type="button" onClick={() => setJoinOpen(true)}>Conocer la membresía →</button>
+          <p className="intro-copy">No perseguimos una receta perfecta. Construimos criterios: qué combustible usar, dónde colocar el alimento, qué señales observar y qué cambiar en la próxima prueba.</p>
+          <a className="text-link light" href="#principios">Leer los principios →</a>
         </div>
+      </section>
+
+      <FirePlanner />
+
+      <section className="knowledge-section" id="principios" aria-labelledby="knowledge-title">
+        <div className="knowledge-heading">
+          <p className="section-index">03 — CONOCIMIENTO DE CAMPO</p>
+          <h2 id="knowledge-title">Antes de cocinar,<br />diseña el fuego.</h2>
+          <p>Cuatro decisiones convierten una intuición en un proceso que otra persona puede repetir.</p>
+        </div>
+        <div className="knowledge-grid">
+          <article><span>01 / COMBUSTIBLE</span><h3>Elige por duración, no sólo por aroma.</h3><p>Carbón para respuesta rápida; leña estable y bien seca cuando el tiempo y el humo forman parte del resultado.</p><strong>VARIABLE: ENERGÍA</strong></article>
+          <article><span>02 / GEOMETRÍA</span><h3>Crea más de una zona de calor.</h3><p>Una zona intensa construye color. Una zona indirecta permite terminar la cocción sin quemar la superficie.</p><strong>VARIABLE: DISTANCIA</strong></article>
+          <article><span>03 / SEÑALES</span><h3>Observa antes de intervenir.</h3><p>Color de la brasa, humo, sonido y resistencia de la superficie dicen más que un cronómetro aislado.</p><strong>VARIABLE: RESPUESTA</strong></article>
+          <article><span>04 / REGISTRO</span><h3>Cambia una cosa por prueba.</h3><p>Anota proporción, temperatura y tiempo. Así una buena casualidad puede convertirse en protocolo.</p><strong>VARIABLE: EVIDENCIA</strong></article>
+        </div>
+        <aside className="knowledge-note"><span>PRINCIPIO DE CAMPO</span><p>La brasa no es un fondo escénico: es una fuente de energía que se distribuye, se agota y deja señales.</p></aside>
       </section>
 
       <section className="recipes-section" id="recetas">
         <div className="section-heading">
-          <div><p className="section-index">02 — RECETARIO</p><h2>Aprende a leer<br />las brasas.</h2></div>
-          <p>Recetas probadas por nuestra comunidad, explicadas por temperatura y señales, no sólo por minutos.</p>
+          <div><p className="section-index">04 — RECETARIO DE CAMPO</p><h2>Casos para<br />poner a prueba.</h2></div>
+          <p>Cada receta es una ruta de aprendizaje: método, tiempo y nivel para practicar una habilidad específica frente al fuego.</p>
         </div>
         <div className="recipe-toolbar">
           <div className="filter-group" aria-label="Filtrar recetas">
@@ -172,7 +202,11 @@ export default function ClubPortal() {
           <div className="recipe-grid" aria-live="polite">
             {filteredRecipes.map((recipe, index) => (
               <article className="recipe-card" key={recipe.id} data-testid="recipe-card">
-                <div className={`recipe-art ${recipe.tone}`}><span>0{index + 1}</span><i aria-hidden="true" /></div>
+                <div className={`recipe-art ${recipe.tone}`}>
+                  <Image src={recipe.image} alt={`Fotografía de ${recipe.title}`} fill sizes="(max-width: 520px) 100vw, (max-width: 850px) 50vw, 33vw" />
+                  <span>{String(index + 1).padStart(3, "0")}</span>
+                  <small>{recipe.categoryLabel}</small>
+                </div>
                 <div className="recipe-meta"><span>{recipe.categoryLabel}</span><span>{recipe.time} · {recipe.level}</span></div>
                 <h3>{recipe.title}</h3><p>{recipe.description}</p>
                 <button type="button" onClick={() => showToast(`Abriendo ${recipe.title}.`)} aria-label={`Ver receta ${recipe.title}`}>Ver receta <span>↗</span></button>
@@ -185,13 +219,23 @@ export default function ClubPortal() {
       <IngredientLab />
 
       <section className="shop-section" id="tienda">
-        <div className="shop-heading"><p className="section-index">04 — PROVISIONES LUMBRE</p><h2>Equipo de fuego.<br />Hecho para durar.</h2><p>Prendas y herramientas diseñadas para ensuciarse, resistir el calor y vivir afuera.</p></div>
+        <div className="shop-heading"><p className="section-index">06 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />protocolos.</h2><p>Mezclas nacidas en el laboratorio y listas para llevar al fuego. La herramienta y la merch acompañan el oficio; el sabor es el punto de partida.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>
         <div className="product-grid">
           {products.map((product) => (
-            <article className="product-card" key={product.id}>
+            <article
+              className="product-card"
+              key={product.id}
+              data-testid="product-card"
+              data-category={product.category}
+            >
               <div className={`product-art product-${product.category}`}>
                 {product.badge && <span className="product-badge">{product.badge}</span>}
-                <i aria-hidden="true" />
+                <Image
+                  src={productImage(product.id)}
+                  alt={`Fotografía de ${product.name}`}
+                  fill
+                  sizes="(max-width: 520px) 100vw, 33vw"
+                />
               </div>
               <p>{productCategoryLabel(product.category)}</p><h3>{product.name}</h3>
               <div><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => addToCart(product)} aria-label={`Agregar ${product.name} a la canasta`}>+</button></div>
@@ -201,7 +245,7 @@ export default function ClubPortal() {
       </section>
 
       <section className="events-section" id="agenda">
-        <div className="section-heading events-heading"><div><p className="section-index">05 — PRÓXIMOS FUEGOS</p><h2>Nos vemos<br />afuera.</h2></div><p>Talleres pequeños, cenas largas y espacios para equivocarnos juntos.</p></div>
+        <div className="section-heading events-heading"><div><p className="section-index">07 — PRÓXIMOS FUEGOS</p><h2>Nos vemos<br />afuera.</h2></div><p>Talleres pequeños, cenas largas y espacios para equivocarnos juntos.</p></div>
         <div className="event-list">
           {events.map((item) => (
             <article className="event-row" key={item.id}>
@@ -247,9 +291,6 @@ export default function ClubPortal() {
         </div>
       )}
 
-      {firePlannerOpen && (
-        <FirePlannerModal onClose={() => setFirePlannerOpen(false)} />
-      )}
 
       {selectedEvent && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedEvent(null)}>

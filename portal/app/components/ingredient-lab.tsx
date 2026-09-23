@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { isPublicProductionReadOnly } from "../lib/environment";
 
@@ -283,7 +284,7 @@ export default function IngredientLab() {
     <section className="ingredient-lab" id="laboratorio" aria-labelledby="lab-title">
       <div className="lab-intro">
         <div>
-          <p className="section-index">03 — LABORATORIO DE SABOR</p>
+          <p className="section-index">05 — LABORATORIO DE SABOR</p>
           <h2 id="lab-title">Experimenta antes<br />de encender.</h2>
         </div>
         <div className="lab-manifesto">
@@ -353,9 +354,15 @@ export default function IngredientLab() {
                           type="button"
                           onClick={() => setInspectedIngredient(ingredient)}
                           aria-label={`Inspeccionar ${ingredient.nombre}`}
+                          data-ingredient-id={ingredient.id}
                         >
+                          <Image
+                            src={`/editorial/ingredients/${ingredient.id}.jpg`}
+                            alt=""
+                            fill
+                            sizes="(max-width: 640px) 50vw, (max-width: 1080px) 25vw, 180px"
+                          />
                           <span>{String(index + 1).padStart(2, "0")}</span>
-                          <i aria-hidden="true" />
                         </button>
                         <div className="ingredient-heading">
                           <span>{familyLabel(ingredient.familia)}</span>

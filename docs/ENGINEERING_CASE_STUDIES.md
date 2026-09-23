@@ -4,46 +4,49 @@ These case studies preserve the most useful design decisions and discoveries
 from building the Lumbre Playwright framework. They focus on engineering
 judgment rather than reproducing test implementation line by line.
 
-## 1. Modeling the fire planner as a Component Object
+## 1. Modeling the embedded fire planner as a Component Object
 
 ### Risk
 
-The fire planner is a modal with several related controls and a calculated
-result. Putting its selectors and actions directly in a test would make the
-scenario difficult to read. Putting all of them in `HomePage` would make the
-page object grow into a model of every widget in the portal.
+The fire planner is a full portal section with several related controls,
+calculated guidance, and persistent browser presets. Putting its selectors and
+actions directly in a test would make the scenario difficult to read. Putting
+all of them in `HomePage` would make the page object grow into a model of every
+widget in the portal.
 
 ### Decision
 
-The implementation introduced `FirePlannerModal`, scoped to its dialog root.
-`HomePage` owns the action that opens the planner because the trigger belongs to
-the page. The component owns guest count, cooking style, duration, vegetable
-reserve, calculation, and recommendation state.
+The implementation introduced `FirePlanner`, scoped to the embedded
+`data-testid="fire-planner"` region. `HomePage` owns navigation to the section;
+the component owns guest count, cooking style, duration, fuel, equipment,
+weather, vegetable reserve, calculation, recommendation state, and presets.
 
 ```text
 HomePage
-  └── opens ──> FirePlannerModal
-                  ├── configures controls
-                  ├── calculates
-                  └── exposes recommendation locator
+  └── navigates ──> FirePlanner
+                      ├── configures controls
+                      ├── calculates
+                      ├── saves and restores presets
+                      └── exposes recommendation locator
 ```
 
 The normalized test remains responsible for the oracle. It configures the
 component and asserts the expected fuel rather than hiding the assertion inside
-the modal object.
+the component object.
 
 ### Playwright techniques
 
-- dialog-scoped `get_by_role()` and `get_by_label()` locators;
+- region-scoped `get_by_role()` and `get_by_label()` locators;
 - web-first visibility and text assertions;
 - parametrization for equivalent direct-fire and slow-cooking contracts;
 - before/after state comparison for the vegetable-reserve calculation.
 
 ### Outcome
 
-`UI-012`, `UI-023`, and `UI-024` protect distinct calculation risks while
-sharing a reusable component boundary. Adding a new cooking-style dataset does
-not require duplicating selectors or creating a generic page-level helper.
+`UI-012`, `UI-023`, `UI-024`, and `UI-033` protect calculation and preset
+persistence risks while sharing a reusable component boundary. Adding a new
+cooking-style dataset does not require duplicating selectors or creating a
+generic page-level helper.
 
 ### Lesson
 

@@ -13,8 +13,8 @@ const mulish = Mulish({
 });
 
 export const metadata: Metadata = {
-  title: "Lumbre | Fuego y vida al aire libre",
-  description: "Equipo, recetas y encuentros para quienes viven alrededor del fuego.",
+  title: "Lumbre | Laboratorio de cocina al fuego",
+  description: "Conocimiento, recetas y protocolos para experimentar alrededor del fuego.",
   icons: {
     icon: "/brand/lumbre-mark-red.png",
     shortcut: "/brand/lumbre-mark-red.png",
