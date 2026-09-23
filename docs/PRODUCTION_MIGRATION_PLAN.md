@@ -1,7 +1,7 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 1 D1 foundation completed and regression-validated on
-> 2026-09-23. Phase 2 has not started.
+> Status: Phase 2 anonymous sessions and persistent carts completed and
+> regression-validated on 2026-09-23. Phase 3 has not started.
 
 ## 1. Purpose
 
@@ -35,6 +35,10 @@ Phase 1 subsequently passed portal lint, TypeScript checking, the vinext
 production build, and all 85 Pytest executions. Its archived regression report
 is `reports/runs/lumbre-report-2026-09-23_15-12-21.html`.
 
+Phase 2 passed portal lint, TypeScript checking, the vinext production build,
+and all 92 Pytest executions in 67.03 seconds. Its archived regression report
+is `reports/runs/lumbre-report-2026-09-23_16-21-58.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -48,19 +52,20 @@ with names only and no secret values.
 
 | Capability | Current source of truth | Production gap |
 | --- | --- | --- |
-| Cart | React component state | Lost on reload and not isolated by session |
+| Cart | D1 records constrained by an opaque anonymous session | No inventory reservation or authenticated ownership |
 | Checkout | Toast notification | No order or payment exists |
 | Membership | Stateless route with a fixed demo identifier | No member record or authenticated identity |
 | Event reservation | Modal and toast | No capacity or reservation is changed |
 | Fire-planner presets | Browser `localStorage` | Cannot synchronize across devices or accounts |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
-| Products | Static TypeScript data | Prices and inventory are not authoritative |
-| Sessions | Not implemented | No server-side identity boundary |
+| Products | Static TypeScript catalog, with cart prices and totals derived server-side | No database-backed inventory or price revisions |
+| Sessions | Opaque anonymous identifier in a protected cookie, backed by D1 | No authenticated identity, revocation UI, or account merge |
 | Database | Drizzle schema, SQL migrations, deterministic seed, and Worker `DB` binding | Remote provisioning and operational backups remain pending |
 
-The existing read-only production switch is a safe public-demo boundary, but
-it is not the final authorization model. It will remain in place until each
-mutation is backed by persistence, validation, and an explicit access policy.
+The production switch is a safe public-demo boundary: reads and anonymous cart
+writes are enabled, while membership, catalog, and laboratory writes stay
+disabled. This is not the final authorization model; each additional mutation
+must be backed by persistence, validation, and an explicit access policy.
 
 ## 4. Architectural decision
 
@@ -190,7 +195,7 @@ Exit criteria:
 - the health contract reports database readiness;
 - focused database checks, OpenAPI tests, and the full suite pass.
 
-### Phase 2: anonymous session and persistent cart
+### Phase 2: anonymous session and persistent cart — completed
 
 Deliver:
 
@@ -209,6 +214,16 @@ Automation risks:
 - add, update, and remove operations persist;
 - manipulated client prices are ignored;
 - repeated or concurrent requests do not corrupt quantities.
+
+Completion evidence:
+
+- migration `0002_jittery_mystique.sql` creates sessions, carts, and line items;
+- OpenAPI publishes all four cart operations and validates their live payloads;
+- `API-022` through `API-024` protect cookie policy, server pricing, repeated
+  adds, quantity replacement, removal, and persistence;
+- `UI-035` proves reload restoration and `UI-036` proves browser-context
+  isolation;
+- focused validation passed `26/26` and the full regression passed `92/92`.
 
 ### Phase 3: authenticated account
 
@@ -333,16 +348,18 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 2 begins with the smallest anonymous-session vertical slice:
+Phase 3 begins with a bounded authentication compatibility spike before any
+customer account UI is added:
 
-1. define the session and cart HTTP contracts;
-2. add D1 tables for sessions, carts, and cart items;
-3. issue an opaque cookie with the documented security attributes;
-4. replace client-only cart mutation with server-authoritative commands;
-5. preserve the current UI while restoring a cart after reload;
-6. prove isolation with two independent Playwright browser contexts;
-7. validate price-tampering rejection at the API boundary;
-8. rerun portal checks and the complete regression suite.
+1. evaluate one established authentication library against Workers, vinext,
+   D1, and the current cookie boundary;
+2. define account, credential-provider, verification, and authenticated-session
+   contracts without storing raw passwords;
+3. decide the local deterministic email or magic-link adapter;
+4. specify anonymous-cart merge rules and collision behavior;
+5. publish the authentication and authorization OpenAPI contract;
+6. add focused API risks before implementing the first sign-in UI;
+7. preserve the anonymous cart as a complete, independently reversible slice.
 
-Authentication and payment remain out of scope until this anonymous slice is
-independently complete and reversible.
+Orders and payments remain out of scope until authenticated ownership and cart
+merge behavior are independently complete and regression-validated.

@@ -14,6 +14,11 @@ from projects.lumbre.api.lumbre_api import LumbreApi
     ("operation_kind", "path", "payload"),
     [
         (
+            "cart_item",
+            "/api/cart/items",
+            {"productId": 101, "quantity": 1},
+        ),
+        (
             "product",
             "/api/products",
             {"name": "Parrilla contractual", "category": "herramientas", "price": 750},
@@ -61,6 +66,7 @@ def test_mutation_request_and_response_match_openapi(
     with test_log.step("Execute the documented mutation"):
         operations: dict[str, Any] = {
             "product": api.create_product,
+            "cart_item": api.add_cart_item,
             "membership": api.create_member,
             "hypothesis": api.create_hypothesis,
         }

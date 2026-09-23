@@ -36,6 +36,24 @@ class LumbreApi:
     def products(self) -> dict[str, Any]:
         return self._json(self._request.get("/api/products"))
 
+    def cart_response(self) -> APIResponse:
+        return self._request.get("/api/cart")
+
+    def cart(self) -> dict[str, Any]:
+        return self._json(self.cart_response())
+
+    def add_cart_item(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.post("/api/cart/items", data=payload)
+
+    def update_cart_item(self, product_id: int, quantity: int) -> APIResponse:
+        return self._request.patch(
+            f"/api/cart/items/{product_id}",
+            data={"quantity": quantity},
+        )
+
+    def remove_cart_item(self, product_id: int) -> APIResponse:
+        return self._request.delete(f"/api/cart/items/{product_id}")
+
     def events(self) -> dict[str, Any]:
         return self._json(self._request.get("/api/events"))
 

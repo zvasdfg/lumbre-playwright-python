@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 61 |
-| Automated functional risks | 61 |
-| Pytest executions | 85 |
-| Test files | 60 |
-| API cases / executions | 25 / 37 |
-| Browser cases / executions | 36 / 40 |
+| Committed functional risks | 66 |
+| Automated functional risks | 66 |
+| Pytest executions | 92 |
+| Test files | 65 |
+| API cases / executions | 28 / 42 |
+| Browser cases / executions | 38 / 42 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (12/12) |
-| Latest full-suite result | 85 passed |
+| API route-operation coverage | 100% (16/16) |
+| Latest full-suite result | 92 passed |
 
-**100% refers to the repository's 61-item committed functional-risk catalog.**
+**100% refers to the repository's 66-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -58,8 +58,8 @@ Lumbre is a cooking-at-the-fire portal with:
 - technical hypotheses for beef crust, bark, chicken, and vegetables;
 - duplicate-formula detection and persisted repetition counters;
 - JSON APIs used directly by API tests and indirectly by UI workflows;
-- mutable local development and test environments plus a read-only production
-  mode prepared for a future public demo.
+- D1-backed hypotheses and anonymous carts, with protected production writes
+  and a production-safe anonymous commerce slice.
 
 ## Architecture at a glance
 
@@ -126,6 +126,7 @@ lumbre-playwright-python/
 - Reusable JSON Schema 2020-12 request/response validation with exact JSON-path diagnostics.
 - Filtering, malformed payloads, resource creation, and `404` contracts.
 - Hypothesis validation, canonical signatures, deduplication, and persistence.
+- Opaque anonymous sessions, server-priced carts, and reload/context isolation.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.
@@ -287,10 +288,10 @@ status.
 
 The repository currently optimizes for deterministic local execution. A public
 portal deployment and CI artifact publishing are natural next steps; they are
-not presented as completed capabilities here. The production build is prepared
-as a read-only public demo: only `GET` API operations are exposed, mutation
-routes are rejected, test-only reset is hidden, and no personal data is
-collected through the membership UI.
+not presented as completed capabilities here. The production build exposes
+public reads and a D1-backed anonymous cart while rejecting unprotected business
+mutations, hiding the test reset route, and collecting no personal data through
+the membership UI.
 
 ## Author
 

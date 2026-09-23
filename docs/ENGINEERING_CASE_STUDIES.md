@@ -194,10 +194,10 @@ path + HTTP method + actual status -> JSON Schema -> payload validation
 
 ### Outcome
 
-`CONTRACT-001` through `CONTRACT-004` add 14 executions covering description
-integrity, all public reads, three mutation families, and diagnostic quality.
-The informational `GET /api` gap is now covered, bringing route-operation
-coverage to `12/12`.
+`CONTRACT-001` through `CONTRACT-004` add 16 executions covering description
+integrity, all public reads, four mutation families, and diagnostic quality.
+The informational API index and anonymous-cart contract are covered, bringing
+route-operation coverage to `16/16`.
 
 An intentional mismatch proves that failures identify the useful location:
 

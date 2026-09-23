@@ -14,7 +14,7 @@ only a collection of executable scripts. Its goals are:
 4. preserve diagnostic evidence without adding logging code to every test;
 5. isolate mutable test data in a per-run Cloudflare D1 database;
 6. keep local execution reproducible across supported Playwright engines;
-7. separate mutable test behavior from a safe, read-only production boundary.
+7. separate mutable test behavior from a protected production boundary.
 8. prevent reusable infrastructure from depending on one product's selectors,
    routes, test data, or business language.
 
@@ -259,12 +259,13 @@ the test selection instead of relying on the framework's generic Node mode.
 | --- | --- | --- | --- |
 | `development` | Enabled for local exploration | Hidden | Local D1 initialized from bundled seeds |
 | `test` | Enabled for contract and persistence tests | Enabled | Per-run temporary D1 |
-| `production` | Rejected at both route and store boundaries | Hidden as `404` | Bundled immutable seeds |
+| `production` | Anonymous cart writes enabled; protected business writes rejected | Hidden as `404` | Remote D1 cart plus bundled immutable hypotheses |
 
 Production uses defense in depth: the UI does not collect membership data or
-offer hypothesis creation, API discovery lists only reads, mutation handlers
-return `405`, and the hypothesis store refuses write operations. The public
-registry does not depend on a writable filesystem.
+offer hypothesis creation, protected mutation handlers return `405`, and the
+hypothesis store refuses write operations. Anonymous cart routes are the
+explicit exception: they resolve an opaque cookie and constrain every D1 query
+to its session. The public registry does not depend on a writable filesystem.
 
 `LUMBRE_ENV` selects server behavior. `NEXT_PUBLIC_LUMBRE_ENV` selects the
 matching browser experience and is fixed when the client bundle is built. Both
@@ -322,8 +323,9 @@ validate different risks, preserving isolation and failure diagnosis.
 
 The current architecture prioritizes deterministic local learning while using
 the same Worker and D1 boundaries intended for deployment. The public
-production mode remains read-only until sessions and authorization are added.
-CI, authentication, and hosted mutations remain outside the completed scope.
+production mode now supports anonymous session carts while business data stays
+read-only until authentication and authorization are added. CI, authenticated
+accounts, and hosted business mutations remain outside the completed scope.
 
 ## 12. Extension rules
 

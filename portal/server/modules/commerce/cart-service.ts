@@ -1,0 +1,152 @@
+import { asc, eq, sql } from "drizzle-orm";
+import { products, type Product } from "../../../app/lib/data";
+import { getDatabase } from "../../platform/database/client";
+import { anonymousSessions, cartItems, carts } from "../../platform/database/schema";
+
+export type CartItemView = {
+  productId: number;
+  name: string;
+  category: Product["category"];
+  unitPrice: number;
+  quantity: number;
+  lineTotal: number;
+};
+
+export type CartView = {
+  items: CartItemView[];
+  totalQuantity: number;
+  total: number;
+};
+
+export class UnknownProductError extends Error {
+  constructor(productId: number) {
+    super(`Product '${productId}' was not found`);
+  }
+}
+
+function catalogProduct(productId: number): Product {
+  const product = products.find((candidate) => candidate.id === productId);
+  if (!product) throw new UnknownProductError(productId);
+  return product;
+}
+
+async function getOrCreateCartId(sessionId: string): Promise<string> {
+  const database = getDatabase();
+  const existing = await database
+    .select({ id: carts.id })
+    .from(carts)
+    .where(eq(carts.sessionId, sessionId))
+    .get();
+  if (existing) return existing.id;
+
+  const id = crypto.randomUUID();
+  await database.insert(carts).values({ id, sessionId }).onConflictDoNothing();
+  const created = await database
+    .select({ id: carts.id })
+    .from(carts)
+    .where(eq(carts.sessionId, sessionId))
+    .get();
+  if (!created) throw new Error("The anonymous cart could not be created");
+  return created.id;
+}
+
+async function projectCart(cartId: string): Promise<CartView> {
+  const rows = await getDatabase()
+    .select({ productId: cartItems.productId, quantity: cartItems.quantity })
+    .from(cartItems)
+    .where(eq(cartItems.cartId, cartId))
+    .orderBy(asc(cartItems.id));
+
+  const items = rows.map(({ productId, quantity }) => {
+    const product = catalogProduct(productId);
+    return {
+      productId,
+      name: product.name,
+      category: product.category,
+      unitPrice: product.price,
+      quantity,
+      lineTotal: product.price * quantity,
+    };
+  });
+
+  return {
+    items,
+    totalQuantity: items.reduce((total, item) => total + item.quantity, 0),
+    total: items.reduce((total, item) => total + item.lineTotal, 0),
+  };
+}
+
+export async function readCart(sessionId: string): Promise<CartView> {
+  return projectCart(await getOrCreateCartId(sessionId));
+}
+
+export async function addCartItem(
+  sessionId: string,
+  productId: number,
+  quantity: number,
+): Promise<CartView> {
+  catalogProduct(productId);
+  const database = getDatabase();
+  const cartId = await getOrCreateCartId(sessionId);
+  const now = new Date().toISOString();
+
+  await database
+    .insert(cartItems)
+    .values({ cartId, productId, quantity, updatedAt: now })
+    .onConflictDoUpdate({
+      target: [cartItems.cartId, cartItems.productId],
+      set: {
+        quantity: sql`${cartItems.quantity} + ${quantity}`,
+        updatedAt: now,
+      },
+    });
+  await database.update(carts).set({ updatedAt: now }).where(eq(carts.id, cartId));
+  return projectCart(cartId);
+}
+
+export async function setCartItemQuantity(
+  sessionId: string,
+  productId: number,
+  quantity: number,
+): Promise<CartView> {
+  catalogProduct(productId);
+  const database = getDatabase();
+  const cartId = await getOrCreateCartId(sessionId);
+  const current = await database
+    .select({ id: cartItems.id })
+    .from(cartItems)
+    .where(sql`${cartItems.cartId} = ${cartId} AND ${cartItems.productId} = ${productId}`)
+    .get();
+  if (!current) throw new UnknownProductError(productId);
+
+  const now = new Date().toISOString();
+  await database
+    .update(cartItems)
+    .set({ quantity, updatedAt: now })
+    .where(eq(cartItems.id, current.id));
+  await database.update(carts).set({ updatedAt: now }).where(eq(carts.id, cartId));
+  return projectCart(cartId);
+}
+
+export async function removeCartItem(
+  sessionId: string,
+  productId: number,
+): Promise<CartView> {
+  const database = getDatabase();
+  const cartId = await getOrCreateCartId(sessionId);
+  await database
+    .delete(cartItems)
+    .where(sql`${cartItems.cartId} = ${cartId} AND ${cartItems.productId} = ${productId}`);
+  await database
+    .update(carts)
+    .set({ updatedAt: new Date().toISOString() })
+    .where(eq(carts.id, cartId));
+  return projectCart(cartId);
+}
+
+export async function resetAnonymousCommerce(): Promise<void> {
+  const database = getDatabase();
+  await database.delete(cartItems);
+  await database.delete(carts);
+  await database.delete(anonymousSessions);
+}

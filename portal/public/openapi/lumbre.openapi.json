@@ -4,12 +4,13 @@
   "info": {
     "title": "Lumbre API",
     "version": "1.0.0",
-    "description": "Contract for the Lumbre system under test. Mutation operations are available only in development and test; production returns 405 and remains read-only."
+    "description": "Contract for the Lumbre system under test. Anonymous cart operations are session-scoped in every environment; protected business mutations remain limited to development and test."
   },
   "servers": [{ "url": "/", "description": "Current Lumbre environment" }],
   "tags": [
     { "name": "System" },
     { "name": "Catalog" },
+    { "name": "Commerce" },
     { "name": "Laboratory" },
     { "name": "Test support" }
   ],
@@ -82,6 +83,61 @@
           },
           "422": { "$ref": "#/components/responses/ValidationErrorResponse" },
           "405": { "$ref": "#/components/responses/ReadOnlyResponse" }
+        }
+      }
+    },
+    "/api/cart": {
+      "get": {
+        "operationId": "getAnonymousCart",
+        "tags": ["Commerce"],
+        "responses": {
+          "200": { "$ref": "#/components/responses/CartResponse" }
+        }
+      }
+    },
+    "/api/cart/items": {
+      "post": {
+        "operationId": "addAnonymousCartItem",
+        "tags": ["Commerce"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CartItemAddRequest" } }
+          }
+        },
+        "responses": {
+          "201": { "$ref": "#/components/responses/CartResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/cart/items/{productId}": {
+      "patch": {
+        "operationId": "updateAnonymousCartItem",
+        "tags": ["Commerce"],
+        "parameters": [{ "$ref": "#/components/parameters/ProductId" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CartItemUpdateRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/CartResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      },
+      "delete": {
+        "operationId": "removeAnonymousCartItem",
+        "tags": ["Commerce"],
+        "parameters": [{ "$ref": "#/components/parameters/ProductId" }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/CartResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
         }
       }
     },
@@ -253,6 +309,12 @@
         "in": "path",
         "required": true,
         "schema": { "type": "string", "pattern": "^LH[CBVP]-[0-9]{3}$" }
+      },
+      "ProductId": {
+        "name": "productId",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "minimum": 1 }
       }
     },
     "responses": {
@@ -303,6 +365,18 @@
         "content": {
           "application/json": { "schema": { "$ref": "#/components/schemas/HypothesisValidationError" } }
         }
+      },
+      "CartResponse": {
+        "description": "Server-authoritative anonymous cart",
+        "headers": {
+          "Set-Cookie": {
+            "description": "Issued only when a new anonymous session is created",
+            "schema": { "type": "string" }
+          }
+        },
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/CartResponse" } }
+        }
       }
     },
     "schemas": {
@@ -313,7 +387,7 @@
           "name": { "const": "Lumbre API" },
           "version": { "type": "string" },
           "environment": { "type": "string", "enum": ["development", "test", "production"] },
-          "access": { "type": "string", "enum": ["read-only", "read-write"] },
+          "access": { "type": "string", "enum": ["read-only", "cart-write", "read-write"] },
           "endpoints": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
         },
         "additionalProperties": false
@@ -370,6 +444,52 @@
           "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
           "price": { "type": "number", "exclusiveMinimum": 0 },
           "badge": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      },
+      "CartItem": {
+        "type": "object",
+        "required": ["productId", "name", "category", "unitPrice", "quantity", "lineTotal"],
+        "properties": {
+          "productId": { "type": "integer", "minimum": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
+          "unitPrice": { "type": "number", "exclusiveMinimum": 0 },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "lineTotal": { "type": "number", "exclusiveMinimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "Cart": {
+        "type": "object",
+        "required": ["items", "totalQuantity", "total"],
+        "properties": {
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/CartItem" } },
+          "totalQuantity": { "type": "integer", "minimum": 0 },
+          "total": { "type": "number", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "CartResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": { "data": { "$ref": "#/components/schemas/Cart" } },
+        "additionalProperties": false
+      },
+      "CartItemAddRequest": {
+        "type": "object",
+        "required": ["productId"],
+        "properties": {
+          "productId": { "type": "integer", "minimum": 1 },
+          "quantity": { "type": "integer", "minimum": 1, "maximum": 20, "default": 1 }
+        },
+        "additionalProperties": false
+      },
+      "CartItemUpdateRequest": {
+        "type": "object",
+        "required": ["quantity"],
+        "properties": {
+          "quantity": { "type": "integer", "minimum": 1, "maximum": 20 }
         },
         "additionalProperties": false
       },

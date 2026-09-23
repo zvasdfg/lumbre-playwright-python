@@ -15,6 +15,13 @@
       "when": 1790197177726,
       "tag": "0001_misty_echo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790201130273,
+      "tag": "0002_jittery_mystique",
+      "breakpoints": true
     }
   ]
 }

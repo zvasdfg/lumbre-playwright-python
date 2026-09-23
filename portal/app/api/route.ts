@@ -2,11 +2,15 @@ import { getLumbreEnvironment } from "../lib/environment";
 
 export async function GET() {
   const environment = getLumbreEnvironment();
-  const readEndpoints = [
+  const publicEndpoints = [
     "GET /openapi/lumbre.openapi.json",
     "GET /api/health",
     "GET /api/recipes?category=directo&q=entraña",
     "GET /api/products",
+    "GET /api/cart",
+    "POST /api/cart/items",
+    "PATCH /api/cart/items/{productId}",
+    "DELETE /api/cart/items/{productId}",
     "GET /api/events",
     "GET /api/ingredientes?q=chile&familia=Picante&estado=pendiente",
     "GET /api/ingredientes?id=chile_ancho",
@@ -24,9 +28,9 @@ export async function GET() {
     name: "Lumbre API",
     version: "1.0.0",
     environment,
-    access: environment === "production" ? "read-only" : "read-write",
+    access: environment === "production" ? "cart-write" : "read-write",
     endpoints: [
-      ...readEndpoints,
+      ...publicEndpoints,
       ...(environment === "production" ? [] : testAndDevelopmentEndpoints),
     ],
   });

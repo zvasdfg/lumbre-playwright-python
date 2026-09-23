@@ -9,6 +9,23 @@ import IngredientLab from "./ingredient-lab";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
+type CartItem = {
+  productId: number;
+  name: string;
+  category: Product["category"];
+  unitPrice: number;
+  quantity: number;
+  lineTotal: number;
+};
+
+type Cart = {
+  items: CartItem[];
+  totalQuantity: number;
+  total: number;
+};
+
+const emptyCart: Cart = { items: [], totalQuantity: 0, total: 0 };
+
 const currency = new Intl.NumberFormat("es-MX", {
   style: "currency",
   currency: "MXN",
@@ -39,7 +56,7 @@ export default function ClubPortal() {
   const appRef = useRef<HTMLElement>(null);
   const [recipeFilter, setRecipeFilter] = useState<RecipeFilter>("todos");
   const [search, setSearch] = useState("");
-  const [cart, setCart] = useState<Product[]>([]);
+  const [cart, setCart] = useState<Cart>(emptyCart);
   const [cartOpen, setCartOpen] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<FireEvent | null>(null);
@@ -56,12 +73,30 @@ export default function ClubPortal() {
     });
   }, [recipeFilter, search]);
 
-  const cartTotal = cart.reduce((total, product) => total + product.price, 0);
-
   useEffect(() => {
-    appRef.current?.setAttribute("data-app-ready", "true");
+    const controller = new AbortController();
+
+    async function loadCart() {
+      try {
+        const response = await fetch("/api/cart", { signal: controller.signal });
+        if (!response.ok) throw new Error(`Cart request failed with ${response.status}`);
+        const result = (await response.json()) as { data: Cart };
+        setCart(result.data);
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error("The anonymous cart could not be loaded", error);
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          appRef.current?.setAttribute("data-app-ready", "true");
+        }
+      }
+    }
+
+    void loadCart();
 
     return () => {
+      controller.abort();
       if (toastTimeoutRef.current !== null) {
         window.clearTimeout(toastTimeoutRef.current);
       }
@@ -79,9 +114,31 @@ export default function ClubPortal() {
     }, 3200);
   }
 
-  function addToCart(product: Product) {
-    setCart((current) => [...current, product]);
+  async function addToCart(product: Product) {
+    const response = await fetch("/api/cart/items", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId: product.id, quantity: 1 }),
+    });
+    if (!response.ok) {
+      showToast("No pudimos actualizar tu canasta. Intenta de nuevo.");
+      return;
+    }
+    const result = (await response.json()) as { data: Cart };
+    setCart(result.data);
     showToast(`${product.name} se agregó a tu canasta.`);
+  }
+
+  async function removeFromCart(item: CartItem) {
+    const response = await fetch(`/api/cart/items/${item.productId}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      showToast("No pudimos actualizar tu canasta. Intenta de nuevo.");
+      return;
+    }
+    const result = (await response.json()) as { data: Cart };
+    setCart(result.data);
   }
 
   async function submitMembership(event: FormEvent<HTMLFormElement>) {
@@ -120,8 +177,8 @@ export default function ClubPortal() {
           <a href="#agenda">Agenda</a>
         </nav>
         <div className="header-actions">
-          <button className="cart-button" type="button" onClick={() => setCartOpen(true)} aria-label={`Abrir canasta, ${cart.length} productos`}>
-            Canasta <span>{cart.length}</span>
+          <button className="cart-button" type="button" onClick={() => setCartOpen(true)} aria-label={`Abrir canasta, ${cart.totalQuantity} productos`}>
+            Canasta <span>{cart.totalQuantity}</span>
           </button>
           <button className="header-cta" type="button" onClick={() => setJoinOpen(true)}>Únete al fuego</button>
         </div>
@@ -129,8 +186,11 @@ export default function ClubPortal() {
 
       {readOnlyProduction && (
         <aside className="public-demo-banner" aria-label="Entorno público de demostración">
-          <strong>Demostración pública de solo lectura.</strong>
-          <span>Explora el laboratorio y sus fichas sin enviar información personal.</span>
+          <strong>Demostración pública protegida.</strong>
+          <span>
+            Explora el catálogo y usa tu canasta anónima; membresía y laboratorio no reciben
+            datos personales.
+          </span>
         </aside>
       )}
 
@@ -238,7 +298,7 @@ export default function ClubPortal() {
                 />
               </div>
               <p>{productCategoryLabel(product.category)}</p><h3>{product.name}</h3>
-              <div><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => addToCart(product)} aria-label={`Agregar ${product.name} a la canasta`}>+</button></div>
+              <div><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => void addToCart(product)} aria-label={`Agregar ${product.name} a la canasta`}>+</button></div>
             </article>
           ))}
         </div>
@@ -307,9 +367,9 @@ export default function ClubPortal() {
           <aside className="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
             <button className="modal-close" type="button" onClick={() => setCartOpen(false)} aria-label="Cerrar canasta">×</button>
             <p className="section-index">LA DESPENSA</p><h2 id="cart-title">Tu canasta</h2>
-            {cart.length ? <ul>{cart.map((product, index) => <li key={`${product.id}-${index}`}><span>{product.name}</span><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => setCart((current) => current.filter((_, itemIndex) => itemIndex !== index))} aria-label={`Eliminar ${product.name}`}>×</button></li>)}</ul> : <p className="empty-cart">Todavía no agregas nada. El fuego puede esperar.</p>}
-            <div className="cart-total"><span>Total</span><strong>{currency.format(cartTotal)}</strong></div>
-            <button className="button button-primary full" type="button" disabled={!cart.length} onClick={() => showToast("El proceso de compra de demostración está listo para automatizarse.")}>Continuar compra</button>
+            {cart.items.length ? <ul>{cart.items.map((item) => <li key={item.productId}><span>{item.name}{item.quantity > 1 && <small> × {item.quantity}</small>}</span><strong>{currency.format(item.lineTotal)}</strong><button type="button" onClick={() => void removeFromCart(item)} aria-label={`Eliminar ${item.name}`}>×</button></li>)}</ul> : <p className="empty-cart">Todavía no agregas nada. El fuego puede esperar.</p>}
+            <div className="cart-total"><span>Total</span><strong>{currency.format(cart.total)}</strong></div>
+            <button className="button button-primary full" type="button" disabled={!cart.items.length} onClick={() => showToast("El proceso de compra de demostración está listo para automatizarse.")}>Continuar compra</button>
           </aside>
         </div>
       )}

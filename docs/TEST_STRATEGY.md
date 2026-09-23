@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 25 / 37 |
-| Browser case IDs / executions | 36 / 40 |
+| API case IDs / executions | 28 / 42 |
+| Browser case IDs / executions | 38 / 42 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 61 |
-| Total Pytest executions | 85 |
-| Test files | 60 |
+| Unique committed risks | 66 |
+| Total Pytest executions | 92 |
+| Test files | 65 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 85 passed |
+| Latest validation | 92 passed in 67.03 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,13 +50,13 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 22 | 22 | 100% |
-| P1 | 33 | 33 | 100% |
+| P0 | 26 | 26 | 100% |
+| P1 | 34 | 34 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **61** | **61** | **100%** |
+| **Total** | **66** | **66** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `12/12 = 100%`. Contract
+secondary API route-operation signal is `16/16 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
@@ -157,6 +157,9 @@ Priority definitions:
 | API-019 | Event collection count and item contract remain consistent | P2 | API contract |
 | API-020 | Invalid membership variants return a stable `422` contract | P0 | API negative |
 | API-021 | Health reports a ready D1 database with the expected seed version | P0 | API + persistence smoke |
+| API-022 | Anonymous session cookie protects and restores its D1 cart | P0 | API + session persistence |
+| API-023 | Cart rejects client prices and derives totals from the server catalog | P0 | API negative + integrity |
+| API-024 | Repeated adds, quantity replacement, and removal persist correctly | P1 | API lifecycle |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -195,6 +198,8 @@ Priority definitions:
 | UI-032 | Every store product has a distinct catalog photograph | P1 | UI merchandising |
 | UI-033 | A saved fire-planner preset can be restored after a page reload | P0 | UI persistence |
 | UI-034 | Recipe catalog exposes 100 unique recipes with distinct descriptive images | P1 | UI visual contract |
+| UI-035 | Anonymous cart is restored after reloading the same browser session | P0 | E2E persistence |
+| UI-036 | Independent browser contexts cannot observe each other's carts | P0 | E2E isolation |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 
