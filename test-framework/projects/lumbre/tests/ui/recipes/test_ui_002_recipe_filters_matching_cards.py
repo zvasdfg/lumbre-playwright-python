@@ -14,10 +14,10 @@ def test_recipe_filters_return_only_matching_cards(home: HomePage, test_log: Tes
         test_log.values(selected_filter=selected_filter)
 
     with test_log.step("Validate the filtered recipe count"):
-        expect(home.recipe_cards).to_have_count(2)
+        expect(home.recipe_cards).to_have_count(33)
         test_log.values(
             observed_card_count=home.recipe_cards.count(),
-            expected_card_count=2,
+            expected_card_count=33,
         )
 
     with test_log.step("Validate a representative recipe from the category"):

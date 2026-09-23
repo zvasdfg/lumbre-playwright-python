@@ -14,6 +14,8 @@ class IngredientLab:
         self.catalog_status = self.root.locator(".catalog-status")
         self.catalog = self.root.get_by_test_id("ingredient-catalog")
         self.ingredient_cards = self.catalog.get_by_test_id("ingredient-card")
+        self.specimen_buttons = self.catalog.locator("button.ingredient-specimen")
+        self.specimen_images = self.specimen_buttons.locator("img")
         self.selected_ingredients = self.root.get_by_role(
             "list",
             name="Componentes seleccionados",

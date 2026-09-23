@@ -5,7 +5,7 @@ from playwright.sync_api import Locator, Page
 from projects.lumbre.components.cart_drawer import CartDrawer
 from projects.lumbre.components.event_reservation_modal import EventReservationModal
 from projects.lumbre.components.events_section import EventsSection
-from projects.lumbre.components.fire_planner_modal import FirePlannerModal
+from projects.lumbre.components.fire_planner import FirePlanner
 from projects.lumbre.components.header import Header
 from projects.lumbre.components.ingredient_lab import IngredientLab
 from projects.lumbre.components.membership_modal import MembershipModal
@@ -27,8 +27,12 @@ class HomePage(BasePage):
         self.toast = ToastNotification(page)
         self.hero_title = page.get_by_role("heading", name="El fuego nos reúne.")
         self.recipe_cards = page.get_by_test_id("recipe-card")
+        self.recipe_art = self.recipe_cards.locator(".recipe-art")
+        self.recipe_images = self.recipe_cards.locator(".recipe-art img")
         self.recipe_search = page.get_by_placeholder("Buscar receta...")
-        self.fire_planner = FirePlannerModal(page)
+        self.product_cards = page.get_by_test_id("product-card")
+        self.product_images = self.product_cards.locator(".product-art img")
+        self.fire_planner = FirePlanner(page)
 
     def filter_recipes(self, label: str) -> None:
         self.page.get_by_role("button", name=label, exact=True).click()

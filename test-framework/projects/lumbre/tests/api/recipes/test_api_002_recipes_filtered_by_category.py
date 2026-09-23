@@ -15,11 +15,11 @@ def test_recipes_can_be_filtered_by_category(api: LumbreApi, test_log: TestLogge
         test_log.values(
             requested_category="vegetales",
             observed_count=response["count"],
-            expected_count=2,
+            expected_count=33,
             observed_categories=sorted(categories),
             expected_categories=["vegetales"],
         )
 
     with test_log.step("Validate the count and category of every result"):
-        assert response["count"] == 2
+        assert response["count"] == 33
         assert categories == {"vegetales"}
