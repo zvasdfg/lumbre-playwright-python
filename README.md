@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 55 |
-| Automated functional risks | 55 |
-| Pytest executions | 79 |
-| Test files | 54 |
-| API cases / executions | 24 / 36 |
-| Browser cases / executions | 31 / 35 |
+| Committed functional risks | 61 |
+| Automated functional risks | 61 |
+| Pytest executions | 85 |
+| Test files | 60 |
+| API cases / executions | 25 / 37 |
+| Browser cases / executions | 36 / 40 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (12/12) |
-| Latest full-suite result | 79 passed |
+| Latest full-suite result | 85 passed |
 
-**100% refers to the repository's 55-item committed functional-risk catalog.**
+**100% refers to the repository's 61-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -51,7 +51,8 @@ Playwright + Python observable through reusable engineering. It provides:
 
 Lumbre is a cooking-at-the-fire portal with:
 
-- recipes, products, events, membership, cart, and fire planning;
+- 100 unique fire-cooking recipes with recipe-specific editorial photography;
+- products, events, membership, cart, and fire planning;
 - a researched ingredient catalog grouped by flavor family;
 - an experiment bench supporting formulas of up to six components;
 - technical hypotheses for beef crust, bark, chicken, and vegetables;
@@ -79,10 +80,10 @@ flowchart LR
     end
 
     Components --> Browser[Playwright browser]
-    Browser --> Portal[Lumbre Next.js portal]
+    Browser --> Portal[Lumbre Next.js portal on Workers]
     ApiClient --> Routes[Lumbre API routes]
     Portal --> Routes
-    Routes --> Registry[(Isolated hypothesis registry)]
+    Routes --> D1[(Isolated Cloudflare D1)]
     Reporting --> Html[Timestamped HTML report]
 ```
 
@@ -98,7 +99,7 @@ ownership, execution flows, isolation, and trade-offs.
 
 ```text
 lumbre-playwright-python/
-├── portal/                 Next.js product UI, API routes, and JSON data
+├── portal/                 Next.js UI, API routes, D1 schema, and seed data
 ├── test-framework/
 │   ├── automation/         Reusable core and Playwright adapter
 │   ├── projects/lumbre/    Product models, fixtures, and functional tests
@@ -163,8 +164,9 @@ the Page Object to network implementation details.
 ### Persistent duplicate behavior remains deterministic
 
 Hypothesis tests verify canonical ingredient signatures, formula reuse, and
-counter persistence. The local runner copies seed JSON into a temporary
-registry, so test execution never mutates the repository's source data.
+counter persistence. Version-controlled JSON is the editorial seed source;
+the local runner migrates a fresh temporary D1 database for every run, so test
+execution never mutates repository data or the developer database.
 
 Read the complete design decisions and outcomes in
 [Engineering case studies](docs/ENGINEERING_CASE_STUDIES.md).
@@ -199,9 +201,9 @@ cd ..
 
 ## Run the project
 
-Run the full isolated suite. The script starts the portal on port `3100`,
-copies hypothesis data into a temporary registry, runs Pytest, archives the
-report, and shuts the temporary server down.
+Run the full isolated suite. The script creates and migrates a temporary D1
+database, starts the portal on port `3100`, runs Pytest, archives the report,
+and removes both the temporary server and database state.
 
 ```bash
 ./scripts/test-local.sh -q
@@ -273,6 +275,7 @@ status.
 - [Test strategy and complete catalog](docs/TEST_STRATEGY.md)
 - [Engineering case studies](docs/ENGINEERING_CASE_STUDIES.md)
 - [Architecture and design decisions](docs/ARCHITECTURE.md)
+- [Production architecture migration plan](docs/PRODUCTION_MIGRATION_PLAN.md)
 - [Adding another automation project](docs/ADDING_A_PROJECT.md)
 - [Guided UI test creation protocol](docs/GUIDED_UI_TEST_PROTOCOL.md)
 - [Key Playwright notes](docs/KEY_PLAYWRIGHT_NOTES.md)

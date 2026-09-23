@@ -90,11 +90,12 @@ supplied by the reusable Playwright adapter. `api`, `openapi_contract`, `home`,
 and `reset_scenario` belong to Lumbre and demonstrate the fixtures a consuming
 project may define.
 
-`scripts/test-local.sh` copies version-controlled hypothesis JSON into a
-temporary directory before starting the portal. Persistence scenarios therefore
-write real files without changing repository seed data. The runner also sets
-the portal environment explicitly to `test`; mutation contracts and
-`/api/test/reset` are never enabled by a production build.
+`scripts/test-local.sh` creates a fresh temporary Cloudflare D1 state directory,
+applies the version-controlled migrations and seed, and then starts the portal.
+Persistence scenarios therefore exercise real SQL state without changing the
+repository seed data or the developer database. The runner also sets the portal
+environment explicitly to `test`; mutation contracts and `/api/test/reset` are
+never enabled by a production build.
 
 ## Running tests
 

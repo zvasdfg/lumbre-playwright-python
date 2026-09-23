@@ -28,7 +28,8 @@
         "operationId": "getHealth",
         "tags": ["System"],
         "responses": {
-          "200": { "$ref": "#/components/responses/HealthResponse" }
+          "200": { "$ref": "#/components/responses/HealthResponse" },
+          "503": { "$ref": "#/components/responses/HealthResponse" }
         }
       }
     },
@@ -319,18 +320,34 @@
       },
       "Health": {
         "type": "object",
-        "required": ["status", "service", "seedVersion", "timestamp"],
+        "required": ["status", "service", "seedVersion", "database", "timestamp"],
         "properties": {
-          "status": { "const": "ok" },
+          "status": { "type": "string", "enum": ["ok", "degraded"] },
           "service": { "const": "lumbre-api" },
           "seedVersion": { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]{2}\\.[0-9]{2}$" },
+          "database": { "$ref": "#/components/schemas/DatabaseHealth" },
           "timestamp": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "DatabaseHealth": {
+        "type": "object",
+        "required": ["status", "provider", "seedVersion"],
+        "properties": {
+          "status": { "type": "string", "enum": ["ready", "seed-mismatch", "unavailable"] },
+          "provider": { "const": "cloudflare-d1" },
+          "seedVersion": {
+            "oneOf": [
+              { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]{2}\\.[0-9]{2}$" },
+              { "type": "null" }
+            ]
+          }
         },
         "additionalProperties": false
       },
       "Recipe": {
         "type": "object",
-        "required": ["id", "title", "category", "categoryLabel", "time", "level", "description", "tone"],
+        "required": ["id", "title", "category", "categoryLabel", "time", "level", "description", "tone", "image"],
         "properties": {
           "id": { "type": "integer", "minimum": 1 },
           "title": { "type": "string", "minLength": 1 },
@@ -339,7 +356,8 @@
           "time": { "type": "string", "minLength": 1 },
           "level": { "type": "string", "minLength": 1 },
           "description": { "type": "string", "minLength": 1 },
-          "tone": { "type": "string", "minLength": 1 }
+          "tone": { "type": "string", "minLength": 1 },
+          "image": { "type": "string", "pattern": "^/editorial/recipes/recipe-[0-9]{3}\\.jpg$" }
         },
         "additionalProperties": false
       },
@@ -349,7 +367,7 @@
         "properties": {
           "id": { "type": "integer", "minimum": 1 },
           "name": { "type": "string", "minLength": 1 },
-          "category": { "type": "string", "enum": ["ropa", "herramientas", "outdoor"] },
+          "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
           "price": { "type": "number", "exclusiveMinimum": 0 },
           "badge": { "type": "string", "minLength": 1 }
         },
@@ -604,7 +622,7 @@
         "required": ["name", "category", "price"],
         "properties": {
           "name": { "type": "string", "minLength": 1 },
-          "category": { "type": "string", "enum": ["ropa", "herramientas", "outdoor"] },
+          "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
           "price": { "type": "number", "exclusiveMinimum": 0 }
         },
         "additionalProperties": false

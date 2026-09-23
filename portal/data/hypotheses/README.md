@@ -1,9 +1,9 @@
-# Local hypothesis registry
+# Hypothesis seed catalog
 
-The ingredient laboratory writes one JSON file per unique objective and
-ingredient combination in this directory. Files use the technical sequence
-`LHC`, `LHB`, `LHV`, or `LHP`.
+This directory contains the reviewed, version-controlled technical sheets used
+to initialize the hypothesis registry. Files use the technical sequence `LHC`,
+`LHB`, `LHV`, or `LHP`.
 
-This filesystem registry is intended for local learning and testing. A hosted
-serverless deployment must replace it with persistent database or object
-storage.
+Development and test import these records into Cloudflare D1 and persist new
+hypotheses and duplicate counters there. Production currently reads the bundled
+catalog without allowing mutations. Request handlers never modify these files.

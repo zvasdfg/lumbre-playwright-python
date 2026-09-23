@@ -12,7 +12,7 @@ only a collection of executable scripts. Its goals are:
 2. centralize browser selectors and reusable actions;
 3. test API contracts without requiring a browser;
 4. preserve diagnostic evidence without adding logging code to every test;
-5. isolate mutable hypothesis data from version-controlled seed files;
+5. isolate mutable test data in a per-run Cloudflare D1 database;
 6. keep local execution reproducible across supported Playwright engines;
 7. separate mutable test behavior from a safe, read-only production boundary.
 8. prevent reusable infrastructure from depending on one product's selectors,
@@ -25,9 +25,9 @@ flowchart TB
     Engineer[QA engineer] --> Commands[Local commands]
     Commands --> Runner[scripts/test-local.sh]
 
-    Runner --> DevServer[Next.js development server]
+    Runner --> DevServer[vinext Cloudflare development server]
     Runner --> Pytest[Pytest]
-    Runner --> TempData[(Temporary hypothesis data)]
+    Runner --> TempD1[(Temporary D1 state)]
 
     Pytest --> Unit[Framework unit tests]
     Pytest --> UI[Lumbre UI tests]
@@ -46,7 +46,7 @@ flowchart TB
     Contracts --> ContractAdapter[OpenApiContract]
     ContractAdapter --> RequestContext
 
-    DevServer --> TempData
+    DevServer --> TempD1
     Evidence --> Report[Timestamped HTML report]
     Evidence --> Failure[Failure screenshot and trace]
 ```
@@ -134,7 +134,7 @@ HomePage
 ├── CartDrawer
 ├── EventsSection
 ├── EventReservationModal
-├── FirePlannerModal
+├── FirePlanner
 ├── IngredientLab
 └── ToastNotification
 ```
@@ -185,12 +185,12 @@ sequenceDiagram
     participant Client as LumbreApi
     participant Context as APIRequestContext
     participant Route as Next.js API route
-    participant Store as Hypothesis store
+    participant Store as D1 hypothesis repository
 
     Test->>Client: Call a domain operation
     Client->>Context: GET or POST request
     Context->>Route: HTTP request
-    Route->>Store: Read or mutate isolated JSON
+    Route->>Store: Read or mutate isolated SQL state
     Store-->>Route: Domain data
     Route-->>Context: Status and JSON contract
     Context-->>Client: APIResponse or parsed JSON
@@ -230,19 +230,21 @@ business oracle; schema checks complement rather than replace them.
 
 ## 7. Mutable-data isolation
 
-Hypothesis creation and duplicate counters intentionally persist to JSON so the
-suite can validate state changes. The source registry must remain deterministic.
+Hypothesis creation and duplicate counters persist to D1 so the suite exercises
+the same storage boundary required by the Workers runtime. Version-controlled
+JSON remains editorial seed input and is never a request-time write target.
 
 The local runner performs this lifecycle:
 
 ```mermaid
 flowchart LR
-    Seed[Version-controlled hypothesis JSON] --> Copy[Copy to temporary directory]
-    Copy --> Env[Set LUMBRE_HYPOTHESIS_DIR]
-    Env --> Server[Start portal]
-    Server --> Tests[Execute tests]
-    Tests --> Temp[(Mutate temporary registry)]
-    Temp --> Cleanup[Stop server and delete temporary directory]
+    Seed[SQL migrations and seed metadata] --> Temp[Create temporary D1 state]
+    JSON[Version-controlled hypothesis JSON] --> Server[Start portal]
+    Temp --> Server
+    Server --> Import[Import bundled hypotheses into D1]
+    Import --> Tests[Execute tests]
+    Tests --> Temp
+    Temp --> Cleanup[Stop server and delete D1 state]
 ```
 
 This makes mutation tests repeatable and prevents an interrupted learning run
@@ -255,8 +257,8 @@ the test selection instead of relying on the framework's generic Node mode.
 
 | Environment | Mutation policy | Test-only routes | Registry implementation |
 | --- | --- | --- | --- |
-| `development` | Enabled for local exploration | Hidden | Local JSON files |
-| `test` | Enabled for contract and persistence tests | Enabled | Temporary JSON files |
+| `development` | Enabled for local exploration | Hidden | Local D1 initialized from bundled seeds |
+| `test` | Enabled for contract and persistence tests | Enabled | Per-run temporary D1 |
 | `production` | Rejected at both route and store boundaries | Hidden as `404` | Bundled immutable seeds |
 
 Production uses defense in depth: the UI does not collect membership data or
@@ -316,12 +318,12 @@ Equivalent `404`, collection, form-constraint, and cooking-style contracts are
 parameterized. Workflows that merely share setup remain separate when they
 validate different risks, preserving isolation and failure diagnosis.
 
-### Local-first orchestration
+### Local-first, production-shaped orchestration
 
-The current architecture prioritizes deterministic local learning. A future
-public deployment can use the read-only production build without persistent
-storage. CI, authentication, and hosted mutation storage remain deliberately
-outside the completed scope.
+The current architecture prioritizes deterministic local learning while using
+the same Worker and D1 boundaries intended for deployment. The public
+production mode remains read-only until sessions and authorization are added.
+CI, authentication, and hosted mutations remain outside the completed scope.
 
 ## 12. Extension rules
 

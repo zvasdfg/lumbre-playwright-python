@@ -5,23 +5,28 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PORT="${PORT:-3100}"
 BASE_URL="http://localhost:${PORT}"
 SERVER_LOG="${TMPDIR:-/tmp}/lumbre-portal-${PORT}.log"
-HYPOTHESIS_DIR="$(mktemp -d "${TMPDIR:-/tmp}/lumbre-test-hypotheses.XXXXXX")"
+D1_STATE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/lumbre-test-d1.XXXXXX")"
 export NO_PROXY="localhost,127.0.0.1,::1"
 export no_proxy="$NO_PROXY"
 export LUMBRE_ENV="test"
 export NEXT_PUBLIC_LUMBRE_ENV="test"
-export LUMBRE_HYPOTHESIS_DIR="$HYPOTHESIS_DIR"
-
-cp "$ROOT_DIR"/portal/data/hypotheses/*.json "$HYPOTHESIS_DIR"/
+export LUMBRE_D1_STATE_DIR="$D1_STATE_DIR"
 
 cd "$ROOT_DIR/portal"
+CI=1 ./node_modules/.bin/wrangler d1 migrations apply lumbre-db \
+  --local \
+  --persist-to "$D1_STATE_DIR"
+./node_modules/.bin/wrangler d1 execute lumbre-db \
+  --local \
+  --persist-to "$D1_STATE_DIR" \
+  --file ./db/seed.sql
 npm run dev -- --hostname localhost --port "$PORT" >"$SERVER_LOG" 2>&1 &
 SERVER_PID=$!
 
 cleanup() {
   kill "$SERVER_PID" 2>/dev/null || true
   wait "$SERVER_PID" 2>/dev/null || true
-  rm -rf -- "${HYPOTHESIS_DIR:?}"
+  rm -rf -- "${D1_STATE_DIR:?}"
 }
 trap cleanup EXIT INT TERM
 

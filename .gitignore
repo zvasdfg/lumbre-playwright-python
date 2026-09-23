@@ -19,7 +19,10 @@ portal/.wrangler/
 portal/.npm-cache/
 portal/.env*
 !portal/.env.example
+portal/.dev.vars*
+!portal/.dev.vars.example
 portal/.vinext/
+portal/*.tsbuildinfo
 
 # Imported ingredient catalog archive; editable JSON sources are versioned instead
 portal/app/api/base_conocimiento_lumbre_ingredientes_v0_2.zip

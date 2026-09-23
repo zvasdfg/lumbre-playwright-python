@@ -1,5 +1,20 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790196803894,
+      "tag": "0000_lush_firebrand",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790197177726,
+      "tag": "0001_misty_echo",
+      "breakpoints": true
+    }
+  ]
 }
