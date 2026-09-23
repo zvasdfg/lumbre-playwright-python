@@ -4,12 +4,13 @@
   "info": {
     "title": "Lumbre API",
     "version": "1.0.0",
-    "description": "Contract for the Lumbre system under test. Anonymous cart operations are session-scoped in every environment; protected business mutations remain limited to development and test."
+    "description": "Contract for the Lumbre system under test. Carts are scoped to an anonymous session or authenticated account; authentication and protected business mutations remain limited to development and test until production email delivery is configured."
   },
   "servers": [{ "url": "/", "description": "Current Lumbre environment" }],
   "tags": [
     { "name": "System" },
     { "name": "Catalog" },
+    { "name": "Identity" },
     { "name": "Commerce" },
     { "name": "Laboratory" },
     { "name": "Test support" }
@@ -31,6 +32,78 @@
         "responses": {
           "200": { "$ref": "#/components/responses/HealthResponse" },
           "503": { "$ref": "#/components/responses/HealthResponse" }
+        }
+      }
+    },
+    "/api/account": {
+      "get": {
+        "operationId": "getAccount",
+        "tags": ["Identity"],
+        "security": [{}, { "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Current account, or null for an anonymous request",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/AccountResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/account/magic-link": {
+      "post": {
+        "operationId": "requestAccountMagicLink",
+        "tags": ["Identity"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/MagicLinkRequest" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A passwordless verification link was accepted for delivery",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/MagicLinkResponse" } }
+            }
+          },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "503": { "$ref": "#/components/responses/AuthenticationUnavailableResponse" }
+        }
+      }
+    },
+    "/api/account/logout": {
+      "post": {
+        "operationId": "logoutAccount",
+        "tags": ["Identity"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "The authenticated session was invalidated",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/LogoutResponse" } }
+            }
+          },
+          "503": { "$ref": "#/components/responses/AuthenticationUnavailableResponse" }
+        }
+      }
+    },
+    "/api/admin/accounts": {
+      "get": {
+        "operationId": "listAccounts",
+        "tags": ["Identity"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Account summaries visible to administrators",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/AccountCollection" } }
+            }
+          },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" },
+          "503": { "$ref": "#/components/responses/AuthenticationUnavailableResponse" }
         }
       }
     },
@@ -273,6 +346,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "lumbre_auth.session_token"
+      }
+    },
     "parameters": {
       "SearchQuery": {
         "name": "q",
@@ -348,6 +428,24 @@
           "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
         }
       },
+      "AuthenticationRequiredResponse": {
+        "description": "An authenticated account is required",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
+      "AuthorizationRequiredResponse": {
+        "description": "The authenticated account lacks the required role",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
+      "AuthenticationUnavailableResponse": {
+        "description": "Authentication is not configured for the active environment",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
       "ServerErrorResponse": {
         "description": "Registry operation failed",
         "content": {
@@ -417,6 +515,60 @@
             ]
           }
         },
+        "additionalProperties": false
+      },
+      "Account": {
+        "type": "object",
+        "required": ["id", "name", "email", "role"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string", "minLength": 1 },
+          "email": { "type": "string", "format": "email" },
+          "role": { "type": "string", "enum": ["customer", "admin"] }
+        },
+        "additionalProperties": false
+      },
+      "AccountResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/Account" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "AccountCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Account" } },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "MagicLinkRequest": {
+        "type": "object",
+        "required": ["name", "email"],
+        "properties": {
+          "name": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "email": { "type": "string", "format": "email", "maxLength": 254 }
+        },
+        "additionalProperties": false
+      },
+      "MagicLinkResponse": {
+        "type": "object",
+        "required": ["status"],
+        "properties": { "status": { "const": true } },
+        "additionalProperties": false
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "required": ["success"],
+        "properties": { "success": { "const": true } },
         "additionalProperties": false
       },
       "Recipe": {

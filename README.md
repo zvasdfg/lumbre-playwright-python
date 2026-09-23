@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 66 |
-| Automated functional risks | 66 |
-| Pytest executions | 92 |
-| Test files | 65 |
-| API cases / executions | 28 / 42 |
-| Browser cases / executions | 38 / 42 |
+| Committed functional risks | 74 |
+| Automated functional risks | 74 |
+| Pytest executions | 102 |
+| Test files | 73 |
+| API cases / executions | 34 / 50 |
+| Browser cases / executions | 40 / 44 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (16/16) |
-| Latest full-suite result | 92 passed |
+| API route-operation coverage | 100% (20/20) |
+| Latest full-suite result | 102 passed |
 
-**100% refers to the repository's 66-item committed functional-risk catalog.**
+**100% refers to the repository's 74-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -58,8 +58,10 @@ Lumbre is a cooking-at-the-fire portal with:
 - technical hypotheses for beef crust, bark, chicken, and vegetables;
 - duplicate-formula detection and persisted repetition counters;
 - JSON APIs used directly by API tests and indirectly by UI workflows;
-- D1-backed hypotheses and anonymous carts, with protected production writes
-  and a production-safe anonymous commerce slice.
+- D1-backed hypotheses, anonymous carts, passwordless local accounts, and
+  deterministic anonymous-to-account cart migration;
+- protected `customer` and `admin` roles, while production authentication stays
+  disabled until a real email provider and secrets are configured.
 
 ## Architecture at a glance
 
@@ -127,6 +129,8 @@ lumbre-playwright-python/
 - Filtering, malformed payloads, resource creation, and `404` contracts.
 - Hypothesis validation, canonical signatures, deduplication, and persistence.
 - Opaque anonymous sessions, server-priced carts, and reload/context isolation.
+- Passwordless account sessions, role authorization, deterministic cart merge,
+  and reusable Playwright `storage_state` fixtures.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.
@@ -288,10 +292,12 @@ status.
 
 The repository currently optimizes for deterministic local execution. A public
 portal deployment and CI artifact publishing are natural next steps; they are
-not presented as completed capabilities here. The production build exposes
-public reads and a D1-backed anonymous cart while rejecting unprotected business
-mutations, hiding the test reset route, and collecting no personal data through
-the membership UI.
+not presented as completed capabilities here. Local and test modes now exercise
+passwordless accounts, role authorization, reusable authenticated browser
+state, and account-owned carts. The production build still exposes only public
+reads and a D1-backed anonymous cart while account access and unprotected
+business mutations remain disabled, the reset route stays hidden, and the
+membership UI collects no personal data.
 
 ## Author
 

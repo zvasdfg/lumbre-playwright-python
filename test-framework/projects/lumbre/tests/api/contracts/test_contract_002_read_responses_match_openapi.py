@@ -14,6 +14,7 @@ from projects.lumbre.api.lumbre_api import LumbreApi
     [
         ("api_index", "/api"),
         ("health", "/api/health"),
+        ("account", "/api/account"),
         ("recipes", "/api/recipes"),
         ("products", "/api/products"),
         ("cart", "/api/cart"),
@@ -39,6 +40,7 @@ def test_read_response_matches_openapi(
         payloads: dict[str, Any] = {
             "api_index": api.api_index,
             "health": api.health,
+            "account": api.account,
             "recipes": api.recipes,
             "products": api.products,
             "cart": api.cart,

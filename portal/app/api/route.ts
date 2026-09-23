@@ -18,6 +18,10 @@ export async function GET() {
     "GET /api/hipotesis/LHC-003",
   ];
   const testAndDevelopmentEndpoints = [
+    "GET /api/account",
+    "POST /api/account/magic-link",
+    "POST /api/account/logout",
+    "GET /api/admin/accounts",
     "POST /api/products",
     "POST /api/hipotesis",
     "POST /api/members",

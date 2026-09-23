@@ -8,12 +8,16 @@ class Header:
         self.page = page
         self.join_button = page.get_by_role("button", name="Únete al fuego")
         self.cart_button = page.get_by_role("button", name=r"Abrir canasta")
+        self.account_button = page.get_by_test_id("account-button")
 
     def open_membership(self) -> None:
         self.join_button.click()
 
     def open_cart(self) -> None:
         self.cart_button.click()
+
+    def open_account(self) -> None:
+        self.account_button.click()
 
     def open_membership_with_keyboard(self) -> None:
         self.join_button.focus()

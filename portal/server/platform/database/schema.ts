@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { user as authUser } from "../../modules/auth/auth-schema";
 
 export const metadataKeys = {
   seedVersion: "seed_version",
@@ -37,12 +38,15 @@ export const carts = sqliteTable(
   {
     id: text("id").primaryKey(),
     sessionId: text("session_id")
-      .notNull()
       .references(() => anonymousSessions.id, { onDelete: "cascade" }),
+    userId: text("user_id").references(() => authUser.id, { onDelete: "cascade" }),
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   },
-  (table) => [uniqueIndex("carts_session_unique").on(table.sessionId)],
+  (table) => [
+    uniqueIndex("carts_session_unique").on(table.sessionId),
+    uniqueIndex("carts_user_unique").on(table.userId),
+  ],
 );
 
 export const cartItems = sqliteTable(

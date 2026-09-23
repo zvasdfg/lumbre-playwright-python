@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from playwright.sync_api import APIRequestContext, APIResponse, expect
+from playwright.sync_api import APIRequestContext, APIResponse, StorageState, expect
 
 
 class LumbreApi:
@@ -53,6 +53,30 @@ class LumbreApi:
 
     def remove_cart_item(self, product_id: int) -> APIResponse:
         return self._request.delete(f"/api/cart/items/{product_id}")
+
+    def request_magic_link(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.post("/api/account/magic-link", data=payload)
+
+    def latest_local_magic_link(self, email: str) -> APIResponse:
+        return self._request.get("/api/local/auth/magic-link", params={"email": email})
+
+    def follow_magic_link(self, url: str) -> APIResponse:
+        return self._request.get(url)
+
+    def account(self) -> dict[str, Any]:
+        return self._json(self._request.get("/api/account"))
+
+    def logout(self) -> APIResponse:
+        return self._request.post("/api/account/logout", data={})
+
+    def admin_accounts(self) -> APIResponse:
+        return self._request.get("/api/admin/accounts")
+
+    def expire_session(self) -> APIResponse:
+        return self._request.post("/api/local/auth/expire-session", data={})
+
+    def storage_state(self) -> StorageState:
+        return self._request.storage_state()
 
     def events(self) -> dict[str, Any]:
         return self._json(self._request.get("/api/events"))

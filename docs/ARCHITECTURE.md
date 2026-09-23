@@ -130,6 +130,7 @@ and exposes bounded components:
 ```text
 HomePage
 ├── Header
+├── AccountModal
 ├── MembershipModal
 ├── CartDrawer
 ├── EventsSection
@@ -185,7 +186,7 @@ sequenceDiagram
     participant Client as LumbreApi
     participant Context as APIRequestContext
     participant Route as Next.js API route
-    participant Store as D1 hypothesis repository
+    participant Store as D1 module repository
 
     Test->>Client: Call a domain operation
     Client->>Context: GET or POST request
@@ -250,6 +251,19 @@ flowchart LR
 This makes mutation tests repeatable and prevents an interrupted learning run
 from silently changing the repository baseline.
 
+Authentication tests use the same reset boundary. Core account, verification,
+session, local-delivery, cart, and cart-item tables are cleared before each
+scenario; test mode then recreates one deterministic administrator identity.
+
+### Authenticated fixture flow
+
+The project fixture requests and consumes a deterministic local magic link
+through `APIRequestContext`, exports the resulting Playwright `storage_state`,
+and installs its cookies in the test's fresh browser context before navigation.
+Tests that validate sign-in still perform the full UI flow; tests whose
+precondition is merely “authenticated customer” reuse the fixture. No token or
+magic-link URL is written to logs or reports.
+
 ## 8. Environment boundary
 
 The portal resolves one of three explicit environments. The local runner owns
@@ -259,13 +273,20 @@ the test selection instead of relying on the framework's generic Node mode.
 | --- | --- | --- | --- |
 | `development` | Enabled for local exploration | Hidden | Local D1 initialized from bundled seeds |
 | `test` | Enabled for contract and persistence tests | Enabled | Per-run temporary D1 |
-| `production` | Anonymous cart writes enabled; protected business writes rejected | Hidden as `404` | Remote D1 cart plus bundled immutable hypotheses |
+| `production` | Anonymous cart writes enabled; account access and protected business writes disabled | Hidden as `404` | Remote D1 cart plus bundled immutable hypotheses |
 
 Production uses defense in depth: the UI does not collect membership data or
 offer hypothesis creation, protected mutation handlers return `405`, and the
 hypothesis store refuses write operations. Anonymous cart routes are the
 explicit exception: they resolve an opaque cookie and constrain every D1 query
 to its session. The public registry does not depend on a writable filesystem.
+
+Development and test use Better Auth with its Drizzle/D1 adapter and a
+passwordless magic-link plugin. The local delivery adapter writes only to an
+isolated D1 outbox so automation can retrieve a deterministic link. Production
+does not expose this adapter and refuses authentication until a real email
+provider and production secrets are configured. Account identity and the
+separate marketing-membership form do not share consent state.
 
 `LUMBRE_ENV` selects server behavior. `NEXT_PUBLIC_LUMBRE_ENV` selects the
 matching browser experience and is fixed when the client bundle is built. Both
@@ -323,9 +344,11 @@ validate different risks, preserving isolation and failure diagnosis.
 
 The current architecture prioritizes deterministic local learning while using
 the same Worker and D1 boundaries intended for deployment. The public
-production mode now supports anonymous session carts while business data stays
-read-only until authentication and authorization are added. CI, authenticated
-accounts, and hosted business mutations remain outside the completed scope.
+production mode supports anonymous session carts while business data stays
+read-only. Local and test modes add authenticated accounts and role
+authorization without pretending that production email delivery is already
+configured. CI and hosted business mutations remain outside the completed
+scope.
 
 ## 12. Extension rules
 

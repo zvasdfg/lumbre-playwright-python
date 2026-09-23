@@ -301,6 +301,17 @@ expect(locator).to_be_focused()
 
 Use the DOM read as evidence and the assertion as the test verdict.
 
+## 28. Reuse authentication with `storage_state`
+
+Do not repeat a visible login workflow in every test when authentication is
+only setup. Authenticate through a deterministic API boundary, export the
+request context's storage state, and install its cookies in the fresh browser
+context before navigation. Keep a separate UI test for the login experience.
+
+In Lumbre, `authenticated_storage_state` prepares the state and
+`authenticated_home` consumes it. This preserves browser isolation while
+keeping tokens and magic-link URLs out of test logs and versioned files.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)
@@ -309,4 +320,5 @@ Use the DOM read as evidence and the assertion as the test verdict.
 - [Isolation](https://playwright.dev/python/docs/browser-contexts)
 - [Pytest plugin](https://playwright.dev/python/docs/test-runners)
 - [API testing](https://playwright.dev/python/docs/api-testing)
+- [Authentication and storage state](https://playwright.dev/python/docs/auth)
 - [Trace Viewer](https://playwright.dev/python/docs/trace-viewer-intro)

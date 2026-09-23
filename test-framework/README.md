@@ -82,6 +82,8 @@ they match the product contract.
 | `api` | Domain wrapper around APIRequestContext |
 | `openapi_contract` | Contract downloaded from the active `BASE_URL` |
 | `home` | Ready `HomePage` opened at the configured base URL |
+| `authenticated_storage_state` | Customer session prepared by API and exported as Playwright state |
+| `authenticated_home` | `HomePage` opened after installing the authenticated state |
 | `test_log` | Case narrative, steps, values, timing, and screenshots |
 | `reset_scenario` | Deterministic API reset before each test |
 
@@ -89,6 +91,11 @@ they match the product contract.
 supplied by the reusable Playwright adapter. `api`, `openapi_contract`, `home`,
 and `reset_scenario` belong to Lumbre and demonstrate the fixtures a consuming
 project may define.
+
+Use `authenticated_home` when authentication is only a precondition. Use the
+visible account Component Object when sign-in itself is the behavior under
+test. The fixture keeps setup fast while preserving a fresh browser context;
+it does not log or persist the passwordless verification URL.
 
 `scripts/test-local.sh` creates a fresh temporary Cloudflare D1 state directory,
 applies the version-controlled migrations and seed, and then starts the portal.

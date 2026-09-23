@@ -24,6 +24,13 @@ type Cart = {
   total: number;
 };
 
+type Account = {
+  id: string;
+  name: string;
+  email: string;
+  role: "customer" | "admin";
+};
+
 const emptyCart: Cart = { items: [], totalQuantity: 0, total: 0 };
 
 const currency = new Intl.NumberFormat("es-MX", {
@@ -57,7 +64,10 @@ export default function ClubPortal() {
   const [recipeFilter, setRecipeFilter] = useState<RecipeFilter>("todos");
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState<Cart>(emptyCart);
+  const [account, setAccount] = useState<Account | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [magicLinkRequested, setMagicLinkRequested] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<FireEvent | null>(null);
   const [toast, setToast] = useState("");
@@ -76,12 +86,21 @@ export default function ClubPortal() {
   useEffect(() => {
     const controller = new AbortController();
 
-    async function loadCart() {
+    async function loadInitialState() {
       try {
-        const response = await fetch("/api/cart", { signal: controller.signal });
-        if (!response.ok) throw new Error(`Cart request failed with ${response.status}`);
-        const result = (await response.json()) as { data: Cart };
-        setCart(result.data);
+        const [cartResponse, accountResponse] = await Promise.all([
+          fetch("/api/cart", { signal: controller.signal }),
+          fetch("/api/account", { signal: controller.signal }),
+        ]);
+        if (!cartResponse.ok) {
+          throw new Error(`Cart request failed with ${cartResponse.status}`);
+        }
+        const cartResult = (await cartResponse.json()) as { data: Cart };
+        setCart(cartResult.data);
+        if (accountResponse.ok) {
+          const accountResult = (await accountResponse.json()) as { data: Account | null };
+          setAccount(accountResult.data);
+        }
       } catch (error) {
         if (!controller.signal.aborted) {
           console.error("The anonymous cart could not be loaded", error);
@@ -93,7 +112,7 @@ export default function ClubPortal() {
       }
     }
 
-    void loadCart();
+    void loadInitialState();
 
     return () => {
       controller.abort();
@@ -141,6 +160,37 @@ export default function ClubPortal() {
     setCart(result.data);
   }
 
+  async function requestMagicLink(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/account/magic-link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form)),
+    });
+    if (!response.ok) {
+      showToast("No pudimos preparar tu acceso. Revisa tus datos.");
+      return;
+    }
+    setMagicLinkRequested(true);
+  }
+
+  async function logout() {
+    const response = await fetch("/api/account/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+    if (!response.ok) {
+      showToast("No pudimos cerrar tu sesión. Intenta de nuevo.");
+      return;
+    }
+    setAccount(null);
+    setAccountOpen(false);
+    setCart(emptyCart);
+    showToast("Tu sesión se cerró correctamente.");
+  }
+
   async function submitMembership(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (readOnlyProduction) return;
@@ -179,6 +229,14 @@ export default function ClubPortal() {
         <div className="header-actions">
           <button className="cart-button" type="button" onClick={() => setCartOpen(true)} aria-label={`Abrir canasta, ${cart.totalQuantity} productos`}>
             Canasta <span>{cart.totalQuantity}</span>
+          </button>
+          <button
+            className="cart-button"
+            type="button"
+            data-testid="account-button"
+            onClick={() => setAccountOpen(true)}
+          >
+            {account ? account.name.split(" ")[0] : "Entrar"}
           </button>
           <button className="header-cta" type="button" onClick={() => setJoinOpen(true)}>Únete al fuego</button>
         </div>
@@ -345,6 +403,43 @@ export default function ClubPortal() {
                 <label>Experiencia<select name="experience" defaultValue="inicial"><option value="inicial">Estoy empezando</option><option value="intermedio">Ya controlo el fuego</option><option value="avanzado">Vivo entre brasas</option></select></label>
                 <label className="checkbox"><input name="terms" type="checkbox" required /> Acepto recibir novedades del club.</label>
                 <button className="button button-primary" type="submit" disabled={submitting}>{submitting ? "Encendiendo..." : "Unirme al club"}</button>
+              </form>
+            )}
+          </section>
+        </div>
+      )}
+
+      {accountOpen && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setAccountOpen(false)}>
+          <section className="modal compact" role="dialog" aria-modal="true" aria-labelledby="account-title">
+            <button className="modal-close" type="button" onClick={() => setAccountOpen(false)} aria-label="Cerrar acceso">×</button>
+            <p className="section-index">CUENTA LUMBRE</p>
+            <h2 id="account-title">Tu lugar junto al fuego.</h2>
+            {account ? (
+              <div className="read-only-message">
+                <strong>{account.name}</strong>
+                <p>{account.email}</p>
+                <p>Perfil: {account.role === "admin" ? "administración" : "cliente"}</p>
+                <button className="button button-primary" type="button" onClick={() => void logout()}>
+                  Cerrar sesión
+                </button>
+              </div>
+            ) : readOnlyProduction ? (
+              <div className="read-only-message" role="note">
+                <strong>Acceso en preparación.</strong>
+                <p>La demostración pública habilitará cuentas cuando tenga correo transaccional.</p>
+              </div>
+            ) : magicLinkRequested ? (
+              <div className="read-only-message" role="status">
+                <strong>Revisa tu correo.</strong>
+                <p>El enlace es único, vence en diez minutos y sólo puede utilizarse una vez.</p>
+              </div>
+            ) : (
+              <form onSubmit={requestMagicLink}>
+                <label>Nombre para tu cuenta<input name="name" required minLength={2} autoFocus /></label>
+                <label>Correo de acceso<input name="email" type="email" required /></label>
+                <button className="button button-primary" type="submit">Enviar enlace de acceso</button>
+                <small>Crear una cuenta no te suscribe a mensajes de membresía.</small>
               </form>
             )}
           </section>

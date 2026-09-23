@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from playwright.sync_api import Locator, Page
 
+from projects.lumbre.components.account_modal import AccountModal
 from projects.lumbre.components.cart_drawer import CartDrawer
 from projects.lumbre.components.event_reservation_modal import EventReservationModal
 from projects.lumbre.components.events_section import EventsSection
@@ -19,6 +20,7 @@ class HomePage(BasePage):
     def __init__(self, page: Page, base_url: str) -> None:
         super().__init__(page, base_url)
         self.header = Header(page)
+        self.account = AccountModal(page)
         self.cart = CartDrawer(page)
         self.events = EventsSection(page)
         self.event_reservation = EventReservationModal(page)
@@ -48,6 +50,9 @@ class HomePage(BasePage):
 
     def open_cart(self) -> None:
         self.header.open_cart()
+
+    def open_account(self) -> None:
+        self.header.open_account()
 
     def register_member(self, *, name: str, email: str, experience: str = "intermedio") -> None:
         self.open_membership()

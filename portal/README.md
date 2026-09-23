@@ -43,9 +43,9 @@ Lumbre has an explicit product environment boundary:
 
 | Environment | Default use | API access | Hypothesis source |
 | --- | --- | --- | --- |
-| `development` | Local product development | Public reads and business writes; test reset hidden | Local D1, initialized from versioned JSON seed data |
-| `test` | Automated local suite | Current read/write behavior plus the test reset hook | Fresh temporary D1 created by the runner |
-| `production` | Deployment-ready public demo | Public reads and anonymous cart writes; protected business mutations return `405`; test reset returns `404` | Remote D1 cart plus bundled, immutable technical sheets |
+| `development` | Local product development | Public reads, passwordless accounts, and business writes; test reset hidden | Local D1, initialized from versioned JSON seed data |
+| `test` | Automated local suite | Current read/write and account behavior plus deterministic auth/reset hooks | Fresh temporary D1 created by the runner |
+| `production` | Deployment-ready public demo | Public reads and anonymous cart writes; account access and protected mutations are unavailable; test reset returns `404` | Remote D1 cart plus bundled, immutable technical sheets |
 
 `npm run dev` defaults to `development`. A production build defaults to
 `production`. `scripts/test-local.sh` explicitly sets both `LUMBRE_ENV=test`
@@ -63,6 +63,10 @@ hypothesis mutations are rejected. The hypothesis registry remains browsable
 from bundled seed data without filesystem access. This makes the portal
 suitable for a future public demonstration while preserving the richer mutable
 system under test locally.
+
+Development and test use passwordless accounts backed by Better Auth and D1.
+Production account access stays deliberately disabled until a real email
+delivery adapter, production URL, and secret bindings are configured.
 
 ## Product areas
 
@@ -83,6 +87,10 @@ system under test locally.
 | --- | --- | --- | --- |
 | `GET` | `/api` | API discovery | Informational; not committed |
 | `GET` | `/api/health` | Service, D1 readiness, and seed version | `API-001`, `API-021` |
+| `GET` | `/api/account` | Current authenticated account or anonymous null state | `API-025`, `API-026`, `CONTRACT-002` |
+| `POST` | `/api/account/magic-link` | Request passwordless account access | `API-025`–`API-029`, `CONTRACT-003` |
+| `POST` | `/api/account/logout` | Invalidate the current authenticated session | `API-026`, `API-029` |
+| `GET` | `/api/admin/accounts` | Role-protected account summaries | `API-028` |
 | `GET` | `/api/recipes` | Recipe collection and filters | `API-002`, `API-005` |
 | `GET` | `/api/products` | Product collection | `API-017` |
 | `POST` | `/api/products` | Product creation and validation | `API-004`, `API-018` |
@@ -116,6 +124,29 @@ atomically increment one line item, while `PATCH` replaces its quantity and
 `DELETE` removes it. Independent browser contexts therefore receive isolated
 carts, and a cart survives reload within its own session.
 
+## Passwordless accounts and authorization
+
+Development and test expose a passwordless magic-link flow. Better Auth owns
+verification tokens, authenticated session records, opaque cookies, expiry,
+and one-time token consumption. Lumbre adds a server-owned `customer` or
+`admin` role and never accepts a role from the registration request.
+
+The local adapter writes the complete delivery URL to a D1 outbox that is
+readable only through `/api/local/auth/magic-link` outside production. This
+makes browser and API automation deterministic without printing tokens in logs
+or reports. Test reset seeds a known administrator identity; production does
+not seed an administrator or expose the outbox.
+
+On sign-in, an anonymous cart is promoted when no account cart exists. If both
+exist, matching product quantities are summed into one line and the anonymous
+cart is deleted. Account identity is independent of the membership form:
+creating an account never grants marketing consent.
+
+The project fixture `authenticated_storage_state` prepares a customer session
+through `APIRequestContext` and exports Playwright storage state. UI tests that
+need an authenticated precondition can consume `authenticated_home`; tests of
+the sign-in experience continue to exercise the visible flow.
+
 ## Hypothesis persistence
 
 Hypotheses originate as independent, version-controlled JSON resources under
@@ -138,7 +169,7 @@ repository without changing source JSON or the developer's local database.
 
 Worker request handlers never write to the filesystem. Production serves the
 bundled hypothesis registry read-only and persists only anonymous commerce data
-to D1; authenticated hosted writes remain a later migration phase.
+to D1; authenticated hosted business writes remain a later migration phase.
 
 ## Research data
 
@@ -165,6 +196,11 @@ npm run typecheck
 npm run build
 npm run start
 ```
+
+For explicit local auth bindings, copy `.dev.vars.example` to `.dev.vars` and
+replace its placeholder secret. `.dev.vars` is ignored and must never be
+committed. The repository also supplies a non-production-only fallback secret
+so the learning suite remains zero-configuration; production has no fallback.
 
 `npm run db:generate` creates version-controlled SQL from the Drizzle schema.
 Rerun `npm run cf:typegen` whenever `wrangler.jsonc` bindings change.

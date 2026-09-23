@@ -6,8 +6,8 @@ import {
   addCartItem,
   UnknownProductError,
 } from "../../../../server/modules/commerce/cart-service";
+import { resolveCartContext } from "../../../../server/modules/commerce/cart-context";
 import {
-  resolveAnonymousSession,
   sessionResponse,
 } from "../../../../server/modules/sessions/session-service";
 
@@ -25,17 +25,21 @@ export async function POST(request: Request) {
     );
   }
 
-  const session = await resolveAnonymousSession(request);
+  const context = await resolveCartContext(request);
   try {
     const cart = await addCartItem(
-      session.id,
+      context.owner,
       parsed.data.productId,
       parsed.data.quantity,
     );
-    return sessionResponse(session, { data: cart }, { status: 201 });
+    return sessionResponse(context.anonymousSession, { data: cart }, { status: 201 });
   } catch (error) {
     if (error instanceof UnknownProductError) {
-      return sessionResponse(session, { error: error.message }, { status: 404 });
+      return sessionResponse(
+        context.anonymousSession,
+        { error: error.message },
+        { status: 404 },
+      );
     }
     throw error;
   }

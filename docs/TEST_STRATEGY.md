@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 28 / 42 |
-| Browser case IDs / executions | 38 / 42 |
+| API case IDs / executions | 34 / 50 |
+| Browser case IDs / executions | 40 / 44 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 66 |
-| Total Pytest executions | 92 |
-| Test files | 65 |
+| Unique committed risks | 74 |
+| Total Pytest executions | 102 |
+| Test files | 73 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 92 passed in 67.03 seconds |
+| Latest validation | 102 passed in 79.07 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,13 +50,13 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 26 | 26 | 100% |
-| P1 | 34 | 34 | 100% |
+| P0 | 32 | 32 | 100% |
+| P1 | 36 | 36 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **66** | **66** | **100%** |
+| **Total** | **74** | **74** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `16/16 = 100%`. Contract
+secondary API route-operation signal is `20/20 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
@@ -160,6 +160,12 @@ Priority definitions:
 | API-022 | Anonymous session cookie protects and restores its D1 cart | P0 | API + session persistence |
 | API-023 | Cart rejects client prices and derives totals from the server catalog | P0 | API negative + integrity |
 | API-024 | Repeated adds, quantity replacement, and removal persist correctly | P1 | API lifecycle |
+| API-025 | A single-use magic link creates an authenticated customer session | P0 | API authentication |
+| API-026 | Logout invalidates the active session without deleting the account | P0 | API authentication |
+| API-027 | An anonymous cart becomes the authenticated account cart on sign-in | P0 | API + persistence |
+| API-028 | Administrative account data enforces anonymous, customer, and admin boundaries | P0 | API authorization |
+| API-029 | Matching anonymous and account cart items merge without duplicate lines | P1 | API + persistence |
+| API-030 | An expired authenticated session no longer resolves an account | P0 | API authentication |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -200,6 +206,8 @@ Priority definitions:
 | UI-034 | Recipe catalog exposes 100 unique recipes with distinct descriptive images | P1 | UI visual contract |
 | UI-035 | Anonymous cart is restored after reloading the same browser session | P0 | E2E persistence |
 | UI-036 | Independent browser contexts cannot observe each other's carts | P0 | E2E isolation |
+| UI-037 | A visitor completes the passwordless account experience in one browser context | P0 | E2E authentication |
+| UI-038 | A prepared Playwright `storage_state` restores an authenticated customer | P1 | UI fixture + authentication |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

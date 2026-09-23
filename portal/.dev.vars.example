@@ -1,0 +1,4 @@
+# Server-only development bindings. Copy to .dev.vars and replace the secret.
+# Never expose this secret through a NEXT_PUBLIC_* variable or commit .dev.vars.
+BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_SECRET=replace-with-at-least-32-random-characters

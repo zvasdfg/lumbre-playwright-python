@@ -1,7 +1,7 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 2 anonymous sessions and persistent carts completed and
-> regression-validated on 2026-09-23. Phase 3 has not started.
+> Status: Phase 3 passwordless accounts, authorization, and cart ownership
+> completed and regression-validated locally on 2026-09-23.
 
 ## 1. Purpose
 
@@ -39,6 +39,11 @@ Phase 2 passed portal lint, TypeScript checking, the vinext production build,
 and all 92 Pytest executions in 67.03 seconds. Its archived regression report
 is `reports/runs/lumbre-report-2026-09-23_16-21-58.html`.
 
+Phase 3 passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, and all 102 Pytest executions in 79.07 seconds.
+Its archived report is
+`reports/runs/lumbre-report-2026-09-23_17-43-37.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -52,20 +57,21 @@ with names only and no secret values.
 
 | Capability | Current source of truth | Production gap |
 | --- | --- | --- |
-| Cart | D1 records constrained by an opaque anonymous session | No inventory reservation or authenticated ownership |
+| Cart | D1 records constrained by an opaque anonymous session or authenticated account | No inventory reservation |
 | Checkout | Toast notification | No order or payment exists |
 | Membership | Stateless route with a fixed demo identifier | No member record or authenticated identity |
 | Event reservation | Modal and toast | No capacity or reservation is changed |
 | Fire-planner presets | Browser `localStorage` | Cannot synchronize across devices or accounts |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
 | Products | Static TypeScript catalog, with cart prices and totals derived server-side | No database-backed inventory or price revisions |
-| Sessions | Opaque anonymous identifier in a protected cookie, backed by D1 | No authenticated identity, revocation UI, or account merge |
+| Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
 | Database | Drizzle schema, SQL migrations, deterministic seed, and Worker `DB` binding | Remote provisioning and operational backups remain pending |
 
 The production switch is a safe public-demo boundary: reads and anonymous cart
-writes are enabled, while membership, catalog, and laboratory writes stay
-disabled. This is not the final authorization model; each additional mutation
-must be backed by persistence, validation, and an explicit access policy.
+writes are enabled, while account access, membership, catalog, and laboratory
+writes stay disabled. Local and test modes exercise authenticated ownership and
+role authorization. Each additional hosted mutation must still be backed by
+persistence, validation, and an explicit access policy.
 
 ## 4. Architectural decision
 
@@ -110,8 +116,8 @@ observability infrastructure.
 - Use Zod schemas at HTTP and provider boundaries.
 - Keep the public OpenAPI 3.1 contract and update it in the same change as each
   API slice.
-- Use an established authentication library after a focused Workers/vinext
-  compatibility spike. Lumbre will not implement password storage itself.
+- Use Better Auth with its Drizzle/D1 adapter and magic-link plugin. Lumbre does
+  not implement passwords, verification tokens, or authenticated cookies.
 - Introduce a local fake payment adapter before choosing or integrating an
   external provider.
 - Keep static images in the repository initially. R2 is not required for the
@@ -225,7 +231,7 @@ Completion evidence:
   isolation;
 - focused validation passed `26/26` and the full regression passed `92/92`.
 
-### Phase 3: authenticated account
+### Phase 3: authenticated account — completed locally
 
 Deliver:
 
@@ -243,6 +249,24 @@ Automation risks:
 - logout and expiry invalidate access;
 - user data remains isolated;
 - cart merging is deterministic and does not duplicate items.
+
+Completion evidence:
+
+- migration `0003_chemical_cable.sql` creates Better Auth core tables, a
+  non-production delivery outbox, and account-owned carts;
+- Better Auth 1.7 uses the Drizzle/D1 adapter and a passwordless, single-use
+  magic-link flow with a 30-day session lifetime;
+- production refuses account access and never exposes the deterministic local
+  delivery route;
+- `API-025` through `API-030` protect one-time verification, logout, expiry,
+  anonymous cart promotion, `401/403` authorization, administrator access, and
+  collision-safe cart merge;
+- `UI-037` protects the visible account journey and `UI-038` proves reusable
+  authenticated setup with Playwright `storage_state`;
+- OpenAPI publishes the account facade and role-protected admin resource;
+- focused authentication and contract validation passed `30/30`.
+- the complete regression passed `102/102` across Chromium, Firefox, and
+  WebKit where configured.
 
 ### Phase 4: order and fake payment vertical slice
 
@@ -348,18 +372,15 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 3 begins with a bounded authentication compatibility spike before any
-customer account UI is added:
+Phase 4 begins with the smallest order vertical slice:
 
-1. evaluate one established authentication library against Workers, vinext,
-   D1, and the current cookie boundary;
-2. define account, credential-provider, verification, and authenticated-session
-   contracts without storing raw passwords;
-3. decide the local deterministic email or magic-link adapter;
-4. specify anonymous-cart merge rules and collision behavior;
-5. publish the authentication and authorization OpenAPI contract;
-6. add focused API risks before implementing the first sign-in UI;
-7. preserve the anonymous cart as a complete, independently reversible slice.
+1. persist a server-priced order snapshot for an authenticated customer;
+2. introduce a deterministic local payment port with success and rejection;
+3. define idempotency behavior before adding the checkout UI;
+4. publish order and payment contracts with focused API risks;
+5. add one browser journey only after the state transitions are proven below
+   the UI.
 
-Orders and payments remain out of scope until authenticated ownership and cart
-merge behavior are independently complete and regression-validated.
+Production authentication remains disabled until an actual email provider and
+secret bindings are selected. That deployment integration does not block local
+Phase 4 modeling or automation learning.
