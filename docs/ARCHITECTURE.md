@@ -253,13 +253,21 @@ from silently changing the repository baseline.
 
 Authentication and checkout tests use the same reset boundary. Core account,
 verification, session, local-delivery, cart, order, order-item, payment
-attempt, hosted-checkout-session, and provider-event tables are cleared before
-each scenario; test mode then recreates one deterministic administrator
-identity.
+attempt, hosted-checkout-session, provider-event, reservation, and fire-preset
+tables are cleared before each scenario; test mode then recreates one
+deterministic administrator identity.
 
 Event-reservation scenarios share the same isolation boundary. Reservations
 are removed before account records because their ownership foreign key points
 to the authenticated user.
+
+Fire-planner presets follow a dual persistence boundary. Anonymous presets stay
+in browser `localStorage`; authenticated presets belong to a user in D1. On
+sign-in, the UI sends its local library to a sync use case that imports only
+missing normalized names. Existing server names win, and authenticated writes
+never mutate the anonymous library. API tests protect ownership and merge
+rules, while `UI-042` uses two browser contexts with the same Playwright
+`storage_state` to prove account-level restoration.
 
 ### Hosted payment boundary
 

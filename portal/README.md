@@ -76,7 +76,8 @@ delivery adapter, production URL, and secret bindings are configured.
   deterministic local payments, provider-hosted checkout, and account-owned
   order history.
 - Membership validation, keyboard navigation, API submission, and recovery.
-- Fire planning with cooking-style and vegetable-reserve calculations.
+- Fire planning with cooking-style and vegetable-reserve calculations,
+  anonymous local presets, and synchronized account presets.
 - Ingredient catalog with research detail, family filters, and search.
 - Two-to-six-component experiment bench and generated technical hypotheses.
 - Registered technical sheets for crust, bark, chicken, and vegetables.
@@ -109,6 +110,10 @@ delivery adapter, production URL, and secret bindings are configured.
 | `GET` | `/api/events` | Event collection | `API-019` |
 | `POST` | `/api/events/:id/reservations` | Confirm an account-owned group reservation | `API-041`–`API-045`, `UI-010`, `UI-041` |
 | `GET` | `/api/reservations` | Read the authenticated account's reservation history | `API-041`, `API-042`, `UI-041` |
+| `GET` | `/api/fire-presets` | Read the authenticated account's fire-planner presets | `API-046`–`API-050`, `UI-042` |
+| `POST` | `/api/fire-presets` | Create or update a preset by normalized name | `API-046`–`API-048`, `API-051`, `UI-042`, `UI-043` |
+| `POST` | `/api/fire-presets/sync` | Import missing browser-local presets without overwriting server conflicts | `API-046`, `API-050` |
+| `DELETE` | `/api/fire-presets/:id` | Delete an account-owned preset | `API-046`, `API-049` |
 | `GET` | `/api/ingredientes` | Ingredient catalog, filters, and detail | `API-007`, `API-008`, `API-016` |
 | `GET` | `/api/hipotesis` | Technical hypothesis registry | `API-011` |
 | `GET` | `/api/hipotesis/:id` | One hypothesis and duplicate counter | `API-012`, `API-014` |
@@ -121,6 +126,21 @@ and `id`. Hypothesis creation requires an objective and two to six ingredient
 IDs. Write operations return realistic status and error contracts in
 `development` and `test`. Production permits only its anonymous-cart writes
 and rejects the protected business mutations described above.
+
+## Fire-planner preset ownership and synchronization
+
+Anonymous visitors keep fire-planner presets in browser `localStorage`. Once
+an account session is active, D1 becomes the source of truth and the portal
+imports only local preset names that are missing from that account. A
+normalized name conflict preserves the server copy; explicitly saving the same
+name updates its existing server record. Account operations never rewrite the
+anonymous local library.
+
+Every list, save, sync, and delete query is constrained by the authenticated
+user ID. A foreign preset is concealed with `404`, and each account can store
+at most 20 presets. `UI-042` proves restoration in an independent browser
+context using Playwright `storage_state`; API cases protect the merge,
+ownership, deduplication, and validation rules directly.
 
 ## Anonymous cart and session
 

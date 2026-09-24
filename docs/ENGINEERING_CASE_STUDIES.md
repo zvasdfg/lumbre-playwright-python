@@ -9,10 +9,10 @@ judgment rather than reproducing test implementation line by line.
 ### Risk
 
 The fire planner is a full portal section with several related controls,
-calculated guidance, and persistent browser presets. Putting its selectors and
-actions directly in a test would make the scenario difficult to read. Putting
-all of them in `HomePage` would make the page object grow into a model of every
-widget in the portal.
+calculated guidance, browser-local presets for visitors, and D1-backed presets
+for accounts. Putting its selectors and actions directly in a test would make
+the scenario difficult to read. Putting all of them in `HomePage` would make
+the page object grow into a model of every widget in the portal.
 
 ### Decision
 
@@ -26,7 +26,8 @@ HomePage
   └── navigates ──> FirePlanner
                       ├── configures controls
                       ├── calculates
-                      ├── saves and restores presets
+                      ├── saves, restores, and deletes presets
+                      ├── exposes the active storage scope
                       └── exposes recommendation locator
 ```
 
@@ -43,10 +44,13 @@ the component object.
 
 ### Outcome
 
-`UI-012`, `UI-023`, `UI-024`, and `UI-033` protect calculation and preset
-persistence risks while sharing a reusable component boundary. Adding a new
-cooking-style dataset does not require duplicating selectors or creating a
-generic page-level helper.
+`UI-012`, `UI-023`, `UI-024`, `UI-033`, `UI-042`, and `UI-043` protect
+calculation, browser-local persistence, account synchronization, and retryable
+save failures while sharing a reusable component boundary. `UI-042`
+deliberately opens a second browser context with the same Playwright
+`storage_state`; this distinguishes account persistence from same-tab React
+state or one browser's `localStorage`. `UI-043` uses `page.route()` to prove a
+remote failure does not render false success or erase retry data.
 
 ### Lesson
 

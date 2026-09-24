@@ -12,6 +12,7 @@
     { "name": "Catalog" },
     { "name": "Identity" },
     { "name": "Commerce" },
+    { "name": "Planning" },
     { "name": "Laboratory" },
     { "name": "Test support" }
   ],
@@ -368,6 +369,73 @@
         }
       }
     },
+    "/api/fire-presets": {
+      "get": {
+        "operationId": "listFirePlannerPresets",
+        "tags": ["Planning"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/FirePresetCollectionResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" }
+        }
+      },
+      "post": {
+        "operationId": "saveFirePlannerPreset",
+        "tags": ["Planning"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/FirePresetSaveRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/FirePresetMutationResponse" },
+          "201": { "$ref": "#/components/responses/FirePresetMutationResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "409": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/fire-presets/sync": {
+      "post": {
+        "operationId": "syncLocalFirePlannerPresets",
+        "tags": ["Planning"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/FirePresetSyncRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/FirePresetSyncResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/fire-presets/{id}": {
+      "delete": {
+        "operationId": "deleteFirePlannerPreset",
+        "tags": ["Planning"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/FirePresetId" }],
+        "responses": {
+          "200": {
+            "description": "The account-owned preset was deleted",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/FirePresetDeleteResult" } }
+            }
+          },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" }
+        }
+      }
+    },
     "/api/members": {
       "post": {
         "operationId": "createMember",
@@ -548,6 +616,12 @@
         "required": true,
         "schema": { "type": "integer", "minimum": 1 }
       },
+      "FirePresetId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string", "format": "uuid" }
+      },
       "IdempotencyKey": {
         "name": "Idempotency-Key",
         "in": "header",
@@ -692,6 +766,24 @@
         "description": "A confirmed reservation and the updated event availability",
         "content": {
           "application/json": { "schema": { "$ref": "#/components/schemas/ReservationMutation" } }
+        }
+      },
+      "FirePresetCollectionResponse": {
+        "description": "Fire-planner presets owned by the authenticated account",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/FirePresetCollection" } }
+        }
+      },
+      "FirePresetMutationResponse": {
+        "description": "Created or updated fire-planner preset",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/FirePresetMutation" } }
+        }
+      },
+      "FirePresetSyncResponse": {
+        "description": "Server-authoritative result after importing browser-local presets",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/FirePresetSyncResult" } }
         }
       }
     },
@@ -1065,6 +1157,92 @@
         "properties": {
           "data": { "$ref": "#/components/schemas/Reservation" },
           "event": { "$ref": "#/components/schemas/Event" }
+        },
+        "additionalProperties": false
+      },
+      "PlannerConfiguration": {
+        "type": "object",
+        "required": ["guests", "cookingStyle", "durationHours", "fuelType", "equipment", "weather", "servingTime", "includeVegetables"],
+        "properties": {
+          "guests": { "type": "integer", "minimum": 2, "maximum": 30 },
+          "cookingStyle": { "type": "string", "enum": ["directo", "dos_zonas", "lento"] },
+          "durationHours": { "type": "integer", "enum": [2, 4, 6, 8, 12] },
+          "fuelType": { "type": "string", "enum": ["carbon", "briquetas", "lena"] },
+          "equipment": { "type": "string", "enum": ["kettle", "abierta", "ahumador"] },
+          "weather": { "type": "string", "enum": ["templado", "viento", "frio"] },
+          "servingTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$" },
+          "includeVegetables": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "FirePresetSaveRequest": {
+        "type": "object",
+        "required": ["name", "configuration"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+          "configuration": { "$ref": "#/components/schemas/PlannerConfiguration" }
+        },
+        "additionalProperties": false
+      },
+      "FirePreset": {
+        "type": "object",
+        "required": ["id", "name", "configuration", "createdAt", "updatedAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+          "configuration": { "$ref": "#/components/schemas/PlannerConfiguration" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "FirePresetCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/FirePreset" } },
+          "count": { "type": "integer", "minimum": 0, "maximum": 20 }
+        },
+        "additionalProperties": false
+      },
+      "FirePresetMutation": {
+        "type": "object",
+        "required": ["data", "created"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/FirePreset" },
+          "created": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "FirePresetSyncRequest": {
+        "type": "object",
+        "required": ["presets"],
+        "properties": {
+          "presets": {
+            "type": "array",
+            "maxItems": 20,
+            "items": { "$ref": "#/components/schemas/FirePresetSaveRequest" }
+          }
+        },
+        "additionalProperties": false
+      },
+      "FirePresetSyncResult": {
+        "type": "object",
+        "required": ["data", "count", "imported", "skipped"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/FirePreset" } },
+          "count": { "type": "integer", "minimum": 0, "maximum": 20 },
+          "imported": { "type": "integer", "minimum": 0, "maximum": 20 },
+          "skipped": { "type": "integer", "minimum": 0, "maximum": 20 }
+        },
+        "additionalProperties": false
+      },
+      "FirePresetDeleteResult": {
+        "type": "object",
+        "required": ["deleted", "id"],
+        "properties": {
+          "deleted": { "const": true },
+          "id": { "type": "string", "format": "uuid" }
         },
         "additionalProperties": false
       },

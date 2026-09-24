@@ -1,6 +1,6 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 6A persistent event reservations implemented and
+> Status: Phase 6B synchronized account fire-planner presets implemented and
 > regression-validated locally on 2026-09-23. Live Stripe sandbox activation
 > remains pending test credentials.
 
@@ -60,6 +60,11 @@ all framework static checks, and all 122 Pytest executions in 78.41 seconds.
 Its archived report is
 `reports/runs/lumbre-report-2026-09-23_18-53-23.html`.
 
+Phase 6B passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, and all 132 Pytest executions in 86.63 seconds.
+Its archived report is
+`reports/runs/lumbre-report-2026-09-23_19-18-03.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -77,7 +82,7 @@ with names only and no secret values.
 | Checkout | Toast notification | No order or payment exists |
 | Membership | Stateless route with a fixed demo identifier | No member record or authenticated identity |
 | Event reservation | D1 account reservation plus derived capacity | Cancellation and administrative capacity changes remain pending |
-| Fire-planner presets | Browser `localStorage` | Cannot synchronize across devices or accounts |
+| Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
 | Products | Static TypeScript catalog, with cart prices and totals derived server-side | No database-backed inventory or price revisions |
 | Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
@@ -356,12 +361,12 @@ provider adapter. A live Stripe test-mode smoke remains an environment
 activation task: configure `.dev.vars` with test-only secrets and use the
 Stripe CLI to forward signed sandbox events before enabling the adapter.
 
-### Phase 6: remaining transactional features — event slice completed
+### Phase 6: remaining transactional features — preset slice completed
 
 Migrate one capability per vertical slice:
 
 1. reservation capacity and customer reservations — completed in Phase 6A;
-2. synchronized fire-planner presets;
+2. synchronized fire-planner presets — completed in Phase 6B;
 3. membership preferences;
 4. administrative products and events.
 
@@ -381,6 +386,23 @@ Phase 6A completion evidence:
 - `UI-010` validates immediate confirmation and availability feedback, while
   `UI-041` proves persistence through reload and account history;
 - OpenAPI publishes 28 route operations.
+
+Phase 6B completion evidence:
+
+- migration `0007_flowery_bill_hollister.sql` adds account-owned fire-planner
+  presets with an indexed normalized-name uniqueness constraint;
+- anonymous visitors retain browser-local presets, while authenticated users
+  read and write a D1-backed account library;
+- sign-in imports only missing local names, preserves server conflicts, and
+  never rewrites the anonymous library;
+- saving a normalized duplicate name updates one record, deletion and listing
+  enforce ownership, and each account is limited to 20 presets;
+- `API-046` through `API-051` protect authorization, persistence,
+  deduplication, ownership, merge behavior, and validation;
+- `UI-042` proves that a preset saved in one browser context is restored in a
+  second context using the same Playwright `storage_state`; `UI-043` uses
+  Playwright routing to prove a failed save remains recoverable;
+- OpenAPI publishes 32 route operations.
 
 ### Phase 7: production hardening
 
@@ -441,11 +463,11 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 6B should synchronize fire-planner presets to authenticated accounts
-while retaining anonymous browser-local presets. The slice must define merge
-behavior, ownership, duplicate names, deletion, and offline/error feedback
-before replacing the existing `localStorage` source of truth.
+Phase 6C should persist authenticated membership preferences. Before coding,
+define the editable preference model, consent history, ownership boundary,
+account UI, and the distinction between membership enrollment and profile
+updates.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local
-Phase 4 modeling or automation learning.
+Phase 6C modeling or automation learning.

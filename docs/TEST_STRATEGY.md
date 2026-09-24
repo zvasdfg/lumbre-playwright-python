@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 49 / 67 |
-| Browser case IDs / executions | 43 / 47 |
+| API case IDs / executions | 55 / 75 |
+| Browser case IDs / executions | 45 / 49 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 92 |
-| Total Pytest executions | 122 |
-| Test files | 91 |
+| Unique committed risks | 100 |
+| Total Pytest executions | 132 |
+| Test files | 99 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 122 passed in 78.41 seconds |
+| Latest validation | 132 passed in 86.63 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,13 +50,13 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 49 | 49 | 100% |
-| P1 | 37 | 37 | 100% |
+| P0 | 54 | 54 | 100% |
+| P1 | 40 | 40 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **92** | **92** | **100%** |
+| **Total** | **100** | **100** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `28/28 = 100%`. Contract
+secondary API route-operation signal is `32/32 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
@@ -181,6 +181,12 @@ Priority definitions:
 | API-043 | One account cannot reserve the same event or consume its capacity twice | P0 | API uniqueness + integrity |
 | API-044 | A sold-out event rejects another account without overselling capacity | P0 | API concurrency boundary |
 | API-045 | Invalid party sizes and unknown events cannot create reservations | P1 | API negative + validation |
+| API-046 | Anonymous requests cannot list, save, synchronize, or delete fire-planner presets | P0 | API authorization |
+| API-047 | An authenticated account persists and lists its fire-planner preset | P0 | API persistence + contract |
+| API-048 | A normalized duplicate preset name updates one existing record | P1 | API uniqueness + persistence |
+| API-049 | One account cannot observe or delete another account's preset | P0 | API ownership + authorization |
+| API-050 | Browser-local sync imports missing names while server conflicts win | P0 | API merge integrity |
+| API-051 | Invalid fire-planner configurations cannot be persisted | P1 | API negative + validation |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -226,6 +232,8 @@ Priority definitions:
 | UI-039 | An authenticated customer pays and sees the persisted order in account history | P0 | E2E checkout |
 | UI-040 | An authenticated shopper follows the provider-hosted URL returned by the checkout API | P0 | UI + API integration |
 | UI-041 | A confirmed reservation survives reload and appears in account history | P0 | E2E reservation persistence |
+| UI-042 | An authenticated fire preset is restored in a second browser context | P0 | E2E account synchronization |
+| UI-043 | A failed account preset save preserves retry data and reports no false success | P1 | UI route control + recoverability |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

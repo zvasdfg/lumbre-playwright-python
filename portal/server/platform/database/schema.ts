@@ -209,3 +209,32 @@ export const eventReservations = sqliteTable(
     index("event_reservations_event_status_index").on(table.eventId, table.status),
   ],
 );
+
+export const firePlannerPresets = sqliteTable(
+  "fire_planner_presets",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => authUser.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    normalizedName: text("normalized_name").notNull(),
+    guests: integer("guests").notNull(),
+    cookingStyle: text("cooking_style", { enum: ["directo", "dos_zonas", "lento"] }).notNull(),
+    durationHours: integer("duration_hours").notNull(),
+    fuelType: text("fuel_type", { enum: ["carbon", "briquetas", "lena"] }).notNull(),
+    equipment: text("equipment", { enum: ["kettle", "abierta", "ahumador"] }).notNull(),
+    weather: text("weather", { enum: ["templado", "viento", "frio"] }).notNull(),
+    servingTime: text("serving_time").notNull(),
+    includeVegetables: integer("include_vegetables", { mode: "boolean" }).notNull(),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    uniqueIndex("fire_planner_presets_user_name_unique").on(
+      table.userId,
+      table.normalizedName,
+    ),
+    index("fire_planner_presets_user_updated_index").on(table.userId, table.updatedAt),
+  ],
+);

@@ -35,6 +35,15 @@ type PlannerPreset = {
   configuration: PlannerConfiguration;
 };
 
+type ServerPlannerPreset = {
+  id: string;
+  name: string;
+  configuration: Omit<PlannerConfiguration, "guests" | "durationHours"> & {
+    guests: number;
+    durationHours: number;
+  };
+};
+
 const STORAGE_KEY = "lumbre.fire-planner.presets.v1";
 
 const initialConfiguration: PlannerConfiguration = {
@@ -80,6 +89,39 @@ const quickPlans: Array<{ name: string; configuration: PlannerConfiguration }> =
     },
   },
 ];
+
+function readLocalPresets(): PlannerPreset[] {
+  try {
+    const storedPresets = window.localStorage.getItem(STORAGE_KEY);
+    if (!storedPresets) return [];
+    const parsedPresets = JSON.parse(storedPresets);
+    if (!Array.isArray(parsedPresets)) throw new Error("Preset storage is not a collection");
+    return parsedPresets as PlannerPreset[];
+  } catch {
+    window.localStorage.removeItem(STORAGE_KEY);
+    return [];
+  }
+}
+
+function serverConfiguration(configuration: PlannerConfiguration) {
+  return {
+    ...configuration,
+    guests: Number(configuration.guests),
+    durationHours: Number(configuration.durationHours),
+  };
+}
+
+function clientPreset(preset: ServerPlannerPreset): PlannerPreset {
+  return {
+    id: preset.id,
+    name: preset.name,
+    configuration: {
+      ...preset.configuration,
+      guests: String(preset.configuration.guests),
+      durationHours: String(preset.configuration.durationHours),
+    },
+  };
+}
 
 function formatClock(time: string, minutesToSubtract: number) {
   const [hours, minutes] = time.split(":").map(Number);
@@ -149,7 +191,7 @@ function createRecommendation(configuration: PlannerConfiguration): FireRecommen
   };
 }
 
-export default function FirePlanner() {
+export default function FirePlanner({ authenticated }: { authenticated: boolean }) {
   const [configuration, setConfiguration] = useState(initialConfiguration);
   const [recommendation, setRecommendation] = useState<FireRecommendation | null>(null);
   const [presetName, setPresetName] = useState("");
@@ -157,17 +199,55 @@ export default function FirePlanner() {
   const [presetMessage, setPresetMessage] = useState("");
 
   useEffect(() => {
-    try {
-      const storedPresets = window.localStorage.getItem(STORAGE_KEY);
-      if (!storedPresets) return;
-
-      const parsedPresets = JSON.parse(storedPresets) as PlannerPreset[];
-      const timer = window.setTimeout(() => setPresets(parsedPresets), 0);
-      return () => window.clearTimeout(timer);
-    } catch {
-      window.localStorage.removeItem(STORAGE_KEY);
+    const controller = new AbortController();
+    const localPresets = readLocalPresets();
+    if (!authenticated) {
+      const timer = window.setTimeout(() => {
+        setPresets(localPresets);
+        setPresetMessage("");
+      }, 0);
+      return () => {
+        controller.abort();
+        window.clearTimeout(timer);
+      };
     }
-  }, []);
+
+    async function synchronizeAccountPresets() {
+      const response = await fetch("/api/fire-presets/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          presets: localPresets.map((preset) => ({
+            name: preset.name,
+            configuration: serverConfiguration(preset.configuration),
+          })),
+        }),
+        signal: controller.signal,
+      });
+      if (!response.ok) {
+        setPresetMessage("No pudimos sincronizar tus presets. Intenta de nuevo.");
+        return;
+      }
+      const result = (await response.json()) as {
+        data: ServerPlannerPreset[];
+        imported: number;
+      };
+      setPresets(result.data.map(clientPreset));
+      setPresetMessage(
+        result.imported
+          ? `${result.imported} ${result.imported === 1 ? "preset importado" : "presets importados"} a tu cuenta.`
+          : "Presets de tu cuenta sincronizados.",
+      );
+    }
+
+    void synchronizeAccountPresets().catch((error: unknown) => {
+      if (!controller.signal.aborted) {
+        console.error("Fire presets could not be synchronized", error);
+        setPresetMessage("No pudimos sincronizar tus presets. Intenta de nuevo.");
+      }
+    });
+    return () => controller.abort();
+  }, [authenticated]);
 
   function updateConfiguration<Key extends keyof PlannerConfiguration>(
     key: Key,
@@ -189,14 +269,46 @@ export default function FirePlanner() {
     setPresetMessage(message);
   }
 
-  function persistPresets(nextPresets: PlannerPreset[]) {
+  function persistLocalPresets(nextPresets: PlannerPreset[]) {
     setPresets(nextPresets);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPresets));
   }
 
-  function savePreset() {
+  async function savePreset() {
     const name = presetName.trim();
     if (!name) return;
+
+    if (authenticated) {
+      try {
+        const response = await fetch("/api/fire-presets", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, configuration: serverConfiguration(configuration) }),
+        });
+        if (!response.ok) {
+          setPresetMessage(
+            response.status === 409
+              ? "Tu cuenta alcanzó el límite de 20 presets."
+              : "No pudimos guardar el preset en tu cuenta.",
+          );
+          return;
+        }
+        const result = (await response.json()) as { data: ServerPlannerPreset };
+        const saved = clientPreset(result.data);
+        setPresets((current) => {
+          const exists = current.some((preset) => preset.id === saved.id);
+          return exists
+            ? current.map((preset) => preset.id === saved.id ? saved : preset)
+            : [...current, saved];
+        });
+        setPresetName("");
+        setPresetMessage(`Preset ${saved.name} sincronizado con tu cuenta.`);
+      } catch (error) {
+        console.error("Fire preset could not be saved", error);
+        setPresetMessage("No pudimos guardar el preset en tu cuenta.");
+      }
+      return;
+    }
 
     const existing = presets.find((preset) => preset.name.toLocaleLowerCase("es") === name.toLocaleLowerCase("es"));
     const preset: PlannerPreset = {
@@ -207,13 +319,28 @@ export default function FirePlanner() {
     const nextPresets = existing
       ? presets.map((item) => (item.id === existing.id ? preset : item))
       : [...presets, preset];
-    persistPresets(nextPresets);
+    persistLocalPresets(nextPresets);
     setPresetName("");
     setPresetMessage(`Preset ${name} guardado en este navegador.`);
   }
 
-  function deletePreset(preset: PlannerPreset) {
-    persistPresets(presets.filter((item) => item.id !== preset.id));
+  async function deletePreset(preset: PlannerPreset) {
+    if (authenticated) {
+      try {
+        const response = await fetch(`/api/fire-presets/${preset.id}`, { method: "DELETE" });
+        if (!response.ok) {
+          setPresetMessage("No pudimos eliminar el preset de tu cuenta.");
+          return;
+        }
+        setPresets((current) => current.filter((item) => item.id !== preset.id));
+        setPresetMessage(`Preset ${preset.name} eliminado de tu cuenta.`);
+      } catch (error) {
+        console.error("Fire preset could not be deleted", error);
+        setPresetMessage("No pudimos eliminar el preset de tu cuenta.");
+      }
+      return;
+    }
+    persistLocalPresets(presets.filter((item) => item.id !== preset.id));
     setPresetMessage(`Preset ${preset.name} eliminado.`);
   }
 
@@ -282,8 +409,8 @@ export default function FirePlanner() {
       </div>
 
       <section className="preset-library" aria-labelledby="preset-title">
-        <div className="preset-copy"><p className="section-index">MEMORIA LOCAL</p><h3 id="preset-title">Tus fuegos repetibles.</h3><p>Guarda una configuración con nombre. Los presets permanecen únicamente en este navegador.</p></div>
-        <div className="preset-create"><label>Nombre del preset<input value={presetName} onChange={(event) => setPresetName(event.target.value)} placeholder="Ej. Domingo con viento" /></label><button type="button" onClick={savePreset} disabled={!presetName.trim()}>Guardar preset</button></div>
+        <div className="preset-copy"><p className="section-index" data-testid="preset-storage-scope">{authenticated ? "MEMORIA DE CUENTA" : "MEMORIA LOCAL"}</p><h3 id="preset-title">Tus fuegos repetibles.</h3><p>{authenticated ? "Tus presets se sincronizan con tu cuenta y estarán disponibles en tus otros dispositivos." : "Guarda una configuración con nombre. Los presets permanecen únicamente en este navegador."}</p></div>
+        <div className="preset-create"><label>Nombre del preset<input value={presetName} onChange={(event) => setPresetName(event.target.value)} placeholder="Ej. Domingo con viento" /></label><button type="button" onClick={() => void savePreset()} disabled={!presetName.trim()}>Guardar preset</button></div>
         {presetMessage && <p className="preset-message" role="status">{presetMessage}</p>}
         <div className="preset-list" data-testid="fire-presets">
           {presets.length ? presets.map((preset) => (
@@ -291,7 +418,7 @@ export default function FirePlanner() {
               <span>{preset.configuration.guests} PERSONAS · {preset.configuration.durationHours} H</span>
               <h4>{preset.name}</h4>
               <p>{preset.configuration.cookingStyle.replaceAll("_", " ")} · {fuelLabels[preset.configuration.fuelType]}</p>
-              <div><button type="button" onClick={() => applyPlan(preset.configuration, `Preset ${preset.name} cargado.`)}>Cargar</button><button type="button" onClick={() => deletePreset(preset)} aria-label={`Eliminar preset ${preset.name}`}>Eliminar</button></div>
+              <div><button type="button" onClick={() => applyPlan(preset.configuration, `Preset ${preset.name} cargado.`)}>Cargar</button><button type="button" onClick={() => void deletePreset(preset)} aria-label={`Eliminar preset ${preset.name}`}>Eliminar</button></div>
             </article>
           )) : <p className="preset-empty">Aún no hay presets guardados. Tu primera configuración puede convertirse en el inicio de un protocolo.</p>}
         </div>

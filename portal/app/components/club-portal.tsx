@@ -475,7 +475,7 @@ export default function ClubPortal() {
         </div>
       </section>
 
-      <FirePlanner />
+      <FirePlanner authenticated={Boolean(account)} />
 
       <section className="knowledge-section" id="principios" aria-labelledby="knowledge-title">
         <div className="knowledge-heading">

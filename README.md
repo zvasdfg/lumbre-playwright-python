@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 92 |
-| Automated functional risks | 92 |
-| Pytest executions | 122 |
-| Test files | 91 |
-| API cases / executions | 49 / 67 |
-| Browser cases / executions | 43 / 47 |
+| Committed functional risks | 100 |
+| Automated functional risks | 100 |
+| Pytest executions | 132 |
+| Test files | 99 |
+| API cases / executions | 55 / 75 |
+| Browser cases / executions | 45 / 49 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (28/28) |
-| Latest full-suite result | 122 passed |
+| API route-operation coverage | 100% (32/32) |
+| Latest full-suite result | 132 passed |
 
-**100% refers to the repository's 92-item committed functional-risk catalog.**
+**100% refers to the repository's 100-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -66,6 +66,8 @@ Lumbre is a cooking-at-the-fire portal with:
   deduplicated provider events without transporting card data through Lumbre;
 - authenticated event reservations with server-owned capacity, atomic
   oversell protection, duplicate prevention, and persisted account history;
+- account-owned fire-planner presets synchronized across browser contexts,
+  with deterministic import of anonymous browser-local plans;
 - protected `customer` and `admin` roles, while production authentication stays
   disabled until a real email provider and secrets are configured.
 

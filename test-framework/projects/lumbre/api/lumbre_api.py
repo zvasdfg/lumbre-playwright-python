@@ -132,6 +132,18 @@ class LumbreApi:
             data={"partySize": party_size},
         )
 
+    def fire_presets(self) -> APIResponse:
+        return self._request.get("/api/fire-presets")
+
+    def save_fire_preset(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.post("/api/fire-presets", data=payload)
+
+    def sync_fire_presets(self, presets: list[dict[str, Any]]) -> APIResponse:
+        return self._request.post("/api/fire-presets/sync", data={"presets": presets})
+
+    def delete_fire_preset(self, preset_id: str) -> APIResponse:
+        return self._request.delete(f"/api/fire-presets/{preset_id}")
+
     def reset_demo_data(self) -> dict[str, Any]:
         return self._json(self._request.post("/api/test/reset"))
 

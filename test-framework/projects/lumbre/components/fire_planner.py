@@ -32,6 +32,8 @@ class FirePlanner:
             name="Guardar preset",
         )
         self.preset_library = self.root.get_by_test_id("fire-presets")
+        self.storage_scope = self.root.get_by_test_id("preset-storage-scope")
+        self.preset_message = self.root.locator(".preset-message")
 
     def configure(
         self,
@@ -66,3 +68,6 @@ class FirePlanner:
 
     def load_preset(self, name: str) -> None:
         self.preset(name).get_by_role("button", name="Cargar").click()
+
+    def delete_preset(self, name: str) -> None:
+        self.preset(name).get_by_role("button", name="Eliminar").click()
