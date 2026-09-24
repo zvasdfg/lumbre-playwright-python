@@ -231,6 +231,8 @@ export default function ClubPortal() {
     if (!account || submitting) return;
     setSubmitting(true);
     const form = new FormData(event.currentTarget);
+    const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+    const checkoutMode = submitter?.value === "hosted" ? "hosted" : "local";
 
     let order = checkoutOrder;
     if (!order) {
@@ -254,6 +256,27 @@ export default function ClubPortal() {
       const orderResult = (await orderResponse.json()) as { data: Order };
       order = orderResult.data;
       setCheckoutOrder(order);
+    }
+
+    if (checkoutMode === "hosted") {
+      const checkoutResponse = await fetch(`/api/orders/${order.id}/checkout-session`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": crypto.randomUUID(),
+        },
+        body: "{}",
+      });
+      const checkoutResult = (await checkoutResponse.json()) as {
+        data?: { checkoutUrl: string };
+      };
+      setSubmitting(false);
+      if (!checkoutResponse.ok || !checkoutResult.data) {
+        showToast("Checkout alojado no está disponible. Usa el simulador local.");
+        return;
+      }
+      window.location.assign(checkoutResult.data.checkoutUrl);
+      return;
     }
 
     const paymentResponse = await fetch(`/api/orders/${order.id}/payment`, {
@@ -569,7 +592,8 @@ export default function ClubPortal() {
                 <label>Resultado del simulador<select name="paymentScenario" defaultValue="success"><option value="success">Pago aprobado</option><option value="rejection">Pago rechazado</option></select></label>
                 <div className="cart-total"><span>Total calculado por servidor</span><strong>{currency.format(checkoutOrder?.total ?? cart.total)}</strong></div>
                 {checkoutOrder?.status === "failed" && <p className="payment-rejected" role="alert">El intento fue rechazado. Conservamos la canasta para que puedas probar de nuevo.</p>}
-                <button className="button button-primary full" type="submit" disabled={submitting}>{submitting ? "Procesando..." : checkoutOrder?.status === "failed" ? "Reintentar pago" : "Crear pedido y pagar"}</button>
+                <button className="button button-primary full" type="submit" name="checkoutMode" value="local" disabled={submitting}>{submitting ? "Procesando..." : checkoutOrder?.status === "failed" ? "Reintentar pago" : "Crear pedido y pagar"}</button>
+                {!checkoutOrder && <button className="button button-quiet full hosted-checkout-button" type="submit" name="checkoutMode" value="hosted" disabled={submitting}>Continuar en Stripe Checkout ↗</button>}
               </form>
             )}
           </section>

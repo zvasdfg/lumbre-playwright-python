@@ -13,6 +13,9 @@ class CheckoutModal:
         self.delivery_notes = self.root.get_by_label("Notas de entrega")
         self.payment_scenario = self.root.get_by_label("Resultado del simulador")
         self.submit_button = self.root.get_by_role("button", name="Crear pedido y pagar")
+        self.hosted_checkout_button = self.root.get_by_role(
+            "button", name="Continuar en Stripe Checkout"
+        )
         self.confirmation = self.root.get_by_role("status")
 
     def complete_customer(self, *, name: str, email: str, notes: str = "") -> None:

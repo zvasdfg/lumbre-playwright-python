@@ -1,7 +1,8 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 4 orders and deterministic local payments completed and
-> regression-validated locally on 2026-09-23.
+> Status: Phase 5 external hosted-checkout integration implemented and
+> regression-validated locally on 2026-09-23. Live Stripe sandbox activation
+> remains pending test credentials.
 
 ## 1. Purpose
 
@@ -48,6 +49,11 @@ Phase 4 passed portal lint, TypeScript checking, the vinext production build,
 all framework static checks, and all 108 Pytest executions in 72.91 seconds.
 Its archived report is
 `reports/runs/lumbre-report-2026-09-23_18-12-58.html`.
+
+Phase 5 passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, and all 114 Pytest executions in 76.10 seconds.
+Its archived report is
+`reports/runs/lumbre-report-2026-09-23_18-34-25.html`.
 
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
@@ -308,7 +314,7 @@ Completion evidence:
 - OpenAPI publishes 24 route operations, including order history, creation,
   detail, and payment initiation.
 
-### Phase 5: external payment sandbox
+### Phase 5: external payment sandbox — implemented locally
 
 Deliver:
 
@@ -321,6 +327,29 @@ Deliver:
 The default recommendation is to evaluate Stripe Checkout first because of its
 test environment and idempotency support. Mercado Pago remains a valid second
 adapter when Mexican payment-method relevance becomes the higher priority.
+
+Completion evidence:
+
+- migration `0005_sour_colonel_america.sql` creates hosted-session and
+  provider-event records with database uniqueness constraints;
+- a `HostedCheckoutPort` isolates provider behavior and supports both the
+  deterministic local adapter and the Stripe Checkout API adapter;
+- the browser never collects card data and redirects only to the URL returned
+  by the authenticated checkout-session endpoint;
+- webhook handling verifies the raw body, timestamped signature, session,
+  order, MXN currency, and amount before changing state;
+- processed provider event IDs are durable deduplication keys, failed events
+  can be retried safely, and only a payload hash is stored;
+- `API-036` through `API-040` protect session idempotency, signature rejection,
+  successful transition, replay safety, and amount integrity;
+- `UI-040` proves the browser-to-hosted-provider handoff;
+- OpenAPI publishes 26 route operations, including hosted session creation and
+  the provider webhook.
+
+The local suite deliberately uses fake test credentials and a deterministic
+provider adapter. A live Stripe test-mode smoke remains an environment
+activation task: configure `.dev.vars` with test-only secrets and use the
+Stripe CLI to forward signed sandbox events before enabling the adapter.
 
 ### Phase 6: remaining transactional features
 
@@ -393,10 +422,10 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 5 begins by evaluating an external hosted-checkout sandbox behind the
-existing payment port. Before adding a provider, define webhook signature
-verification, provider-event deduplication, retry-safe transition rules, and a
-test boundary that never transports or stores card data in Lumbre.
+Phase 6 should move event reservations into one transactional vertical slice:
+persist capacity, require an authenticated customer, reject sold-out or
+duplicate reservations, and expose the result in account history. Keep the
+same API-first and risk-first evidence loop used by the payment phases.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local

@@ -252,9 +252,24 @@ This makes mutation tests repeatable and prevents an interrupted learning run
 from silently changing the repository baseline.
 
 Authentication and checkout tests use the same reset boundary. Core account,
-verification, session, local-delivery, cart, order, order-item, and payment
-attempt tables are cleared before each scenario; test mode then recreates one
-deterministic administrator identity.
+verification, session, local-delivery, cart, order, order-item, payment
+attempt, hosted-checkout-session, and provider-event tables are cleared before
+each scenario; test mode then recreates one deterministic administrator
+identity.
+
+### Hosted payment boundary
+
+The commerce service depends on a `HostedCheckoutPort`, not on Stripe-specific
+route code. Test mode uses a deterministic adapter with the same session
+contract; an explicitly configured environment uses Stripe's hosted Checkout
+API. Lumbre sends the immutable order snapshot and receives only a provider
+session identifier and redirect URL. Card collection remains on the provider.
+
+Webhook processing begins with the raw request body. The adapter verifies the
+timestamped HMAC signature before parsing the event, checks the provider
+session, order identifier, currency, and amount against D1, and persists the
+provider event ID as the deduplication key. Only the payload hash is retained;
+the raw provider payload is not stored.
 
 ### Authenticated fixture flow
 

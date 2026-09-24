@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 80 |
-| Automated functional risks | 80 |
-| Pytest executions | 108 |
-| Test files | 79 |
-| API cases / executions | 39 / 55 |
-| Browser cases / executions | 41 / 45 |
+| Committed functional risks | 86 |
+| Automated functional risks | 86 |
+| Pytest executions | 114 |
+| Test files | 85 |
+| API cases / executions | 44 / 60 |
+| Browser cases / executions | 42 / 46 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (24/24) |
-| Latest full-suite result | 108 passed |
+| API route-operation coverage | 100% (26/26) |
+| Latest full-suite result | 114 passed |
 
-**100% refers to the repository's 80-item committed functional-risk catalog.**
+**100% refers to the repository's 86-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -62,6 +62,8 @@ Lumbre is a cooking-at-the-fire portal with:
   deterministic anonymous-to-account cart migration;
 - authenticated checkout with immutable order snapshots, fake payment outcomes,
   retry-safe idempotency, and persisted order history;
+- provider-hosted checkout sessions, signed Stripe-compatible webhooks, and
+  deduplicated provider events without transporting card data through Lumbre;
 - protected `customer` and `admin` roles, while production authentication stays
   disabled until a real email provider and secrets are configured.
 
@@ -135,6 +137,8 @@ lumbre-playwright-python/
   and reusable Playwright `storage_state` fixtures.
 - Server-priced order snapshots, deterministic payment rejection/approval, and
   independent idempotency keys for order and payment submissions.
+- A provider boundary for hosted checkout, timestamped HMAC webhook validation,
+  event deduplication, amount/currency checks, and retry-safe order transitions.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.
@@ -159,9 +163,10 @@ run locally, in CI, or against a remote environment.
 ### Checkout is protected at the cheapest effective layers
 
 API cases protect authentication, server-owned pricing, order/payment
-idempotency, rejected-payment retention, and successful cart clearing. UI-025
-checks anonymous guidance, while UI-039 alone pays the browser cost of proving
-the complete account-to-history journey.
+idempotency, rejected-payment retention, successful cart clearing, hosted
+session reuse, signed webhooks, and provider-event deduplication. UI-025 checks
+anonymous guidance, UI-039 proves the local account-to-history journey, and
+UI-040 verifies that the browser follows the hosted URL returned by the API.
 
 ### Network behavior is tested at the correct boundary
 

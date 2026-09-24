@@ -13,6 +13,7 @@ export NEXT_PUBLIC_LUMBRE_ENV="test"
 export LUMBRE_D1_STATE_DIR="$D1_STATE_DIR"
 export BETTER_AUTH_URL="$BASE_URL"
 export BETTER_AUTH_SECRET="lumbre-test-auth-secret-not-for-production-2026"
+export STRIPE_WEBHOOK_SECRET="whsec_lumbre_test_webhook_secret_2026"
 
 cd "$ROOT_DIR/portal"
 CI=1 ./node_modules/.bin/wrangler d1 migrations apply lumbre-db \

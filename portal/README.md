@@ -73,7 +73,8 @@ delivery adapter, production URL, and secret bindings are configured.
 - Lumbre identity and outdoor-fire community content.
 - Recipe category filters, search, and recipe feedback.
 - Product catalog, server-priced persistent cart, authenticated checkout,
-  deterministic local payments, and account-owned order history.
+  deterministic local payments, provider-hosted checkout, and account-owned
+  order history.
 - Membership validation, keyboard navigation, API submission, and recovery.
 - Fire planning with cooking-style and vegetable-reserve calculations.
 - Ingredient catalog with research detail, family filters, and search.
@@ -102,6 +103,8 @@ delivery adapter, production URL, and secret bindings are configured.
 | `POST` | `/api/orders` | Create an idempotent server-priced order snapshot | `API-031`–`API-033` |
 | `GET` | `/api/orders/:id` | Read one account-owned immutable order | OpenAPI contract |
 | `POST` | `/api/orders/:id/payment` | Run an idempotent local payment attempt | `API-034`, `API-035`, `UI-039` |
+| `POST` | `/api/orders/:id/checkout-session` | Create or reuse a provider-hosted checkout session | `API-036`, `UI-040` |
+| `POST` | `/api/payments/stripe/webhook` | Verify and process a signed provider event | `API-037`–`API-040` |
 | `GET` | `/api/events` | Event collection | `API-019` |
 | `GET` | `/api/ingredientes` | Ingredient catalog, filters, and detail | `API-007`, `API-008`, `API-016` |
 | `GET` | `/api/hipotesis` | Technical hypothesis registry | `API-011` |
@@ -165,6 +168,26 @@ of duplicating it. The local payment port accepts explicit `success` and
 `rejection` scenarios: approval marks the order paid and clears the cart;
 rejection marks it failed and preserves the cart for retry. The account dialog
 reads persisted order history rather than reconstructing it from client state.
+
+## Provider-hosted checkout
+
+Phase 5 adds a `HostedCheckoutPort` behind the existing order model. Test mode
+uses a deterministic Stripe-shaped adapter; setting `PAYMENT_PROVIDER=stripe`
+uses Stripe Checkout with `STRIPE_SECRET_KEY`. The authenticated session route
+creates one hosted session per order and idempotency key, and the browser
+redirects to the returned provider URL. Lumbre does not render card fields or
+receive card details.
+
+`POST /api/payments/stripe/webhook` reads the raw request body and validates
+`Stripe-Signature` with `STRIPE_WEBHOOK_SECRET`. It rejects stale or invalid
+signatures, mismatched provider sessions, order IDs, MXN amounts, and currency.
+Processed event IDs are persisted for replay safety, while only a SHA-256 hash
+of the payload is stored. The cart is cleared only after a verified paid event.
+
+Copy `.dev.vars.example` to `.dev.vars` to exercise a live test-mode provider.
+Use only Stripe test credentials and forward sandbox webhooks to the local
+route. The deterministic adapter remains the default for isolated automation,
+so the suite never depends on the network or shared provider state.
 
 ## Hypothesis persistence
 

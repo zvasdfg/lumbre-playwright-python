@@ -5,9 +5,11 @@ import {
   anonymousSessions,
   cartItems,
   carts,
+  hostedCheckoutSessions,
   orderItems,
   orders,
   paymentAttempts,
+  paymentProviderEvents,
 } from "../../platform/database/schema";
 
 export type CartItemView = {
@@ -219,6 +221,8 @@ export async function mergeAnonymousCartIntoUser(
 
 export async function resetAnonymousCommerce(): Promise<void> {
   const database = getDatabase();
+  await database.delete(paymentProviderEvents);
+  await database.delete(hostedCheckoutSessions);
   await database.delete(paymentAttempts);
   await database.delete(orderItems);
   await database.delete(orders);

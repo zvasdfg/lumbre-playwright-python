@@ -284,6 +284,45 @@
         }
       }
     },
+    "/api/orders/{id}/checkout-session": {
+      "post": {
+        "operationId": "createHostedCheckoutSession",
+        "tags": ["Commerce"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          { "$ref": "#/components/parameters/OrderId" },
+          { "$ref": "#/components/parameters/IdempotencyKey" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/HostedCheckoutResponse" },
+          "201": { "$ref": "#/components/responses/HostedCheckoutResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "503": { "$ref": "#/components/responses/ProviderUnavailableResponse" }
+        }
+      }
+    },
+    "/api/payments/stripe/webhook": {
+      "post": {
+        "operationId": "receiveStripeWebhook",
+        "tags": ["Commerce"],
+        "parameters": [{ "$ref": "#/components/parameters/StripeSignature" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/StripeCheckoutEvent" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/ProviderEventResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "503": { "$ref": "#/components/responses/ProviderUnavailableResponse" }
+        }
+      }
+    },
     "/api/events": {
       "get": {
         "operationId": "listEvents",
@@ -477,6 +516,12 @@
         "in": "header",
         "required": true,
         "schema": { "type": "string", "minLength": 1, "maxLength": 100 }
+      },
+      "StripeSignature": {
+        "name": "Stripe-Signature",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string", "pattern": "^t=[0-9]+,.*v1=" }
       }
     },
     "responses": {
@@ -580,6 +625,24 @@
         "description": "Deterministic payment attempt result",
         "content": {
           "application/json": { "schema": { "$ref": "#/components/schemas/PaymentResult" } }
+        }
+      },
+      "HostedCheckoutResponse": {
+        "description": "Hosted Checkout Session or idempotent replay",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/HostedCheckoutMutation" } }
+        }
+      },
+      "ProviderEventResponse": {
+        "description": "Verified and deduplicated payment provider event acknowledgement",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/ProviderEventResult" } }
+        }
+      },
+      "ProviderUnavailableResponse": {
+        "description": "Payment provider or webhook signing is not configured",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
         }
       }
     },
@@ -829,6 +892,72 @@
           "paymentId": { "type": "string", "format": "uuid" },
           "outcome": { "type": "string", "enum": ["approved", "rejected"] },
           "created": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "HostedCheckout": {
+        "type": "object",
+        "required": ["orderId", "provider", "providerSessionId", "checkoutUrl", "status"],
+        "properties": {
+          "orderId": { "type": "string", "format": "uuid" },
+          "provider": { "const": "stripe" },
+          "providerSessionId": { "type": "string", "pattern": "^cs_" },
+          "checkoutUrl": { "type": "string", "format": "uri" },
+          "status": { "type": "string", "enum": ["open", "completed", "expired", "failed"] }
+        },
+        "additionalProperties": false
+      },
+      "HostedCheckoutMutation": {
+        "type": "object",
+        "required": ["data", "created"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/HostedCheckout" },
+          "created": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "StripeCheckoutEvent": {
+        "type": "object",
+        "required": ["id", "type", "data"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "enum": ["checkout.session.completed", "checkout.session.async_payment_succeeded", "checkout.session.async_payment_failed", "checkout.session.expired"] },
+          "data": {
+            "type": "object",
+            "required": ["object"],
+            "properties": {
+              "object": {
+                "type": "object",
+                "required": ["id", "amount_total", "currency", "payment_status", "metadata"],
+                "properties": {
+                  "id": { "type": "string", "pattern": "^cs_" },
+                  "amount_total": { "type": "integer", "minimum": 0 },
+                  "currency": { "type": "string", "minLength": 3 },
+                  "payment_status": { "type": "string", "minLength": 1 },
+                  "metadata": {
+                    "type": "object",
+                    "required": ["order_id"],
+                    "properties": { "order_id": { "type": "string", "format": "uuid" } },
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "ProviderEventResult": {
+        "type": "object",
+        "required": ["received", "duplicate", "eventId", "orderId", "status"],
+        "properties": {
+          "received": { "const": true },
+          "duplicate": { "type": "boolean" },
+          "eventId": { "type": "string", "minLength": 1 },
+          "orderId": { "type": "string", "format": "uuid" },
+          "status": { "type": "string", "enum": ["pending", "paid", "failed", "cancelled"] }
         },
         "additionalProperties": false
       },

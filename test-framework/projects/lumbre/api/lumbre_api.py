@@ -79,6 +79,23 @@ class LumbreApi:
             headers={"Idempotency-Key": idempotency_key},
         )
 
+    def create_checkout_session(self, order_id: str, idempotency_key: str) -> APIResponse:
+        return self._request.post(
+            f"/api/orders/{order_id}/checkout-session",
+            data={},
+            headers={"Idempotency-Key": idempotency_key},
+        )
+
+    def stripe_webhook(self, raw_body: str, signature: str | None = None) -> APIResponse:
+        headers = {"Content-Type": "application/json"}
+        if signature is not None:
+            headers["Stripe-Signature"] = signature
+        return self._request.post(
+            "/api/payments/stripe/webhook",
+            data=raw_body.encode("utf-8"),
+            headers=headers,
+        )
+
     def request_magic_link(self, payload: dict[str, Any]) -> APIResponse:
         return self._request.post("/api/account/magic-link", data=payload)
 

@@ -131,3 +131,56 @@ export const paymentAttempts = sqliteTable(
     index("payment_attempts_order_index").on(table.orderId),
   ],
 );
+
+export const hostedCheckoutSessions = sqliteTable(
+  "hosted_checkout_sessions",
+  {
+    id: text("id").primaryKey(),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    idempotencyKey: text("idempotency_key").notNull(),
+    provider: text("provider").notNull(),
+    providerSessionId: text("provider_session_id").notNull(),
+    checkoutUrl: text("checkout_url").notNull(),
+    status: text("status", { enum: ["open", "completed", "expired", "failed"] })
+      .notNull()
+      .default("open"),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    uniqueIndex("hosted_checkout_order_idempotency_unique").on(
+      table.orderId,
+      table.idempotencyKey,
+    ),
+    uniqueIndex("hosted_checkout_provider_session_unique").on(
+      table.provider,
+      table.providerSessionId,
+    ),
+  ],
+);
+
+export const paymentProviderEvents = sqliteTable(
+  "payment_provider_events",
+  {
+    id: text("id").primaryKey(),
+    provider: text("provider").notNull(),
+    eventType: text("event_type").notNull(),
+    providerObjectId: text("provider_object_id").notNull(),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    payloadHash: text("payload_hash").notNull(),
+    status: text("status", { enum: ["received", "processed", "failed"] })
+      .notNull()
+      .default("received"),
+    error: text("error"),
+    receivedAt: text("received_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    processedAt: text("processed_at"),
+  },
+  (table) => [
+    index("payment_provider_events_order_index").on(table.orderId),
+    index("payment_provider_events_status_index").on(table.status),
+  ],
+);

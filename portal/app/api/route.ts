@@ -26,6 +26,8 @@ export async function GET() {
     "POST /api/orders",
     "GET /api/orders/{id}",
     "POST /api/orders/{id}/payment",
+    "POST /api/orders/{id}/checkout-session",
+    "POST /api/payments/stripe/webhook",
     "POST /api/products",
     "POST /api/hipotesis",
     "POST /api/members",
