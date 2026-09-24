@@ -400,6 +400,22 @@ risks. `UI-051` uses API setup only for its pending-order precondition, then
 uses the real browser to prove the new accessible action, localized feedback,
 rendered state, and disappearance of an ineligible control.
 
+## 34. Browser contexts do not isolate shared server state
+
+Playwright gives each UI test a fresh browser context, but pytest-xdist runs
+multiple Python processes at the same time. If those processes call one global
+reset endpoint against one database, a worker may erase another worker's
+accounts, orders, or inventory while its test is still executing.
+
+Lumbre's parallel runner therefore assigns every worker its own portal process
+and temporary D1 database. `app_url` selects the worker-specific target for both
+browser navigation and `APIRequestContext`. This also exposed a hardcoded
+`localhost:3100` assertion in `API-036`; replacing it with the injected
+`app_url` removed the runner coupling.
+
+Treat parallel safety as a data-ownership problem, not a command-line flag.
+`pytest -n 4` is safe only after the server-side state boundary is explicit.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)

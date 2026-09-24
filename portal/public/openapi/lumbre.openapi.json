@@ -309,7 +309,9 @@
         "responses": {
           "201": { "$ref": "#/components/responses/CartResponse" },
           "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "403": { "$ref": "#/components/responses/CrossOriginResponse" },
           "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "429": { "$ref": "#/components/responses/RateLimitResponse" },
           "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
         }
       }
@@ -328,7 +330,9 @@
         "responses": {
           "200": { "$ref": "#/components/responses/CartResponse" },
           "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "403": { "$ref": "#/components/responses/CrossOriginResponse" },
           "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "429": { "$ref": "#/components/responses/RateLimitResponse" },
           "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
         }
       },
@@ -338,6 +342,8 @@
         "parameters": [{ "$ref": "#/components/parameters/ProductId" }],
         "responses": {
           "200": { "$ref": "#/components/responses/CartResponse" },
+          "403": { "$ref": "#/components/responses/CrossOriginResponse" },
+          "429": { "$ref": "#/components/responses/RateLimitResponse" },
           "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
         }
       }
@@ -841,6 +847,24 @@
           "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
         }
       },
+      "CrossOriginResponse": {
+        "description": "A browser mutation originated outside the trusted origin",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
+      "RateLimitResponse": {
+        "description": "The caller exceeded the mutation budget",
+        "headers": {
+          "Retry-After": {
+            "description": "Seconds before the caller should retry",
+            "schema": { "type": "string", "const": "60" }
+          }
+        },
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
       "AdministrativeProductCollectionResponse": {
         "description": "Complete product catalog visible to administrators",
         "content": {
@@ -920,9 +944,9 @@
         }
       },
       "ServerErrorResponse": {
-        "description": "Registry operation failed",
+        "description": "Sanitized internal operation failure",
         "content": {
-          "application/json": { "schema": { "$ref": "#/components/schemas/DetailedError" } }
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
         }
       },
       "HypothesisMutationResponse": {
@@ -2071,15 +2095,9 @@
       "Error": {
         "type": "object",
         "required": ["error"],
-        "properties": { "error": { "type": "string", "minLength": 1 } },
-        "additionalProperties": false
-      },
-      "DetailedError": {
-        "type": "object",
-        "required": ["error", "detail"],
         "properties": {
           "error": { "type": "string", "minLength": 1 },
-          "detail": { "type": "string", "minLength": 1 }
+          "requestId": { "type": "string", "format": "uuid" }
         },
         "additionalProperties": false
       }

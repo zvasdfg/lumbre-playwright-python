@@ -8,6 +8,7 @@ from projects.lumbre.api.lumbre_api import LumbreApi
 @pytest.mark.case("API-036", "Hosted checkout creation is authenticated and idempotent")
 def test_hosted_checkout_is_idempotent(
     authenticated_api: LumbreApi,
+    app_url: str,
     test_log: TestLogger,
 ) -> None:
     authenticated_api.add_cart_item({"productId": 111, "quantity": 1})
@@ -35,8 +36,12 @@ def test_hosted_checkout_is_idempotent(
     with test_log.step("Validate that Lumbre exposes only a hosted redirect reference"):
         checkout = first_body["data"]
         serialized = str(checkout).lower()
-        test_log.values(observed_checkout=checkout, card_data_present="card" in serialized)
+        test_log.values(
+            observed_checkout=checkout,
+            expected_checkout_origin=app_url,
+            card_data_present="card" in serialized,
+        )
         assert checkout["provider"] == "stripe"
         assert checkout["providerSessionId"].startswith("cs_test_")
-        assert checkout["checkoutUrl"].startswith("http://localhost:3100/")
+        assert checkout["checkoutUrl"].startswith(f"{app_url}/")
         assert "card" not in serialized

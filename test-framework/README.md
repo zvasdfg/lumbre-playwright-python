@@ -30,10 +30,14 @@ AUTOMATION_PROJECT=Lumbre
 LOCALE=es-MX
 VIEWPORT_WIDTH=1440
 VIEWPORT_HEIGHT=1000
+AUTOMATION_WORKER_BASE_URLS=
 ```
 
 `BASE_URL` is shared by browser navigation and `APIRequestContext`. The managed
 root runner overrides it with its temporary portal URL.
+`AUTOMATION_WORKER_BASE_URLS` is normally populated only by the managed
+parallel runner. Worker `gw0` consumes the first URL, `gw1` the second, and so
+on.
 
 ## Package layout
 
@@ -104,6 +108,12 @@ repository seed data or the developer database. The runner also sets the portal
 environment explicitly to `test`; mutation contracts and `/api/test/reset` are
 never enabled by a production build.
 
+`scripts/test-parallel.sh` creates the same lifecycle independently for every
+pytest-xdist worker. Each process receives a different base URL, portal process,
+and D1 state directory. Lumbre collection fails early when multiple workers are
+configured without enough isolated targets; sharing one resettable database is
+not treated as valid parallel execution.
+
 ## Running tests
 
 From the project root:
@@ -111,6 +121,12 @@ From the project root:
 ```bash
 # Full managed suite
 ./scripts/test-local.sh -q
+
+# Full suite with four isolated workers
+WORKERS=4 ./scripts/test-parallel.sh -q
+
+# Two workers on ports 3300 and 3301
+WORKERS=2 BASE_PORT=3300 ./scripts/test-parallel.sh -q
 
 # Layer selection
 ./scripts/test-local.sh -q -m api
@@ -124,6 +140,15 @@ From the project root:
 cd test-framework
 .venv/bin/pytest -q tests/framework -m framework_unit
 ```
+
+Use the sequential runner for headed learning runs. Parallel headed execution
+opens several browsers concurrently and is intended only for targeted
+diagnosis, not normal instruction.
+
+The current Phase 7A regression passed 171 executions in 103.94 seconds with
+four isolated workers. The earlier like-for-like 168-execution benchmark took
+135.12 seconds sequentially and 71.75 seconds with four workers. Measurements
+use Pytest's reported duration and exclude target provisioning.
 
 Against an already-running portal:
 

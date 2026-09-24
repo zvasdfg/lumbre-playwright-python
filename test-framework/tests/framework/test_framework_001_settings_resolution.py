@@ -22,6 +22,7 @@ pytestmark = [
                 "project_name": "Lumbre",
                 "locale": "es-MX",
                 "viewport": (1440, 1000),
+                "worker_base_urls": (),
             },
         ),
         (
@@ -32,6 +33,7 @@ pytestmark = [
                 "LOCALE": "en-US",
                 "VIEWPORT_WIDTH": "1280",
                 "VIEWPORT_HEIGHT": "720",
+                "AUTOMATION_WORKER_BASE_URLS": ("http://localhost:3200/, http://localhost:3201"),
             },
             {
                 "base_url": "https://example.test",
@@ -39,6 +41,10 @@ pytestmark = [
                 "project_name": "Example Store",
                 "locale": "en-US",
                 "viewport": (1280, 720),
+                "worker_base_urls": (
+                    "http://localhost:3200",
+                    "http://localhost:3201",
+                ),
             },
         ),
     ],
@@ -55,8 +61,35 @@ def test_settings_resolve_environment(
     assert settings.project_name == expected["project_name"]
     assert settings.locale == expected["locale"]
     assert (settings.viewport_width, settings.viewport_height) == expected["viewport"]
+    assert settings.worker_base_urls == expected["worker_base_urls"]
 
 
 def test_settings_reject_non_numeric_timeout() -> None:
     with pytest.raises(ValueError):
         Settings.from_environment({"DEFAULT_TIMEOUT_MS": "ten-seconds"})
+
+
+@pytest.mark.parametrize(
+    ("worker_id", "expected_url"),
+    [
+        ("master", "http://localhost:3000"),
+        ("gw0", "http://localhost:3200"),
+        ("gw1", "http://localhost:3201"),
+    ],
+)
+def test_settings_resolve_worker_target(worker_id: str, expected_url: str) -> None:
+    settings = Settings.from_environment(
+        {
+            "BASE_URL": "http://localhost:3000",
+            "AUTOMATION_WORKER_BASE_URLS": ("http://localhost:3200,http://localhost:3201"),
+        }
+    )
+
+    assert settings.base_url_for_worker(worker_id) == expected_url
+
+
+def test_settings_reject_missing_worker_target() -> None:
+    settings = Settings.from_environment({"AUTOMATION_WORKER_BASE_URLS": "http://localhost:3200"})
+
+    with pytest.raises(ValueError, match="No isolated base URL configured for gw1"):
+        settings.base_url_for_worker("gw1")

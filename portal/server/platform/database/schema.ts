@@ -26,12 +26,16 @@ export const hypotheses = sqliteTable(
   (table) => [uniqueIndex("hypotheses_signature_unique").on(table.signature)],
 );
 
-export const anonymousSessions = sqliteTable("anonymous_sessions", {
-  id: text("id").primaryKey(),
-  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-  lastSeenAt: text("last_seen_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-  expiresAt: text("expires_at").notNull(),
-});
+export const anonymousSessions = sqliteTable(
+  "anonymous_sessions",
+  {
+    id: text("id").primaryKey(),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    lastSeenAt: text("last_seen_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    expiresAt: text("expires_at").notNull(),
+  },
+  (table) => [index("anonymous_sessions_expires_index").on(table.expiresAt)],
+);
 
 export const carts = sqliteTable(
   "carts",

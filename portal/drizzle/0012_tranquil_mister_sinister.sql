@@ -1,0 +1,1 @@
+CREATE INDEX `anonymous_sessions_expires_index` ON `anonymous_sessions` (`expires_at`);

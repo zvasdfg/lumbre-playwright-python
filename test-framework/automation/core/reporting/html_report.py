@@ -45,7 +45,14 @@ def _trace_link(item: pytest.Item) -> str | None:
 def pytest_configure(config: pytest.Config) -> None:
     metadata = config.stash[metadata_key]
     metadata["Application"] = settings.project_name
-    metadata["Base URL"] = settings.base_url
+    metadata["Base URL"] = (
+        ", ".join(settings.worker_base_urls) if settings.worker_base_urls else settings.base_url
+    )
+    metadata["Execution"] = (
+        f"Parallel · {len(settings.worker_base_urls)} isolated targets"
+        if settings.worker_base_urls
+        else "Sequential · one target"
+    )
     metadata["Python"] = platform.python_version()
     metadata["Platform"] = platform.platform()
     metadata["Report mode"] = "Incremental after each test"

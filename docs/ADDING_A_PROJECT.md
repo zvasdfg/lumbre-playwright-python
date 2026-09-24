@@ -59,7 +59,7 @@ The root Pytest configuration loads
 
 | Fixture | Provided behavior |
 | --- | --- |
-| `app_url` | Normalized `BASE_URL` |
+| `app_url` | Normalized `BASE_URL`, or the URL assigned to the active xdist worker |
 | `browser_context_args` | Configured locale and viewport |
 | `api_request_context` | Session-level Playwright `APIRequestContext` |
 | `page` | Isolated page from `pytest-playwright` |
@@ -176,6 +176,7 @@ The generic core recognizes:
 
 ```dotenv
 BASE_URL=https://example.test
+AUTOMATION_WORKER_BASE_URLS=
 HEADLESS=true
 DEFAULT_TIMEOUT_MS=10000
 AUTOMATION_PROJECT=Example Store
@@ -186,6 +187,11 @@ VIEWPORT_HEIGHT=1000
 
 `AUTOMATION_PROJECT` changes report identity, not test selection. Never place a
 secret in a public frontend variable or commit a real `.env` file.
+
+`AUTOMATION_WORKER_BASE_URLS` is a comma-separated list of already-started,
+isolated targets. It is intentionally empty for sequential and remote runs.
+The reusable `app_url` fixture maps `gw0`, `gw1`, and later xdist workers to the
+corresponding list entries.
 
 ## 8. Register default collection
 
@@ -226,6 +232,24 @@ That runner should:
 7. stop services and remove temporary data through a trap/finalizer.
 
 Do not add product startup logic to the generic Pytest plugin.
+
+### Parallel local lifecycle
+
+Mutable tests may run in parallel only when each worker owns a complete state
+boundary. A project-specific parallel runner must:
+
+1. choose an explicit worker count;
+2. create one database or equivalent data namespace per worker;
+3. start one independently configured SUT target per worker;
+4. export their URLs through `AUTOMATION_WORKER_BASE_URLS` in worker order;
+5. run Pytest with the same worker count;
+6. stop every process and delete every temporary data directory on exit.
+
+Do not enable `pytest -n auto` against one shared environment merely because
+browser contexts are isolated. Browser isolation does not isolate server-side
+accounts, inventory, carts, resets, or rate limits. When a remote environment
+provides tenant-level isolation instead of multiple URLs, the consuming project
+must implement and document that ownership model itself.
 
 ## 10. Optional OpenAPI integration
 

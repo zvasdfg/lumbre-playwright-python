@@ -407,6 +407,31 @@ separate marketing-membership form do not share consent state.
 matching browser experience and is fixed when the client bundle is built. Both
 must represent the same environment.
 
+### Worker-isolated parallel execution
+
+pytest-xdist provides process concurrency, not test-data isolation. Lumbre's
+autouse reset changes shared server state, so multiple workers cannot safely
+target one portal instance. The parallel runner therefore creates one complete
+local target per worker:
+
+```mermaid
+flowchart LR
+    Controller[Pytest controller] --> GW0[gw0]
+    Controller --> GW1[gw1]
+    Controller --> GW2[gw2]
+    Controller --> GW3[gw3]
+    GW0 --> S0[Portal :3200] --> D0[(Temporary D1 0)]
+    GW1 --> S1[Portal :3201] --> D1[(Temporary D1 1)]
+    GW2 --> S2[Portal :3202] --> D2[(Temporary D1 2)]
+    GW3 --> S3[Portal :3203] --> D3[(Temporary D1 3)]
+```
+
+The generic settings layer maps each xdist worker to an entry in
+`AUTOMATION_WORKER_BASE_URLS`. Lumbre adds the product-specific safety rule that
+rejects multi-worker collection when fewer isolated targets are configured.
+The core does not start portals or databases; lifecycle orchestration remains a
+project-owned runner responsibility.
+
 ## 9. Reporting architecture
 
 `TestLogger` owns case identity, named steps, observed values, and screenshot

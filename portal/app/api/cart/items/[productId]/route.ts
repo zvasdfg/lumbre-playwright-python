@@ -7,7 +7,7 @@ import {
   setCartItemQuantity,
   UnknownProductError,
 } from "../../../../../server/modules/commerce/cart-service";
-import { resolveCartContext } from "../../../../../server/modules/commerce/cart-context";
+import { resolveWritableCartContext } from "../../../../../server/modules/commerce/cart-context";
 import {
   sessionResponse,
 } from "../../../../../server/modules/sessions/session-service";
@@ -37,7 +37,7 @@ export async function PATCH(request: Request, routeContext: RouteContext) {
     return Response.json({ error: "quantity from 1 to 20 is required" }, { status: 422 });
   }
 
-  const cartContext = await resolveCartContext(request);
+  const cartContext = await resolveWritableCartContext(request);
   try {
     const cart = await setCartItemQuantity(
       cartContext.owner,
@@ -64,7 +64,7 @@ export async function DELETE(request: Request, routeContext: RouteContext) {
     return Response.json({ error: "A positive numeric productId is required" }, { status: 422 });
   }
 
-  const cartContext = await resolveCartContext(request);
+  const cartContext = await resolveWritableCartContext(request);
   const cart = await removeCartItem(cartContext.owner, productId);
   return sessionResponse(cartContext.anonymousSession, { data: cart });
 }

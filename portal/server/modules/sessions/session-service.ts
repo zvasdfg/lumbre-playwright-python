@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, lt } from "drizzle-orm";
 import { getDatabase } from "../../platform/database/client";
 import { anonymousSessions } from "../../platform/database/schema";
 import {
@@ -19,7 +19,9 @@ function expirationFrom(now: Date): string {
   return new Date(now.getTime() + sessionTtlSeconds * 1000).toISOString();
 }
 
-export async function resolveAnonymousSession(request: Request): Promise<AnonymousSession> {
+export async function resolveExistingAnonymousSession(
+  request: Request,
+): Promise<AnonymousSession | null> {
   const database = getDatabase();
   const now = new Date();
   const cookieSessionId = readSessionCookie(request);
@@ -32,16 +34,24 @@ export async function resolveAnonymousSession(request: Request): Promise<Anonymo
       .get();
 
     if (existing && new Date(existing.expiresAt).getTime() > now.getTime()) {
-      await database
-        .update(anonymousSessions)
-        .set({ lastSeenAt: now.toISOString(), expiresAt: expirationFrom(now) })
-        .where(eq(anonymousSessions.id, existing.id));
       return { id: existing.id, setCookie: null };
     }
+  }
 
-    if (existing) {
-      await database.delete(anonymousSessions).where(eq(anonymousSessions.id, existing.id));
-    }
+  return null;
+}
+
+export async function resolveAnonymousSession(request: Request): Promise<AnonymousSession> {
+  const database = getDatabase();
+  const now = new Date();
+  const existing = await resolveExistingAnonymousSession(request);
+
+  if (existing) {
+    await database
+      .update(anonymousSessions)
+      .set({ lastSeenAt: now.toISOString(), expiresAt: expirationFrom(now) })
+      .where(eq(anonymousSessions.id, existing.id));
+    return existing;
   }
 
   const sessionId = crypto.randomUUID();
@@ -58,12 +68,30 @@ export async function resolveAnonymousSession(request: Request): Promise<Anonymo
 }
 
 export function sessionResponse(
-  session: AnonymousSession,
+  session: AnonymousSession | null,
   body: unknown,
   init: ResponseInit = {},
 ): Response {
   const headers = new Headers(init.headers);
   headers.set("Cache-Control", "private, no-store");
-  if (session.setCookie) headers.set("Set-Cookie", session.setCookie);
+  if (session?.setCookie) headers.set("Set-Cookie", session.setCookie);
   return Response.json(body, { ...init, headers });
+}
+
+export async function cleanupExpiredAnonymousSessions(
+  now: Date = new Date(),
+): Promise<number> {
+  const database = getDatabase();
+  const expired = await database
+    .select({ id: anonymousSessions.id })
+    .from(anonymousSessions)
+    .where(lt(anonymousSessions.expiresAt, now.toISOString()))
+    .all();
+
+  if (expired.length > 0) {
+    await database
+      .delete(anonymousSessions)
+      .where(lt(anonymousSessions.expiresAt, now.toISOString()));
+  }
+  return expired.length;
 }

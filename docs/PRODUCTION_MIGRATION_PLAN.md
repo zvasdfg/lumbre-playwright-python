@@ -1,8 +1,9 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 6G order cancellation and fulfillment implemented and
-> regression-validated locally on 2026-09-24. Live Stripe sandbox activation
-> remains pending test credentials.
+> Status: Portal feature migration paused after Phase 6G and accepted as the
+> Reference SUT v1 on 2026-09-24. The active engineering track has returned to
+> the Playwright framework; production hardening remains an explicit future
+> deployment phase.
 
 ## 1. Purpose
 
@@ -515,16 +516,36 @@ Phase 6G completion evidence:
   `UI-051` protects the browser cancellation contract;
 - OpenAPI publishes and validates 42 route operations.
 
-### Phase 7: production hardening
+### Phase 7A: application and Worker hardening — completed
 
-- rate limits for abuse-sensitive operations;
-- CSRF protection where the selected session mechanism requires it;
-- structured logs and request correlation IDs;
-- sanitized error responses;
-- D1 backup/export procedure;
-- secret rotation procedure;
-- privacy and retention policy;
-- post-deployment smoke suite.
+- public cart mutations are protected by a Cloudflare rate-limit binding;
+- cross-site browser mutations are rejected before session or business-state
+  allocation, while signed Stripe webhooks retain their provider boundary;
+- every response receives a correlation ID and production API requests emit
+  structured metadata-only logs;
+- unexpected API failures are sanitized and correlated without exposing stack
+  traces or internal exception messages;
+- browser security headers now include CSP, framing denial, MIME-sniffing
+  protection, referrer and permissions policies, plus production HSTS;
+- empty-cart reads no longer create sessions or cart rows;
+- a daily Worker cron removes expired anonymous sessions, with cascading cart
+  cleanup and an indexed expiration query;
+- OpenAPI documents the new `403`, `429`, `Retry-After`, and correlated error
+  contracts;
+- `API-072` through `API-074` protect correlation, headers, CSRF rejection,
+  no-allocation reads, and abuse throttling.
+
+### Phase 7B: deployment operations — in progress
+
+- completed 2026-09-24: created the remote WNAM D1 database, replaced the
+  placeholder binding ID, applied all 13 migrations, seeded its version, and
+  verified catalog counts and the session-expiry index;
+- define and test D1 backup/export and restoration procedures;
+- provision production secrets and document rotation and revocation;
+- publish privacy, retention, and incident-response policies;
+- add deployed health monitoring, alert ownership, and a post-deployment smoke
+  suite against an explicit remote-test target;
+- establish staging before enabling live email or Stripe adapters.
 
 ## 9. Increment protocol
 
@@ -571,14 +592,34 @@ not replace API contracts or browser workflows.
 - Test-only reset behavior returns `404` outside the test environment.
 - Every user-owned query is constrained by the resolved session or user ID.
 
-## 12. Immediate next increment
+## 12. Migration checkpoint and future backlog
 
-Phase 6H should add account-owned event-reservation cancellation. The increment
-must restore public capacity exactly once, preserve foreign-record concealment,
-and define whether cancellation remains available after an event starts. API
-tests should own capacity and lifecycle invariants; one browser test is useful
-only if account history exposes a distinct cancellation action and feedback.
+Phase 7A is the current implementation checkpoint. Lumbre has persistence,
+identity, commerce, administration, inventory, state-machine behavior, and an
+application-level production security baseline. This is sufficient to serve as
+a realistic automation target; more product features are not required to prove
+the framework's architecture or Playwright capabilities.
 
-Production authentication remains disabled until an actual email provider and
-secret bindings are selected. That deployment integration does not block local
-Phase 6G order-lifecycle work or automation learning.
+The automation product also supports worker-isolated pytest-xdist execution.
+Its runner starts one portal and temporary D1 database per worker, maps
+`app_url` to that target, and rejects unsafe shared mutable execution. The last
+pre-hardening four-worker baseline passed 168 executions in 71.75 seconds
+versus 135.12 seconds sequentially, a 46.9% reduction in Pytest execution time.
+The Phase 7A regression passed all 171 executions in 103.94 seconds with four
+isolated workers.
+
+Lumbre is not yet ready for public traffic without operator work. The remote D1
+resource is provisioned and migrated; Phase 7B must still establish secrets,
+backup/restore validation, monitoring, privacy ownership, and a remote smoke
+gate.
+
+Optional portal backlog, not an active phase:
+
+- account-owned event-reservation cancellation;
+- a provider-backed refund workflow before paid-order cancellation;
+- live email delivery and production authentication;
+- live Stripe test-mode smoke coverage;
+- Phase 7B deployment operations.
+
+Any return to this backlog should begin with a new risk decision, not by
+automatically incrementing the phase number.

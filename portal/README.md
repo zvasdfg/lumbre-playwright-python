@@ -107,7 +107,7 @@ delivery adapter, production URL, and secret bindings are configured.
 | `PATCH` | `/api/admin/orders/:id/fulfillment` | Advance a paid order through audited fulfillment states | `API-070`, `API-071` |
 | `GET` | `/api/recipes` | Recipe collection and filters | `API-002`, `API-005` |
 | `GET` | `/api/products` | Product collection | `API-017` |
-| `GET` | `/api/cart` | Resolve a session and restore its cart | `API-022`, `CONTRACT-002` |
+| `GET` | `/api/cart` | Read the current cart without allocating anonymous state | `API-022`, `API-072`, `CONTRACT-002` |
 | `POST` | `/api/cart/items` | Add or increment a server-priced line item | `API-022`, `API-023`, `API-024`, `CONTRACT-003` |
 | `PATCH` | `/api/cart/items/:productId` | Replace a persisted item quantity | `API-024` |
 | `DELETE` | `/api/cart/items/:productId` | Remove a persisted line item | `API-024`, `UI-008` |
@@ -182,15 +182,43 @@ ownership, deduplication, and validation rules directly.
 
 ## Anonymous cart and session
 
-`GET /api/cart` creates or resumes an opaque 30-day anonymous session. Its
-cookie uses `HttpOnly`, `SameSite=Lax`, `Path=/`, and `Secure` in production.
-The cookie contains only a random identifier; cart content remains in D1.
+`GET /api/cart` is allocation-free: a new visitor receives an empty cart
+without a cookie or D1 write. The first cart mutation creates an opaque 30-day
+anonymous session. Its cookie uses `HttpOnly`, `SameSite=Lax`, `Path=/`, and
+`Secure` in production. The cookie contains only a random identifier; cart
+content remains in D1.
 
 The browser sends only `productId` and `quantity`. Product names, unit prices,
 line totals, and cart totals are derived from the server catalog. Repeated adds
 atomically increment one line item, while `PATCH` replaces its quantity and
 `DELETE` removes it. Independent browser contexts therefore receive isolated
 carts, and a cart survives reload within its own session.
+
+## Worker security and operations baseline
+
+Every response receives an opaque `X-Request-ID`. Production API requests and
+maintenance tasks emit one-line structured JSON logs containing correlation,
+route, status, and duration metadata without bodies, cookies, tokens, personal
+data, or stack traces. Unexpected API failures return a generic `500` contract
+with the same request ID.
+
+Unsafe browser API methods reject cross-site requests before application state
+is allocated. The Stripe webhook is excluded because it uses its own signed
+provider contract. In production, Cloudflare's rate-limit binding permits 30
+public cart mutations per 60 seconds for each caller key; rejected requests
+return `429` with `Retry-After: 60`. Tests activate the same binding with a
+run-unique `X-Lumbre-Test-Rate-Limit-Key` so the boundary is deterministic
+without weakening production behavior. Protected mutation routes can receive
+their own scopes when production identity is enabled.
+
+The Worker cron runs daily at `04:00 UTC` and deletes expired anonymous
+sessions. D1 cascades that deletion to their carts and items, and the expiry
+index keeps the retention query bounded as the dataset grows.
+
+Browser responses publish a restrictive CSP, framing denial, MIME-sniffing
+protection, a strict referrer policy, and a limited permissions policy. The
+production build also publishes HSTS. These controls are exercised by
+`API-072` through `API-074`.
 
 ## Passwordless accounts and authorization
 
@@ -342,6 +370,8 @@ npm run dev:cloudflare
 npm run db:generate
 npm run db:migrate:local
 npm run db:seed:local
+npm run db:migrate:remote
+npm run db:seed:remote
 npm run cf:typegen
 npm run lint
 npm run typecheck
@@ -357,5 +387,25 @@ so the learning suite remains zero-configuration; production has no fallback.
 `npm run db:generate` creates version-controlled SQL from the Drizzle schema.
 Rerun `npm run cf:typegen` whenever `wrangler.jsonc` bindings change.
 `npm run build` produces the vinext/Cloudflare-compatible build. The production
-result is a protected public-demo candidate with anonymous cart support; no
-deployment is performed or represented as complete by this repository.
+result is a protected public-demo candidate with anonymous cart support.
+
+## Remote D1 preparation
+
+The Cloudflare account has one remote `lumbre-db` in WNAM. Its real binding ID
+is versioned in `wrangler.jsonc`; database IDs identify a resource and are not
+credentials. OAuth tokens remain in Wrangler's user configuration outside the
+repository.
+
+After an explicit production database change, apply only committed migrations
+and then the idempotent metadata seed:
+
+```bash
+npm run db:migrate:remote
+npm run db:seed:remote
+```
+
+Both commands mutate the remote database and must never be used by the local or
+parallel test runners. On 2026-09-24 the remote database was verified with all
+13 migrations, 23 tables, seven catalog products, three events, the expected
+seed version, and the anonymous-session expiry index. The Worker itself has not
+yet been deployed.

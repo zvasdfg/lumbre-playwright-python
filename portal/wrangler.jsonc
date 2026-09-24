@@ -12,11 +12,24 @@
   "images": {
     "binding": "IMAGES"
   },
+  "ratelimits": [
+    {
+      "name": "ABUSE_RATE_LIMITER",
+      "namespace_id": "1001001",
+      "simple": {
+        "limit": 30,
+        "period": 60
+      }
+    }
+  ],
+  "triggers": {
+    "crons": ["0 4 * * *"]
+  },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "lumbre-db",
-      "database_id": "00000000-0000-4000-8000-000000000000",
+      "database_id": "cfe21e00-9638-4d62-9dc8-409debceb4b4",
       "migrations_dir": "drizzle"
     }
   ]

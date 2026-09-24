@@ -17,11 +17,10 @@ export async function GET(_request: Request, context: RouteContext) {
       return Response.json({ error: `Hypothesis '${id}' was not found` }, { status: 404 });
     }
     return Response.json({ data: hypothesis });
-  } catch (error) {
+  } catch {
     return Response.json(
       {
         error: "The local hypothesis registry could not be read",
-        detail: (error as Error).message,
       },
       { status: 500 },
     );

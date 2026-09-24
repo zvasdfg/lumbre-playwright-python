@@ -8,6 +8,7 @@ class Header:
         self.page = page
         self.join_button = page.get_by_role("button", name="Únete al fuego")
         self.cart_button = page.get_by_role("button", name=r"Abrir canasta")
+        self.cart_quantity = self.cart_button.locator("span")
         self.account_button = page.get_by_test_id("account-button")
 
     def open_membership(self) -> None:

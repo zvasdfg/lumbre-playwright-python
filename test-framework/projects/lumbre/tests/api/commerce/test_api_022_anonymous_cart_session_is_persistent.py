@@ -13,26 +13,29 @@ def test_anonymous_cart_session_is_persistent(
     api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    with test_log.step("Initialize an anonymous cart session"):
+    with test_log.step("Read an empty cart without allocating server state"):
         response = api.cart_response()
         initial_cart = response.json()["data"]
-        set_cookie = response.headers.get("set-cookie", "")
+        initial_set_cookie = response.headers.get("set-cookie", "")
         test_log.values(
             observed_status=response.status,
             observed_initial_cart=initial_cart,
-            cookie_is_http_only="HttpOnly" in set_cookie,
-            cookie_same_site_lax="SameSite=Lax" in set_cookie,
-            cookie_has_path="Path=/" in set_cookie,
-            cookie_has_max_age="Max-Age=" in set_cookie,
+            observed_set_cookie=initial_set_cookie,
+            expected_server_allocation=False,
         )
 
     with test_log.step("Add a catalog product to the session cart"):
         mutation = api.add_cart_item({"productId": 101, "quantity": 1})
         mutated_cart = mutation.json()["data"]
+        set_cookie = mutation.headers.get("set-cookie", "")
         test_log.values(
             observed_status=mutation.status,
             observed_product=mutated_cart["items"][0]["name"],
             observed_total_quantity=mutated_cart["totalQuantity"],
+            cookie_is_http_only="HttpOnly" in set_cookie,
+            cookie_same_site_lax="SameSite=Lax" in set_cookie,
+            cookie_has_path="Path=/" in set_cookie,
+            cookie_has_max_age="Max-Age=" in set_cookie,
         )
 
     with test_log.step("Read the cart again with the same session"):
@@ -45,6 +48,7 @@ def test_anonymous_cart_session_is_persistent(
 
         assert response.status == 200
         assert initial_cart == {"items": [], "totalQuantity": 0, "total": 0}
+        assert initial_set_cookie == ""
         assert "HttpOnly" in set_cookie
         assert "SameSite=Lax" in set_cookie
         assert "Path=/" in set_cookie

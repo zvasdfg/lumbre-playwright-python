@@ -18,11 +18,10 @@ export async function GET() {
     await ensureRecommendedHypotheses();
     const records = await listHypotheses();
     return Response.json({ data: records, count: records.length });
-  } catch (error) {
+  } catch {
     return Response.json(
       {
         error: "The recommended hypothesis registry could not be initialized",
-        detail: (error as Error).message,
       },
       { status: 500 },
     );
@@ -114,11 +113,10 @@ export async function POST(request: Request) {
       },
       { status: created ? 201 : 200 },
     );
-  } catch (error) {
+  } catch {
     return Response.json(
       {
         error: "The local hypothesis registry could not be updated",
-        detail: (error as Error).message,
       },
       { status: 500 },
     );

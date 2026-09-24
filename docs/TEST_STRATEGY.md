@@ -2,7 +2,7 @@
 
 > Perspective: Staff QA architecture
 > Stack: Python, Pytest, Playwright Sync API, Page Object Model, Component
-> Objects, APIRequestContext, OpenAPI 3.1, and JSON Schema 2020-12
+> Objects, APIRequestContext, pytest-xdist, OpenAPI 3.1, and JSON Schema 2020-12
 
 ## 1. Purpose
 
@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 75 / 99 |
+| API case IDs / executions | 78 / 102 |
 | Browser case IDs / executions | 53 / 57 |
-| Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 128 |
-| Total Pytest executions | 164 |
-| Test files | 127 |
+| Framework unit case IDs / executions | 3 / 12 |
+| Unique committed risks | 131 |
+| Total Pytest executions | 171 |
+| Test files | 130 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 164 passed in 141.87 seconds |
+| Latest validation | 171 passed; 103.94 s with 4 isolated workers |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,10 +50,10 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 74 | 74 | 100% |
-| P1 | 48 | 48 | 100% |
+| P0 | 76 | 76 | 100% |
+| P1 | 49 | 49 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **128** | **128** | **100%** |
+| **Total** | **131** | **131** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
 secondary API route-operation signal is `42/42 = 100%`. Contract
@@ -207,6 +207,9 @@ Priority definitions:
 | API-069 | A paid order cannot be cancelled or restore stock without a refund | P0 | API state conflict + inventory integrity |
 | API-070 | Order fulfillment transitions reject a customer account | P0 | API role authorization |
 | API-071 | Administrator fulfillment advances without skipped or replayed transitions | P0 | API state machine + audit |
+| API-072 | API responses expose correlation and browser security controls | P1 | API security headers + observability |
+| API-073 | Cross-site browser mutations cannot allocate cart state | P0 | API CSRF boundary |
+| API-074 | Repeated cart mutations are rejected at the Worker boundary | P0 | API abuse protection |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -316,6 +319,11 @@ Investigate failures in this order:
 
 Execution and report commands live in the root [README](../README.md). Detailed
 framework configuration lives in the [framework README](../test-framework/README.md).
+
+Parallel regression uses pytest-xdist only through the managed parallel runner.
+Every worker receives an independent portal and D1 database, so the per-test
+reset remains deterministic. A shared mutable target is an invalid execution
+model, even if each UI test already receives a fresh browser context.
 
 ## 8. Review checklist
 

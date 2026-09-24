@@ -10,8 +10,8 @@ from automation.core.reporting import TestLogger
 
 
 @pytest.fixture(scope="session")
-def app_url() -> str:
-    return settings.base_url
+def app_url(worker_id: str) -> str:
+    return settings.base_url_for_worker(worker_id)
 
 
 @pytest.fixture(scope="session")

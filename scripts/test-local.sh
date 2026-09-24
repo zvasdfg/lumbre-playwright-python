@@ -5,15 +5,26 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PORT="${PORT:-3100}"
 BASE_URL="http://localhost:${PORT}"
 SERVER_LOG="${TMPDIR:-/tmp}/lumbre-portal-${PORT}.log"
-D1_STATE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/lumbre-test-d1.XXXXXX")"
 export NO_PROXY="localhost,127.0.0.1,::1"
 export no_proxy="$NO_PROXY"
 export LUMBRE_ENV="test"
 export NEXT_PUBLIC_LUMBRE_ENV="test"
-export LUMBRE_D1_STATE_DIR="$D1_STATE_DIR"
 export BETTER_AUTH_URL="$BASE_URL"
 export BETTER_AUTH_SECRET="lumbre-test-auth-secret-not-for-production-2026"
 export STRIPE_WEBHOOK_SECRET="whsec_lumbre_test_webhook_secret_2026"
+
+for argument in "$@"; do
+  case "$argument" in
+    -n | -n[0-9]* | --numprocesses | --numprocesses=*)
+      echo "The sequential runner owns one mutable target and cannot use pytest-xdist." >&2
+      echo "Use ./scripts/test-parallel.sh with WORKERS=<count> instead." >&2
+      exit 2
+      ;;
+  esac
+done
+
+D1_STATE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/lumbre-test-d1.XXXXXX")"
+export LUMBRE_D1_STATE_DIR="$D1_STATE_DIR"
 
 cd "$ROOT_DIR/portal"
 CI=1 ./node_modules/.bin/wrangler d1 migrations apply lumbre-db \

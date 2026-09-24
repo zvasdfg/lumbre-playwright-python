@@ -28,6 +28,8 @@ export type CartView = {
   total: number;
 };
 
+const emptyCart: CartView = { items: [], totalQuantity: 0, total: 0 };
+
 export type CartOwner = { sessionId: string } | { userId: string };
 
 export class UnknownProductError extends Error {
@@ -95,7 +97,12 @@ async function projectCart(cartId: string): Promise<CartView> {
 }
 
 export async function readCart(owner: CartOwner): Promise<CartView> {
-  return projectCart(await getOrCreateCartId(owner));
+  const existing = await getDatabase()
+    .select({ id: carts.id })
+    .from(carts)
+    .where(ownerCondition(owner))
+    .get();
+  return existing ? projectCart(existing.id) : structuredClone(emptyCart);
 }
 
 export async function addCartItem(

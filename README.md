@@ -11,7 +11,8 @@ project consumes the independent automation core.
 
 The framework demonstrates project isolation, Page Object Model, Component
 Objects, API contracts, browser-network control, deterministic test data,
-cross-browser validation, diagnostic reporting, and risk-based test strategy.
+worker-isolated parallel execution, cross-browser validation, diagnostic
+reporting, and risk-based test strategy.
 
 > The product experience is written in Mexican Spanish as part of the Lumbre
 > identity. Framework code and engineering documentation are written in English.
@@ -20,18 +21,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 128 |
-| Automated functional risks | 128 |
-| Pytest executions | 164 |
-| Test files | 127 |
-| API cases / executions | 75 / 99 |
+| Committed functional risks | 131 |
+| Automated functional risks | 131 |
+| Pytest executions | 171 |
+| Test files | 130 |
+| API cases / executions | 78 / 102 |
 | Browser cases / executions | 53 / 57 |
-| Framework unit cases / executions | 3 / 8 |
+| Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (42/42) |
-| Latest full-suite result | 164 passed |
+| Latest full-suite result | 171 passed with 4 isolated workers |
 
-**100% refers to the repository's 128-item committed functional-risk catalog.**
+**100% refers to the repository's 131-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -244,6 +245,28 @@ and removes both the temporary server and database state.
 ./scripts/test-local.sh -q
 ```
 
+Run the same suite in parallel. This runner creates one portal process and one
+temporary D1 database per worker; tests never share mutable server state.
+
+```bash
+WORKERS=4 ./scripts/test-parallel.sh -q
+```
+
+The equivalent regression benchmark is:
+
+| Mode | Workers | Result | Pytest duration |
+| --- | ---: | ---: | ---: |
+| Pre-hardening sequential baseline | 1 | 168 passed | 135.12 s |
+| Pre-hardening isolated parallel baseline | 4 | 168 passed | 71.75 s |
+| Phase 7A isolated parallel validation | 4 | 171 passed | 103.94 s |
+
+The comparable pre-hardening runs measured a 46.9% reduction in Pytest
+execution time, or approximately 1.88x speedup. Target startup and D1 migration
+time is outside the Pytest duration. The Phase 7A row is the current security
+baseline and is not compared to an outdated sequential case count.
+Passing `-n` to `test-local.sh` is rejected because multiple workers must not
+reset the same database.
+
 Useful focused commands:
 
 ```bash
@@ -320,9 +343,9 @@ status.
 
 ## Current scope
 
-The repository currently optimizes for deterministic local execution. A public
-portal deployment and CI artifact publishing are natural next steps; they are
-not presented as completed capabilities here. Local and test modes now exercise
+The repository currently optimizes for deterministic local execution. A remote
+D1 resource is provisioned and migrated, but the Worker has not been deployed;
+CI artifact publishing also remains future work. Local and test modes exercise
 passwordless accounts, role authorization, reusable authenticated browser
 state, and account-owned carts. The production build still exposes only public
 reads and a D1-backed anonymous cart while account access and unprotected

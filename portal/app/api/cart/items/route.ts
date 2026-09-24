@@ -6,7 +6,7 @@ import {
   addCartItem,
   UnknownProductError,
 } from "../../../../server/modules/commerce/cart-service";
-import { resolveCartContext } from "../../../../server/modules/commerce/cart-context";
+import { resolveWritableCartContext } from "../../../../server/modules/commerce/cart-context";
 import {
   sessionResponse,
 } from "../../../../server/modules/sessions/session-service";
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const context = await resolveCartContext(request);
+  const context = await resolveWritableCartContext(request);
   try {
     const cart = await addCartItem(
       context.owner,

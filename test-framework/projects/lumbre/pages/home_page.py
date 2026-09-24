@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from playwright.sync_api import Locator, Page
+from playwright.sync_api import Locator, Page, expect
 
 from projects.lumbre.components.account_modal import AccountModal
 from projects.lumbre.components.admin_catalog import AdminCatalog
@@ -47,7 +47,17 @@ class HomePage(BasePage):
         self.recipe_search.fill(text)
 
     def add_product(self, product_name: str) -> None:
-        self.page.get_by_role("button", name=f"Agregar {product_name} a la canasta").click()
+        current_quantity = int(self.header.cart_quantity.inner_text())
+        with self.page.expect_response(
+            lambda response: response.request.method == "POST"
+            and "/api/cart/items" in response.url
+            and response.status == 201,
+        ):
+            self.page.get_by_role(
+                "button",
+                name=f"Agregar {product_name} a la canasta",
+            ).click()
+        expect(self.header.cart_quantity).to_have_text(str(current_quantity + 1))
 
     def product_named(self, product_name: str) -> Locator:
         heading = self.page.get_by_role("heading", name=product_name, exact=True)

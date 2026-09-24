@@ -1,5 +1,19 @@
 import type { NextConfig } from "next";
 
+const production = process.env.NODE_ENV === "production";
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${production ? "" : " 'unsafe-eval'"}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+].join("; ");
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
@@ -18,8 +32,14 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+            value: contentSecurityPolicy,
           },
+          ...(production
+            ? [{
+                key: "Strict-Transport-Security",
+                value: "max-age=31536000; includeSubDomains",
+              }]
+            : []),
         ],
       },
     ];
