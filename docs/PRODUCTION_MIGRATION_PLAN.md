@@ -1,7 +1,7 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 3 passwordless accounts, authorization, and cart ownership
-> completed and regression-validated locally on 2026-09-23.
+> Status: Phase 4 orders and deterministic local payments completed and
+> regression-validated locally on 2026-09-23.
 
 ## 1. Purpose
 
@@ -43,6 +43,11 @@ Phase 3 passed portal lint, TypeScript checking, the vinext production build,
 all framework static checks, and all 102 Pytest executions in 79.07 seconds.
 Its archived report is
 `reports/runs/lumbre-report-2026-09-23_17-43-37.html`.
+
+Phase 4 passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, and all 108 Pytest executions in 72.91 seconds.
+Its archived report is
+`reports/runs/lumbre-report-2026-09-23_18-12-58.html`.
 
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
@@ -268,7 +273,7 @@ Completion evidence:
 - the complete regression passed `102/102` across Chromium, Firefox, and
   WebKit where configured.
 
-### Phase 4: order and fake payment vertical slice
+### Phase 4: order and fake payment vertical slice — completed locally
 
 Deliver:
 
@@ -286,6 +291,22 @@ Automation risks:
 - client-side total manipulation cannot change the order;
 - the cart is cleared only after the defined successful state;
 - order history reflects the persisted result.
+
+Completion evidence:
+
+- migration `0004_conscious_rocket_raccoon.sql` creates account-owned orders,
+  immutable order-item snapshots, and payment-attempt records;
+- the server rejects client totals and derives every snapshot from its catalog;
+- independent order and payment idempotency keys return the original result;
+- the local payment port deterministically approves or rejects without an
+  external provider, clearing the cart only after approval;
+- `API-031` through `API-035` protect authorization, pricing integrity,
+  idempotency, both payment transitions, cart behavior, persistence, and live
+  OpenAPI response contracts;
+- `UI-025` protects anonymous account guidance and `UI-039` proves the complete
+  authenticated checkout and persisted order-history journey;
+- OpenAPI publishes 24 route operations, including order history, creation,
+  detail, and payment initiation.
 
 ### Phase 5: external payment sandbox
 
@@ -372,14 +393,10 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 4 begins with the smallest order vertical slice:
-
-1. persist a server-priced order snapshot for an authenticated customer;
-2. introduce a deterministic local payment port with success and rejection;
-3. define idempotency behavior before adding the checkout UI;
-4. publish order and payment contracts with focused API risks;
-5. add one browser journey only after the state transitions are proven below
-   the UI.
+Phase 5 begins by evaluating an external hosted-checkout sandbox behind the
+existing payment port. Before adding a provider, define webhook signature
+verification, provider-event deduplication, retry-safe transition rules, and a
+test boundary that never transports or stores card data in Lumbre.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local

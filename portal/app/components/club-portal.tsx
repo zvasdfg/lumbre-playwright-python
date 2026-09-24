@@ -31,6 +31,18 @@ type Account = {
   role: "customer" | "admin";
 };
 
+type Order = {
+  id: string;
+  status: "pending" | "paid" | "failed" | "cancelled";
+  customerName: string;
+  customerEmail: string;
+  currency: "MXN";
+  total: number;
+  items: CartItem[];
+  createdAt: string;
+  paidAt: string | null;
+};
+
 const emptyCart: Cart = { items: [], totalQuantity: 0, total: 0 };
 
 const currency = new Intl.NumberFormat("es-MX", {
@@ -67,6 +79,9 @@ export default function ClubPortal() {
   const [account, setAccount] = useState<Account | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [magicLinkRequested, setMagicLinkRequested] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<FireEvent | null>(null);
@@ -100,6 +115,13 @@ export default function ClubPortal() {
         if (accountResponse.ok) {
           const accountResult = (await accountResponse.json()) as { data: Account | null };
           setAccount(accountResult.data);
+          if (accountResult.data) {
+            const ordersResponse = await fetch("/api/orders", { signal: controller.signal });
+            if (ordersResponse.ok) {
+              const orderResult = (await ordersResponse.json()) as { data: Order[] };
+              setOrders(orderResult.data);
+            }
+          }
         }
       } catch (error) {
         if (!controller.signal.aborted) {
@@ -188,7 +210,77 @@ export default function ClubPortal() {
     setAccount(null);
     setAccountOpen(false);
     setCart(emptyCart);
+    setOrders([]);
     showToast("Tu sesión se cerró correctamente.");
+  }
+
+  function startCheckout() {
+    if (!account) {
+      setCartOpen(false);
+      setAccountOpen(true);
+      showToast("Inicia sesión para proteger y consultar tus compras.");
+      return;
+    }
+    setCartOpen(false);
+    setCheckoutOpen(true);
+    setCheckoutOrder(null);
+  }
+
+  async function submitCheckout(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!account || submitting) return;
+    setSubmitting(true);
+    const form = new FormData(event.currentTarget);
+
+    let order = checkoutOrder;
+    if (!order) {
+      const orderResponse = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": crypto.randomUUID(),
+        },
+        body: JSON.stringify({
+          customerName: form.get("customerName"),
+          customerEmail: form.get("customerEmail"),
+          deliveryNotes: form.get("deliveryNotes") || undefined,
+        }),
+      });
+      if (!orderResponse.ok) {
+        setSubmitting(false);
+        showToast("No pudimos crear tu pedido. Revisa los datos.");
+        return;
+      }
+      const orderResult = (await orderResponse.json()) as { data: Order };
+      order = orderResult.data;
+      setCheckoutOrder(order);
+    }
+
+    const paymentResponse = await fetch(`/api/orders/${order.id}/payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Idempotency-Key": crypto.randomUUID(),
+      },
+      body: JSON.stringify({ scenario: form.get("paymentScenario") }),
+    });
+    const paymentResult = (await paymentResponse.json()) as { data?: Order };
+    setSubmitting(false);
+    if (!paymentResult.data) {
+      showToast("No pudimos procesar el pago local.");
+      return;
+    }
+
+    setCheckoutOrder(paymentResult.data);
+    setOrders((current) => [paymentResult.data!, ...current.filter(({ id }) => id !== paymentResult.data!.id)]);
+    if (paymentResponse.status === 402) {
+      showToast("Pago rechazado. Tu canasta permanece intacta.");
+      return;
+    }
+    if (paymentResponse.ok) {
+      setCart(emptyCart);
+      showToast("Compra confirmada. El pedido quedó guardado en tu cuenta.");
+    }
   }
 
   async function submitMembership(event: FormEvent<HTMLFormElement>) {
@@ -420,6 +512,16 @@ export default function ClubPortal() {
                 <strong>{account.name}</strong>
                 <p>{account.email}</p>
                 <p>Perfil: {account.role === "admin" ? "administración" : "cliente"}</p>
+                <div className="order-history" data-testid="order-history">
+                  <h3>Historial de pedidos</h3>
+                  {orders.length ? orders.map((order) => (
+                    <article key={order.id}>
+                      <span>{order.id.slice(0, 8).toUpperCase()}</span>
+                      <strong>{currency.format(order.total)}</strong>
+                      <small>{order.status === "paid" ? "Pagado" : order.status === "failed" ? "Pago rechazado" : "Pendiente"}</small>
+                    </article>
+                  )) : <p>Todavía no hay pedidos registrados.</p>}
+                </div>
                 <button className="button button-primary" type="button" onClick={() => void logout()}>
                   Cerrar sesión
                 </button>
@@ -446,6 +548,34 @@ export default function ClubPortal() {
         </div>
       )}
 
+      {checkoutOpen && account && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setCheckoutOpen(false)}>
+          <section className="modal checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+            <button className="modal-close" type="button" onClick={() => setCheckoutOpen(false)} aria-label="Cerrar compra">×</button>
+            <p className="section-index">COMPRA LOCAL DETERMINISTA</p>
+            <h2 id="checkout-title">Confirma tus provisiones.</h2>
+            <p>El servidor vuelve a calcular cada precio. Ningún total enviado por el navegador se acepta como autoridad.</p>
+            {checkoutOrder?.status === "paid" ? (
+              <div className="checkout-result" role="status">
+                <strong>Compra confirmada</strong>
+                <p>Pedido {checkoutOrder.id.slice(0, 8).toUpperCase()} · {currency.format(checkoutOrder.total)}</p>
+                <button className="button button-primary" type="button" onClick={() => setCheckoutOpen(false)}>Cerrar</button>
+              </div>
+            ) : (
+              <form onSubmit={submitCheckout}>
+                <label>Nombre de entrega<input name="customerName" defaultValue={account.name} required minLength={2} /></label>
+                <label>Correo de confirmación<input name="customerEmail" type="email" defaultValue={account.email} required /></label>
+                <label>Notas de entrega<textarea name="deliveryNotes" maxLength={500} /></label>
+                <label>Resultado del simulador<select name="paymentScenario" defaultValue="success"><option value="success">Pago aprobado</option><option value="rejection">Pago rechazado</option></select></label>
+                <div className="cart-total"><span>Total calculado por servidor</span><strong>{currency.format(checkoutOrder?.total ?? cart.total)}</strong></div>
+                {checkoutOrder?.status === "failed" && <p className="payment-rejected" role="alert">El intento fue rechazado. Conservamos la canasta para que puedas probar de nuevo.</p>}
+                <button className="button button-primary full" type="submit" disabled={submitting}>{submitting ? "Procesando..." : checkoutOrder?.status === "failed" ? "Reintentar pago" : "Crear pedido y pagar"}</button>
+              </form>
+            )}
+          </section>
+        </div>
+      )}
+
 
       {selectedEvent && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedEvent(null)}>
@@ -464,7 +594,7 @@ export default function ClubPortal() {
             <p className="section-index">LA DESPENSA</p><h2 id="cart-title">Tu canasta</h2>
             {cart.items.length ? <ul>{cart.items.map((item) => <li key={item.productId}><span>{item.name}{item.quantity > 1 && <small> × {item.quantity}</small>}</span><strong>{currency.format(item.lineTotal)}</strong><button type="button" onClick={() => void removeFromCart(item)} aria-label={`Eliminar ${item.name}`}>×</button></li>)}</ul> : <p className="empty-cart">Todavía no agregas nada. El fuego puede esperar.</p>}
             <div className="cart-total"><span>Total</span><strong>{currency.format(cart.total)}</strong></div>
-            <button className="button button-primary full" type="button" disabled={!cart.items.length} onClick={() => showToast("El proceso de compra de demostración está listo para automatizarse.")}>Continuar compra</button>
+            <button className="button button-primary full" type="button" disabled={!cart.items.length} onClick={startCheckout}>Continuar compra</button>
           </aside>
         </div>
       )}

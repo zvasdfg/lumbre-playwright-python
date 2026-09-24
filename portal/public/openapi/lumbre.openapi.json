@@ -214,6 +214,76 @@
         }
       }
     },
+    "/api/orders": {
+      "get": {
+        "operationId": "listOrders",
+        "tags": ["Commerce"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/OrderCollectionResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" }
+        }
+      },
+      "post": {
+        "operationId": "createOrder",
+        "tags": ["Commerce"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/OrderCreateRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/OrderMutationResponse" },
+          "201": { "$ref": "#/components/responses/OrderMutationResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "409": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "operationId": "getOrder",
+        "tags": ["Commerce"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/OrderId" }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/OrderResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" }
+        }
+      }
+    },
+    "/api/orders/{id}/payment": {
+      "post": {
+        "operationId": "payOrder",
+        "tags": ["Commerce"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          { "$ref": "#/components/parameters/OrderId" },
+          { "$ref": "#/components/parameters/IdempotencyKey" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/PaymentRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/PaymentResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "402": { "$ref": "#/components/responses/PaymentResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
     "/api/events": {
       "get": {
         "operationId": "listEvents",
@@ -395,6 +465,18 @@
         "in": "path",
         "required": true,
         "schema": { "type": "integer", "minimum": 1 }
+      },
+      "OrderId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string", "format": "uuid" }
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string", "minLength": 1, "maxLength": 100 }
       }
     },
     "responses": {
@@ -474,6 +556,30 @@
         },
         "content": {
           "application/json": { "schema": { "$ref": "#/components/schemas/CartResponse" } }
+        }
+      },
+      "OrderResponse": {
+        "description": "An account-owned immutable order snapshot",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/OrderResponse" } }
+        }
+      },
+      "OrderCollectionResponse": {
+        "description": "Order history owned by the authenticated account",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/OrderCollection" } }
+        }
+      },
+      "OrderMutationResponse": {
+        "description": "Created order or idempotent replay",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/OrderMutation" } }
+        }
+      },
+      "PaymentResponse": {
+        "description": "Deterministic payment attempt result",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/PaymentResult" } }
         }
       }
     },
@@ -642,6 +748,87 @@
         "required": ["quantity"],
         "properties": {
           "quantity": { "type": "integer", "minimum": 1, "maximum": 20 }
+        },
+        "additionalProperties": false
+      },
+      "OrderItem": {
+        "type": "object",
+        "required": ["productId", "name", "category", "unitPrice", "quantity", "lineTotal"],
+        "properties": {
+          "productId": { "type": "integer", "minimum": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "unitPrice": { "type": "integer", "minimum": 1 },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "lineTotal": { "type": "integer", "minimum": 1 }
+        },
+        "additionalProperties": false
+      },
+      "Order": {
+        "type": "object",
+        "required": ["id", "status", "customerName", "customerEmail", "deliveryNotes", "currency", "total", "items", "createdAt", "paidAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "status": { "type": "string", "enum": ["pending", "paid", "failed", "cancelled"] },
+          "customerName": { "type": "string", "minLength": 2 },
+          "customerEmail": { "type": "string", "format": "email" },
+          "deliveryNotes": { "type": ["string", "null"] },
+          "currency": { "const": "MXN" },
+          "total": { "type": "integer", "minimum": 1 },
+          "items": { "type": "array", "minItems": 1, "items": { "$ref": "#/components/schemas/OrderItem" } },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "paidAt": { "type": ["string", "null"], "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "OrderCreateRequest": {
+        "type": "object",
+        "required": ["customerName", "customerEmail"],
+        "properties": {
+          "customerName": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "customerEmail": { "type": "string", "format": "email", "maxLength": 254 },
+          "deliveryNotes": { "type": "string", "maxLength": 500 }
+        },
+        "additionalProperties": false
+      },
+      "OrderResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": { "data": { "$ref": "#/components/schemas/Order" } },
+        "additionalProperties": false
+      },
+      "OrderCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Order" } },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "OrderMutation": {
+        "type": "object",
+        "required": ["data", "created"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Order" },
+          "created": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "PaymentRequest": {
+        "type": "object",
+        "required": ["scenario"],
+        "properties": { "scenario": { "type": "string", "enum": ["success", "rejection"] } },
+        "additionalProperties": false
+      },
+      "PaymentResult": {
+        "type": "object",
+        "required": ["data", "paymentId", "outcome", "created"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Order" },
+          "paymentId": { "type": "string", "format": "uuid" },
+          "outcome": { "type": "string", "enum": ["approved", "rejected"] },
+          "created": { "type": "boolean" }
         },
         "additionalProperties": false
       },

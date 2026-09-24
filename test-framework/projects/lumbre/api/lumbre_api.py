@@ -54,6 +54,31 @@ class LumbreApi:
     def remove_cart_item(self, product_id: int) -> APIResponse:
         return self._request.delete(f"/api/cart/items/{product_id}")
 
+    def create_order(self, payload: dict[str, Any], idempotency_key: str) -> APIResponse:
+        return self._request.post(
+            "/api/orders",
+            data=payload,
+            headers={"Idempotency-Key": idempotency_key},
+        )
+
+    def orders(self) -> APIResponse:
+        return self._request.get("/api/orders")
+
+    def order(self, order_id: str) -> APIResponse:
+        return self._request.get(f"/api/orders/{order_id}")
+
+    def pay_order(
+        self,
+        order_id: str,
+        scenario: str,
+        idempotency_key: str,
+    ) -> APIResponse:
+        return self._request.post(
+            f"/api/orders/{order_id}/payment",
+            data={"scenario": scenario},
+            headers={"Idempotency-Key": idempotency_key},
+        )
+
     def request_magic_link(self, payload: dict[str, Any]) -> APIResponse:
         return self._request.post("/api/account/magic-link", data=payload)
 

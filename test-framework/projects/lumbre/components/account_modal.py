@@ -16,6 +16,7 @@ class AccountModal:
         )
         self.link_sent_status = self.root.get_by_role("status")
         self.logout_button = self.root.get_by_role("button", name="Cerrar sesión")
+        self.order_history = self.root.get_by_test_id("order-history")
 
     def request_magic_link(self, *, name: str, email: str) -> None:
         self.name_input.fill(name)

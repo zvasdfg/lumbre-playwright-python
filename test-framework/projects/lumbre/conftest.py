@@ -42,6 +42,17 @@ def authenticated_storage_state(api: LumbreApi) -> StorageState:
 
 
 @pytest.fixture
+def authenticated_api(api: LumbreApi) -> LumbreApi:
+    """Return the domain client with a deterministic customer session."""
+    email = "fixture.customer@example.test"
+    assert api.request_magic_link({"name": "Cliente Fixture", "email": email}).status == 200
+    delivery = api.latest_local_magic_link(email)
+    assert delivery.status == 200
+    assert api.follow_magic_link(delivery.json()["data"]["url"]).status == 200
+    return api
+
+
+@pytest.fixture
 def authenticated_home(
     page: Page,
     app_url: str,

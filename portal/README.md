@@ -72,8 +72,8 @@ delivery adapter, production URL, and secret bindings are configured.
 
 - Lumbre identity and outdoor-fire community content.
 - Recipe category filters, search, and recipe feedback.
-- Product catalog, server-priced persistent anonymous cart, totals, removal,
-  and demonstration checkout.
+- Product catalog, server-priced persistent cart, authenticated checkout,
+  deterministic local payments, and account-owned order history.
 - Membership validation, keyboard navigation, API submission, and recovery.
 - Fire planning with cooking-style and vegetable-reserve calculations.
 - Ingredient catalog with research detail, family filters, and search.
@@ -98,6 +98,10 @@ delivery adapter, production URL, and secret bindings are configured.
 | `POST` | `/api/cart/items` | Add or increment a server-priced line item | `API-022`, `API-023`, `API-024`, `CONTRACT-003` |
 | `PATCH` | `/api/cart/items/:productId` | Replace a persisted item quantity | `API-024` |
 | `DELETE` | `/api/cart/items/:productId` | Remove a persisted line item | `API-024`, `UI-008` |
+| `GET` | `/api/orders` | Account-owned persisted order history | `API-033`, `API-035`, `UI-039` |
+| `POST` | `/api/orders` | Create an idempotent server-priced order snapshot | `API-031`–`API-033` |
+| `GET` | `/api/orders/:id` | Read one account-owned immutable order | OpenAPI contract |
+| `POST` | `/api/orders/:id/payment` | Run an idempotent local payment attempt | `API-034`, `API-035`, `UI-039` |
 | `GET` | `/api/events` | Event collection | `API-019` |
 | `GET` | `/api/ingredientes` | Ingredient catalog, filters, and detail | `API-007`, `API-008`, `API-016` |
 | `GET` | `/api/hipotesis` | Technical hypothesis registry | `API-011` |
@@ -146,6 +150,21 @@ The project fixture `authenticated_storage_state` prepares a customer session
 through `APIRequestContext` and exports Playwright storage state. UI tests that
 need an authenticated precondition can consume `authenticated_home`; tests of
 the sign-in experience continue to exercise the visible flow.
+
+## Orders and deterministic payment
+
+Checkout is available to authenticated customers in development and test. The
+browser submits customer delivery details but never submits an authoritative
+price. The order service reads the account cart, calculates totals from the
+server catalog, and persists immutable product-name, category, unit-price,
+quantity, and line-total snapshots.
+
+Order creation and payment initiation require independent `Idempotency-Key`
+headers. Replaying a key returns the original order or payment attempt instead
+of duplicating it. The local payment port accepts explicit `success` and
+`rejection` scenarios: approval marks the order paid and clears the cart;
+rejection marks it failed and preserves the cart for retry. The account dialog
+reads persisted order history rather than reconstructing it from client state.
 
 ## Hypothesis persistence
 

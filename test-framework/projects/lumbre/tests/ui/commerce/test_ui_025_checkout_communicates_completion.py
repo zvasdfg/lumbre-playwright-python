@@ -8,7 +8,7 @@ from projects.lumbre.pages.home_page import HomePage
 @pytest.mark.ui
 @pytest.mark.case(
     "UI-025",
-    "The demonstration checkout communicates its observable completion state",
+    "An anonymous shopper is guided to authentication before checkout",
 )
 def test_checkout_communicates_completion(
     home: HomePage,
@@ -22,13 +22,15 @@ def test_checkout_communicates_completion(
         expect(home.cart.checkout_button).to_be_enabled()
         test_log.values(selected_product=product_name)
 
-    with test_log.step("Continue the demonstration purchase"):
+    with test_log.step("Continue to the account-protected purchase"):
         home.cart.checkout()
 
-    with test_log.step("Validate the completion feedback"):
-        expected_message = "El proceso de compra de demostración está listo"
+    with test_log.step("Validate the authentication guidance"):
+        expected_message = "Inicia sesión para proteger y consultar tus compras."
+        expect(home.account.root).to_be_visible()
         expect(home.toast.root).to_contain_text(expected_message)
         test_log.values(
             observed_message=home.toast.root.inner_text(),
             expected_message_contains=expected_message,
+            observed_account_dialog=True,
         )

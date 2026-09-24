@@ -251,9 +251,10 @@ flowchart LR
 This makes mutation tests repeatable and prevents an interrupted learning run
 from silently changing the repository baseline.
 
-Authentication tests use the same reset boundary. Core account, verification,
-session, local-delivery, cart, and cart-item tables are cleared before each
-scenario; test mode then recreates one deterministic administrator identity.
+Authentication and checkout tests use the same reset boundary. Core account,
+verification, session, local-delivery, cart, order, order-item, and payment
+attempt tables are cleared before each scenario; test mode then recreates one
+deterministic administrator identity.
 
 ### Authenticated fixture flow
 

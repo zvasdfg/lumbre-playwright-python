@@ -1,7 +1,14 @@
 import { asc, eq, sql } from "drizzle-orm";
 import { products, type Product } from "../../../app/lib/data";
 import { getDatabase } from "../../platform/database/client";
-import { anonymousSessions, cartItems, carts } from "../../platform/database/schema";
+import {
+  anonymousSessions,
+  cartItems,
+  carts,
+  orderItems,
+  orders,
+  paymentAttempts,
+} from "../../platform/database/schema";
 
 export type CartItemView = {
   productId: number;
@@ -152,6 +159,17 @@ export async function removeCartItem(
   return projectCart(cartId);
 }
 
+export async function clearCart(owner: CartOwner): Promise<CartView> {
+  const database = getDatabase();
+  const cartId = await getOrCreateCartId(owner);
+  await database.delete(cartItems).where(eq(cartItems.cartId, cartId));
+  await database
+    .update(carts)
+    .set({ updatedAt: new Date().toISOString() })
+    .where(eq(carts.id, cartId));
+  return projectCart(cartId);
+}
+
 export async function mergeAnonymousCartIntoUser(
   sessionId: string,
   userId: string,
@@ -201,6 +219,9 @@ export async function mergeAnonymousCartIntoUser(
 
 export async function resetAnonymousCommerce(): Promise<void> {
   const database = getDatabase();
+  await database.delete(paymentAttempts);
+  await database.delete(orderItems);
+  await database.delete(orders);
   await database.delete(cartItems);
   await database.delete(carts);
   await database.delete(anonymousSessions);

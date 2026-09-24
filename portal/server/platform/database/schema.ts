@@ -66,3 +66,68 @@ export const cartItems = sqliteTable(
     index("cart_items_cart_index").on(table.cartId),
   ],
 );
+
+export const orders = sqliteTable(
+  "orders",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => authUser.id, { onDelete: "restrict" }),
+    status: text("status", { enum: ["pending", "paid", "failed", "cancelled"] })
+      .notNull()
+      .default("pending"),
+    customerName: text("customer_name").notNull(),
+    customerEmail: text("customer_email").notNull(),
+    deliveryNotes: text("delivery_notes"),
+    currency: text("currency").notNull().default("MXN"),
+    total: integer("total").notNull(),
+    idempotencyKey: text("idempotency_key").notNull(),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    paidAt: text("paid_at"),
+  },
+  (table) => [
+    uniqueIndex("orders_user_idempotency_unique").on(table.userId, table.idempotencyKey),
+    index("orders_user_created_index").on(table.userId, table.createdAt),
+  ],
+);
+
+export const orderItems = sqliteTable(
+  "order_items",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    productId: integer("product_id").notNull(),
+    productName: text("product_name").notNull(),
+    productCategory: text("product_category").notNull(),
+    unitPrice: integer("unit_price").notNull(),
+    quantity: integer("quantity").notNull(),
+    lineTotal: integer("line_total").notNull(),
+  },
+  (table) => [index("order_items_order_index").on(table.orderId)],
+);
+
+export const paymentAttempts = sqliteTable(
+  "payment_attempts",
+  {
+    id: text("id").primaryKey(),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    idempotencyKey: text("idempotency_key").notNull(),
+    adapter: text("adapter").notNull().default("local_fake"),
+    outcome: text("outcome", { enum: ["approved", "rejected"] }).notNull(),
+    amount: integer("amount").notNull(),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    uniqueIndex("payment_attempts_order_idempotency_unique").on(
+      table.orderId,
+      table.idempotencyKey,
+    ),
+    index("payment_attempts_order_index").on(table.orderId),
+  ],
+);

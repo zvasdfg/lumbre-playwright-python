@@ -4,6 +4,7 @@ from playwright.sync_api import Locator, Page
 
 from projects.lumbre.components.account_modal import AccountModal
 from projects.lumbre.components.cart_drawer import CartDrawer
+from projects.lumbre.components.checkout_modal import CheckoutModal
 from projects.lumbre.components.event_reservation_modal import EventReservationModal
 from projects.lumbre.components.events_section import EventsSection
 from projects.lumbre.components.fire_planner import FirePlanner
@@ -22,6 +23,7 @@ class HomePage(BasePage):
         self.header = Header(page)
         self.account = AccountModal(page)
         self.cart = CartDrawer(page)
+        self.checkout = CheckoutModal(page)
         self.events = EventsSection(page)
         self.event_reservation = EventReservationModal(page)
         self.membership = MembershipModal(page)
