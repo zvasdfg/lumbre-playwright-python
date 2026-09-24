@@ -154,7 +154,7 @@ export async function processStripeWebhook(rawBody: string, signature: string) {
       await sellReservedInventory(order.id);
       await clearCart({ userId: order.userId });
     } else if (failed && order.status !== "paid") {
-      await releaseOrderInventory(order.id, { failOrder: true });
+      await releaseOrderInventory(order.id, { orderStatus: "failed" });
     }
 
     await database

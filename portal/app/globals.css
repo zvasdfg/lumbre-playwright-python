@@ -334,6 +334,8 @@ footer small { grid-column: 1 / -1; border-top: 1px solid #4a4c46; margin-top: 5
 .order-history h3 { margin: 0 0 14px; font-family: var(--font-exo), sans-serif; font-size: 16px; text-transform: uppercase; }
 .order-history article { display: grid; grid-template-columns: 1fr auto; gap: 5px 16px; padding: 11px 0; border-bottom: 1px solid #d5d0c5; }
 .order-history article small { grid-column: 1 / -1; color: var(--text-muted); text-transform: uppercase; }
+.order-history .order-cancel { grid-column: 1 / -1; justify-self: start; border: 0; border-bottom: 1px solid currentColor; background: transparent; padding: 3px 0; color: var(--accent-dark); font: inherit; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.order-history .order-cancel:disabled { cursor: wait; opacity: .55; }
 .account-preferences { margin: 26px 0; padding-top: 20px; border-top: 1px solid #c7c2b5; }
 .account-preferences h3 { margin: 0; font-family: var(--font-exo), sans-serif; font-size: 16px; text-transform: uppercase; }
 .account-preferences > p { margin: 8px 0 0; color: var(--text-muted); font-size: 12px; line-height: 1.5; }

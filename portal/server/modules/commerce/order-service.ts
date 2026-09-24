@@ -10,10 +10,12 @@ import {
 } from "./inventory-service";
 
 export type OrderStatus = "pending" | "paid" | "failed" | "cancelled";
+export type FulfillmentStatus = "unfulfilled" | "processing" | "fulfilled" | "cancelled";
 
 export type OrderView = {
   id: string;
   status: OrderStatus;
+  fulfillmentStatus: FulfillmentStatus;
   customerName: string;
   customerEmail: string;
   deliveryNotes: string | null;
@@ -29,6 +31,8 @@ export type OrderView = {
   }>;
   createdAt: string;
   paidAt: string | null;
+  cancelledAt: string | null;
+  fulfilledAt: string | null;
 };
 
 export class EmptyCartError extends Error {}
@@ -61,6 +65,7 @@ async function projectOrder(orderId: string, userId: string): Promise<OrderView 
   return {
     id: order.id,
     status: order.status,
+    fulfillmentStatus: order.fulfillmentStatus,
     customerName: order.customerName,
     customerEmail: order.customerEmail,
     deliveryNotes: order.deliveryNotes,
@@ -69,6 +74,8 @@ async function projectOrder(orderId: string, userId: string): Promise<OrderView 
     items,
     createdAt: order.createdAt,
     paidAt: order.paidAt,
+    cancelledAt: order.cancelledAt,
+    fulfilledAt: order.fulfilledAt,
   };
 }
 

@@ -36,6 +36,7 @@ type Account = {
 type Order = {
   id: string;
   status: "pending" | "paid" | "failed" | "cancelled";
+  fulfillmentStatus: "unfulfilled" | "processing" | "fulfilled" | "cancelled";
   customerName: string;
   customerEmail: string;
   currency: "MXN";
@@ -43,6 +44,8 @@ type Order = {
   items: CartItem[];
   createdAt: string;
   paidAt: string | null;
+  cancelledAt: string | null;
+  fulfilledAt: string | null;
 };
 
 type AvailableEvent = FireEvent & {
@@ -276,6 +279,31 @@ export default function ClubPortal() {
     setOrders([]);
     setReservations([]);
     showToast("Tu sesión se cerró correctamente.");
+  }
+
+  async function cancelAccountOrder(order: Order) {
+    if (submitting) return;
+    setSubmitting(true);
+    const response = await fetch(`/api/orders/${order.id}/cancel`, {
+      method: "POST",
+      headers: { "Idempotency-Key": crypto.randomUUID() },
+    });
+    const result = (await response.json()) as { data?: Order; error?: string };
+    setSubmitting(false);
+    if (!response.ok || !result.data) {
+      showToast(
+        response.status === 409
+          ? "Este pedido ya no puede cancelarse desde el portal."
+          : "No pudimos cancelar el pedido. Intenta de nuevo.",
+      );
+      return;
+    }
+    setOrders((current) =>
+      current.map((candidate) =>
+        candidate.id === result.data!.id ? result.data! : candidate,
+      ),
+    );
+    showToast("Pedido cancelado. Ya no se procesará esta compra.");
   }
 
   async function confirmReservation(event: FormEvent<HTMLFormElement>) {
@@ -662,10 +690,21 @@ export default function ClubPortal() {
                 <div className="order-history" data-testid="order-history">
                   <h3>Historial de pedidos</h3>
                   {orders.length ? orders.map((order) => (
-                    <article key={order.id}>
+                    <article key={order.id} data-order-id={order.id}>
                       <span>{order.id.slice(0, 8).toUpperCase()}</span>
                       <strong>{currency.format(order.total)}</strong>
-                      <small>{order.status === "paid" ? "Pagado" : order.status === "failed" ? "Pago rechazado" : "Pendiente"}</small>
+                      <small>{order.status === "cancelled" ? "Cancelado" : order.status === "paid" ? order.fulfillmentStatus === "fulfilled" ? "Enviado" : order.fulfillmentStatus === "processing" ? "En preparación" : "Pagado" : order.status === "failed" ? "Pago rechazado" : "Pendiente"}</small>
+                      {(order.status === "pending" || order.status === "failed") && (
+                        <button
+                          className="order-cancel"
+                          type="button"
+                          disabled={submitting}
+                          aria-label={`Cancelar pedido ${order.id.slice(0, 8).toUpperCase()}`}
+                          onClick={() => void cancelAccountOrder(order)}
+                        >
+                          Cancelar pedido
+                        </button>
+                      )}
                     </article>
                   )) : <p>Todavía no hay pedidos registrados.</p>}
                 </div>

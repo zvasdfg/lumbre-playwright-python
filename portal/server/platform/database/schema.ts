@@ -90,6 +90,12 @@ export const orders = sqliteTable(
       enum: ["uncommitted", "reserved", "sold", "released"],
     }).notNull().default("uncommitted"),
     inventoryKey: text("inventory_key"),
+    fulfillmentStatus: text("fulfillment_status", {
+      enum: ["unfulfilled", "processing", "fulfilled", "cancelled"],
+    }).notNull().default("unfulfilled"),
+    cancellationKey: text("cancellation_key"),
+    cancelledAt: text("cancelled_at"),
+    fulfilledAt: text("fulfilled_at"),
   },
   (table) => [
     uniqueIndex("orders_user_idempotency_unique").on(table.userId, table.idempotencyKey),
@@ -298,7 +304,9 @@ export const administrativeAuditEvents = sqliteTable(
     actorUserId: text("actor_user_id")
       .notNull()
       .references(() => authUser.id, { onDelete: "restrict" }),
-    resourceType: text("resource_type", { enum: ["product", "event"] }).notNull(),
+    resourceType: text("resource_type", {
+      enum: ["product", "event", "order"],
+    }).notNull(),
     resourceId: text("resource_id").notNull(),
     action: text("action", { enum: ["created", "updated"] }).notNull(),
     beforeJson: text("before_json"),

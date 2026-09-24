@@ -103,7 +103,8 @@ delivery adapter, production URL, and secret bindings are configured.
 | `GET` | `/api/admin/events` | Complete event catalog with revisions | `API-058`, `API-061` |
 | `POST` | `/api/admin/events` | Create an event under the administrator role | `API-058`, `API-062` |
 | `PATCH` | `/api/admin/events/:id` | Update event details without invalidating confirmed capacity | `API-061` |
-| `GET` | `/api/admin/audit-events` | Read append-only product and event change evidence | `API-059`–`API-062` |
+| `GET` | `/api/admin/audit-events` | Read append-only catalog and fulfillment change evidence | `API-059`–`API-062`, `API-071` |
+| `PATCH` | `/api/admin/orders/:id/fulfillment` | Advance a paid order through audited fulfillment states | `API-070`, `API-071` |
 | `GET` | `/api/recipes` | Recipe collection and filters | `API-002`, `API-005` |
 | `GET` | `/api/products` | Product collection | `API-017` |
 | `GET` | `/api/cart` | Resolve a session and restore its cart | `API-022`, `CONTRACT-002` |
@@ -113,6 +114,7 @@ delivery adapter, production URL, and secret bindings are configured.
 | `GET` | `/api/orders` | Account-owned persisted order history | `API-033`, `API-035`, `UI-039` |
 | `POST` | `/api/orders` | Create an idempotent server-priced order snapshot | `API-031`–`API-033` |
 | `GET` | `/api/orders/:id` | Read one account-owned immutable order | OpenAPI contract |
+| `POST` | `/api/orders/:id/cancel` | Cancel an owned unpaid order and release any reservation once | `API-067`–`API-069`, `UI-051` |
 | `POST` | `/api/orders/:id/payment` | Run an idempotent local payment attempt and consume stock on approval | `API-034`, `API-035`, `API-063`–`API-065`, `UI-039` |
 | `POST` | `/api/orders/:id/checkout-session` | Create or reuse a provider-hosted checkout session and reserve stock | `API-036`, `API-066`, `UI-040` |
 | `POST` | `/api/payments/stripe/webhook` | Verify a signed provider event and finalize or release inventory | `API-037`–`API-040`, `API-066` |
@@ -251,6 +253,18 @@ a verified failed or expired event releases the reservation. Each order stores
 an inventory state and unique claim key so retries cannot sell or restore the
 same units twice. A competing claim receives `409` instead of allowing stock to
 become negative.
+
+Pending and failed orders may be cancelled by their owning account. Lumbre
+expires an open hosted provider session before releasing its reservation, and
+an idempotency key plus the persisted cancelled state prevents a second
+restock. Paid orders reject cancellation until a refund port is implemented.
+
+Payment and fulfillment are separate. A paid order starts `unfulfilled`; only
+an administrator can advance it to `processing` and then `fulfilled`. Skips and
+reversals receive `409`, replaying the current target is harmless, and every
+accepted transition is written to administrative audit history. Account order
+history presents these states in Mexican Spanish and offers **Cancelar pedido**
+only while the order remains eligible.
 
 ## Provider-hosted checkout
 

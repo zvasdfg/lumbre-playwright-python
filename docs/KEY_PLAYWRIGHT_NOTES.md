@@ -381,6 +381,25 @@ Do not reproduce every API transition in the browser. Add a UI test when
 rendering, accessibility, browser serialization, or user feedback is itself
 the contract; keep transactional invariants at the API/database boundary.
 
+## 33. Let contract baselines fail when the API surface changes
+
+Adding cancellation and fulfillment increased the OpenAPI surface from 40 to
+42 operations. The first full regression produced one intentional maintenance
+failure: `CONTRACT-001` still expected 40, while the other 162 executions
+passed. Updating the baseline only after validating both new operations keeps
+route growth visible instead of silently weakening the contract.
+
+This is a useful failure. A fixed operation count is not coverage by itself;
+it is a change detector paired with request and response schemas. When it
+fails, confirm which operations were added or removed, validate their schemas,
+then update the reviewed baseline.
+
+`API-067` through `API-071` drive cancellation and fulfillment directly because
+ownership, stock restoration, authorization, and transition order are server
+risks. `UI-051` uses API setup only for its pending-order precondition, then
+uses the real browser to prove the new accessible action, localized feedback,
+rendered state, and disappearance of an ineligible control.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)

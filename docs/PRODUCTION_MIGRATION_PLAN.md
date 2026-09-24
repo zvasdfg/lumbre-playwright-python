@@ -1,6 +1,6 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 6F server-owned inventory implemented and
+> Status: Phase 6G order cancellation and fulfillment implemented and
 > regression-validated locally on 2026-09-24. Live Stripe sandbox activation
 > remains pending test credentials.
 
@@ -85,6 +85,11 @@ all framework static checks, five focused inventory scenarios, and all 157
 Pytest executions in 106.92 seconds. Its archived report is
 `reports/runs/lumbre-report-2026-09-24_11-10-23.html`.
 
+Phase 6G passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, seven focused order-lifecycle executions, and all
+164 Pytest executions in 141.87 seconds. Its archived report is
+`reports/runs/lumbre-report-2026-09-24_11-39-05.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -99,7 +104,7 @@ with names only and no secret values.
 | Capability | Current source of truth | Production gap |
 | --- | --- | --- |
 | Cart | D1 records constrained by an opaque anonymous session or authenticated account | Cart quantities are intentionally non-reserving until checkout |
-| Checkout | D1 order snapshots, payment attempts, hosted checkout sessions, and verified provider events | Live provider credentials and fulfillment remain pending |
+| Checkout | D1 order snapshots, owner-scoped cancellation, payment attempts, hosted checkout sessions, audited fulfillment, and verified provider events | Live provider credentials and refund processing remain pending |
 | Membership | Stateless enrollment plus account-owned D1 preferences and consent events | Enrollment record and production messaging delivery remain pending |
 | Event reservation | D1 account reservation plus derived capacity and revision-protected administrative capacity | Cancellation remains pending |
 | Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
@@ -491,6 +496,25 @@ Phase 6F completion evidence:
   the oversell boundary, and expiration release; `UI-050` protects the distinct
   browser presentation risk.
 
+Phase 6G completion evidence:
+
+- account-owned pending or failed orders can be cancelled through an
+  idempotent route; foreign orders remain concealed with `404`;
+- cancelling a hosted reservation expires the provider session before one D1
+  batch releases inventory, preventing a duplicate restock on replay;
+- paid orders reject cancellation until a real refund workflow exists, so sold
+  inventory cannot be restored without reversing payment;
+- payment and fulfillment remain separate states; administrators advance paid
+  orders only from `unfulfilled` to `processing` to `fulfilled`;
+- accepted fulfillment transitions append before/after administrative audit
+  evidence, while customer accounts receive `403`;
+- account history renders the localized state and exposes cancellation only for
+  eligible orders;
+- `API-067` through `API-071` protect idempotency, ownership, paid-order
+  integrity, role authorization, ordered transitions, and audit evidence;
+  `UI-051` protects the browser cancellation contract;
+- OpenAPI publishes and validates 42 route operations.
+
 ### Phase 7: production hardening
 
 - rate limits for abuse-sensitive operations;
@@ -549,13 +573,12 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 6G should add authenticated order cancellation and fulfillment states.
-Cancellation must define which pre-fulfillment states are reversible, whether
-sold inventory is restored, and which idempotency boundary prevents duplicate
-restocks. API tests should protect the state machine and account ownership; a
-UI test is justified only for a distinct customer-facing cancellation or
-status-history contract.
+Phase 6H should add account-owned event-reservation cancellation. The increment
+must restore public capacity exactly once, preserve foreign-record concealment,
+and define whether cancellation remains available after an event starts. API
+tests should own capacity and lifecycle invariants; one browser test is useful
+only if account history exposes a distinct cancellation action and feedback.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local
-Phase 6F inventory work or automation learning.
+Phase 6G order-lifecycle work or automation learning.

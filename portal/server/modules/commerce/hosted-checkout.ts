@@ -38,6 +38,7 @@ export class PaymentProviderUnavailableError extends Error {}
 
 interface HostedCheckoutPort {
   createSession(input: CheckoutInput, idempotencyKey: string): Promise<ProviderSession>;
+  expireSession(providerSessionId: string): Promise<void>;
 }
 
 const localStripeSandbox: HostedCheckoutPort = {
@@ -49,6 +50,7 @@ const localStripeSandbox: HostedCheckoutPort = {
       checkoutUrl: `${input.origin}/?checkout=sandbox&session_id=${providerSessionId}`,
     };
   },
+  async expireSession() {},
 };
 
 const stripeCheckout: HostedCheckoutPort = {
@@ -89,6 +91,27 @@ const stripeCheckout: HostedCheckoutPort = {
       );
     }
     return { provider: "stripe", providerSessionId: payload.id, checkoutUrl: payload.url };
+  },
+  async expireSession(providerSessionId) {
+    const secretKey = serverBinding("STRIPE_SECRET_KEY");
+    if (!secretKey) {
+      throw new PaymentProviderUnavailableError("Stripe Checkout is not configured");
+    }
+    const response = await fetch(
+      `https://api.stripe.com/v1/checkout/sessions/${providerSessionId}/expire`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${secretKey}`,
+          "Idempotency-Key": `lumbre-expire-${providerSessionId}`,
+        },
+      },
+    );
+    if (!response.ok) {
+      throw new PaymentProviderUnavailableError(
+        "Stripe Checkout could not expire the hosted session",
+      );
+    }
   },
 };
 
@@ -145,7 +168,7 @@ export async function createHostedCheckout(
       idempotencyKey,
     );
   } catch (error) {
-    await releaseOrderInventory(orderId, { failOrder: false });
+    await releaseOrderInventory(orderId);
     throw error;
   }
   const now = new Date().toISOString();
@@ -158,4 +181,31 @@ export async function createHostedCheckout(
     updatedAt: now,
   });
   return { data: { orderId, status: "open", ...providerSession }, created: true };
+}
+
+export async function expireHostedCheckout(orderId: string): Promise<boolean> {
+  const database = getDatabase();
+  const checkout = await database
+    .select()
+    .from(hostedCheckoutSessions)
+    .where(
+      and(
+        eq(hostedCheckoutSessions.orderId, orderId),
+        eq(hostedCheckoutSessions.status, "open"),
+      ),
+    )
+    .get();
+  if (!checkout) return false;
+
+  await checkoutPort().expireSession(checkout.providerSessionId);
+  await database
+    .update(hostedCheckoutSessions)
+    .set({ status: "expired", updatedAt: new Date().toISOString() })
+    .where(
+      and(
+        eq(hostedCheckoutSessions.id, checkout.id),
+        eq(hostedCheckoutSessions.status, "open"),
+      ),
+    );
+  return true;
 }

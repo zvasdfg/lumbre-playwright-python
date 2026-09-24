@@ -86,6 +86,18 @@ class LumbreApi:
             headers={"Idempotency-Key": idempotency_key},
         )
 
+    def cancel_order(self, order_id: str, idempotency_key: str) -> APIResponse:
+        return self._request.post(
+            f"/api/orders/{order_id}/cancel",
+            headers={"Idempotency-Key": idempotency_key},
+        )
+
+    def update_order_fulfillment(self, order_id: str, status: str) -> APIResponse:
+        return self._request.patch(
+            f"/api/admin/orders/{order_id}/fulfillment",
+            data={"status": status},
+        )
+
     def stripe_webhook(self, raw_body: str, signature: str | None = None) -> APIResponse:
         headers = {"Content-Type": "application/json"}
         if signature is not None:

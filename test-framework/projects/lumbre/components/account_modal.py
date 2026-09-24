@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from playwright.sync_api import Page
+from playwright.sync_api import Locator, Page
 
 
 class AccountModal:
@@ -42,6 +42,16 @@ class AccountModal:
         self.name_input.fill(name)
         self.email_input.fill(email)
         self.request_link_button.click()
+
+    def order(self, order_id: str) -> Locator:
+        return self.order_history.locator(f'[data-order-id="{order_id}"]')
+
+    def cancel_order(self, order_id: str) -> None:
+        short_id = order_id[:8].upper()
+        self.order(order_id).get_by_role(
+            "button",
+            name=f"Cancelar pedido {short_id}",
+        ).click()
 
     def update_preferences(
         self,

@@ -312,6 +312,25 @@ and webhook replay safe and prevents two competing order snapshots from
 driving stock below zero. Administrative stock edits use the existing catalog
 revision contract, so stale operators cannot silently replace a newer value.
 
+### Order cancellation and fulfillment boundary
+
+Payment status and fulfillment status are independent. A paid order begins as
+`unfulfilled`, then an administrator may advance it to `processing` and finally
+`fulfilled`; skips, reversals, and customer mutations are rejected. Every
+accepted transition records its actor plus before and after state in the
+administrative audit stream.
+
+An owning account may cancel only a pending or failed order. If hosted checkout
+has reserved inventory, Lumbre first expires the provider session and then
+releases the stock in the same idempotent inventory boundary. Replaying the
+cancellation returns the existing cancelled order without restoring units
+again. A foreign account receives `404`, preserving the ownership-concealment
+contract.
+
+Paid cancellation is deliberately rejected because returning sold stock
+without refunding money would create an invalid business state. Refunds are a
+future provider-backed use case rather than an alias for cancellation.
+
 ### Administrative catalog and event capacity boundary
 
 TypeScript product and event data remains reviewed seed input, while D1 owns

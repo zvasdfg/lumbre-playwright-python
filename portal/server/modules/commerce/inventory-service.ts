@@ -93,7 +93,11 @@ export async function sellReservedInventory(orderId: string): Promise<void> {
 
 export async function releaseOrderInventory(
   orderId: string,
-  options: { failOrder: boolean },
+  options: {
+    orderStatus?: "failed" | "cancelled";
+    fulfillmentStatus?: "cancelled";
+    cancellationKey?: string;
+  } = {},
 ): Promise<boolean> {
   if ((await inventoryState(orderId)) !== "reserved") return false;
 
@@ -105,7 +109,13 @@ export async function releaseOrderInventory(
     .set({
       inventoryState: "released",
       inventoryKey: releaseKey,
-      ...(options.failOrder ? { status: "failed" as const } : {}),
+      ...(options.orderStatus ? { status: options.orderStatus } : {}),
+      ...(options.fulfillmentStatus
+        ? { fulfillmentStatus: options.fulfillmentStatus }
+        : {}),
+      ...(options.cancellationKey
+        ? { cancellationKey: options.cancellationKey, cancelledAt: now }
+        : {}),
       updatedAt: now,
     })
     .where(and(eq(orders.id, orderId), eq(orders.inventoryState, "reserved")));

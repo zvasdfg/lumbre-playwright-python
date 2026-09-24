@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 122 |
-| Automated functional risks | 122 |
-| Pytest executions | 157 |
-| Test files | 121 |
-| API cases / executions | 70 / 93 |
-| Browser cases / executions | 52 / 56 |
+| Committed functional risks | 128 |
+| Automated functional risks | 128 |
+| Pytest executions | 164 |
+| Test files | 127 |
+| API cases / executions | 75 / 99 |
+| Browser cases / executions | 53 / 57 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (40/40) |
-| Latest full-suite result | 157 passed |
+| API route-operation coverage | 100% (42/42) |
+| Latest full-suite result | 164 passed |
 
-**100% refers to the repository's 122-item committed functional-risk catalog.**
+**100% refers to the repository's 128-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -66,6 +66,8 @@ Lumbre is a cooking-at-the-fire portal with:
   deduplicated provider events without transporting card data through Lumbre;
 - server-owned product inventory, atomic stock reservation, release on hosted
   checkout expiration, idempotent sale finalization, and sold-out feedback;
+- owner-scoped order cancellation, provider-session expiration, one-time stock
+  restoration, and administrator-audited fulfillment transitions;
 - authenticated event reservations with server-owned capacity, atomic
   oversell protection, duplicate prevention, and persisted account history;
 - account-owned fire-planner presets synchronized across browser contexts,
@@ -154,6 +156,8 @@ lumbre-playwright-python/
   explicit deactivation feedback, and recoverable stale-revision conflicts.
 - Server-owned inventory with atomic reservation, idempotent finalization,
   expired-checkout release, oversell protection, and sold-out presentation.
+- Customer cancellation with owner isolation and administrator-only fulfillment
+  that advances through an explicit, append-only-audited state machine.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.
