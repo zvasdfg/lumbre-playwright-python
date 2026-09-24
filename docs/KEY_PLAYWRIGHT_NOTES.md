@@ -312,6 +312,23 @@ In Lumbre, `authenticated_storage_state` prepares the state and
 `authenticated_home` consumes it. This preserves browser isolation while
 keeping tokens and magic-link URLs out of test logs and versioned files.
 
+## 29. API correctness does not prove browser integration
+
+An `APIRequestContext` test can prove that a request schema and persistence
+rule work when given a valid payload. It cannot prove that React state, form
+serialization, or the browser's actual request produces that payload.
+
+Phase 6C exposed this distinction: API preference tests passed, but `UI-044`
+found that response-only metadata was being sent back in a strict `PUT`.
+Preserve both layers when they answer independent risks:
+
+- API test: domain validation, ownership, status, and persistence;
+- UI test: real form state produces the correct integration result;
+- routed UI test: error feedback and retry state remain usable.
+
+Do not mock the successful request when the browser-to-server integration is
+the behavior under test. Use `page.route()` for the separate failure-path risk.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)

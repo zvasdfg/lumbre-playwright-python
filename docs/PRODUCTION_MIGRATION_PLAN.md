@@ -1,7 +1,7 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 6B synchronized account fire-planner presets implemented and
-> regression-validated locally on 2026-09-23. Live Stripe sandbox activation
+> Status: Phase 6C persisted membership preferences and consent history
+> implemented and regression-validated locally on 2026-09-24. Live Stripe sandbox activation
 > remains pending test credentials.
 
 ## 1. Purpose
@@ -65,6 +65,11 @@ all framework static checks, and all 132 Pytest executions in 86.63 seconds.
 Its archived report is
 `reports/runs/lumbre-report-2026-09-23_19-18-03.html`.
 
+Phase 6C passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, and all 142 Pytest executions in 95.52 seconds.
+Its archived report is
+`reports/runs/lumbre-report-2026-09-24_10-13-02.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -80,7 +85,7 @@ with names only and no secret values.
 | --- | --- | --- |
 | Cart | D1 records constrained by an opaque anonymous session or authenticated account | No inventory reservation |
 | Checkout | Toast notification | No order or payment exists |
-| Membership | Stateless route with a fixed demo identifier | No member record or authenticated identity |
+| Membership | Stateless enrollment plus account-owned D1 preferences and consent events | Enrollment record and production messaging delivery remain pending |
 | Event reservation | D1 account reservation plus derived capacity | Cancellation and administrative capacity changes remain pending |
 | Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
@@ -361,13 +366,13 @@ provider adapter. A live Stripe test-mode smoke remains an environment
 activation task: configure `.dev.vars` with test-only secrets and use the
 Stripe CLI to forward signed sandbox events before enabling the adapter.
 
-### Phase 6: remaining transactional features — preset slice completed
+### Phase 6: remaining transactional features — preference slice completed
 
 Migrate one capability per vertical slice:
 
 1. reservation capacity and customer reservations — completed in Phase 6A;
 2. synchronized fire-planner presets — completed in Phase 6B;
-3. membership preferences;
+3. membership preferences — completed in Phase 6C;
 4. administrative products and events.
 
 Existing hypothesis JSON remains the reviewed editorial seed source. D1 is the
@@ -403,6 +408,20 @@ Phase 6B completion evidence:
   second context using the same Playwright `storage_state`; `UI-043` uses
   Playwright routing to prove a failed save remains recoverable;
 - OpenAPI publishes 32 route operations.
+
+Phase 6C completion evidence:
+
+- migration `0008_gigantic_archangel.sql` adds one preference record per user
+  and append-only newsletter consent events;
+- new accounts receive safe defaults without implied marketing consent;
+- updating cooking preferences does not duplicate consent history, while the
+  initial choice and each later consent change are recorded;
+- the account UI edits the five-field write model and restores it after reload;
+- `API-052` through `API-057` protect authorization, privacy defaults,
+  persistence, audit integrity, account isolation, and validation;
+- `UI-044` proves end-to-end persistence, while `UI-045` uses Playwright
+  routing to prove a failed save retains retry data;
+- OpenAPI publishes 34 route operations.
 
 ### Phase 7: production hardening
 
@@ -463,11 +482,11 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 6C should persist authenticated membership preferences. Before coding,
-define the editable preference model, consent history, ownership boundary,
-account UI, and the distinction between membership enrollment and profile
-updates.
+Phase 6D should move administrative product and event management behind the
+existing `admin` role. Before coding, define immutable catalog identifiers,
+price and capacity revision rules, audit events, optimistic concurrency, and
+which public reads remain available in production.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local
-Phase 6C modeling or automation learning.
+Phase 6D modeling or automation learning.

@@ -75,7 +75,8 @@ delivery adapter, production URL, and secret bindings are configured.
 - Product catalog, server-priced persistent cart, authenticated checkout,
   deterministic local payments, provider-hosted checkout, and account-owned
   order history.
-- Membership validation, keyboard navigation, API submission, and recovery.
+- Membership validation, keyboard navigation, API submission, account-owned
+  cooking preferences, explicit consent history, and recovery.
 - Fire planning with cooking-style and vegetable-reserve calculations,
   anonymous local presets, and synchronized account presets.
 - Ingredient catalog with research detail, family filters, and search.
@@ -93,6 +94,8 @@ delivery adapter, production URL, and secret bindings are configured.
 | `GET` | `/api/account` | Current authenticated account or anonymous null state | `API-025`, `API-026`, `CONTRACT-002` |
 | `POST` | `/api/account/magic-link` | Request passwordless account access | `API-025`–`API-029`, `CONTRACT-003` |
 | `POST` | `/api/account/logout` | Invalidate the current authenticated session | `API-026`, `API-029` |
+| `GET` | `/api/account/preferences` | Read account cooking preferences and consent history | `API-052`–`API-056`, `UI-044` |
+| `PUT` | `/api/account/preferences` | Create or update preferences and audit consent changes | `API-052`, `API-054`–`API-057`, `UI-044`, `UI-045` |
 | `GET` | `/api/admin/accounts` | Role-protected account summaries | `API-028` |
 | `GET` | `/api/recipes` | Recipe collection and filters | `API-002`, `API-005` |
 | `GET` | `/api/products` | Product collection | `API-017` |
@@ -176,6 +179,22 @@ The project fixture `authenticated_storage_state` prepares a customer session
 through `APIRequestContext` and exports Playwright storage state. UI tests that
 need an authenticated precondition can consume `authenticated_home`; tests of
 the sign-in experience continue to exercise the visible flow.
+
+## Membership preferences and consent history
+
+Authenticated accounts can configure a preferred fuel, equipment, cooking
+style, usual party size, and newsletter choice. `GET
+/api/account/preferences` returns safe unconfigured defaults for a new account;
+the default newsletter choice is always `false` and does not create an implied
+consent event.
+
+`PUT /api/account/preferences` upserts one D1 record owned by the current user.
+The initial newsletter choice and each later change append an immutable consent
+event; changing only cooking preferences does not duplicate that history. The
+browser projects the read model back to the five writable fields so response
+metadata can never leak into the strict update contract. `UI-044` validates
+reload persistence and `UI-045` validates recoverability through Playwright
+network routing.
 
 ## Orders and deterministic payment
 

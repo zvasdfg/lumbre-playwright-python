@@ -21,6 +21,8 @@ export async function GET() {
     "GET /api/account",
     "POST /api/account/magic-link",
     "POST /api/account/logout",
+    "GET /api/account/preferences",
+    "PUT /api/account/preferences",
     "GET /api/admin/accounts",
     "GET /api/orders",
     "POST /api/orders",

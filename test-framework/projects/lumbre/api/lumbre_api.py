@@ -108,6 +108,12 @@ class LumbreApi:
     def account(self) -> dict[str, Any]:
         return self._json(self._request.get("/api/account"))
 
+    def membership_preferences(self) -> APIResponse:
+        return self._request.get("/api/account/preferences")
+
+    def update_membership_preferences(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.put("/api/account/preferences", data=payload)
+
     def logout(self) -> APIResponse:
         return self._request.post("/api/account/logout", data={})
 

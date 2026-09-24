@@ -4,6 +4,7 @@ import { resetAnonymousCommerce } from "../../../../server/modules/commerce/cart
 import { resetAuthentication } from "../../../../server/modules/auth/auth-service";
 import { resetReservations } from "../../../../server/modules/events/reservation-service";
 import { resetFirePresets } from "../../../../server/modules/fire-planner/preset-service";
+import { resetMembershipPreferences } from "../../../../server/modules/membership/preference-service";
 
 export async function POST() {
   if (getLumbreEnvironment() !== "test") {
@@ -13,6 +14,7 @@ export async function POST() {
   await resetAnonymousCommerce();
   await resetReservations();
   await resetFirePresets();
+  await resetMembershipPreferences();
   await resetAuthentication();
   return Response.json({ reset: true, seedVersion, message: "Demo data restored" });
 }

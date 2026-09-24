@@ -51,6 +51,35 @@
         }
       }
     },
+    "/api/account/preferences": {
+      "get": {
+        "operationId": "getMembershipPreferences",
+        "tags": ["Identity"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/MembershipPreferencesResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" }
+        }
+      },
+      "put": {
+        "operationId": "updateMembershipPreferences",
+        "tags": ["Identity"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/MembershipPreferenceUpdateRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/MembershipPreferenceMutationResponse" },
+          "201": { "$ref": "#/components/responses/MembershipPreferenceMutationResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
     "/api/account/magic-link": {
       "post": {
         "operationId": "requestAccountMagicLink",
@@ -684,6 +713,18 @@
           "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
         }
       },
+      "MembershipPreferencesResponse": {
+        "description": "The authenticated account's cooking preferences and consent history",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/MembershipPreferencesResponse" } }
+        }
+      },
+      "MembershipPreferenceMutationResponse": {
+        "description": "Created or updated account preferences with consent audit metadata",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/MembershipPreferenceMutation" } }
+        }
+      },
       "ServerErrorResponse": {
         "description": "Registry operation failed",
         "content": {
@@ -879,6 +920,66 @@
         "type": "object",
         "required": ["success"],
         "properties": { "success": { "const": true } },
+        "additionalProperties": false
+      },
+      "MembershipPreferenceInput": {
+        "type": "object",
+        "required": ["preferredFuel", "equipment", "cookingStyle", "defaultGuests", "newsletterConsent"],
+        "properties": {
+          "preferredFuel": { "type": "string", "enum": ["carbon", "briquetas", "lena"] },
+          "equipment": { "type": "string", "enum": ["kettle", "abierta", "ahumador"] },
+          "cookingStyle": { "type": "string", "enum": ["directo", "dos_zonas", "lento"] },
+          "defaultGuests": { "type": "integer", "minimum": 2, "maximum": 30 },
+          "newsletterConsent": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "MembershipPreferenceUpdateRequest": {
+        "$ref": "#/components/schemas/MembershipPreferenceInput"
+      },
+      "MembershipPreferences": {
+        "type": "object",
+        "required": ["preferredFuel", "equipment", "cookingStyle", "defaultGuests", "newsletterConsent", "configured", "updatedAt"],
+        "properties": {
+          "preferredFuel": { "type": "string", "enum": ["carbon", "briquetas", "lena"] },
+          "equipment": { "type": "string", "enum": ["kettle", "abierta", "ahumador"] },
+          "cookingStyle": { "type": "string", "enum": ["directo", "dos_zonas", "lento"] },
+          "defaultGuests": { "type": "integer", "minimum": 2, "maximum": 30 },
+          "newsletterConsent": { "type": "boolean" },
+          "configured": { "type": "boolean" },
+          "updatedAt": { "type": ["string", "null"], "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "MembershipConsentEvent": {
+        "type": "object",
+        "required": ["id", "channel", "granted", "recordedAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "channel": { "const": "newsletter" },
+          "granted": { "type": "boolean" },
+          "recordedAt": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "MembershipPreferencesResponse": {
+        "type": "object",
+        "required": ["data", "consentHistory"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/MembershipPreferences" },
+          "consentHistory": { "type": "array", "items": { "$ref": "#/components/schemas/MembershipConsentEvent" } }
+        },
+        "additionalProperties": false
+      },
+      "MembershipPreferenceMutation": {
+        "type": "object",
+        "required": ["data", "consentHistory", "created", "consentRecorded"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/MembershipPreferences" },
+          "consentHistory": { "type": "array", "items": { "$ref": "#/components/schemas/MembershipConsentEvent" } },
+          "created": { "type": "boolean" },
+          "consentRecorded": { "type": "boolean" }
+        },
         "additionalProperties": false
       },
       "Recipe": {

@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 55 / 75 |
-| Browser case IDs / executions | 45 / 49 |
+| API case IDs / executions | 61 / 83 |
+| Browser case IDs / executions | 47 / 51 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 100 |
-| Total Pytest executions | 132 |
-| Test files | 99 |
+| Unique committed risks | 108 |
+| Total Pytest executions | 142 |
+| Test files | 107 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 132 passed in 86.63 seconds |
+| Latest validation | 142 passed in 95.52 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,13 +50,13 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 54 | 54 | 100% |
-| P1 | 40 | 40 | 100% |
+| P0 | 59 | 59 | 100% |
+| P1 | 43 | 43 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **100** | **100** | **100%** |
+| **Total** | **108** | **108** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `32/32 = 100%`. Contract
+secondary API route-operation signal is `34/34 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
@@ -187,6 +187,12 @@ Priority definitions:
 | API-049 | One account cannot observe or delete another account's preset | P0 | API ownership + authorization |
 | API-050 | Browser-local sync imports missing names while server conflicts win | P0 | API merge integrity |
 | API-051 | Invalid fire-planner configurations cannot be persisted | P1 | API negative + validation |
+| API-052 | Anonymous requests cannot read or update membership preferences | P0 | API authorization |
+| API-053 | New accounts receive safe defaults without implied newsletter consent | P1 | API privacy default + contract |
+| API-054 | Account cooking preferences persist with an explicit consent event | P0 | API persistence + audit |
+| API-055 | Consent history records initial choice and changes without duplicate events | P0 | API audit integrity |
+| API-056 | Membership preferences cannot cross account boundaries | P0 | API ownership |
+| API-057 | Invalid membership preferences cannot be persisted | P1 | API negative + validation |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -234,6 +240,8 @@ Priority definitions:
 | UI-041 | A confirmed reservation survives reload and appears in account history | P0 | E2E reservation persistence |
 | UI-042 | An authenticated fire preset is restored in a second browser context | P0 | E2E account synchronization |
 | UI-043 | A failed account preset save preserves retry data and reports no false success | P1 | UI route control + recoverability |
+| UI-044 | Authenticated membership preferences survive a complete page reload | P0 | E2E preference persistence |
+| UI-045 | A failed preference save preserves edited values for retry | P1 | UI route control + recoverability |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

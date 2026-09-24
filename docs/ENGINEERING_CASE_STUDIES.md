@@ -253,3 +253,43 @@ modules or copying reporting infrastructure.
 Folders alone do not create a framework boundary. Reuse becomes credible when
 dependency direction, fixture ownership, discovery, configuration, and
 SUT-independent tests all express the same separation.
+
+## 7. Preventing read-model metadata from leaking into writes
+
+### Risk
+
+The membership preference API deliberately returns operational metadata such
+as `configured` and `updatedAt`, while its strict update contract accepts only
+five editable fields. API tests passed because they submitted a purpose-built
+request. The first UI persistence test failed because the React component
+stored the complete read object and serialized it back into `PUT`, causing the
+server to reject its own metadata with `422`.
+
+### Decision
+
+The UI now projects every API response through `editablePreferences()` before
+placing it in editable state or serializing it:
+
+```text
+read model = editable fields + configured + updatedAt
+                         |
+                         v
+write model = exactly five editable fields
+```
+
+The server keeps strict Zod validation. Weakening the API to ignore unknown
+fields would have hidden the integration defect and allowed accidental client
+state to cross the boundary.
+
+### Outcome
+
+`API-054` protects the request and response schemas directly. `UI-044` proves
+that the actual browser form sends a valid request and restores the data after
+reload. `UI-045` intercepts `PUT` with Playwright routing and proves that a
+dependency failure retains every edited field for retry.
+
+### Lesson
+
+API and browser tests answer different questions. A valid API client fixture
+does not prove that production UI state produces the same request. Keep strict
+contracts and use an end-to-end test to expose read/write model leakage.

@@ -6,6 +6,7 @@ import { events as eventSeeds, products, recipes, type FireEvent, type Product }
 import { isPublicProductionReadOnly } from "../lib/environment";
 import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
+import AccountPreferences from "./account-preferences";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
@@ -611,6 +612,7 @@ export default function ClubPortal() {
                 <strong>{account.name}</strong>
                 <p>{account.email}</p>
                 <p>Perfil: {account.role === "admin" ? "administración" : "cliente"}</p>
+                <AccountPreferences />
                 <div className="order-history" data-testid="order-history">
                   <h3>Historial de pedidos</h3>
                   {orders.length ? orders.map((order) => (

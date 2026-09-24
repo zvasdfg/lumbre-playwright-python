@@ -253,9 +253,9 @@ from silently changing the repository baseline.
 
 Authentication and checkout tests use the same reset boundary. Core account,
 verification, session, local-delivery, cart, order, order-item, payment
-attempt, hosted-checkout-session, provider-event, reservation, and fire-preset
-tables are cleared before each scenario; test mode then recreates one
-deterministic administrator identity.
+attempt, hosted-checkout-session, provider-event, reservation, fire-preset,
+membership-preference, and consent-event tables are cleared before each
+scenario; test mode then recreates one deterministic administrator identity.
 
 Event-reservation scenarios share the same isolation boundary. Reservations
 are removed before account records because their ownership foreign key points
@@ -268,6 +268,14 @@ missing normalized names. Existing server names win, and authenticated writes
 never mutate the anonymous library. API tests protect ownership and merge
 rules, while `UI-042` uses two browser contexts with the same Playwright
 `storage_state` to prove account-level restoration.
+
+Membership enrollment and authenticated preferences are separate use cases.
+The membership form can request club enrollment, but account creation never
+implies newsletter consent. A user-owned D1 preference row stores the current
+choice, while an append-only consent table records the initial choice and each
+change. The API read model includes configuration metadata; the UI explicitly
+projects it to a smaller write model before `PUT`, preserving the strict
+request contract.
 
 ### Hosted payment boundary
 

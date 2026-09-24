@@ -238,3 +238,36 @@ export const firePlannerPresets = sqliteTable(
     index("fire_planner_presets_user_updated_index").on(table.userId, table.updatedAt),
   ],
 );
+
+export const membershipPreferences = sqliteTable("membership_preferences", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => authUser.id, { onDelete: "cascade" }),
+  preferredFuel: text("preferred_fuel", {
+    enum: ["carbon", "briquetas", "lena"],
+  }).notNull(),
+  equipment: text("equipment", {
+    enum: ["kettle", "abierta", "ahumador"],
+  }).notNull(),
+  cookingStyle: text("cooking_style", {
+    enum: ["directo", "dos_zonas", "lento"],
+  }).notNull(),
+  defaultGuests: integer("default_guests").notNull(),
+  newsletterConsent: integer("newsletter_consent", { mode: "boolean" }).notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const membershipConsentEvents = sqliteTable(
+  "membership_consent_events",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => authUser.id, { onDelete: "cascade" }),
+    channel: text("channel", { enum: ["newsletter"] }).notNull(),
+    granted: integer("granted", { mode: "boolean" }).notNull(),
+    recordedAt: text("recorded_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [index("membership_consent_user_recorded_index").on(table.userId, table.recordedAt)],
+);
