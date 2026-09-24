@@ -108,10 +108,10 @@ Do not spend browser navigation on setup that the API can perform directly.
 return the raw response and assert its contract:
 
 ```python
-response = api.create_product(invalid_payload)
+response = administrator_api.create_product(invalid_payload)
 body = response.json()
 assert response.status == 422
-assert body["error"] == "name, category and a positive price are required"
+assert body["error"] == "Valid product data is required"
 ```
 
 ## 11. Keep one behavior or equivalent contract family per file
@@ -328,6 +328,22 @@ Preserve both layers when they answer independent risks:
 
 Do not mock the successful request when the browser-to-server integration is
 the behavior under test. Use `page.route()` for the separate failure-path risk.
+
+## 30. Persistence migrations can change presentation semantics
+
+Moving a catalog from an in-memory array to SQL preserved every product but
+initially changed their visible order because the query sorted by numeric ID.
+API collection checks still passed; `UI-030` failed because the business rule
+is that laboratory blends lead the store.
+
+This is a useful layer distinction:
+
+- API contract tests prove shape, authorization, and persisted values;
+- focused API tests prove revision and audit rules;
+- browser tests protect presentation semantics such as editorial order.
+
+When sequence is meaningful, encode it as a domain rule or persisted sort
+field. Do not depend accidentally on insertion order.
 
 ## Official references
 

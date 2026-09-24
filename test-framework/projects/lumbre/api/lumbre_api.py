@@ -120,6 +120,27 @@ class LumbreApi:
     def admin_accounts(self) -> APIResponse:
         return self._request.get("/api/admin/accounts")
 
+    def admin_products(self) -> APIResponse:
+        return self._request.get("/api/admin/products")
+
+    def create_product(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.post("/api/admin/products", data=payload)
+
+    def update_product(self, product_id: int, payload: dict[str, Any]) -> APIResponse:
+        return self._request.patch(f"/api/admin/products/{product_id}", data=payload)
+
+    def admin_events(self) -> APIResponse:
+        return self._request.get("/api/admin/events")
+
+    def create_event(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.post("/api/admin/events", data=payload)
+
+    def update_event(self, event_id: int, payload: dict[str, Any]) -> APIResponse:
+        return self._request.patch(f"/api/admin/events/{event_id}", data=payload)
+
+    def administrative_audit_events(self) -> APIResponse:
+        return self._request.get("/api/admin/audit-events")
+
     def expire_session(self) -> APIResponse:
         return self._request.post("/api/local/auth/expire-session", data={})
 
@@ -152,9 +173,6 @@ class LumbreApi:
 
     def reset_demo_data(self) -> dict[str, Any]:
         return self._json(self._request.post("/api/test/reset"))
-
-    def create_product(self, payload: dict[str, Any]) -> APIResponse:
-        return self._request.post("/api/products", data=payload)
 
     def create_member(self, payload: dict[str, Any]) -> APIResponse:
         return self._request.post("/api/members", data=payload)

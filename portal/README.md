@@ -97,9 +97,15 @@ delivery adapter, production URL, and secret bindings are configured.
 | `GET` | `/api/account/preferences` | Read account cooking preferences and consent history | `API-052`–`API-056`, `UI-044` |
 | `PUT` | `/api/account/preferences` | Create or update preferences and audit consent changes | `API-052`, `API-054`–`API-057`, `UI-044`, `UI-045` |
 | `GET` | `/api/admin/accounts` | Role-protected account summaries | `API-028` |
+| `GET` | `/api/admin/products` | Complete product catalog with revisions | `API-058`, `API-059` |
+| `POST` | `/api/admin/products` | Create a product under the administrator role | `API-004`, `API-018`, `API-058`, `CONTRACT-003` |
+| `PATCH` | `/api/admin/products/:id` | Update an immutable product ID with optimistic concurrency | `API-059`, `API-060` |
+| `GET` | `/api/admin/events` | Complete event catalog with revisions | `API-058`, `API-061` |
+| `POST` | `/api/admin/events` | Create an event under the administrator role | `API-058`, `API-062` |
+| `PATCH` | `/api/admin/events/:id` | Update event details without invalidating confirmed capacity | `API-061` |
+| `GET` | `/api/admin/audit-events` | Read append-only product and event change evidence | `API-059`–`API-062` |
 | `GET` | `/api/recipes` | Recipe collection and filters | `API-002`, `API-005` |
 | `GET` | `/api/products` | Product collection | `API-017` |
-| `POST` | `/api/products` | Product creation and validation | `API-004`, `API-018` |
 | `GET` | `/api/cart` | Resolve a session and restore its cart | `API-022`, `CONTRACT-002` |
 | `POST` | `/api/cart/items` | Add or increment a server-priced line item | `API-022`, `API-023`, `API-024`, `CONTRACT-003` |
 | `PATCH` | `/api/cart/items/:productId` | Replace a persisted item quantity | `API-024` |
@@ -129,6 +135,20 @@ and `id`. Hypothesis creation requires an objective and two to six ingredient
 IDs. Write operations return realistic status and error contracts in
 `development` and `test`. Production permits only its anonymous-cart writes
 and rejects the protected business mutations described above.
+
+## Administrative catalog integrity
+
+Products and events are seeded into D1 by migration and are no longer mutable
+through public catalog routes. Administrative writes require the persisted
+`admin` role; hiding a control in the browser is never treated as
+authorization. Catalog identifiers are immutable after creation.
+
+Every update supplies `expectedRevision`. A stale editor receives `409`
+instead of silently replacing a newer value. Event capacity additionally
+cannot be reduced below the sum of confirmed reservations. Successful creates
+and updates append an audit record containing actor, resource, before state,
+after state, and timestamp. Public reads expose only active entries and omit
+administrative metadata.
 
 ## Fire-planner preset ownership and synchronization
 

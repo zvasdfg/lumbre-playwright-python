@@ -137,6 +137,124 @@
         }
       }
     },
+    "/api/admin/products": {
+      "get": {
+        "operationId": "listAdministrativeProducts",
+        "tags": ["Catalog"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/AdministrativeProductCollectionResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" }
+        }
+      },
+      "post": {
+        "operationId": "createAdministrativeProduct",
+        "tags": ["Catalog"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeProductCreateRequest" } }
+          }
+        },
+        "responses": {
+          "201": { "$ref": "#/components/responses/AdministrativeProductMutationResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/admin/products/{id}": {
+      "patch": {
+        "operationId": "updateAdministrativeProduct",
+        "tags": ["Catalog"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/NumericResourceId" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeProductUpdateRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/AdministrativeProductUpdateResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ConflictResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/admin/events": {
+      "get": {
+        "operationId": "listAdministrativeEvents",
+        "tags": ["Catalog"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/AdministrativeEventCollectionResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" }
+        }
+      },
+      "post": {
+        "operationId": "createAdministrativeEvent",
+        "tags": ["Catalog"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeEventCreateRequest" } }
+          }
+        },
+        "responses": {
+          "201": { "$ref": "#/components/responses/AdministrativeEventMutationResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/admin/events/{id}": {
+      "patch": {
+        "operationId": "updateAdministrativeEvent",
+        "tags": ["Catalog"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/NumericResourceId" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeEventUpdateRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/AdministrativeEventUpdateResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ConflictResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/admin/audit-events": {
+      "get": {
+        "operationId": "listAdministrativeAuditEvents",
+        "tags": ["Catalog"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/AdministrativeAuditCollectionResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" }
+        }
+      }
+    },
     "/api/recipes": {
       "get": {
         "operationId": "listRecipes",
@@ -166,26 +284,6 @@
               "application/json": { "schema": { "$ref": "#/components/schemas/ProductCollection" } }
             }
           }
-        }
-      },
-      "post": {
-        "operationId": "createProduct",
-        "tags": ["Catalog"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/ProductCreateRequest" } }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Product representation created in the demonstration API",
-            "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/ProductCreateResponse" } }
-            }
-          },
-          "422": { "$ref": "#/components/responses/ValidationErrorResponse" },
-          "405": { "$ref": "#/components/responses/ReadOnlyResponse" }
         }
       }
     },
@@ -633,6 +731,12 @@
         "required": true,
         "schema": { "type": "integer", "minimum": 1 }
       },
+      "NumericResourceId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "minimum": 1 }
+      },
       "OrderId": {
         "name": "id",
         "in": "path",
@@ -687,6 +791,54 @@
         "description": "Request validation failed",
         "content": {
           "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
+      "ConflictResponse": {
+        "description": "The requested mutation conflicts with persisted state",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
+      "AdministrativeProductCollectionResponse": {
+        "description": "Complete product catalog visible to administrators",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeProductCollection" } }
+        }
+      },
+      "AdministrativeProductMutationResponse": {
+        "description": "New product catalog entry",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeProductMutation" } }
+        }
+      },
+      "AdministrativeProductUpdateResponse": {
+        "description": "Product updated at the requested revision",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeProductUpdate" } }
+        }
+      },
+      "AdministrativeEventCollectionResponse": {
+        "description": "Complete event catalog visible to administrators",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeEventCollection" } }
+        }
+      },
+      "AdministrativeEventMutationResponse": {
+        "description": "New event catalog entry",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeEventMutation" } }
+        }
+      },
+      "AdministrativeEventUpdateResponse": {
+        "description": "Event updated at the requested revision",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeEventUpdate" } }
+        }
+      },
+      "AdministrativeAuditCollectionResponse": {
+        "description": "Append-only administrative change history",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/AdministrativeAuditCollection" } }
         }
       },
       "ReadOnlyResponse": {
@@ -1010,6 +1162,72 @@
         },
         "additionalProperties": false
       },
+      "AdministrativeProduct": {
+        "type": "object",
+        "required": ["id", "name", "category", "price", "badge", "active", "revision", "createdAt", "updatedAt"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 1 },
+          "name": { "type": "string", "minLength": 3, "maxLength": 100 },
+          "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
+          "price": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+          "badge": { "type": ["string", "null"] },
+          "active": { "type": "boolean" },
+          "revision": { "type": "integer", "minimum": 1 },
+          "createdAt": { "type": "string", "minLength": 1 },
+          "updatedAt": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeProductCreateRequest": {
+        "type": "object",
+        "required": ["name", "category", "price"],
+        "properties": {
+          "name": { "type": "string", "minLength": 3, "maxLength": 100 },
+          "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
+          "price": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+          "badge": { "type": ["string", "null"] },
+          "active": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeProductUpdateRequest": {
+        "type": "object",
+        "required": ["expectedRevision"],
+        "minProperties": 2,
+        "properties": {
+          "expectedRevision": { "type": "integer", "minimum": 1 },
+          "name": { "type": "string", "minLength": 3, "maxLength": 100 },
+          "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
+          "price": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+          "badge": { "type": ["string", "null"] },
+          "active": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeProductCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/AdministrativeProduct" } },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeProductMutation": {
+        "type": "object",
+        "required": ["data", "created"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/AdministrativeProduct" },
+          "created": { "const": true }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeProductUpdate": {
+        "type": "object",
+        "required": ["data"],
+        "properties": { "data": { "$ref": "#/components/schemas/AdministrativeProduct" } },
+        "additionalProperties": false
+      },
       "CartItem": {
         "type": "object",
         "required": ["productId", "name", "category", "unitPrice", "quantity", "lineTotal"],
@@ -1216,6 +1434,102 @@
           "spots": { "type": "integer", "minimum": 0 },
           "capacity": { "type": "integer", "minimum": 1 },
           "reservedSpots": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeEvent": {
+        "type": "object",
+        "required": ["id", "day", "month", "city", "title", "detail", "capacity", "active", "revision", "createdAt", "updatedAt"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 1 },
+          "day": { "type": "string", "pattern": "^(0[1-9]|[12][0-9]|3[01])$" },
+          "month": { "type": "string", "minLength": 3, "maxLength": 3 },
+          "city": { "type": "string", "minLength": 3, "maxLength": 100 },
+          "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+          "detail": { "type": "string", "minLength": 3, "maxLength": 240 },
+          "capacity": { "type": "integer", "minimum": 1, "maximum": 10000 },
+          "active": { "type": "boolean" },
+          "revision": { "type": "integer", "minimum": 1 },
+          "createdAt": { "type": "string", "minLength": 1 },
+          "updatedAt": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeEventCreateRequest": {
+        "type": "object",
+        "required": ["day", "month", "city", "title", "detail", "capacity"],
+        "properties": {
+          "day": { "type": "string", "pattern": "^(0[1-9]|[12][0-9]|3[01])$" },
+          "month": { "type": "string", "pattern": "^[A-ZÁÉÍÓÚ]{3}$" },
+          "city": { "type": "string", "minLength": 3, "maxLength": 100 },
+          "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+          "detail": { "type": "string", "minLength": 3, "maxLength": 240 },
+          "capacity": { "type": "integer", "minimum": 1, "maximum": 10000 },
+          "active": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeEventUpdateRequest": {
+        "type": "object",
+        "required": ["expectedRevision"],
+        "minProperties": 2,
+        "properties": {
+          "expectedRevision": { "type": "integer", "minimum": 1 },
+          "day": { "type": "string", "pattern": "^(0[1-9]|[12][0-9]|3[01])$" },
+          "month": { "type": "string", "pattern": "^[A-ZÁÉÍÓÚ]{3}$" },
+          "city": { "type": "string", "minLength": 3, "maxLength": 100 },
+          "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+          "detail": { "type": "string", "minLength": 3, "maxLength": 240 },
+          "capacity": { "type": "integer", "minimum": 1, "maximum": 10000 },
+          "active": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeEventCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/AdministrativeEvent" } },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeEventMutation": {
+        "type": "object",
+        "required": ["data", "created"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/AdministrativeEvent" },
+          "created": { "const": true }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeEventUpdate": {
+        "type": "object",
+        "required": ["data"],
+        "properties": { "data": { "$ref": "#/components/schemas/AdministrativeEvent" } },
+        "additionalProperties": false
+      },
+      "AdministrativeAuditEvent": {
+        "type": "object",
+        "required": ["id", "actorUserId", "resourceType", "resourceId", "action", "before", "after", "createdAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "actorUserId": { "type": "string", "format": "uuid" },
+          "resourceType": { "type": "string", "enum": ["product", "event"] },
+          "resourceId": { "type": "string", "minLength": 1 },
+          "action": { "type": "string", "enum": ["created", "updated"] },
+          "before": { "type": ["object", "null"] },
+          "after": { "type": "object" },
+          "createdAt": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      },
+      "AdministrativeAuditCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/AdministrativeAuditEvent" } },
+          "count": { "type": "integer", "minimum": 0 }
         },
         "additionalProperties": false
       },
@@ -1575,25 +1889,6 @@
         "type": "object",
         "required": ["data"],
         "properties": { "data": { "$ref": "#/components/schemas/Hypothesis" } },
-        "additionalProperties": false
-      },
-      "ProductCreateRequest": {
-        "type": "object",
-        "required": ["name", "category", "price"],
-        "properties": {
-          "name": { "type": "string", "minLength": 1 },
-          "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
-          "price": { "type": "number", "exclusiveMinimum": 0 }
-        },
-        "additionalProperties": false
-      },
-      "ProductCreateResponse": {
-        "type": "object",
-        "required": ["data", "created"],
-        "properties": {
-          "data": { "$ref": "#/components/schemas/Product" },
-          "created": { "const": true }
-        },
         "additionalProperties": false
       },
       "MemberCreateRequest": {

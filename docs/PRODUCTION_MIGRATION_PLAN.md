@@ -1,7 +1,7 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 6C persisted membership preferences and consent history
-> implemented and regression-validated locally on 2026-09-24. Live Stripe sandbox activation
+> Status: Phase 6D API-first catalog administration implemented and
+> regression-validated locally on 2026-09-24. Live Stripe sandbox activation
 > remains pending test credentials.
 
 ## 1. Purpose
@@ -70,6 +70,11 @@ all framework static checks, and all 142 Pytest executions in 95.52 seconds.
 Its archived report is
 `reports/runs/lumbre-report-2026-09-24_10-13-02.html`.
 
+Phase 6D passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, and all 148 Pytest executions in 102.05 seconds.
+Its archived report is
+`reports/runs/lumbre-report-2026-09-24_10-39-30.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -84,12 +89,12 @@ with names only and no secret values.
 | Capability | Current source of truth | Production gap |
 | --- | --- | --- |
 | Cart | D1 records constrained by an opaque anonymous session or authenticated account | No inventory reservation |
-| Checkout | Toast notification | No order or payment exists |
+| Checkout | D1 order snapshots, payment attempts, hosted checkout sessions, and verified provider events | Live provider credentials and fulfillment remain pending |
 | Membership | Stateless enrollment plus account-owned D1 preferences and consent events | Enrollment record and production messaging delivery remain pending |
-| Event reservation | D1 account reservation plus derived capacity | Cancellation and administrative capacity changes remain pending |
+| Event reservation | D1 account reservation plus derived capacity and revision-protected administrative capacity | Cancellation and admin UI remain pending |
 | Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
-| Products | Static TypeScript catalog, with cart prices and totals derived server-side | No database-backed inventory or price revisions |
+| Products | D1 catalog with public projections, revision-protected admin writes, and server-priced carts | Inventory quantity and admin UI remain pending |
 | Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
 | Database | Drizzle schema, SQL migrations, deterministic seed, and Worker `DB` binding | Remote provisioning and operational backups remain pending |
 
@@ -366,14 +371,14 @@ provider adapter. A live Stripe test-mode smoke remains an environment
 activation task: configure `.dev.vars` with test-only secrets and use the
 Stripe CLI to forward signed sandbox events before enabling the adapter.
 
-### Phase 6: remaining transactional features — preference slice completed
+### Phase 6: remaining transactional features — administration slice completed
 
 Migrate one capability per vertical slice:
 
 1. reservation capacity and customer reservations — completed in Phase 6A;
 2. synchronized fire-planner presets — completed in Phase 6B;
 3. membership preferences — completed in Phase 6C;
-4. administrative products and events.
+4. administrative products and events — completed in Phase 6D.
 
 Existing hypothesis JSON remains the reviewed editorial seed source. D1 is the
 validated development/test write target and the Worker never writes JSON.
@@ -423,13 +428,32 @@ Phase 6C completion evidence:
   routing to prove a failed save retains retry data;
 - OpenAPI publishes 34 route operations.
 
+Phase 6D completion evidence:
+
+- migration `0009_glossy_the_anarchist.sql` persists the product and event
+  catalogs and seeds the reviewed public entries;
+- the former public product mutation was removed; product and event writes now
+  require the persisted `admin` role and public reads expose active entries
+  without administrative metadata;
+- immutable numeric identifiers are created once, while every update requires
+  an `expectedRevision`; stale edits receive `409`;
+- event capacity cannot be reduced below confirmed reservations;
+- successful creates and updates append actor, resource, before state, after
+  state, and timestamp to administrative audit history;
+- cart pricing and reservation availability resolve the persisted catalog, so
+  administrative changes affect actual business behavior;
+- `API-058` through `API-062` protect role authorization, catalog-to-commerce
+  integration, optimistic concurrency, reservation integrity, public
+  projection, OpenAPI contracts, and audit evidence;
+- OpenAPI publishes 40 route operations. The admin browser workspace remains a
+  deliberately separate UI risk rather than being folded into this API slice.
+
 ### Phase 7: production hardening
 
 - rate limits for abuse-sensitive operations;
 - CSRF protection where the selected session mechanism requires it;
 - structured logs and request correlation IDs;
 - sanitized error responses;
-- administrative audit events;
 - D1 backup/export procedure;
 - secret rotation procedure;
 - privacy and retention policy;
@@ -482,11 +506,12 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 6D should move administrative product and event management behind the
-existing `admin` role. Before coding, define immutable catalog identifiers,
-price and capacity revision rules, audit events, optimistic concurrency, and
-which public reads remain available in production.
+Phase 6E should add a small administrator workspace over the completed catalog
+API. Its browser risks are stale-revision recovery, visible validation,
+deactivation feedback, and confirmation that public customers never receive
+administrative controls. Image assignment or upload must be defined before
+newly created store products are exposed as polished editorial merchandise.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local
-Phase 6D modeling or automation learning.
+Phase 6E UI work or automation learning.

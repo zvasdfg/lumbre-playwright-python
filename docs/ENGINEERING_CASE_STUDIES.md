@@ -293,3 +293,34 @@ dependency failure retains every edited field for retry.
 API and browser tests answer different questions. A valid API client fixture
 does not prove that production UI state produces the same request. Keep strict
 contracts and use an end-to-end test to expose read/write model leakage.
+
+## 8. Preserving editorial order during a persistence migration
+
+### Risk
+
+The original product array deliberately listed laboratory blends before tools
+and merchandise. After moving the catalog to D1, a conventional numeric-ID
+query returned the same seven records in a different order. Collection and
+schema tests passed because no data was missing, but the store no longer
+expressed the intended product hierarchy.
+
+### Decision
+
+The public product projection now makes the merchandising rule explicit:
+blends sort first, followed by the stable identifier order. Administrative
+listing remains a neutral identifier-ordered view. The public and admin read
+models can therefore serve different use cases without leaking revision data
+or relying on database insertion order.
+
+### Outcome
+
+The first full regression run produced one failure in `UI-030`, while the
+other 147 executions passed. After encoding the public ordering rule,
+`UI-030` passed in isolation and the complete suite passed 148/148.
+
+### Lesson
+
+Data equivalence is not presentation equivalence. Persistence migrations need
+tests for ordering, grouping, and prioritization whenever those behaviors
+communicate product intent. A browser failure can reveal a domain rule that
+was previously hidden inside an array literal.

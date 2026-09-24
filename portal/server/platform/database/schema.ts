@@ -258,6 +258,58 @@ export const membershipPreferences = sqliteTable("membership_preferences", {
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const catalogProducts = sqliteTable("catalog_products", {
+  id: integer("id").primaryKey(),
+  name: text("name").notNull(),
+  category: text("category", {
+    enum: ["blends", "ropa", "herramientas", "outdoor"],
+  }).notNull(),
+  price: integer("price").notNull(),
+  badge: text("badge"),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  revision: integer("revision").notNull().default(1),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const catalogEvents = sqliteTable("catalog_events", {
+  id: integer("id").primaryKey(),
+  day: text("day").notNull(),
+  month: text("month").notNull(),
+  city: text("city").notNull(),
+  title: text("title").notNull(),
+  detail: text("detail").notNull(),
+  capacity: integer("capacity").notNull(),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  revision: integer("revision").notNull().default(1),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const administrativeAuditEvents = sqliteTable(
+  "administrative_audit_events",
+  {
+    id: text("id").primaryKey(),
+    actorUserId: text("actor_user_id")
+      .notNull()
+      .references(() => authUser.id, { onDelete: "restrict" }),
+    resourceType: text("resource_type", { enum: ["product", "event"] }).notNull(),
+    resourceId: text("resource_id").notNull(),
+    action: text("action", { enum: ["created", "updated"] }).notNull(),
+    beforeJson: text("before_json"),
+    afterJson: text("after_json").notNull(),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    index("administrative_audit_resource_index").on(
+      table.resourceType,
+      table.resourceId,
+      table.createdAt,
+    ),
+    index("administrative_audit_actor_index").on(table.actorUserId, table.createdAt),
+  ],
+);
+
 export const membershipConsentEvents = sqliteTable(
   "membership_consent_events",
   {

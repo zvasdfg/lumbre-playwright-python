@@ -1,5 +1,9 @@
 import { and, desc, eq, sql } from "drizzle-orm";
-import { events, type FireEvent } from "../../../app/lib/data";
+import type { FireEvent } from "../../../app/lib/data";
+import {
+  findCatalogEvent,
+  listPublicEventRecords,
+} from "../catalog/catalog-service";
 import { getDatabase } from "../../platform/database/client";
 import { eventReservations } from "../../platform/database/schema";
 
@@ -24,8 +28,19 @@ export class EventNotFoundError extends Error {}
 export class DuplicateReservationError extends Error {}
 export class EventSoldOutError extends Error {}
 
-function catalogEvent(eventId: number): FireEvent {
-  const event = events.find((candidate) => candidate.id === eventId);
+async function catalogEvent(eventId: number): Promise<FireEvent> {
+  const record = await findCatalogEvent(eventId);
+  const event = record
+    ? {
+        id: record.id,
+        day: record.day,
+        month: record.month,
+        city: record.city,
+        title: record.title,
+        detail: record.detail,
+        spots: record.capacity,
+      }
+    : null;
   if (!event) throw new EventNotFoundError("Event not found");
   return event;
 }
@@ -44,8 +59,18 @@ async function confirmedSpots(eventId: number): Promise<number> {
 }
 
 export async function listAvailableEvents(): Promise<AvailableEvent[]> {
+  const records = await listPublicEventRecords();
   return Promise.all(
-    events.map(async (event) => {
+    records.map(async (record) => {
+      const event: FireEvent = {
+        id: record.id,
+        day: record.day,
+        month: record.month,
+        city: record.city,
+        title: record.title,
+        detail: record.detail,
+        spots: record.capacity,
+      };
       const reservedSpots = await confirmedSpots(event.id);
       return {
         ...event,
@@ -80,7 +105,7 @@ export async function createReservation(
   userId: string,
   partySize: number,
 ): Promise<{ data: ReservationView; event: AvailableEvent }> {
-  const event = catalogEvent(eventId);
+  const event = await catalogEvent(eventId);
   const database = getDatabase();
   const id = crypto.randomUUID();
   const createdAt = new Date().toISOString();

@@ -1,5 +1,6 @@
 import { asc, eq, sql } from "drizzle-orm";
-import { products, type Product } from "../../../app/lib/data";
+import type { Product } from "../../../app/lib/data";
+import { findPublicProduct } from "../catalog/catalog-service";
 import { getDatabase } from "../../platform/database/client";
 import {
   anonymousSessions,
@@ -35,8 +36,8 @@ export class UnknownProductError extends Error {
   }
 }
 
-function catalogProduct(productId: number): Product {
-  const product = products.find((candidate) => candidate.id === productId);
+async function catalogProduct(productId: number): Promise<Product> {
+  const product = await findPublicProduct(productId);
   if (!product) throw new UnknownProductError(productId);
   return product;
 }
@@ -74,8 +75,8 @@ async function projectCart(cartId: string): Promise<CartView> {
     .where(eq(cartItems.cartId, cartId))
     .orderBy(asc(cartItems.id));
 
-  const items = rows.map(({ productId, quantity }) => {
-    const product = catalogProduct(productId);
+  const items = await Promise.all(rows.map(async ({ productId, quantity }) => {
+    const product = await catalogProduct(productId);
     return {
       productId,
       name: product.name,
@@ -84,7 +85,7 @@ async function projectCart(cartId: string): Promise<CartView> {
       quantity,
       lineTotal: product.price * quantity,
     };
-  });
+  }));
 
   return {
     items,
@@ -102,7 +103,7 @@ export async function addCartItem(
   productId: number,
   quantity: number,
 ): Promise<CartView> {
-  catalogProduct(productId);
+  await catalogProduct(productId);
   const database = getDatabase();
   const cartId = await getOrCreateCartId(owner);
   const now = new Date().toISOString();
@@ -126,7 +127,7 @@ export async function setCartItemQuantity(
   productId: number,
   quantity: number,
 ): Promise<CartView> {
-  catalogProduct(productId);
+  await catalogProduct(productId);
   const database = getDatabase();
   const cartId = await getOrCreateCartId(owner);
   const current = await database

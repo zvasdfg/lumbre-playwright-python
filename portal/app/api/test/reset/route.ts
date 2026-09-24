@@ -5,6 +5,7 @@ import { resetAuthentication } from "../../../../server/modules/auth/auth-servic
 import { resetReservations } from "../../../../server/modules/events/reservation-service";
 import { resetFirePresets } from "../../../../server/modules/fire-planner/preset-service";
 import { resetMembershipPreferences } from "../../../../server/modules/membership/preference-service";
+import { resetCatalog } from "../../../../server/modules/catalog/catalog-service";
 
 export async function POST() {
   if (getLumbreEnvironment() !== "test") {
@@ -15,6 +16,7 @@ export async function POST() {
   await resetReservations();
   await resetFirePresets();
   await resetMembershipPreferences();
+  await resetCatalog();
   await resetAuthentication();
   return Response.json({ reset: true, seedVersion, message: "Demo data restored" });
 }

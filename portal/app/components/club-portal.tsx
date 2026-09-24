@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { events as eventSeeds, products, recipes, type FireEvent, type Product } from "../lib/data";
+import { events as eventSeeds, products as productSeeds, recipes, type FireEvent, type Product } from "../lib/data";
 import { isPublicProductionReadOnly } from "../lib/environment";
 import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
@@ -88,6 +88,15 @@ function productImage(productId: number) {
   return images[productId];
 }
 
+function productInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .slice(0, 3)
+    .map((word) => word[0])
+    .join("")
+    .toLocaleUpperCase("es");
+}
+
 export default function ClubPortal() {
   const readOnlyProduction = isPublicProductionReadOnly();
   const appRef = useRef<HTMLElement>(null);
@@ -100,6 +109,7 @@ export default function ClubPortal() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [productCatalog, setProductCatalog] = useState<Product[]>(productSeeds);
   const [eventCatalog, setEventCatalog] = useState<AvailableEvent[]>(eventSeeds);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [magicLinkRequested, setMagicLinkRequested] = useState(false);
@@ -123,9 +133,10 @@ export default function ClubPortal() {
 
     async function loadInitialState() {
       try {
-        const [cartResponse, accountResponse, eventsResponse] = await Promise.all([
+        const [cartResponse, accountResponse, productsResponse, eventsResponse] = await Promise.all([
           fetch("/api/cart", { signal: controller.signal }),
           fetch("/api/account", { signal: controller.signal }),
+          fetch("/api/products", { signal: controller.signal }),
           fetch("/api/events", { signal: controller.signal }),
         ]);
         if (!cartResponse.ok) {
@@ -133,6 +144,10 @@ export default function ClubPortal() {
         }
         const cartResult = (await cartResponse.json()) as { data: Cart };
         setCart(cartResult.data);
+        if (productsResponse.ok) {
+          const productResult = (await productsResponse.json()) as { data: Product[] };
+          setProductCatalog(productResult.data);
+        }
         if (eventsResponse.ok) {
           const eventResult = (await eventsResponse.json()) as { data: AvailableEvent[] };
           setEventCatalog(eventResult.data);
@@ -531,7 +546,7 @@ export default function ClubPortal() {
       <section className="shop-section" id="tienda">
         <div className="shop-heading"><p className="section-index">06 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />protocolos.</h2><p>Mezclas nacidas en el laboratorio y listas para llevar al fuego. La herramienta y la merch acompañan el oficio; el sabor es el punto de partida.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>
         <div className="product-grid">
-          {products.map((product) => (
+          {productCatalog.map((product) => (
             <article
               className="product-card"
               key={product.id}
@@ -540,12 +555,18 @@ export default function ClubPortal() {
             >
               <div className={`product-art product-${product.category}`}>
                 {product.badge && <span className="product-badge">{product.badge}</span>}
-                <Image
-                  src={productImage(product.id)}
-                  alt={`Fotografía de ${product.name}`}
-                  fill
-                  sizes="(max-width: 520px) 100vw, 33vw"
-                />
+                {productImage(product.id) ? (
+                  <Image
+                    src={productImage(product.id)}
+                    alt={`Fotografía de ${product.name}`}
+                    fill
+                    sizes="(max-width: 520px) 100vw, 33vw"
+                  />
+                ) : (
+                  <span className="product-placeholder" aria-hidden="true">
+                    {productInitials(product.name)}
+                  </span>
+                )}
               </div>
               <p>{productCategoryLabel(product.category)}</p><h3>{product.name}</h3>
               <div><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => void addToCart(product)} aria-label={`Agregar ${product.name} a la canasta`}>+</button></div>

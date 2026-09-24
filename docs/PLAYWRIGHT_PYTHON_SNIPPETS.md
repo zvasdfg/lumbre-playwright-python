@@ -210,15 +210,15 @@ assert body["created"] is True
 ```python
 payload = {
     "name": "Test grill",
-    "category": "tools",
+    "category": "herramientas",
     "price": 0,
 }
 
-response = api.create_product(payload)
+response = administrator_api.create_product(payload)
 body = response.json()
 
 assert response.status == 422
-assert body["error"] == "name, category and a positive price are required"
+assert body["error"] == "Valid product data is required"
 ```
 
 Do not call a helper that asserts `to_be_ok()` when a `4xx` response is the

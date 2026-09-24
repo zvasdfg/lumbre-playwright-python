@@ -6,17 +6,20 @@ from projects.lumbre.api.lumbre_api import LumbreApi
 
 @pytest.mark.api
 @pytest.mark.case("API-004", "The API rejects products with a non-positive price")
-def test_product_rejects_non_positive_price(api: LumbreApi, test_log: TestLogger) -> None:
+def test_product_rejects_non_positive_price(
+    administrator_api: LumbreApi,
+    test_log: TestLogger,
+) -> None:
     with test_log.step("Prepare a product with price=0"):
         payload = {
             "name": "Test grill",
-            "category": "tools",
+            "category": "herramientas",
             "price": 0,
         }
         test_log.values(product_name=payload["name"], requested_price=payload["price"])
 
     with test_log.step("Send the invalid product to the API"):
-        response = api.create_product(payload)
+        response = administrator_api.create_product(payload)
         error = response.json()["error"]
         test_log.values(
             observed_status=response.status,
@@ -26,4 +29,4 @@ def test_product_rejects_non_positive_price(api: LumbreApi, test_log: TestLogger
 
     with test_log.step("Validate the rejection and error message"):
         assert response.status == 422
-        assert error == "name, category and a positive price are required"
+        assert error == "Valid product data is required"

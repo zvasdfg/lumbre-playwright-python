@@ -25,7 +25,7 @@ from projects.lumbre.api.lumbre_api import LumbreApi
         ),
         (
             "product",
-            "/api/products",
+            "/api/admin/products",
             {"name": "Parrilla contractual", "category": "herramientas", "price": 750},
         ),
         (
@@ -53,7 +53,7 @@ from projects.lumbre.api.lumbre_api import LumbreApi
     "Mutation requests and successful responses satisfy the same OpenAPI operation contract",
 )
 def test_mutation_request_and_response_match_openapi(
-    api: LumbreApi,
+    administrator_api: LumbreApi,
     openapi_contract: OpenApiContract,
     test_log: TestLogger,
     operation_kind: str,
@@ -70,11 +70,11 @@ def test_mutation_request_and_response_match_openapi(
 
     with test_log.step("Execute the documented mutation"):
         operations: dict[str, Any] = {
-            "magic_link": api.request_magic_link,
-            "product": api.create_product,
-            "cart_item": api.add_cart_item,
-            "membership": api.create_member,
-            "hypothesis": api.create_hypothesis,
+            "magic_link": administrator_api.request_magic_link,
+            "product": administrator_api.create_product,
+            "cart_item": administrator_api.add_cart_item,
+            "membership": administrator_api.create_member,
+            "hypothesis": administrator_api.create_hypothesis,
         }
         response: APIResponse = operations[operation_kind](payload)
         response_payload = response.json()

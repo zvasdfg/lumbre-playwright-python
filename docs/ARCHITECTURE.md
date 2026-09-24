@@ -254,8 +254,9 @@ from silently changing the repository baseline.
 Authentication and checkout tests use the same reset boundary. Core account,
 verification, session, local-delivery, cart, order, order-item, payment
 attempt, hosted-checkout-session, provider-event, reservation, fire-preset,
-membership-preference, and consent-event tables are cleared before each
-scenario; test mode then recreates one deterministic administrator identity.
+membership-preference, consent-event, catalog, and administrative-audit tables
+are cleared before each scenario; test mode then recreates one deterministic
+administrator identity.
 
 Event-reservation scenarios share the same isolation boundary. Reservations
 are removed before account records because their ownership foreign key points
@@ -291,12 +292,25 @@ session, order identifier, currency, and amount against D1, and persists the
 provider event ID as the deduplication key. Only the payload hash is retained;
 the raw provider payload is not stored.
 
-### Event capacity boundary
+### Administrative catalog and event capacity boundary
 
-The TypeScript event catalog remains reviewed editorial content. D1 owns each
-user reservation and its immutable event-name, location, date, and party-size
-snapshot. The public event response derives remaining places from confirmed
-reservations instead of trusting client state.
+TypeScript product and event data remains reviewed seed input, while D1 owns
+the runtime catalog. Public projections include active entries and omit
+revision and audit metadata. Administrative routes authorize the persisted
+role before parsing or applying a mutation; public catalog routes do not expose
+write handlers.
+
+Identifiers never change after creation. Updates include `expectedRevision`
+in the strict request model and condition the SQL update on the matching
+persisted revision. A concurrent stale editor receives `409`. Successful
+creates and updates append an administrative event with the actor and before
+and after representations.
+
+D1 also owns each user reservation and its immutable event-name, location,
+date, and party-size snapshot. The public event response derives remaining
+places from confirmed reservations instead of trusting client state. An
+administrative capacity update is rejected when its requested capacity is
+below the confirmed party-size sum.
 
 Reservation creation uses one conditional `INSERT ... SELECT` statement. The
 same statement checks both account uniqueness and aggregate confirmed capacity,
@@ -322,11 +336,11 @@ the test selection instead of relying on the framework's generic Node mode.
 | --- | --- | --- | --- |
 | `development` | Enabled for local exploration | Hidden | Local D1 initialized from bundled seeds |
 | `test` | Enabled for contract and persistence tests | Enabled | Per-run temporary D1 |
-| `production` | Anonymous cart writes enabled; account access and protected business writes disabled | Hidden as `404` | Remote D1 cart plus bundled immutable hypotheses |
+| `production` | Anonymous cart writes enabled; account access and protected business writes disabled | Hidden as `404` | Remote D1 catalog/cart plus bundled immutable hypotheses |
 
 Production uses defense in depth: the UI does not collect membership data or
-offer hypothesis creation, protected mutation handlers return `405`, and the
-hypothesis store refuses write operations. Anonymous cart routes are the
+offer hypothesis creation, protected mutations require authenticated roles,
+and the hypothesis store refuses write operations. Anonymous cart routes are the
 explicit exception: they resolve an opaque cookie and constrain every D1 query
 to its session. The public registry does not depend on a writable filesystem.
 

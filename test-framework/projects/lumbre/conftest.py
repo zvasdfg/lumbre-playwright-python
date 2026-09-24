@@ -53,6 +53,18 @@ def authenticated_api(api: LumbreApi) -> LumbreApi:
 
 
 @pytest.fixture
+def administrator_api(api: LumbreApi) -> LumbreApi:
+    """Return the domain client authenticated as the deterministic test administrator."""
+    email = "admin@lumbre.example.test"
+    assert api.request_magic_link({"name": "Administración Lumbre", "email": email}).status == 200
+    delivery = api.latest_local_magic_link(email)
+    assert delivery.status == 200
+    assert api.follow_magic_link(delivery.json()["data"]["url"]).status == 200
+    assert api.account()["data"]["role"] == "admin"
+    return api
+
+
+@pytest.fixture
 def authenticated_home(
     page: Page,
     app_url: str,

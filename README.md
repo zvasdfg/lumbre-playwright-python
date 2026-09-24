@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 108 |
-| Automated functional risks | 108 |
-| Pytest executions | 142 |
-| Test files | 107 |
-| API cases / executions | 61 / 83 |
+| Committed functional risks | 113 |
+| Automated functional risks | 113 |
+| Pytest executions | 148 |
+| Test files | 112 |
+| API cases / executions | 66 / 89 |
 | Browser cases / executions | 47 / 51 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (34/34) |
-| Latest full-suite result | 142 passed |
+| API route-operation coverage | 100% (40/40) |
+| Latest full-suite result | 148 passed |
 
-**100% refers to the repository's 108-item committed functional-risk catalog.**
+**100% refers to the repository's 113-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -146,6 +146,8 @@ lumbre-playwright-python/
   event deduplication, amount/currency checks, and retry-safe order transitions.
 - Event availability derived from persisted reservations, with database-backed
   ownership and one-statement conditional creation at the capacity boundary.
+- Role-protected product and event administration with optimistic revisions,
+  public projections, capacity invariants, and append-only audit evidence.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.

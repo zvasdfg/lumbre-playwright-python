@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 61 / 83 |
+| API case IDs / executions | 66 / 89 |
 | Browser case IDs / executions | 47 / 51 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 108 |
-| Total Pytest executions | 142 |
-| Test files | 107 |
+| Unique committed risks | 113 |
+| Total Pytest executions | 148 |
+| Test files | 112 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 142 passed in 95.52 seconds |
+| Latest validation | 148 passed in 102.05 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,13 +50,13 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 59 | 59 | 100% |
-| P1 | 43 | 43 | 100% |
+| P0 | 63 | 63 | 100% |
+| P1 | 44 | 44 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **108** | **108** | **100%** |
+| **Total** | **113** | **113** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `34/34 = 100%`. Contract
+secondary API route-operation signal is `40/40 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
@@ -193,6 +193,11 @@ Priority definitions:
 | API-055 | Consent history records initial choice and changes without duplicate events | P0 | API audit integrity |
 | API-056 | Membership preferences cannot cross account boundaries | P0 | API ownership |
 | API-057 | Invalid membership preferences cannot be persisted | P1 | API negative + validation |
+| API-058 | Catalog mutations reject anonymous and customer accounts | P0 | API role authorization + parameterized |
+| API-059 | Product revisions update public catalog and server-owned cart prices | P0 | API persistence + commerce integration + audit |
+| API-060 | Stale product revisions cannot overwrite an accepted change | P0 | API optimistic concurrency |
+| API-061 | Event capacity cannot fall below confirmed reservations | P0 | API integrity + state conflict |
+| API-062 | Administrator-created events become public, reservable, and auditable | P1 | API persistence + contract + audit |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
