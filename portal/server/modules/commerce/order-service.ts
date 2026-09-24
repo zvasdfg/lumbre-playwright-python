@@ -3,6 +3,11 @@ import { getDatabase } from "../../platform/database/client";
 import { orderItems, orders, paymentAttempts } from "../../platform/database/schema";
 import { clearCart, readCart } from "./cart-service";
 import { localFakePayment, type PaymentScenario } from "./payment-port";
+import {
+  InventoryReservationConflictError,
+  reserveOrderInventory,
+  sellReservedInventory,
+} from "./inventory-service";
 
 export type OrderStatus = "pending" | "paid" | "failed" | "cancelled";
 
@@ -29,6 +34,7 @@ export type OrderView = {
 export class EmptyCartError extends Error {}
 export class OrderNotFoundError extends Error {}
 export class OrderAlreadyPaidError extends Error {}
+export { InventoryUnavailableError } from "./inventory-service";
 
 async function projectOrder(orderId: string, userId: string): Promise<OrderView | null> {
   const database = getDatabase();
@@ -145,6 +151,13 @@ export async function payOrder(
   if (order.status === "paid") throw new OrderAlreadyPaidError("Order is already paid");
 
   const outcome = await localFakePayment.charge(order.total, scenario);
+  if (outcome === "approved") {
+    const reservation = await reserveOrderInventory(orderId);
+    if (!reservation.created) {
+      if (reservation.state === "sold") throw new OrderAlreadyPaidError("Order is already paid");
+      throw new InventoryReservationConflictError("Order inventory is already reserved");
+    }
+  }
   const paymentId = crypto.randomUUID();
   const now = new Date().toISOString();
   await database.insert(paymentAttempts).values({
@@ -155,15 +168,15 @@ export async function payOrder(
     amount: order.total,
     createdAt: now,
   });
-  await database
-    .update(orders)
-    .set({
-      status: outcome === "approved" ? "paid" : "failed",
-      updatedAt: now,
-      paidAt: outcome === "approved" ? now : null,
-    })
-    .where(eq(orders.id, orderId));
-  if (outcome === "approved") await clearCart({ userId });
+  if (outcome === "approved") {
+    await sellReservedInventory(orderId);
+    await clearCart({ userId });
+  } else {
+    await database
+      .update(orders)
+      .set({ status: "failed", updatedAt: now, paidAt: null })
+      .where(eq(orders.id, orderId));
+  }
 
   return { data: await readOrder(orderId, userId), paymentId, outcome, created: true };
 }

@@ -15,6 +15,7 @@ export type Product = {
   name: string;
   category: "blends" | "ropa" | "herramientas" | "outdoor";
   price: number;
+  stock: number;
   badge?: string;
 };
 
@@ -193,13 +194,13 @@ export const recipes: Recipe[] = recipeSeeds.map((recipe) => ({
 }));
 
 export const products: Product[] = [
-  { id: 111, name: "Blend LHC-003 · SPG clásico", category: "blends", price: 260, badge: "Esencial" },
-  { id: 112, name: "Blend LHP-007 · Pollo ahumado", category: "blends", price: 290, badge: "Sumac + orégano" },
-  { id: 113, name: "Blend LHV-002 · Umami tostado", category: "blends", price: 310, badge: "Sésamo + shiitake" },
-  { id: 101, name: "Pinzas Forja 45", category: "herramientas", price: 740, badge: "Favorito" },
-  { id: 102, name: "Mandil Lumbre 01", category: "ropa", price: 1290 },
-  { id: 103, name: "Gorra Brasa Baja", category: "outdoor", price: 590, badge: "Nuevo" },
-  { id: 104, name: "Playera Después del Humo", category: "ropa", price: 680 },
+  { id: 111, name: "Blend LHC-003 · SPG clásico", category: "blends", price: 260, stock: 40, badge: "Esencial" },
+  { id: 112, name: "Blend LHP-007 · Pollo ahumado", category: "blends", price: 290, stock: 32, badge: "Sumac + orégano" },
+  { id: 113, name: "Blend LHV-002 · Umami tostado", category: "blends", price: 310, stock: 28, badge: "Sésamo + shiitake" },
+  { id: 101, name: "Pinzas Forja 45", category: "herramientas", price: 740, stock: 12, badge: "Favorito" },
+  { id: 102, name: "Mandil Lumbre 01", category: "ropa", price: 1290, stock: 8 },
+  { id: 103, name: "Gorra Brasa Baja", category: "outdoor", price: 590, stock: 18, badge: "Nuevo" },
+  { id: 104, name: "Playera Después del Humo", category: "ropa", price: 680, stock: 16 },
 ];
 
 export const events: FireEvent[] = [

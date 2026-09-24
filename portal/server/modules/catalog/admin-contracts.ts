@@ -7,6 +7,7 @@ const productFields = {
   name: z.string().trim().min(3).max(100),
   category: z.enum(["blends", "ropa", "herramientas", "outdoor"]),
   price: z.number().int().min(1).max(1_000_000),
+  stock: z.number().int().min(0).max(1_000_000).optional(),
   badge: z.string().trim().min(1).max(40).nullable().optional(),
   active: z.boolean().optional(),
 };
@@ -18,6 +19,7 @@ export const updateProductRequest = z
     name: productFields.name.optional(),
     category: productFields.category.optional(),
     price: productFields.price.optional(),
+    stock: productFields.stock,
     badge: productFields.badge,
     active: productFields.active,
   })

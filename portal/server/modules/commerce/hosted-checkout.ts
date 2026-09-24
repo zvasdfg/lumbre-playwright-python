@@ -4,6 +4,11 @@ import { getDatabase } from "../../platform/database/client";
 import { serverBinding } from "../../platform/config/bindings";
 import { hostedCheckoutSessions } from "../../platform/database/schema";
 import { OrderAlreadyPaidError, readOrder } from "./order-service";
+import {
+  InventoryReservationConflictError,
+  releaseOrderInventory,
+  reserveOrderInventory,
+} from "./inventory-service";
 
 type CheckoutItem = {
   name: string;
@@ -124,15 +129,25 @@ export async function createHostedCheckout(
 
   const order = await readOrder(orderId, userId);
   if (order.status === "paid") throw new OrderAlreadyPaidError("Order is already paid");
-  const providerSession = await checkoutPort().createSession(
-    {
-      orderId,
-      customerEmail: order.customerEmail,
-      items: order.items,
-      origin,
-    },
-    idempotencyKey,
-  );
+  const reservation = await reserveOrderInventory(orderId);
+  if (!reservation.created) {
+    throw new InventoryReservationConflictError("Order inventory is already reserved");
+  }
+  let providerSession: ProviderSession;
+  try {
+    providerSession = await checkoutPort().createSession(
+      {
+        orderId,
+        customerEmail: order.customerEmail,
+        items: order.items,
+        origin,
+      },
+      idempotencyKey,
+    );
+  } catch (error) {
+    await releaseOrderInventory(orderId, { failOrder: false });
+    throw error;
+  }
   const now = new Date().toISOString();
   await database.insert(hostedCheckoutSessions).values({
     id: crypto.randomUUID(),

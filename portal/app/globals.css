@@ -262,6 +262,7 @@ h1 em { color: var(--ember); font: inherit; }
 .product-card strong { font-size: 12px; }
 .product-card button { width: 34px; height: 34px; border: 1px solid #8e8b80; background: transparent; border-radius: 50%; font-size: 20px; cursor: pointer; }
 .product-card button:hover { background: var(--ink); color: white; }
+.product-card button:disabled { opacity: .4; cursor: not-allowed; }.product-card button:disabled:hover { background: transparent; color: inherit; }
 
 .events-section { background: var(--paper); }
 .events-heading { margin-bottom: 45px; }

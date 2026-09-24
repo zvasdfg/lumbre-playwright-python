@@ -1,6 +1,7 @@
 import { authenticatedUser } from "../../../../../server/modules/auth/auth-service";
 import { idempotencyKey, parseJsonBody, paymentRequest } from "../../../../../server/modules/commerce/order-contracts";
-import { OrderAlreadyPaidError, OrderNotFoundError, payOrder } from "../../../../../server/modules/commerce/order-service";
+import { InventoryUnavailableError, OrderAlreadyPaidError, OrderNotFoundError, payOrder } from "../../../../../server/modules/commerce/order-service";
+import { InventoryReservationConflictError } from "../../../../../server/modules/commerce/inventory-service";
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const user = await authenticatedUser(request);
@@ -20,6 +21,8 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   } catch (error) {
     if (error instanceof OrderNotFoundError) return Response.json({ error: error.message }, { status: 404 });
     if (error instanceof OrderAlreadyPaidError) return Response.json({ error: error.message }, { status: 409 });
+    if (error instanceof InventoryUnavailableError) return Response.json({ error: error.message }, { status: 409 });
+    if (error instanceof InventoryReservationConflictError) return Response.json({ error: error.message }, { status: 409 });
     throw error;
   }
 }

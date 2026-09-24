@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 117 |
-| Automated functional risks | 117 |
-| Pytest executions | 152 |
-| Test files | 116 |
-| API cases / executions | 66 / 89 |
-| Browser cases / executions | 51 / 55 |
+| Committed functional risks | 122 |
+| Automated functional risks | 122 |
+| Pytest executions | 157 |
+| Test files | 121 |
+| API cases / executions | 70 / 93 |
+| Browser cases / executions | 52 / 56 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (40/40) |
-| Latest full-suite result | 152 passed |
+| Latest full-suite result | 157 passed |
 
-**100% refers to the repository's 117-item committed functional-risk catalog.**
+**100% refers to the repository's 122-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -64,6 +64,8 @@ Lumbre is a cooking-at-the-fire portal with:
   retry-safe idempotency, and persisted order history;
 - provider-hosted checkout sessions, signed Stripe-compatible webhooks, and
   deduplicated provider events without transporting card data through Lumbre;
+- server-owned product inventory, atomic stock reservation, release on hosted
+  checkout expiration, idempotent sale finalization, and sold-out feedback;
 - authenticated event reservations with server-owned capacity, atomic
   oversell protection, duplicate prevention, and persisted account history;
 - account-owned fire-planner presets synchronized across browser contexts,
@@ -150,6 +152,8 @@ lumbre-playwright-python/
   public projections, capacity invariants, and append-only audit evidence.
 - An administrator-only browser workspace with public-catalog refresh,
   explicit deactivation feedback, and recoverable stale-revision conflicts.
+- Server-owned inventory with atomic reservation, idempotent finalization,
+  expired-checkout release, oversell protection, and sold-out presentation.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.
@@ -175,9 +179,11 @@ run locally, in CI, or against a remote environment.
 
 API cases protect authentication, server-owned pricing, order/payment
 idempotency, rejected-payment retention, successful cart clearing, hosted
-session reuse, signed webhooks, and provider-event deduplication. UI-025 checks
-anonymous guidance, UI-039 proves the local account-to-history journey, and
-UI-040 verifies that the browser follows the hosted URL returned by the API.
+session reuse, signed webhooks, provider-event deduplication, stock reservation,
+release, and oversell prevention. UI-025 checks anonymous guidance, UI-039
+proves the local account-to-history journey, UI-040 verifies that the browser
+follows the hosted URL returned by the API, and UI-050 protects the visible
+sold-out contract.
 
 ### Network behavior is tested at the correct boundary
 

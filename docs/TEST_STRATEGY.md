@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 66 / 89 |
-| Browser case IDs / executions | 51 / 55 |
+| API case IDs / executions | 70 / 93 |
+| Browser case IDs / executions | 52 / 56 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 117 |
-| Total Pytest executions | 152 |
-| Test files | 116 |
+| Unique committed risks | 122 |
+| Total Pytest executions | 157 |
+| Test files | 121 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 152 passed in 110.88 seconds |
+| Latest validation | 157 passed in 106.92 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,10 +50,10 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 65 | 65 | 100% |
-| P1 | 46 | 46 | 100% |
+| P0 | 69 | 69 | 100% |
+| P1 | 47 | 47 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **117** | **117** | **100%** |
+| **Total** | **122** | **122** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
 secondary API route-operation signal is `40/40 = 100%`. Contract
@@ -198,6 +198,10 @@ Priority definitions:
 | API-060 | Stale product revisions cannot overwrite an accepted change | P0 | API optimistic concurrency |
 | API-061 | Event capacity cannot fall below confirmed reservations | P0 | API integrity + state conflict |
 | API-062 | Administrator-created events become public, reservable, and auditable | P1 | API persistence + contract + audit |
+| API-063 | An approved idempotent payment decrements product inventory exactly once | P0 | API state transition + idempotency |
+| API-064 | A rejected local payment preserves product inventory | P0 | API negative + inventory integrity |
+| API-065 | Competing order snapshots cannot sell more units than available inventory | P0 | API atomicity + oversell boundary |
+| API-066 | An expired hosted checkout releases its reserved inventory | P0 | API lifecycle + signed webhook |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -251,6 +255,7 @@ Priority definitions:
 | UI-047 | An administrator product update reaches the public store without reload | P0 | E2E catalog integration |
 | UI-048 | A stale catalog update preserves administrator edits for recovery | P1 | UI route control + optimistic concurrency |
 | UI-049 | Deactivating an event removes it from the public agenda | P1 | E2E administrative projection |
+| UI-050 | A sold-out product is visibly unavailable and cannot be added to the cart | P1 | UI inventory presentation |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

@@ -9,6 +9,7 @@ import {
   paymentProviderEvents,
 } from "../../platform/database/schema";
 import { clearCart } from "./cart-service";
+import { releaseOrderInventory, sellReservedInventory } from "./inventory-service";
 
 const stripeEvent = z.object({
   id: z.string().min(1),
@@ -150,16 +151,10 @@ export async function processStripeWebhook(rawBody: string, signature: string) {
       event.type === "checkout.session.expired";
 
     if (approved && order.status !== "paid") {
-      await database
-        .update(orders)
-        .set({ status: "paid", paidAt: now, updatedAt: now })
-        .where(eq(orders.id, order.id));
+      await sellReservedInventory(order.id);
       await clearCart({ userId: order.userId });
     } else if (failed && order.status !== "paid") {
-      await database
-        .update(orders)
-        .set({ status: "failed", updatedAt: now })
-        .where(eq(orders.id, order.id));
+      await releaseOrderInventory(order.id, { failOrder: true });
     }
 
     await database

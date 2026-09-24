@@ -27,6 +27,7 @@ function publicProduct(product: ProductRecord) {
     name: product.name,
     category: product.category,
     price: product.price,
+    stock: product.stock,
     ...(product.badge ? { badge: product.badge } : {}),
   };
 }
@@ -90,7 +91,7 @@ export async function createProduct(actorUserId: string, input: CreateProductInp
   const id = await nextIdentifier("product");
   const [created] = await getDatabase()
     .insert(catalogProducts)
-    .values({ id, ...input, badge: input.badge ?? null, active: input.active ?? true, createdAt: now, updatedAt: now })
+    .values({ id, ...input, stock: input.stock ?? 0, badge: input.badge ?? null, active: input.active ?? true, createdAt: now, updatedAt: now })
     .returning();
   await recordAudit(actorUserId, "product", id, "created", null, created);
   return created;

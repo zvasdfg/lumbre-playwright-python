@@ -86,6 +86,10 @@ export const orders = sqliteTable(
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     paidAt: text("paid_at"),
+    inventoryState: text("inventory_state", {
+      enum: ["uncommitted", "reserved", "sold", "released"],
+    }).notNull().default("uncommitted"),
+    inventoryKey: text("inventory_key"),
   },
   (table) => [
     uniqueIndex("orders_user_idempotency_unique").on(table.userId, table.idempotencyKey),
@@ -265,6 +269,7 @@ export const catalogProducts = sqliteTable("catalog_products", {
     enum: ["blends", "ropa", "herramientas", "outdoor"],
   }).notNull(),
   price: integer("price").notNull(),
+  stock: integer("stock").notNull().default(0),
   badge: text("badge"),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
   revision: integer("revision").notNull().default(1),

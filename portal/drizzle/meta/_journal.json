@@ -71,6 +71,13 @@
       "when": 1790267129007,
       "tag": "0009_glossy_the_anarchist",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1790269511843,
+      "tag": "0010_wise_king_bedlam",
+      "breakpoints": true
     }
   ]
 }

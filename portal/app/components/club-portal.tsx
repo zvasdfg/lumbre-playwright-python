@@ -395,8 +395,12 @@ export default function ClubPortal() {
       },
       body: JSON.stringify({ scenario: form.get("paymentScenario") }),
     });
-    const paymentResult = (await paymentResponse.json()) as { data?: Order };
+    const paymentResult = (await paymentResponse.json()) as { data?: Order; error?: string };
     setSubmitting(false);
+    if (paymentResponse.status === 409 && paymentResult.error?.includes("inventory")) {
+      showToast("Ya no hay existencias suficientes para completar este pedido.");
+      return;
+    }
     if (!paymentResult.data) {
       showToast("No pudimos procesar el pago local.");
       return;
@@ -585,7 +589,7 @@ export default function ClubPortal() {
                 )}
               </div>
               <p>{productCategoryLabel(product.category)}</p><h3>{product.name}</h3>
-              <div><strong>{currency.format(product.price)}</strong><button type="button" onClick={() => void addToCart(product)} aria-label={`Agregar ${product.name} a la canasta`}>+</button></div>
+              <div><strong>{product.stock > 0 ? currency.format(product.price) : "Agotado"}</strong><button type="button" disabled={product.stock === 0} onClick={() => void addToCart(product)} aria-label={product.stock > 0 ? `Agregar ${product.name} a la canasta` : `${product.name} agotado`}>{product.stock > 0 ? "+" : "×"}</button></div>
             </article>
           ))}
         </div>

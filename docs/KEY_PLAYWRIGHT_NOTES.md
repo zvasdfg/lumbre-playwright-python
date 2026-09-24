@@ -364,6 +364,23 @@ prepares authorization through `APIRequestContext`; the test still uses a fresh
 browser context to prove which controls are rendered. Authentication mechanics
 stay out of the test while the role-specific user contract remains visible.
 
+## 32. Test state machines at the cheapest layer
+
+Inventory is a server-owned state machine, so API tests are the primary layer.
+They can create exact stock and order preconditions, drive payment or signed
+webhook transitions, and inspect authoritative values without duplicating UI
+navigation. `API-063` through `API-066` therefore protect idempotent sale,
+rejection, oversell prevention, reservation, and release.
+
+The browser adds one different risk: whether a person understands that an item
+cannot be purchased. `UI-050` changes stock through the administrator Component
+Object, then uses Playwright locators and web-first assertions to prove that the
+refreshed public card displays **Agotado** and disables its accessible action.
+
+Do not reproduce every API transition in the browser. Add a UI test when
+rendering, accessibility, browser serialization, or user feedback is itself
+the contract; keep transactional invariants at the API/database boundary.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)

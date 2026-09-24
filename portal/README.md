@@ -74,7 +74,7 @@ delivery adapter, production URL, and secret bindings are configured.
 - Recipe category filters, search, and recipe feedback.
 - Product catalog, server-priced persistent cart, authenticated checkout,
   deterministic local payments, provider-hosted checkout, and account-owned
-  order history.
+  order history with server-owned inventory.
 - Membership validation, keyboard navigation, API submission, account-owned
   cooking preferences, explicit consent history, and recovery.
 - Fire planning with cooking-style and vegetable-reserve calculations,
@@ -113,9 +113,9 @@ delivery adapter, production URL, and secret bindings are configured.
 | `GET` | `/api/orders` | Account-owned persisted order history | `API-033`, `API-035`, `UI-039` |
 | `POST` | `/api/orders` | Create an idempotent server-priced order snapshot | `API-031`–`API-033` |
 | `GET` | `/api/orders/:id` | Read one account-owned immutable order | OpenAPI contract |
-| `POST` | `/api/orders/:id/payment` | Run an idempotent local payment attempt | `API-034`, `API-035`, `UI-039` |
-| `POST` | `/api/orders/:id/checkout-session` | Create or reuse a provider-hosted checkout session | `API-036`, `UI-040` |
-| `POST` | `/api/payments/stripe/webhook` | Verify and process a signed provider event | `API-037`–`API-040` |
+| `POST` | `/api/orders/:id/payment` | Run an idempotent local payment attempt and consume stock on approval | `API-034`, `API-035`, `API-063`–`API-065`, `UI-039` |
+| `POST` | `/api/orders/:id/checkout-session` | Create or reuse a provider-hosted checkout session and reserve stock | `API-036`, `API-066`, `UI-040` |
+| `POST` | `/api/payments/stripe/webhook` | Verify a signed provider event and finalize or release inventory | `API-037`–`API-040`, `API-066` |
 | `GET` | `/api/events` | Event collection | `API-019` |
 | `POST` | `/api/events/:id/reservations` | Confirm an account-owned group reservation | `API-041`–`API-045`, `UI-010`, `UI-041` |
 | `GET` | `/api/reservations` | Read the authenticated account's reservation history | `API-041`, `API-042`, `UI-041` |
@@ -157,6 +157,11 @@ revision preserves the edited form and asks the operator to reload instead of
 discarding work. Customers receive no administrative control, while the API
 role check remains the actual security boundary. Creation remains API-only
 until product image assignment is part of the write model.
+
+Product stock is edited through the same revision-protected workspace. The
+public store exposes zero inventory as **Agotado** and disables the add action;
+that presentation is guidance, while the server remains the enforcement
+boundary when payment or hosted checkout attempts to claim stock.
 
 ## Fire-planner preset ownership and synchronization
 
@@ -238,6 +243,14 @@ of duplicating it. The local payment port accepts explicit `success` and
 `rejection` scenarios: approval marks the order paid and clears the cart;
 rejection marks it failed and preserves the cart for retry. The account dialog
 reads persisted order history rather than reconstructing it from client state.
+
+Inventory follows the payment boundary. A successful local payment claims and
+sells stock atomically. A hosted checkout reserves stock before redirecting to
+the provider, then a verified success finalizes it without another decrement;
+a verified failed or expired event releases the reservation. Each order stores
+an inventory state and unique claim key so retries cannot sell or restore the
+same units twice. A competing claim receives `409` instead of allowing stock to
+become negative.
 
 ## Provider-hosted checkout
 

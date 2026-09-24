@@ -7,6 +7,7 @@ type AdministrativeProduct = {
   name: string;
   category: "blends" | "ropa" | "herramientas" | "outdoor";
   price: number;
+  stock: number;
   badge: string | null;
   active: boolean;
   revision: number;
@@ -117,6 +118,7 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
           name: selectedProduct.name,
           category: selectedProduct.category,
           price: selectedProduct.price,
+          stock: selectedProduct.stock,
           badge: selectedProduct.badge || null,
           active: selectedProduct.active,
         }),
@@ -217,6 +219,7 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
                   <label>Nombre del producto<input value={selectedProduct.name} minLength={3} maxLength={100} required onChange={(event) => setSelectedProduct((current) => current && ({ ...current, name: event.target.value }))} /></label>
                   <label>Categoría<select value={selectedProduct.category} onChange={(event) => setSelectedProduct((current) => current && ({ ...current, category: event.target.value as AdministrativeProduct["category"] }))}><option value="blends">Mezclas</option><option value="ropa">Ropa</option><option value="herramientas">Herramientas</option><option value="outdoor">Aire libre</option></select></label>
                   <label>Precio en MXN<input type="number" min="1" max="1000000" required value={selectedProduct.price} onChange={(event) => setSelectedProduct((current) => current && ({ ...current, price: Number(event.target.value) }))} /></label>
+                  <label>Existencias disponibles<input type="number" min="0" max="1000000" required value={selectedProduct.stock} onChange={(event) => setSelectedProduct((current) => current && ({ ...current, stock: Number(event.target.value) }))} /></label>
                   <label>Distintivo<input value={selectedProduct.badge ?? ""} maxLength={40} onChange={(event) => setSelectedProduct((current) => current && ({ ...current, badge: event.target.value || null }))} /></label>
                   <label className="checkbox"><input type="checkbox" checked={selectedProduct.active} onChange={(event) => setSelectedProduct((current) => current && ({ ...current, active: event.target.checked }))} /> Producto visible en la tienda.</label>
                   <button className="button button-primary" type="submit" disabled={saving}>{saving ? "Guardando..." : "Guardar producto"}</button>

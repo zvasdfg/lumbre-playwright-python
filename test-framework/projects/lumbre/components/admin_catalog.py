@@ -15,6 +15,7 @@ class AdminCatalog:
         self.product_name_input = self.product_form.get_by_label("Nombre del producto")
         self.product_category_select = self.product_form.get_by_label("Categoría")
         self.product_price_input = self.product_form.get_by_label("Precio en MXN")
+        self.product_stock_input = self.product_form.get_by_label("Existencias disponibles")
         self.product_badge_input = self.product_form.get_by_label("Distintivo")
         self.product_active_checkbox = self.product_form.get_by_label(
             "Producto visible en la tienda.",
@@ -48,6 +49,10 @@ class AdminCatalog:
 
     def update_product_price(self, price: int) -> None:
         self.product_price_input.fill(str(price))
+        self.save_product_button.click()
+
+    def update_product_stock(self, stock: int) -> None:
+        self.product_stock_input.fill(str(stock))
         self.save_product_button.click()
 
     def select_event(self, event_id: int) -> None:

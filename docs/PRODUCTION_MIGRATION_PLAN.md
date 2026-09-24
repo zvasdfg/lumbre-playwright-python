@@ -1,6 +1,6 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 6E administrator workspace implemented and
+> Status: Phase 6F server-owned inventory implemented and
 > regression-validated locally on 2026-09-24. Live Stripe sandbox activation
 > remains pending test credentials.
 
@@ -80,6 +80,11 @@ all framework static checks, four focused browser scenarios, and all 152 Pytest
 executions in 110.88 seconds. Its archived report is
 `reports/runs/lumbre-report-2026-09-24_10-58-16.html`.
 
+Phase 6F passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, five focused inventory scenarios, and all 157
+Pytest executions in 106.92 seconds. Its archived report is
+`reports/runs/lumbre-report-2026-09-24_11-10-23.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -93,13 +98,13 @@ with names only and no secret values.
 
 | Capability | Current source of truth | Production gap |
 | --- | --- | --- |
-| Cart | D1 records constrained by an opaque anonymous session or authenticated account | No inventory reservation |
+| Cart | D1 records constrained by an opaque anonymous session or authenticated account | Cart quantities are intentionally non-reserving until checkout |
 | Checkout | D1 order snapshots, payment attempts, hosted checkout sessions, and verified provider events | Live provider credentials and fulfillment remain pending |
 | Membership | Stateless enrollment plus account-owned D1 preferences and consent events | Enrollment record and production messaging delivery remain pending |
 | Event reservation | D1 account reservation plus derived capacity and revision-protected administrative capacity | Cancellation remains pending |
 | Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
-| Products | D1 catalog with public projections, revision-protected admin writes, server-priced carts, and an edit workspace | Inventory quantity and image-aware creation UI remain pending |
+| Products | D1 catalog with server-owned stock, public sold-out projection, revision-protected admin writes, server-priced carts, and an edit workspace | Image-aware creation UI remains pending |
 | Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
 | Database | Drizzle schema, SQL migrations, deterministic seed, and Worker `DB` binding | Remote provisioning and operational backups remain pending |
 
@@ -469,6 +474,23 @@ Phase 6E completion evidence:
 - `UI-046` through `UI-049` protect role visibility, browser-to-server catalog
   integration, stale-edit recovery, and public deactivation behavior.
 
+Phase 6F completion evidence:
+
+- D1 owns product stock; the browser never submits or calculates remaining
+  inventory and administrative stock edits keep optimistic revision control;
+- approved local payments atomically claim inventory before becoming paid,
+  while deterministic rejection consumes no stock and idempotent replay cannot
+  decrement a second time;
+- hosted checkout reserves before redirecting to the provider, verified success
+  finalizes the reservation, and verified failure or expiration restores it;
+- order inventory states and unique claim keys gate every transition, while D1
+  batches combine the order claim and stock mutation as one transaction;
+- public product projections expose availability, and the store renders
+  **Agotado** with a disabled action when stock reaches zero;
+- `API-063` through `API-066` protect sale idempotency, rejection integrity,
+  the oversell boundary, and expiration release; `UI-050` protects the distinct
+  browser presentation risk.
+
 ### Phase 7: production hardening
 
 - rate limits for abuse-sensitive operations;
@@ -527,13 +549,13 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 6F should add inventory as a server-owned commerce invariant. Before
-implementation, define whether stock is reserved when an order is created or
-only when payment succeeds, how failed or expired payments release units, and
-which idempotency boundary prevents double decrement. API tests should protect
-the concurrency and lifecycle rules; UI tests should be limited to distinct
-customer feedback such as an unavailable product.
+Phase 6G should add authenticated order cancellation and fulfillment states.
+Cancellation must define which pre-fulfillment states are reversible, whether
+sold inventory is restored, and which idempotency boundary prevents duplicate
+restocks. API tests should protect the state machine and account ownership; a
+UI test is justified only for a distinct customer-facing cancellation or
+status-history contract.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local
-Phase 6E UI work or automation learning.
+Phase 6F inventory work or automation learning.

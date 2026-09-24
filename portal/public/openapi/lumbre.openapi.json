@@ -1152,24 +1152,26 @@
       },
       "Product": {
         "type": "object",
-        "required": ["id", "name", "category", "price"],
+        "required": ["id", "name", "category", "price", "stock"],
         "properties": {
           "id": { "type": "integer", "minimum": 1 },
           "name": { "type": "string", "minLength": 1 },
           "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
           "price": { "type": "number", "exclusiveMinimum": 0 },
+          "stock": { "type": "integer", "minimum": 0 },
           "badge": { "type": "string", "minLength": 1 }
         },
         "additionalProperties": false
       },
       "AdministrativeProduct": {
         "type": "object",
-        "required": ["id", "name", "category", "price", "badge", "active", "revision", "createdAt", "updatedAt"],
+        "required": ["id", "name", "category", "price", "stock", "badge", "active", "revision", "createdAt", "updatedAt"],
         "properties": {
           "id": { "type": "integer", "minimum": 1 },
           "name": { "type": "string", "minLength": 3, "maxLength": 100 },
           "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
           "price": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+          "stock": { "type": "integer", "minimum": 0, "maximum": 1000000 },
           "badge": { "type": ["string", "null"] },
           "active": { "type": "boolean" },
           "revision": { "type": "integer", "minimum": 1 },
@@ -1185,6 +1187,7 @@
           "name": { "type": "string", "minLength": 3, "maxLength": 100 },
           "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
           "price": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+          "stock": { "type": "integer", "minimum": 0, "maximum": 1000000 },
           "badge": { "type": ["string", "null"] },
           "active": { "type": "boolean" }
         },
@@ -1199,6 +1202,7 @@
           "name": { "type": "string", "minLength": 3, "maxLength": 100 },
           "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
           "price": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+          "stock": { "type": "integer", "minimum": 0, "maximum": 1000000 },
           "badge": { "type": ["string", "null"] },
           "active": { "type": "boolean" }
         },

@@ -292,6 +292,26 @@ session, order identifier, currency, and amount against D1, and persists the
 provider event ID as the deduplication key. Only the payload hash is retained;
 the raw provider payload is not stored.
 
+### Inventory lifecycle boundary
+
+D1 is the inventory source of truth. Product projections expose stock for
+availability feedback, but only server services mutate it. Cart writes and
+order creation do not reserve units: a customer may prepare a cart without
+locking merchandise indefinitely.
+
+An approved local payment claims and consumes stock in one D1 batch. Hosted
+checkout instead reserves stock before returning the provider redirect because
+payment occurs outside Lumbre. A verified success changes `reserved` to `sold`
+without a second decrement; a verified failure or expiration changes it to
+`released` and restores the units.
+
+Each order records `uncommitted`, `reserved`, `sold`, or `released` plus a
+unique inventory claim key. Conditional order updates gate the transition, and
+the same D1 batch applies the corresponding stock mutation. This makes payment
+and webhook replay safe and prevents two competing order snapshots from
+driving stock below zero. Administrative stock edits use the existing catalog
+revision contract, so stale operators cannot silently replace a newer value.
+
 ### Administrative catalog and event capacity boundary
 
 TypeScript product and event data remains reviewed seed input, while D1 owns
@@ -318,8 +338,9 @@ at a time, and sends the record's current revision with every save. A `409`
 keeps the unsaved fields intact and offers an explicit catalog reload instead
 of silently replacing the user's work. Successful changes refetch the public
 product and event projections so the store and agenda update without a full
-page reload. Product creation remains API-only until image ownership and upload
-rules are defined.
+page reload. Stock is editable in the same revision-protected product form;
+zero stock projects a disabled **Agotado** action in the store. Product creation
+remains API-only until image ownership and upload rules are defined.
 
 Reservation creation uses one conditional `INSERT ... SELECT` statement. The
 same statement checks both account uniqueness and aggregate confirmed capacity,
