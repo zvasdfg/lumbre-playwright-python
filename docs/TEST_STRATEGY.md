@@ -25,13 +25,13 @@ in locators and expected values when it is part of the product contract.
 | Signal | Current result |
 | --- | ---: |
 | API case IDs / executions | 66 / 89 |
-| Browser case IDs / executions | 47 / 51 |
+| Browser case IDs / executions | 51 / 55 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 113 |
-| Total Pytest executions | 148 |
-| Test files | 112 |
+| Unique committed risks | 117 |
+| Total Pytest executions | 152 |
+| Test files | 116 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 148 passed in 102.05 seconds |
+| Latest validation | 152 passed in 110.88 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,10 +50,10 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 63 | 63 | 100% |
-| P1 | 44 | 44 | 100% |
+| P0 | 65 | 65 | 100% |
+| P1 | 46 | 46 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **113** | **113** | **100%** |
+| **Total** | **117** | **117** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
 secondary API route-operation signal is `40/40 = 100%`. Contract
@@ -247,6 +247,10 @@ Priority definitions:
 | UI-043 | A failed account preset save preserves retry data and reports no false success | P1 | UI route control + recoverability |
 | UI-044 | Authenticated membership preferences survive a complete page reload | P0 | E2E preference persistence |
 | UI-045 | A failed preference save preserves edited values for retry | P1 | UI route control + recoverability |
+| UI-046 | Catalog administration is visible to administrators but not customers | P0 | UI role boundary + multi-context |
+| UI-047 | An administrator product update reaches the public store without reload | P0 | E2E catalog integration |
+| UI-048 | A stale catalog update preserves administrator edits for recovery | P1 | UI route control + optimistic concurrency |
+| UI-049 | Deactivating an event removes it from the public agenda | P1 | E2E administrative projection |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

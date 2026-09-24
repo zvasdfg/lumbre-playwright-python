@@ -312,6 +312,15 @@ places from confirmed reservations instead of trusting client state. An
 administrative capacity update is rejected when its requested capacity is
 below the confirmed party-size sum.
 
+The administrator browser workspace is a Component Object boundary over these
+APIs. It is rendered only for an authenticated `admin`, edits one copied record
+at a time, and sends the record's current revision with every save. A `409`
+keeps the unsaved fields intact and offers an explicit catalog reload instead
+of silently replacing the user's work. Successful changes refetch the public
+product and event projections so the store and agenda update without a full
+page reload. Product creation remains API-only until image ownership and upload
+rules are defined.
+
 Reservation creation uses one conditional `INSERT ... SELECT` statement. The
 same statement checks both account uniqueness and aggregate confirmed capacity,
 so the decision and insertion happen under one SQLite write operation. A
@@ -320,9 +329,12 @@ boundary. Browser code submits only the event ID and party size.
 
 ### Authenticated fixture flow
 
-The project fixture requests and consumes a deterministic local magic link
-through `APIRequestContext`, exports the resulting Playwright `storage_state`,
-and installs its cookies in the test's fresh browser context before navigation.
+The project fixtures request and consume deterministic local magic links
+through `APIRequestContext`, export the resulting Playwright `storage_state`,
+and install their cookies in each test's fresh browser context before navigation.
+Separate customer and administrator states make role-specific browser
+preconditions explicit without repeating authentication mechanics in every
+test.
 Tests that validate sign-in still perform the full UI flow; tests whose
 precondition is merely “authenticated customer” reuse the fixture. No token or
 magic-link URL is written to logs or reports.

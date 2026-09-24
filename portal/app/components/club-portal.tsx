@@ -7,6 +7,7 @@ import { isPublicProductionReadOnly } from "../lib/environment";
 import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
 import AccountPreferences from "./account-preferences";
+import AdminCatalog from "./admin-catalog";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
@@ -106,6 +107,7 @@ export default function ClubPortal() {
   const [account, setAccount] = useState<Account | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [adminCatalogOpen, setAdminCatalogOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -200,6 +202,20 @@ export default function ClubPortal() {
       setToast("");
       toastTimeoutRef.current = null;
     }, 3200);
+  }
+
+  async function refreshPublicCatalog() {
+    const [productsResponse, eventsResponse] = await Promise.all([
+      fetch("/api/products"),
+      fetch("/api/events"),
+    ]);
+    if (!productsResponse.ok || !eventsResponse.ok) {
+      throw new Error("Public catalog refresh failed");
+    }
+    const productResult = (await productsResponse.json()) as { data: Product[] };
+    const eventResult = (await eventsResponse.json()) as { data: AvailableEvent[] };
+    setProductCatalog(productResult.data);
+    setEventCatalog(eventResult.data);
   }
 
   async function addToCart(product: Product) {
@@ -634,6 +650,11 @@ export default function ClubPortal() {
                 <p>{account.email}</p>
                 <p>Perfil: {account.role === "admin" ? "administración" : "cliente"}</p>
                 <AccountPreferences />
+                {account.role === "admin" && (
+                  <button className="button button-quiet full admin-catalog-button" type="button" onClick={() => { setAccountOpen(false); setAdminCatalogOpen(true); }}>
+                    Administrar catálogo
+                  </button>
+                )}
                 <div className="order-history" data-testid="order-history">
                   <h3>Historial de pedidos</h3>
                   {orders.length ? orders.map((order) => (
@@ -678,6 +699,10 @@ export default function ClubPortal() {
             )}
           </section>
         </div>
+      )}
+
+      {adminCatalogOpen && account?.role === "admin" && (
+        <AdminCatalog onClose={() => setAdminCatalogOpen(false)} onCatalogChanged={refreshPublicCatalog} />
       )}
 
       {checkoutOpen && account && (

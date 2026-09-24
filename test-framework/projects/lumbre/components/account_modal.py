@@ -33,6 +33,10 @@ class AccountModal:
             name="Guardar preferencias",
         )
         self.preference_status = self.preferences.get_by_role("status")
+        self.admin_catalog_button = self.root.get_by_role(
+            "button",
+            name="Administrar catálogo",
+        )
 
     def request_magic_link(self, *, name: str, email: str) -> None:
         self.name_input.fill(name)

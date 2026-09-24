@@ -150,6 +150,14 @@ and updates append an audit record containing actor, resource, before state,
 after state, and timestamp. Public reads expose only active entries and omit
 administrative metadata.
 
+Authenticated administrators can open **Administrar catálogo** from their
+account. The workspace edits existing products and events, reports successful
+deactivation, and refreshes the public store and agenda immediately. A stale
+revision preserves the edited form and asks the operator to reload instead of
+discarding work. Customers receive no administrative control, while the API
+role check remains the actual security boundary. Creation remains API-only
+until product image assignment is part of the write model.
+
 ## Fire-planner preset ownership and synchronization
 
 Anonymous visitors keep fire-planner presets in browser `localStorage`. Once

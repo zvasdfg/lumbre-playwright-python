@@ -3,6 +3,7 @@ from __future__ import annotations
 from playwright.sync_api import Locator, Page
 
 from projects.lumbre.components.account_modal import AccountModal
+from projects.lumbre.components.admin_catalog import AdminCatalog
 from projects.lumbre.components.cart_drawer import CartDrawer
 from projects.lumbre.components.checkout_modal import CheckoutModal
 from projects.lumbre.components.event_reservation_modal import EventReservationModal
@@ -22,6 +23,7 @@ class HomePage(BasePage):
         super().__init__(page, base_url)
         self.header = Header(page)
         self.account = AccountModal(page)
+        self.admin_catalog = AdminCatalog(page)
         self.cart = CartDrawer(page)
         self.checkout = CheckoutModal(page)
         self.events = EventsSection(page)
@@ -47,6 +49,10 @@ class HomePage(BasePage):
     def add_product(self, product_name: str) -> None:
         self.page.get_by_role("button", name=f"Agregar {product_name} a la canasta").click()
 
+    def product_named(self, product_name: str) -> Locator:
+        heading = self.page.get_by_role("heading", name=product_name, exact=True)
+        return self.product_cards.filter(has=heading)
+
     def open_membership(self) -> None:
         self.header.open_membership()
 
@@ -55,6 +61,10 @@ class HomePage(BasePage):
 
     def open_account(self) -> None:
         self.header.open_account()
+
+    def open_admin_catalog(self) -> None:
+        self.open_account()
+        self.account.admin_catalog_button.click()
 
     def register_member(self, *, name: str, email: str, experience: str = "intermedio") -> None:
         self.open_membership()

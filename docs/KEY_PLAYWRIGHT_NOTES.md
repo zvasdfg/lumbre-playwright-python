@@ -345,6 +345,25 @@ This is a useful layer distinction:
 When sequence is meaningful, encode it as a domain rule or persisted sort
 field. Do not depend accidentally on insertion order.
 
+## 31. Combine real success paths with routed failure paths
+
+`UI-047` and `UI-049` use the real browser, API routes, and D1 state because
+the risk is end-to-end propagation from an administrator form to the public
+catalog. `UI-048` instead intercepts the product `PATCH` and deterministically
+returns `409` because the browser risk is preserving edits and explaining how
+to recover.
+
+This is not duplicate coverage. The API case proves that two real revisions
+cannot overwrite one another; the routed UI case proves that the operator's
+unsaved value remains visible after that server decision. Use a real dependency
+for the successful integration contract and `page.route()` for a distinct,
+hard-to-trigger presentation state.
+
+Role fixtures follow the same separation. `administrator_storage_state`
+prepares authorization through `APIRequestContext`; the test still uses a fresh
+browser context to prove which controls are rendered. Authentication mechanics
+stay out of the test while the role-specific user contract remains visible.
+
 ## Official references
 
 - [Locators](https://playwright.dev/python/docs/locators)

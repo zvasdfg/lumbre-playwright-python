@@ -65,12 +65,31 @@ def administrator_api(api: LumbreApi) -> LumbreApi:
 
 
 @pytest.fixture
+def administrator_storage_state(administrator_api: LumbreApi) -> StorageState:
+    """Build reusable browser authentication for the deterministic administrator."""
+    return administrator_api.storage_state()
+
+
+@pytest.fixture
 def authenticated_home(
     page: Page,
     app_url: str,
     authenticated_storage_state: StorageState,
 ) -> HomePage:
     cookies = cast(Any, authenticated_storage_state["cookies"])
+    page.context.add_cookies(cookies)
+    home_page = HomePage(page, app_url)
+    home_page.open()
+    return home_page
+
+
+@pytest.fixture
+def administrator_home(
+    page: Page,
+    app_url: str,
+    administrator_storage_state: StorageState,
+) -> HomePage:
+    cookies = cast(Any, administrator_storage_state["cookies"])
     page.context.add_cookies(cookies)
     home_page = HomePage(page, app_url)
     home_page.open()

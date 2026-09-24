@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 113 |
-| Automated functional risks | 113 |
-| Pytest executions | 148 |
-| Test files | 112 |
+| Committed functional risks | 117 |
+| Automated functional risks | 117 |
+| Pytest executions | 152 |
+| Test files | 116 |
 | API cases / executions | 66 / 89 |
-| Browser cases / executions | 47 / 51 |
+| Browser cases / executions | 51 / 55 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (40/40) |
-| Latest full-suite result | 148 passed |
+| Latest full-suite result | 152 passed |
 
-**100% refers to the repository's 113-item committed functional-risk catalog.**
+**100% refers to the repository's 117-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -148,6 +148,8 @@ lumbre-playwright-python/
   ownership and one-statement conditional creation at the capacity boundary.
 - Role-protected product and event administration with optimistic revisions,
   public projections, capacity invariants, and append-only audit evidence.
+- An administrator-only browser workspace with public-catalog refresh,
+  explicit deactivation feedback, and recoverable stale-revision conflicts.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.

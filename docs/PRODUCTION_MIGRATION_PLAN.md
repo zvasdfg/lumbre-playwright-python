@@ -1,6 +1,6 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 6D API-first catalog administration implemented and
+> Status: Phase 6E administrator workspace implemented and
 > regression-validated locally on 2026-09-24. Live Stripe sandbox activation
 > remains pending test credentials.
 
@@ -75,6 +75,11 @@ all framework static checks, and all 148 Pytest executions in 102.05 seconds.
 Its archived report is
 `reports/runs/lumbre-report-2026-09-24_10-39-30.html`.
 
+Phase 6E passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, four focused browser scenarios, and all 152 Pytest
+executions in 110.88 seconds. Its archived report is
+`reports/runs/lumbre-report-2026-09-24_10-58-16.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -91,10 +96,10 @@ with names only and no secret values.
 | Cart | D1 records constrained by an opaque anonymous session or authenticated account | No inventory reservation |
 | Checkout | D1 order snapshots, payment attempts, hosted checkout sessions, and verified provider events | Live provider credentials and fulfillment remain pending |
 | Membership | Stateless enrollment plus account-owned D1 preferences and consent events | Enrollment record and production messaging delivery remain pending |
-| Event reservation | D1 account reservation plus derived capacity and revision-protected administrative capacity | Cancellation and admin UI remain pending |
+| Event reservation | D1 account reservation plus derived capacity and revision-protected administrative capacity | Cancellation remains pending |
 | Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
-| Products | D1 catalog with public projections, revision-protected admin writes, and server-priced carts | Inventory quantity and admin UI remain pending |
+| Products | D1 catalog with public projections, revision-protected admin writes, server-priced carts, and an edit workspace | Inventory quantity and image-aware creation UI remain pending |
 | Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
 | Database | Drizzle schema, SQL migrations, deterministic seed, and Worker `DB` binding | Remote provisioning and operational backups remain pending |
 
@@ -448,6 +453,22 @@ Phase 6D completion evidence:
 - OpenAPI publishes 40 route operations. The admin browser workspace remains a
   deliberately separate UI risk rather than being folded into this API slice.
 
+Phase 6E completion evidence:
+
+- the account surface exposes **Administrar catálogo** only to the persisted
+  administrator role; customers receive no matching control;
+- the workspace edits existing products and events through the Phase 6D APIs,
+  carries each `expectedRevision`, and refetches public projections after a
+  successful save;
+- stale `409` responses preserve unsaved values and provide an explicit reload
+  action rather than producing false success or silent data loss;
+- event deactivation produces visible confirmation and immediately removes the
+  record from the public agenda;
+- product creation intentionally remains API-only until the image write model
+  can guarantee polished store merchandise;
+- `UI-046` through `UI-049` protect role visibility, browser-to-server catalog
+  integration, stale-edit recovery, and public deactivation behavior.
+
 ### Phase 7: production hardening
 
 - rate limits for abuse-sensitive operations;
@@ -506,11 +527,12 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 6E should add a small administrator workspace over the completed catalog
-API. Its browser risks are stale-revision recovery, visible validation,
-deactivation feedback, and confirmation that public customers never receive
-administrative controls. Image assignment or upload must be defined before
-newly created store products are exposed as polished editorial merchandise.
+Phase 6F should add inventory as a server-owned commerce invariant. Before
+implementation, define whether stock is reserved when an order is created or
+only when payment succeeds, how failed or expired payments release units, and
+which idempotency boundary prevents double decrement. API tests should protect
+the concurrency and lifecycle rules; UI tests should be limited to distinct
+customer feedback such as an unavailable product.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local

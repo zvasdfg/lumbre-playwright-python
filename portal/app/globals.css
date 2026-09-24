@@ -338,6 +338,24 @@ footer small { grid-column: 1 / -1; border-top: 1px solid #4a4c46; margin-top: 5
 .account-preferences > p { margin: 8px 0 0; color: var(--text-muted); font-size: 12px; line-height: 1.5; }
 .account-preferences form { margin-top: 16px; }
 .account-preferences .preference-message { color: var(--ember-dark); font-weight: 700; }
+.admin-catalog-button { margin: 0 0 20px; }
+.admin-catalog-modal { width: min(1120px, 100%); }
+.admin-catalog-heading { display: flex; align-items: end; justify-content: space-between; gap: 25px; }
+.admin-catalog-heading h2 { max-width: 700px; }
+.admin-catalog-heading .button { flex: 0 0 auto; border: 1px solid #8e8b80; color: var(--ink); }
+.admin-catalog-intro { max-width: 680px; }
+.admin-catalog-message { margin: 20px 0 0; padding: 14px 16px; border-left: 5px solid var(--ember); background: #f0dfd8; color: #602118 !important; font-weight: 700; }
+.admin-catalog-loading { padding: 45px 0; }
+.admin-catalog-workspace { display: grid; grid-template-columns: .75fr .75fr 1.5fr; gap: 22px; margin-top: 30px; }
+.admin-catalog-workspace h3, .admin-editor h3 { margin: 0 0 13px; font-family: var(--font-exo), sans-serif; font-size: 16px; text-transform: uppercase; }
+.admin-record-list { max-height: 430px; overflow-y: auto; border-top: 1px solid #c7c2b5; }
+.admin-record-list button { width: 100%; display: grid; gap: 5px; border: 0; border-bottom: 1px solid #d5d0c5; background: transparent; padding: 12px 10px; color: var(--ink); text-align: left; cursor: pointer; }
+.admin-record-list button[aria-pressed="true"] { border-left: 5px solid var(--ember); background: #eee8dc; }
+.admin-record-list span { font-size: 11px; font-weight: 800; }.admin-record-list small { color: var(--text-muted); font-size: 8px; text-transform: uppercase; }
+.admin-editor { min-height: 430px; border-left: 1px solid #c7c2b5; padding-left: 24px; }
+.admin-editor > p { color: var(--text-muted); font-size: 12px; }
+.admin-editor form { margin-top: 0; }
+.admin-date-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .hosted-checkout-button { margin-top: 12px; border: 1px solid #8e8b80; color: var(--ink); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
@@ -360,11 +378,13 @@ footer small { grid-column: 1 / -1; border-top: 1px solid #4a4c46; margin-top: 5
   .shop-section { grid-template-columns: 1fr; padding: 85px 28px; }
   .event-row { grid-template-columns: 80px 1fr; padding: 25px 0; }
   .event-row .spots { grid-column: 2; }.event-row > button { grid-column: 2; width: 180px; }
+  .admin-catalog-workspace { grid-template-columns: 1fr 1fr; }.admin-editor { grid-column: 1 / -1; border-left: 0; border-top: 1px solid #c7c2b5; padding: 24px 0 0; }
   footer { grid-template-columns: 1fr 1fr; padding: 70px 28px 30px; }.footer-brand { grid-column: 1 / -1; }
 }
 
 @media (max-width: 520px) {
   .public-demo-banner { align-items: center; flex-direction: column; gap: 3px; }
+  .admin-catalog-heading { align-items: stretch; flex-direction: column; }.admin-catalog-workspace { grid-template-columns: 1fr; }.admin-editor { grid-column: auto; }.admin-record-list { max-height: 220px; }
   .header-cta, .cart-button { display: none; }
   h1 { font-size: 72px; }
   .hero-actions { align-items: flex-start; flex-direction: column; }
