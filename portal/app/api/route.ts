@@ -28,6 +28,8 @@ export async function GET() {
     "POST /api/orders/{id}/payment",
     "POST /api/orders/{id}/checkout-session",
     "POST /api/payments/stripe/webhook",
+    "POST /api/events/{id}/reservations",
+    "GET /api/reservations",
     "POST /api/products",
     "POST /api/hipotesis",
     "POST /api/members",

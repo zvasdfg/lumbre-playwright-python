@@ -257,6 +257,10 @@ attempt, hosted-checkout-session, and provider-event tables are cleared before
 each scenario; test mode then recreates one deterministic administrator
 identity.
 
+Event-reservation scenarios share the same isolation boundary. Reservations
+are removed before account records because their ownership foreign key points
+to the authenticated user.
+
 ### Hosted payment boundary
 
 The commerce service depends on a `HostedCheckoutPort`, not on Stripe-specific
@@ -270,6 +274,19 @@ timestamped HMAC signature before parsing the event, checks the provider
 session, order identifier, currency, and amount against D1, and persists the
 provider event ID as the deduplication key. Only the payload hash is retained;
 the raw provider payload is not stored.
+
+### Event capacity boundary
+
+The TypeScript event catalog remains reviewed editorial content. D1 owns each
+user reservation and its immutable event-name, location, date, and party-size
+snapshot. The public event response derives remaining places from confirmed
+reservations instead of trusting client state.
+
+Reservation creation uses one conditional `INSERT ... SELECT` statement. The
+same statement checks both account uniqueness and aggregate confirmed capacity,
+so the decision and insertion happen under one SQLite write operation. A
+database unique index on `(event_id, user_id)` provides a second duplicate
+boundary. Browser code submits only the event ID and party size.
 
 ### Authenticated fixture flow
 

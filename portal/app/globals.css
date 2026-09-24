@@ -272,6 +272,7 @@ h1 em { color: var(--ember); font: inherit; }
 .event-row > div > span { color: var(--ember); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }.event-row h3 { font-family: var(--font-exo), sans-serif; font-size: 25px; font-weight: 750; margin: 8px 0; }.event-row p { margin: 0; color: var(--text-muted); font-size: 12px; }
 .spots { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
 .event-row > button { border: 0; border-bottom: 1px solid var(--ink); background: transparent; display: flex; justify-content: space-between; padding: 12px 0; text-transform: uppercase; letter-spacing: .1em; font-size: 9px; font-weight: 800; cursor: pointer; }
+.event-row > button:disabled { opacity: .45; cursor: not-allowed; }
 
 footer { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; padding: 90px 8vw 35px; background: #111; color: var(--cream); border-top: 12px solid var(--ember); }
 .footer-brand { display: flex; align-items: flex-start; gap: 25px; }.footer-brand > img { width: 88px; height: 93px; object-fit: contain; }.footer-brand h2 { margin: 0; font-family: var(--font-exo), sans-serif; font-weight: 800; font-style: italic; text-transform: uppercase; font-size: 42px; line-height: .96; letter-spacing: -.04em; }

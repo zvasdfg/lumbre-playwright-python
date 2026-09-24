@@ -1,6 +1,6 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Phase 5 external hosted-checkout integration implemented and
+> Status: Phase 6A persistent event reservations implemented and
 > regression-validated locally on 2026-09-23. Live Stripe sandbox activation
 > remains pending test credentials.
 
@@ -55,6 +55,11 @@ all framework static checks, and all 114 Pytest executions in 76.10 seconds.
 Its archived report is
 `reports/runs/lumbre-report-2026-09-23_18-34-25.html`.
 
+Phase 6A passed portal lint, TypeScript checking, the vinext production build,
+all framework static checks, and all 122 Pytest executions in 78.41 seconds.
+Its archived report is
+`reports/runs/lumbre-report-2026-09-23_18-53-23.html`.
+
 The partial vinext capability is `next/font/google`: fonts are loaded from a
 CDN rather than self-hosted at build time. This does not block the migration,
 but production readiness requires replacing it with a local font before public
@@ -71,7 +76,7 @@ with names only and no secret values.
 | Cart | D1 records constrained by an opaque anonymous session or authenticated account | No inventory reservation |
 | Checkout | Toast notification | No order or payment exists |
 | Membership | Stateless route with a fixed demo identifier | No member record or authenticated identity |
-| Event reservation | Modal and toast | No capacity or reservation is changed |
+| Event reservation | D1 account reservation plus derived capacity | Cancellation and administrative capacity changes remain pending |
 | Fire-planner presets | Browser `localStorage` | Cannot synchronize across devices or accounts |
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
 | Products | Static TypeScript catalog, with cart prices and totals derived server-side | No database-backed inventory or price revisions |
@@ -351,17 +356,31 @@ provider adapter. A live Stripe test-mode smoke remains an environment
 activation task: configure `.dev.vars` with test-only secrets and use the
 Stripe CLI to forward signed sandbox events before enabling the adapter.
 
-### Phase 6: remaining transactional features
+### Phase 6: remaining transactional features — event slice completed
 
 Migrate one capability per vertical slice:
 
-1. reservation capacity and customer reservations;
+1. reservation capacity and customer reservations — completed in Phase 6A;
 2. synchronized fire-planner presets;
 3. membership preferences;
 4. administrative products and events.
 
 Existing hypothesis JSON remains the reviewed editorial seed source. D1 is the
 validated development/test write target and the Worker never writes JSON.
+
+Phase 6A completion evidence:
+
+- migration `0006_blushing_beyonder.sql` adds account-owned event
+  reservations and database uniqueness constraints;
+- public event availability is derived from confirmed party sizes;
+- reservation creation atomically checks duplicate ownership and remaining
+  capacity in one conditional SQLite statement;
+- the account UI restores reservation history after reload;
+- `API-041` through `API-045` protect authorization, persistence, availability,
+  duplicates, sold-out capacity, and request validation;
+- `UI-010` validates immediate confirmation and availability feedback, while
+  `UI-041` proves persistence through reload and account history;
+- OpenAPI publishes 28 route operations.
 
 ### Phase 7: production hardening
 
@@ -422,10 +441,10 @@ not replace API contracts or browser workflows.
 
 ## 12. Immediate next increment
 
-Phase 6 should move event reservations into one transactional vertical slice:
-persist capacity, require an authenticated customer, reject sold-out or
-duplicate reservations, and expose the result in account history. Keep the
-same API-first and risk-first evidence loop used by the payment phases.
+Phase 6B should synchronize fire-planner presets to authenticated accounts
+while retaining anonymous browser-local presets. The slice must define merge
+behavior, ownership, duplicate names, deletion, and offline/error feedback
+before replacing the existing `localStorage` source of truth.
 
 Production authentication remains disabled until an actual email provider and
 secret bindings are selected. That deployment integration does not block local

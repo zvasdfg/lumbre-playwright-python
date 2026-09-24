@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { events, products, recipes, type FireEvent, type Product } from "../lib/data";
+import { events as eventSeeds, products, recipes, type FireEvent, type Product } from "../lib/data";
 import { isPublicProductionReadOnly } from "../lib/environment";
 import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
@@ -41,6 +41,23 @@ type Order = {
   items: CartItem[];
   createdAt: string;
   paidAt: string | null;
+};
+
+type AvailableEvent = FireEvent & {
+  capacity?: number;
+  reservedSpots?: number;
+};
+
+type Reservation = {
+  id: string;
+  eventId: number;
+  eventTitle: string;
+  eventCity: string;
+  eventDay: string;
+  eventMonth: string;
+  partySize: number;
+  status: "confirmed" | "cancelled";
+  createdAt: string;
 };
 
 const emptyCart: Cart = { items: [], totalQuantity: 0, total: 0 };
@@ -82,6 +99,8 @@ export default function ClubPortal() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [eventCatalog, setEventCatalog] = useState<AvailableEvent[]>(eventSeeds);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [magicLinkRequested, setMagicLinkRequested] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<FireEvent | null>(null);
@@ -103,23 +122,35 @@ export default function ClubPortal() {
 
     async function loadInitialState() {
       try {
-        const [cartResponse, accountResponse] = await Promise.all([
+        const [cartResponse, accountResponse, eventsResponse] = await Promise.all([
           fetch("/api/cart", { signal: controller.signal }),
           fetch("/api/account", { signal: controller.signal }),
+          fetch("/api/events", { signal: controller.signal }),
         ]);
         if (!cartResponse.ok) {
           throw new Error(`Cart request failed with ${cartResponse.status}`);
         }
         const cartResult = (await cartResponse.json()) as { data: Cart };
         setCart(cartResult.data);
+        if (eventsResponse.ok) {
+          const eventResult = (await eventsResponse.json()) as { data: AvailableEvent[] };
+          setEventCatalog(eventResult.data);
+        }
         if (accountResponse.ok) {
           const accountResult = (await accountResponse.json()) as { data: Account | null };
           setAccount(accountResult.data);
           if (accountResult.data) {
-            const ordersResponse = await fetch("/api/orders", { signal: controller.signal });
+            const [ordersResponse, reservationsResponse] = await Promise.all([
+              fetch("/api/orders", { signal: controller.signal }),
+              fetch("/api/reservations", { signal: controller.signal }),
+            ]);
             if (ordersResponse.ok) {
               const orderResult = (await ordersResponse.json()) as { data: Order[] };
               setOrders(orderResult.data);
+            }
+            if (reservationsResponse.ok) {
+              const reservationResult = (await reservationsResponse.json()) as { data: Reservation[] };
+              setReservations(reservationResult.data);
             }
           }
         }
@@ -211,7 +242,52 @@ export default function ClubPortal() {
     setAccountOpen(false);
     setCart(emptyCart);
     setOrders([]);
+    setReservations([]);
     showToast("Tu sesión se cerró correctamente.");
+  }
+
+  async function confirmReservation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedEvent || submitting) return;
+    if (!account) {
+      setSelectedEvent(null);
+      setAccountOpen(true);
+      showToast("Inicia sesión para reservar y consultar tus encuentros.");
+      return;
+    }
+
+    setSubmitting(true);
+    const form = new FormData(event.currentTarget);
+    const partySize = Number(form.get("partySize"));
+    const response = await fetch(`/api/events/${selectedEvent.id}/reservations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ partySize }),
+    });
+    const result = (await response.json()) as {
+      data?: Reservation;
+      event?: AvailableEvent;
+      error?: string;
+    };
+    setSubmitting(false);
+
+    if (!response.ok || !result.data || !result.event) {
+      if (response.status === 409 && result.error?.includes("already")) {
+        showToast("Ya tienes una reservación para este encuentro.");
+      } else if (response.status === 409) {
+        showToast("Ya no quedan suficientes lugares para ese grupo.");
+      } else {
+        showToast("No pudimos confirmar la reservación. Intenta de nuevo.");
+      }
+      return;
+    }
+
+    setReservations((current) => [result.data!, ...current]);
+    setEventCatalog((current) =>
+      current.map((candidate) => candidate.id === result.event!.id ? result.event! : candidate),
+    );
+    setSelectedEvent(null);
+    showToast(`Reservación confirmada para ${partySize} ${partySize === 1 ? "persona" : "personas"}.`);
   }
 
   function startCheckout() {
@@ -480,12 +556,12 @@ export default function ClubPortal() {
       <section className="events-section" id="agenda">
         <div className="section-heading events-heading"><div><p className="section-index">07 — PRÓXIMOS FUEGOS</p><h2>Nos vemos<br />afuera.</h2></div><p>Talleres pequeños, cenas largas y espacios para equivocarnos juntos.</p></div>
         <div className="event-list">
-          {events.map((item) => (
+          {eventCatalog.map((item) => (
             <article className="event-row" key={item.id}>
               <time><strong>{item.day}</strong><span>{item.month}</span></time>
               <div><span>{item.city}</span><h3>{item.title}</h3><p>{item.detail}</p></div>
-              <span className="spots">{item.spots} lugares</span>
-              <button type="button" onClick={() => setSelectedEvent(item)}>Reservar lugar <span>↗</span></button>
+              <span className="spots">{item.spots ? `${item.spots} lugares` : "Agotado"}</span>
+              <button type="button" disabled={item.spots === 0} onClick={() => setSelectedEvent(item)}>{item.spots ? "Reservar lugar" : "Sin lugares"} <span>↗</span></button>
             </article>
           ))}
         </div>
@@ -544,6 +620,16 @@ export default function ClubPortal() {
                       <small>{order.status === "paid" ? "Pagado" : order.status === "failed" ? "Pago rechazado" : "Pendiente"}</small>
                     </article>
                   )) : <p>Todavía no hay pedidos registrados.</p>}
+                </div>
+                <div className="order-history" data-testid="reservation-history">
+                  <h3>Tus reservaciones</h3>
+                  {reservations.length ? reservations.map((reservation) => (
+                    <article key={reservation.id}>
+                      <span>{reservation.eventTitle}</span>
+                      <strong>{reservation.partySize} {reservation.partySize === 1 ? "lugar" : "lugares"}</strong>
+                      <small>{reservation.eventDay} {reservation.eventMonth} · {reservation.eventCity} · Confirmada</small>
+                    </article>
+                  )) : <p>Todavía no hay encuentros reservados.</p>}
                 </div>
                 <button className="button button-primary" type="button" onClick={() => void logout()}>
                   Cerrar sesión
@@ -606,7 +692,10 @@ export default function ClubPortal() {
           <section className="modal compact" role="dialog" aria-modal="true" aria-labelledby="event-title">
             <button className="modal-close" type="button" onClick={() => setSelectedEvent(null)} aria-label="Cerrar">×</button>
             <p className="section-index">{selectedEvent.city}</p><h2 id="event-title">{selectedEvent.title}</h2><p>{selectedEvent.detail}. Quedan {selectedEvent.spots} lugares disponibles.</p>
-            <button className="button button-primary" type="button" onClick={() => { setSelectedEvent(null); showToast("Lugar apartado. Te enviamos los detalles por correo."); }}>Confirmar reservación</button>
+            <form onSubmit={confirmReservation}>
+              <label>Tamaño del grupo<select name="partySize" defaultValue="1">{Array.from({ length: Math.min(selectedEvent.spots, 4) }, (_, index) => index + 1).map((size) => <option key={size} value={size}>{size} {size === 1 ? "persona" : "personas"}</option>)}</select></label>
+              <button className="button button-primary" type="submit" disabled={submitting || selectedEvent.spots === 0}>{submitting ? "Confirmando..." : account ? "Confirmar reservación" : "Entrar para reservar"}</button>
+            </form>
           </section>
         </div>
       )}

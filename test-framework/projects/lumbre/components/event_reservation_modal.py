@@ -17,3 +17,8 @@ class EventReservationModal:
             "button",
             name="Confirmar reservación",
         ).click()
+
+    def select_party_size(self, event_title: str, party_size: int) -> None:
+        self.for_event(event_title).get_by_label("Tamaño del grupo").select_option(
+            str(party_size),
+        )

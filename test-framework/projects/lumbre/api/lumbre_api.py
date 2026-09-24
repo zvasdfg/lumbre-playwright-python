@@ -123,6 +123,15 @@ class LumbreApi:
     def events(self) -> dict[str, Any]:
         return self._json(self._request.get("/api/events"))
 
+    def reservations(self) -> APIResponse:
+        return self._request.get("/api/reservations")
+
+    def create_event_reservation(self, event_id: int, party_size: Any) -> APIResponse:
+        return self._request.post(
+            f"/api/events/{event_id}/reservations",
+            data={"partySize": party_size},
+        )
+
     def reset_demo_data(self) -> dict[str, Any]:
         return self._json(self._request.post("/api/test/reset"))
 

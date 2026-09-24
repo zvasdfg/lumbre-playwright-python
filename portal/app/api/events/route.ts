@@ -1,5 +1,6 @@
-import { events } from "../../lib/data";
+import { listAvailableEvents } from "../../../server/modules/events/reservation-service";
 
 export async function GET() {
-  return Response.json({ data: events, count: events.length });
+  const data = await listAvailableEvents();
+  return Response.json({ data, count: data.length });
 }

@@ -20,18 +20,18 @@ cross-browser validation, diagnostic reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 86 |
-| Automated functional risks | 86 |
-| Pytest executions | 114 |
-| Test files | 85 |
-| API cases / executions | 44 / 60 |
-| Browser cases / executions | 42 / 46 |
+| Committed functional risks | 92 |
+| Automated functional risks | 92 |
+| Pytest executions | 122 |
+| Test files | 91 |
+| API cases / executions | 49 / 67 |
+| Browser cases / executions | 43 / 47 |
 | Framework unit cases / executions | 3 / 8 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (26/26) |
-| Latest full-suite result | 114 passed |
+| API route-operation coverage | 100% (28/28) |
+| Latest full-suite result | 122 passed |
 
-**100% refers to the repository's 86-item committed functional-risk catalog.**
+**100% refers to the repository's 92-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -64,6 +64,8 @@ Lumbre is a cooking-at-the-fire portal with:
   retry-safe idempotency, and persisted order history;
 - provider-hosted checkout sessions, signed Stripe-compatible webhooks, and
   deduplicated provider events without transporting card data through Lumbre;
+- authenticated event reservations with server-owned capacity, atomic
+  oversell protection, duplicate prevention, and persisted account history;
 - protected `customer` and `admin` roles, while production authentication stays
   disabled until a real email provider and secrets are configured.
 
@@ -139,6 +141,8 @@ lumbre-playwright-python/
   independent idempotency keys for order and payment submissions.
 - A provider boundary for hosted checkout, timestamped HMAC webhook validation,
   event deduplication, amount/currency checks, and retry-safe order transitions.
+- Event availability derived from persisted reservations, with database-backed
+  ownership and one-statement conditional creation at the capacity boundary.
 - Browser-to-API payload validation with `page.expect_request()`.
 - Response observation with `page.expect_response()`.
 - Controlled HTTP failures with `page.route()` and `route.fulfill()`.

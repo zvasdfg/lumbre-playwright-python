@@ -337,6 +337,37 @@
         }
       }
     },
+    "/api/events/{id}/reservations": {
+      "post": {
+        "operationId": "createEventReservation",
+        "tags": ["Events"],
+        "parameters": [{ "$ref": "#/components/parameters/EventId" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReservationCreateRequest" } }
+          }
+        },
+        "responses": {
+          "201": { "$ref": "#/components/responses/ReservationMutationResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/reservations": {
+      "get": {
+        "operationId": "listAccountReservations",
+        "tags": ["Events"],
+        "responses": {
+          "200": { "$ref": "#/components/responses/ReservationCollectionResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" }
+        }
+      }
+    },
     "/api/members": {
       "post": {
         "operationId": "createMember",
@@ -511,6 +542,12 @@
         "required": true,
         "schema": { "type": "string", "format": "uuid" }
       },
+      "EventId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "minimum": 1 }
+      },
       "IdempotencyKey": {
         "name": "Idempotency-Key",
         "in": "header",
@@ -643,6 +680,18 @@
         "description": "Payment provider or webhook signing is not configured",
         "content": {
           "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
+      "ReservationCollectionResponse": {
+        "description": "Event reservations owned by the authenticated account",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/ReservationCollection" } }
+        }
+      },
+      "ReservationMutationResponse": {
+        "description": "A confirmed reservation and the updated event availability",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/ReservationMutation" } }
         }
       }
     },
@@ -963,7 +1012,7 @@
       },
       "Event": {
         "type": "object",
-        "required": ["id", "day", "month", "city", "title", "detail", "spots"],
+        "required": ["id", "day", "month", "city", "title", "detail", "spots", "capacity", "reservedSpots"],
         "properties": {
           "id": { "type": "integer", "minimum": 1 },
           "day": { "type": "string", "pattern": "^[0-9]{2}$" },
@@ -971,7 +1020,51 @@
           "city": { "type": "string", "minLength": 1 },
           "title": { "type": "string", "minLength": 1 },
           "detail": { "type": "string", "minLength": 1 },
-          "spots": { "type": "integer", "minimum": 0 }
+          "spots": { "type": "integer", "minimum": 0 },
+          "capacity": { "type": "integer", "minimum": 1 },
+          "reservedSpots": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "ReservationCreateRequest": {
+        "type": "object",
+        "required": ["partySize"],
+        "properties": {
+          "partySize": { "type": "integer", "minimum": 1, "maximum": 4 }
+        },
+        "additionalProperties": false
+      },
+      "Reservation": {
+        "type": "object",
+        "required": ["id", "eventId", "eventTitle", "eventCity", "eventDay", "eventMonth", "partySize", "status", "createdAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "eventId": { "type": "integer", "minimum": 1 },
+          "eventTitle": { "type": "string", "minLength": 1 },
+          "eventCity": { "type": "string", "minLength": 1 },
+          "eventDay": { "type": "string", "pattern": "^[0-9]{2}$" },
+          "eventMonth": { "type": "string", "minLength": 3 },
+          "partySize": { "type": "integer", "minimum": 1, "maximum": 4 },
+          "status": { "type": "string", "enum": ["confirmed", "cancelled"] },
+          "createdAt": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "ReservationCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/Reservation" } },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "ReservationMutation": {
+        "type": "object",
+        "required": ["data", "event"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Reservation" },
+          "event": { "$ref": "#/components/schemas/Event" }
         },
         "additionalProperties": false
       },

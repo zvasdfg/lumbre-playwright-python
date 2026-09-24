@@ -81,6 +81,7 @@ delivery adapter, production URL, and secret bindings are configured.
 - Two-to-six-component experiment bench and generated technical hypotheses.
 - Registered technical sheets for crust, bark, chicken, and vegetables.
 - Outdoor event selection and reservation feedback.
+- Authenticated group reservations with live capacity and account history.
 
 ## API contract and coverage
 
@@ -106,6 +107,8 @@ delivery adapter, production URL, and secret bindings are configured.
 | `POST` | `/api/orders/:id/checkout-session` | Create or reuse a provider-hosted checkout session | `API-036`, `UI-040` |
 | `POST` | `/api/payments/stripe/webhook` | Verify and process a signed provider event | `API-037`–`API-040` |
 | `GET` | `/api/events` | Event collection | `API-019` |
+| `POST` | `/api/events/:id/reservations` | Confirm an account-owned group reservation | `API-041`–`API-045`, `UI-010`, `UI-041` |
+| `GET` | `/api/reservations` | Read the authenticated account's reservation history | `API-041`, `API-042`, `UI-041` |
 | `GET` | `/api/ingredientes` | Ingredient catalog, filters, and detail | `API-007`, `API-008`, `API-016` |
 | `GET` | `/api/hipotesis` | Technical hypothesis registry | `API-011` |
 | `GET` | `/api/hipotesis/:id` | One hypothesis and duplicate counter | `API-012`, `API-014` |
@@ -188,6 +191,19 @@ Copy `.dev.vars.example` to `.dev.vars` to exercise a live test-mode provider.
 Use only Stripe test credentials and forward sandbox webhooks to the local
 route. The deterministic adapter remains the default for isolated automation,
 so the suite never depends on the network or shared provider state.
+
+## Event reservations and capacity
+
+The public event catalog now reports original capacity, confirmed places, and
+remaining places from D1. Authenticated customers may reserve one to four
+places. Each account can hold only one reservation per event, and sold-out
+events reject further writes with `409`.
+
+The capacity check and insertion execute as one conditional SQLite statement;
+the browser never calculates or submits remaining inventory. Reservations
+snapshot the event title, city, and date and appear under “Tus reservaciones”
+in the account dialog after reload. Test reset clears reservations before their
+owning test accounts.
 
 ## Hypothesis persistence
 

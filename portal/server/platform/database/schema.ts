@@ -184,3 +184,28 @@ export const paymentProviderEvents = sqliteTable(
     index("payment_provider_events_status_index").on(table.status),
   ],
 );
+
+export const eventReservations = sqliteTable(
+  "event_reservations",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => authUser.id, { onDelete: "cascade" }),
+    eventId: integer("event_id").notNull(),
+    eventTitle: text("event_title").notNull(),
+    eventCity: text("event_city").notNull(),
+    eventDay: text("event_day").notNull(),
+    eventMonth: text("event_month").notNull(),
+    partySize: integer("party_size").notNull(),
+    status: text("status", { enum: ["confirmed", "cancelled"] })
+      .notNull()
+      .default("confirmed"),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    uniqueIndex("event_reservations_event_user_unique").on(table.eventId, table.userId),
+    index("event_reservations_user_created_index").on(table.userId, table.createdAt),
+    index("event_reservations_event_status_index").on(table.eventId, table.status),
+  ],
+);

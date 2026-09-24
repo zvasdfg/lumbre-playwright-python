@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 44 / 60 |
-| Browser case IDs / executions | 42 / 46 |
+| API case IDs / executions | 49 / 67 |
+| Browser case IDs / executions | 43 / 47 |
 | Framework unit case IDs / executions | 3 / 8 |
-| Unique committed risks | 86 |
-| Total Pytest executions | 114 |
-| Test files | 85 |
+| Unique committed risks | 92 |
+| Total Pytest executions | 122 |
+| Test files | 91 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 114 passed in 76.10 seconds |
+| Latest validation | 122 passed in 78.41 seconds |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,13 +50,13 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 44 | 44 | 100% |
-| P1 | 36 | 36 | 100% |
+| P0 | 49 | 49 | 100% |
+| P1 | 37 | 37 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **86** | **86** | **100%** |
+| **Total** | **92** | **92** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `26/26 = 100%`. Contract
+secondary API route-operation signal is `28/28 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
@@ -176,6 +176,11 @@ Priority definitions:
 | API-038 | A valid paid provider event transitions its order and clears the cart | P0 | API integration + state transition |
 | API-039 | Replayed provider events are acknowledged without repeating their transition | P0 | API idempotency + persistence |
 | API-040 | Provider amount mismatch is rejected while preserving the pending order and cart | P0 | API integrity negative |
+| API-041 | Anonymous accounts cannot create or read event reservations | P0 | API authorization |
+| API-042 | A confirmed reservation persists and reduces public availability | P0 | API state transition + persistence |
+| API-043 | One account cannot reserve the same event or consume its capacity twice | P0 | API uniqueness + integrity |
+| API-044 | A sold-out event rejects another account without overselling capacity | P0 | API concurrency boundary |
+| API-045 | Invalid party sizes and unknown events cannot create reservations | P1 | API negative + validation |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -189,7 +194,7 @@ Priority definitions:
 | UI-007 | Membership prevents submission without a name | P0 | UI validation |
 | UI-008 | Cart removes an added product and returns to empty | P1 | UI |
 | UI-009 | Cart totals multiple products correctly | P1 | UI |
-| UI-010 | Event reservation confirms the selected event | P1 | E2E |
+| UI-010 | An authenticated event reservation confirms its party and updates availability | P1 | E2E |
 | UI-011 | Membership modal closes by button and backdrop | P2 | UI parameterized |
 | UI-012 | Fire planner recommends fuel for direct cooking | P1 | UI component |
 | UI-013 | Membership follows a logical keyboard focus order | P1 | Accessibility |
@@ -220,6 +225,7 @@ Priority definitions:
 | UI-038 | A prepared Playwright `storage_state` restores an authenticated customer | P1 | UI fixture + authentication |
 | UI-039 | An authenticated customer pays and sees the persisted order in account history | P0 | E2E checkout |
 | UI-040 | An authenticated shopper follows the provider-hosted URL returned by the checkout API | P0 | UI + API integration |
+| UI-041 | A confirmed reservation survives reload and appears in account history | P0 | E2E reservation persistence |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

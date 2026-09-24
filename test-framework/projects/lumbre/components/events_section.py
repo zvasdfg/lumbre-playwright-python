@@ -19,3 +19,6 @@ class EventsSection:
             "button",
             name="Reservar lugar",
         ).click()
+
+    def available_spots(self, event_title: str) -> Locator:
+        return self.event_named(event_title).locator(".spots")

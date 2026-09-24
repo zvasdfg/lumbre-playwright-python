@@ -14,4 +14,7 @@ class BasePage:
 
     def open(self) -> None:
         self.page.goto(f"{self.base_url}{self.path}", wait_until="domcontentloaded")
+        self.wait_until_ready()
+
+    def wait_until_ready(self) -> None:
         self.page.locator("main[data-app-ready='true']").wait_for(state="attached")
