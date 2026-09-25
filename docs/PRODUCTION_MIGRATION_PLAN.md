@@ -554,10 +554,15 @@ Phase 6G completion evidence:
   isolated local D1, and rehearsed remote Time Travel against staging with a
   disposable probe; the final post-recovery smoke gate passed `4/4` in 8.97
   seconds;
+- implemented 2026-09-25: added a least-privilege scheduled synthetic monitor
+  that reuses the four-case Python/Playwright remote smoke gate every six hours,
+  emits HTML and JUnit evidence, retains artifacts for 14 days, and supports
+  manual dispatch; remote activation and first GitHub-hosted run require the
+  workflow to reach the default branch;
 - provision production secrets and document rotation and revocation;
 - publish privacy, retention, and incident-response policies;
-- add deployed health monitoring, alert ownership, and a post-deployment smoke
-  suite against an explicit remote-test target;
+- confirm GitHub Actions failure notifications for the repository owner and
+  name a secondary incident owner before production;
 - establish staging before enabling live email or Stripe adapters.
 
 ## 9. Increment protocol

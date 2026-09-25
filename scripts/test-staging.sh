@@ -23,6 +23,7 @@ cd "$ROOT_DIR/test-framework"
 
 RUN_TIMESTAMP="$(date +"%Y-%m-%d_%H-%M-%S")"
 REPORT_PATH="reports/runs/lumbre-staging-smoke-$RUN_TIMESTAMP.html"
+JUNIT_PATH="reports/runs/lumbre-staging-smoke-$RUN_TIMESTAMP.xml"
 mkdir -p reports/runs
 
 echo "Running read-only staging smoke checks against: $STAGING_BASE_URL"
@@ -37,9 +38,11 @@ env \
     projects/lumbre/remote_smoke \
     -m remote_smoke \
     --html="$REPORT_PATH" \
+    --junitxml="$JUNIT_PATH" \
     --self-contained-html \
     --css=automation/core/reporting/report.css \
     "$@"
 
 echo
 echo "Archived staging report: $ROOT_DIR/test-framework/$REPORT_PATH"
+echo "Archived staging JUnit: $ROOT_DIR/test-framework/$JUNIT_PATH"

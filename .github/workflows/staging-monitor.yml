@@ -1,0 +1,72 @@
+name: Staging synthetic monitor
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lumbre-staging-synthetic-monitor
+  cancel-in-progress: true
+
+env:
+  STAGING_BASE_URL: https://lumbre-portal-staging.lumbre-portal.workers.dev
+  HEADLESS: "true"
+  PYTHON_VERSION: "3.13"
+
+jobs:
+  remote-smoke:
+    name: Playwright remote smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: test-framework/pyproject.toml
+
+      - name: Install the automation framework
+        run: |
+          python -m venv test-framework/.venv
+          test-framework/.venv/bin/python -m pip install --disable-pip-version-check -e ./test-framework
+
+      - name: Install the Chromium runtime
+        run: test-framework/.venv/bin/python -m playwright install --with-deps chromium
+
+      - name: Run the deployed acceptance monitor
+        run: ./scripts/test-staging.sh -q
+
+      - name: Publish monitor evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: lumbre-staging-monitor-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            test-framework/reports/runs/lumbre-staging-smoke-*.html
+            test-framework/reports/runs/lumbre-staging-smoke-*.xml
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Summarize the monitor result
+        if: always()
+        run: |
+          {
+            echo "## Lumbre staging synthetic monitor"
+            echo
+            echo "- Target: \`$STAGING_BASE_URL\`"
+            echo "- Trigger: \`${{ github.event_name }}\`"
+            echo "- Owner: repository owner"
+            echo "- Evidence retention: 14 days"
+            echo "- Result: inspect the Playwright remote smoke step and attached artifact"
+          } >> "$GITHUB_STEP_SUMMARY"

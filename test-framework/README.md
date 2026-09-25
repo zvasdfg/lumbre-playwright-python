@@ -164,15 +164,56 @@ an explicitly selected HTTPS staging target:
 STAGING_BASE_URL=https://example.workers.dev ./scripts/test-staging.sh -q
 ```
 
-The runner rejects localhost and non-HTTPS targets and archives a timestamped
-`lumbre-staging-smoke-*.html` report. It must not be expanded with successful
-business mutations; those belong in isolated local/test environments.
+The runner rejects localhost and non-HTTPS targets and archives timestamped
+`lumbre-staging-smoke-*.html` and `lumbre-staging-smoke-*.xml` reports. HTML is
+the human diagnostic artifact; JUnit is the machine-readable monitoring
+signal. It must not be expanded with successful business mutations; those
+belong in isolated local/test environments.
 When the host defines `HTTPS_PROXY` or `HTTP_PROXY`, the runner passes it to
 Playwright explicitly through `PLAYWRIGHT_PROXY`; local runners leave this
 setting empty and continue connecting directly to their isolated targets.
-The first deployed run passed all four checks in 9.14 seconds on 2026-09-25;
-its archived report is
-`reports/runs/lumbre-staging-smoke-2026-09-25_11-31-37.html`.
+The final post-recovery run passed all four checks in 8.97 seconds on
+2026-09-25. The repository workflow `.github/workflows/staging-monitor.yml`
+runs this same gate every six hours and on manual dispatch. It has read-only
+repository permissions, pins third-party Actions to immutable SHAs, applies a
+15-minute timeout, prevents overlapping executions, and retains evidence for
+14 days.
+
+### Synthetic-monitor alert policy
+
+The scheduled job runs at minute 17 every sixth UTC hour. This is a portfolio
+synthetic monitor, not a continuous uptime SLA. GitHub may delay scheduled
+jobs during load, runs them only from the default branch, and disables schedules
+in a public repository after 60 days without activity. A missing run for more
+than eight hours is therefore a monitoring failure and should trigger a manual
+dispatch.
+
+Any failed remote-smoke job blocks promotion to production. The repository
+owner is the current primary owner and must enable GitHub Actions email or web
+notifications. GitHub sends scheduled-workflow notifications to the user who
+last changed the cron expression. Before production, assign a secondary owner
+and test the notification path with an intentional, immediately reverted
+failure.
+
+Triage a failure in this order:
+
+1. open the JUnit summary and HTML evidence from the failed workflow artifact;
+2. use the logged request ID to correlate the failing request with Worker logs;
+3. manually rerun once to separate a transient runner/network problem from an
+   application failure;
+4. stop deployment promotion if health, D1 readiness, security headers, or
+   production guards still fail;
+5. invoke the D1 incident runbook only when the evidence indicates data or
+   migration corruption.
+
+The workflow uses standard GitHub-hosted runners. Those minutes are free for a
+public repository; a private repository consumes its account's included Actions
+quota. No Cloudflare or application secret is required by this read-only and
+expected-rejection gate.
+
+References: [scheduled-workflow constraints](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule),
+[workflow notifications](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs),
+and [Actions billing](https://docs.github.com/en/actions/concepts/billing-and-usage).
 
 Against an already-running portal:
 

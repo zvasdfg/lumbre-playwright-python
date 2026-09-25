@@ -4,6 +4,8 @@
 
 # Playwright Python Automation Framework
 
+[![Staging synthetic monitor](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml/badge.svg)](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml)
+
 Reusable quality-engineering portfolio framework built with **Python, Pytest,
 and Playwright**. Lumbre, a Next.js portal and API for Mexican outdoor-fire
 cooking, is the reference system under test and demonstrates how a product
@@ -343,12 +345,14 @@ status.
 
 ## Current scope
 
-The repository currently optimizes for deterministic local execution. Remote
-production and staging D1 resources are provisioned and migrated, and an
-isolated staging Worker is live at
+The repository supports deterministic local execution plus an explicit remote
+acceptance boundary. Production and staging D1 resources are provisioned and
+migrated, and an isolated staging Worker is live at
 `https://lumbre-portal-staging.lumbre-portal.workers.dev`. Its four-case remote
-smoke gate passes; CI artifact publishing also remains future work. Local and
-test modes exercise
+smoke gate passes. A least-privilege GitHub Actions synthetic monitor schedules
+that gate every six hours and retains its HTML and JUnit evidence for 14 days;
+it becomes active after the workflow reaches the default remote branch. Local
+and test modes exercise
 passwordless accounts, role authorization, reusable authenticated browser
 state, and account-owned carts. The production build still exposes only public
 reads and a D1-backed anonymous cart while account access and unprotected
