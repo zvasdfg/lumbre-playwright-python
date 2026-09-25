@@ -32,7 +32,7 @@ reporting, and risk-based test strategy.
 | Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (42/42) |
-| Latest full-suite result | 174 passed in 72.86 s with 4 isolated workers |
+| Latest full-suite result | 174 passed in 70.52 s with 4 isolated workers |
 
 **100% refers to the repository's 134-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
@@ -55,6 +55,7 @@ Playwright + Python observable through reusable engineering. It provides:
 Lumbre is a cooking-at-the-fire portal with:
 
 - 100 unique fire-cooking recipes with recipe-specific editorial photography;
+- a floating, page-by-page fire almanac with 15 readable technical sheets;
 - products, events, membership, cart, and fire planning;
 - a researched ingredient catalog grouped by flavor family;
 - an experiment bench supporting formulas of up to six components;
@@ -74,6 +75,8 @@ Lumbre is a cooking-at-the-fire portal with:
   restoration, and administrator-audited fulfillment transitions;
 - authenticated event reservations with server-owned capacity, atomic
   oversell protection, duplicate prevention, and persisted account history;
+  the public Agenda surface is temporarily hidden while the event APIs and
+  administration module remain available;
 - account-owned fire-planner presets synchronized across browser contexts,
   with deterministic import of anonymous browser-local plans;
 - account-owned cooking preferences with explicit newsletter consent history;

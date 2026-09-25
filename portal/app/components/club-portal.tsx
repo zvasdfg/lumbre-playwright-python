@@ -9,10 +9,12 @@ import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
 import AccountPreferences from "./account-preferences";
 import AdminCatalog from "./admin-catalog";
+import FireAlmanac from "./fire-almanac";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
 const recipesPerPage = 6;
+const showAgenda = false;
 
 type CartItem = {
   productId: number;
@@ -493,7 +495,6 @@ export default function ClubPortal() {
           <a href="#recetas">Recetas</a>
           <a href="#laboratorio">Laboratorio</a>
           <a href="#tienda">Provisiones</a>
-          <a href="#agenda">Agenda</a>
         </nav>
         <div className="header-actions">
           <button className="cart-button" type="button" onClick={() => setCartOpen(true)} aria-label={`Abrir canasta, ${cart.totalQuantity} productos`}>
@@ -659,7 +660,7 @@ export default function ClubPortal() {
         </div>
       </section>
 
-      <section className="events-section" id="agenda">
+      {showAgenda && <section className="events-section" id="agenda">
         <div className="section-heading events-heading"><div><p className="section-index">07 — PRÓXIMOS FUEGOS</p><h2>Nos vemos<br />afuera.</h2></div><p>Talleres pequeños, cenas largas y espacios para equivocarnos juntos.</p></div>
         <div className="event-list">
           {eventCatalog.map((item) => (
@@ -671,14 +672,16 @@ export default function ClubPortal() {
             </article>
           ))}
         </div>
-      </section>
+      </section>}
 
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
-        <div><p>Explora</p><a href="#recetas">Recetas</a><a href="#laboratorio">Laboratorio</a><a href="#tienda">Tienda</a><a href="#agenda">Agenda</a></div>
+        <div><p>Explora</p><a href="#recetas">Recetas</a><a href="#laboratorio">Laboratorio</a><a href="#tienda">Tienda</a></div>
         <div><p>Comunidad</p><button type="button" onClick={() => setJoinOpen(true)}>Membresía</button><Link href="/privacidad">Privacidad y datos</Link><a href="/api/health">Estado de la API</a><a href="/api/recipes">API de recetas</a><a href="/api/ingredientes">API de ingredientes</a></div>
         <small>© 2026 Lumbre · Diseñado alrededor del fuego en México.</small>
       </footer>
+
+      <FireAlmanac />
 
       {joinOpen && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setJoinOpen(false)}>

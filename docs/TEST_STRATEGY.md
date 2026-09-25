@@ -31,7 +31,7 @@ in locators and expected values when it is part of the product contract.
 | Total Pytest executions | 174 |
 | Test files | 133 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 174 passed; 72.86 s with 4 isolated workers |
+| Latest validation | 174 passed; 70.52 s with 4 isolated workers |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -240,7 +240,6 @@ Priority definitions:
 | UI-007 | Membership prevents submission without a name | P0 | UI validation |
 | UI-008 | Cart removes an added product and returns to empty | P1 | UI |
 | UI-009 | Cart totals multiple products correctly | P1 | UI |
-| UI-010 | An authenticated event reservation confirms its party and updates availability | P1 | E2E |
 | UI-011 | Membership modal closes by button and backdrop | P2 | UI parameterized |
 | UI-012 | Fire planner recommends fuel for direct cooking | P1 | UI component |
 | UI-013 | Membership follows a logical keyboard focus order | P1 | Accessibility |
@@ -279,12 +278,13 @@ Priority definitions:
 | UI-046 | Catalog administration is visible to administrators but not customers | P0 | UI role boundary + multi-context |
 | UI-047 | An administrator product update reaches the public store without reload | P0 | E2E catalog integration |
 | UI-048 | A stale catalog update preserves administrator edits for recovery | P1 | UI route control + optimistic concurrency |
-| UI-049 | Deactivating an event removes it from the public agenda | P1 | E2E administrative projection |
+| UI-049 | Deactivating an event removes it from the retained public event catalog | P1 | E2E administrative projection |
 | UI-050 | A sold-out product is visibly unavailable and cannot be added to the cart | P1 | UI inventory presentation |
 | UI-051 | A customer cancels a pending order from account history | P1 | E2E cancellation feedback |
 | UI-052 | Public privacy disclosure exposes the deployed data boundary and retention | P0 | UI transparency + compliance gate |
 | UI-053 | Recipe pagination renders at most six distinct cards per page | P1 | UI navigation |
 | UI-054 | Ingredient families start collapsed and expose cumin with its owned image | P1 | UI component + visual contract |
+| UI-055 | Floating fire almanac opens on its cover and supports page-by-page reading | P1 | UI navigation + accessibility |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

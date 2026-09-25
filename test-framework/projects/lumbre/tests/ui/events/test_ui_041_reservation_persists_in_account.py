@@ -2,6 +2,7 @@ import pytest
 from playwright.sync_api import expect
 
 from automation.core.reporting import TestLogger
+from projects.lumbre.api.lumbre_api import LumbreApi
 from projects.lumbre.pages.home_page import HomePage
 
 
@@ -12,35 +13,28 @@ from projects.lumbre.pages.home_page import HomePage
 )
 def test_reservation_persists_in_account_history(
     authenticated_home: HomePage,
+    authenticated_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
     event_title = "Humo y fermentos"
 
-    with test_log.step("Confirm an event reservation for the authenticated account"):
-        authenticated_home.events.reserve_event(event_title)
-        authenticated_home.event_reservation.select_party_size(event_title, 3)
-        authenticated_home.event_reservation.confirm(event_title)
-        expect(authenticated_home.toast.root).to_contain_text(
-            "Reservación confirmada para 3 personas",
-        )
+    with test_log.step("Create a reservation through the retained events API"):
+        response = authenticated_api.create_event_reservation(203, 3)
+        assert response.status == 201
+        reservation = response.json()["data"]
         test_log.values(
-            selected_event=event_title,
-            party_size=3,
-            observed_available_spots=authenticated_home.events.available_spots(
-                event_title,
-            ).inner_text(),
+            created_reservation=reservation,
+            observed_available_spots=response.json()["event"]["spots"],
         )
 
-    with test_log.step("Reload the portal using the same authenticated browser context"):
+    with test_log.step("Reload the portal using the authenticated browser context"):
         authenticated_home.page.reload()
         authenticated_home.wait_until_ready()
-        expect(authenticated_home.events.available_spots(event_title)).to_have_text("2 lugares")
         test_log.values(
-            observed_available_spots_after_reload=authenticated_home.events.available_spots(
-                event_title,
-            ).inner_text(),
-            expected_available_spots="2 lugares",
+            observed_agenda_sections=authenticated_home.page.locator("#agenda").count(),
+            expected_agenda_sections=0,
         )
+        expect(authenticated_home.page.locator("#agenda")).to_have_count(0)
 
     with test_log.step("Validate the persisted reservation in account history"):
         authenticated_home.open_account()

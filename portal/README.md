@@ -120,7 +120,7 @@ delivery adapter, production URL, and secret bindings are configured.
 | `POST` | `/api/orders/:id/checkout-session` | Create or reuse a provider-hosted checkout session and reserve stock | `API-036`, `API-066`, `UI-040` |
 | `POST` | `/api/payments/stripe/webhook` | Verify a signed provider event and finalize or release inventory | `API-037`–`API-040`, `API-066` |
 | `GET` | `/api/events` | Event collection | `API-019` |
-| `POST` | `/api/events/:id/reservations` | Confirm an account-owned group reservation | `API-041`–`API-045`, `UI-010`, `UI-041` |
+| `POST` | `/api/events/:id/reservations` | Confirm an account-owned group reservation | `API-041`–`API-045`, `UI-041` |
 | `GET` | `/api/reservations` | Read the authenticated account's reservation history | `API-041`, `API-042`, `UI-041` |
 | `GET` | `/api/fire-presets` | Read the authenticated account's fire-planner presets | `API-046`–`API-050`, `UI-042` |
 | `POST` | `/api/fire-presets` | Create or update a preset by normalized name | `API-046`–`API-048`, `API-051`, `UI-042`, `UI-043` |
@@ -155,7 +155,8 @@ administrative metadata.
 
 Authenticated administrators can open **Administrar catálogo** from their
 account. The workspace edits existing products and events, reports successful
-deactivation, and refreshes the public store and agenda immediately. A stale
+deactivation, and refreshes the public store and event projection immediately. The
+Agenda surface is temporarily hidden, but its API and administration module remain intact. A stale
 revision preserves the edited form and asks the operator to reload instead of
 discarding work. Customers receive no administrative control, while the API
 role check remains the actual security boundary. Creation remains API-only

@@ -410,8 +410,8 @@ Phase 6A completion evidence:
 - the account UI restores reservation history after reload;
 - `API-041` through `API-045` protect authorization, persistence, availability,
   duplicates, sold-out capacity, and request validation;
-- `UI-010` validates immediate confirmation and availability feedback, while
-  `UI-041` proves persistence through reload and account history;
+- `UI-041` proves that a reservation created through the retained event API
+  persists through reload and appears in account history while Agenda is hidden;
 - OpenAPI publishes 28 route operations.
 
 Phase 6B completion evidence:
@@ -475,7 +475,7 @@ Phase 6E completion evidence:
 - stale `409` responses preserve unsaved values and provide an explicit reload
   action rather than producing false success or silent data loss;
 - event deactivation produces visible confirmation and immediately removes the
-  record from the public agenda;
+  record from the public event projection; the Agenda surface is currently hidden;
 - product creation intentionally remains API-only until the image write model
   can guarantee polished store merchandise;
 - `UI-046` through `UI-049` protect role visibility, browser-to-server catalog
@@ -644,7 +644,7 @@ versus 135.12 seconds sequentially, a 46.9% reduction in Pytest execution time.
 The Phase 7A regression passed all 171 executions in 103.94 seconds with four
 isolated workers. The production release-candidate regression passed all 172
 executions in 72.33 seconds with four isolated workers. The latest catalog
-regression passed all 174 executions in 72.86 seconds with four isolated
+regression passed all 174 executions in 70.52 seconds with four isolated
 workers after adding recipe-pagination and laboratory-accordion coverage.
 
 Lumbre is not yet ready for production traffic without operator work. Its

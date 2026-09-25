@@ -9,6 +9,7 @@ from projects.lumbre.components.checkout_modal import CheckoutModal
 from projects.lumbre.components.event_reservation_modal import EventReservationModal
 from projects.lumbre.components.events_section import EventsSection
 from projects.lumbre.components.fire_planner import FirePlanner
+from projects.lumbre.components.fire_almanac import FireAlmanac
 from projects.lumbre.components.header import Header
 from projects.lumbre.components.ingredient_lab import IngredientLab
 from projects.lumbre.components.membership_modal import MembershipModal
@@ -45,6 +46,7 @@ class HomePage(BasePage):
         self.product_images = self.product_cards.locator(".product-art img")
         self.privacy_link = page.get_by_role("link", name="Privacidad y datos")
         self.fire_planner = FirePlanner(page)
+        self.fire_almanac = FireAlmanac(page)
 
     def filter_recipes(self, label: str) -> None:
         self.page.get_by_role("button", name=label, exact=True).click()
