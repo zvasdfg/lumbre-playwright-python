@@ -2,6 +2,7 @@ import pytest
 from playwright.sync_api import Page, expect
 
 from automation.core.reporting import TestLogger
+from projects.lumbre.api.lumbre_api import LumbreApi
 from projects.lumbre.pages.home_page import HomePage
 
 
@@ -13,12 +14,28 @@ from projects.lumbre.pages.home_page import HomePage
 def test_existing_formula_reuses_hypothesis(
     page: Page,
     home: HomePage,
+    api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
     lab = home.ingredient_lab
     ingredient_names = ["ajo granulado", "sal kosher", "pimienta negra"]
 
-    with test_log.step("Build a known SPG formula"):
+    with test_log.step("Register SPG as the user's first formula"):
+        initial_response = api.create_hypothesis(
+            {
+                "ingredient_ids": ["sal_kosher", "pimienta_negra", "ajo_granulado"],
+                "objective": "Costra para res",
+            }
+        )
+        initial_result = initial_response.json()
+        assert initial_response.status == 201
+        assert initial_result["data"]["id"] == "LHC-001"
+        test_log.values(
+            observed_status=initial_response.status,
+            observed_hypothesis_id=initial_result["data"]["id"],
+        )
+
+    with test_log.step("Build the same SPG formula in the browser"):
         for ingredient_name in ingredient_names:
             lab.add_ingredient(ingredient_name)
         lab.select_objective("Costra para res")
@@ -47,11 +64,11 @@ def test_existing_formula_reuses_hypothesis(
         )
 
     with test_log.step("Validate that the existing technical sheet is reused"):
-        expected_hypothesis_id = "LHC-003"
+        expected_hypothesis_id = "LHC-001"
         dialog = lab.hypothesis_dialog(expected_hypothesis_id)
 
         expect(dialog).to_be_visible()
-        expect(dialog).to_contain_text("SPG clásico de tres componentes")
+        expect(dialog).to_contain_text("Sal, pimienta y ajo (SPG) clásico")
         expect(lab.protocol_result).to_contain_text("Hipótesis existente")
         expect(lab.protocol_result).to_contain_text(expected_hypothesis_id)
 

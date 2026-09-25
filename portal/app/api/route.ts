@@ -15,7 +15,7 @@ export async function GET() {
     "GET /api/ingredientes?q=chile&familia=Picante&estado=pendiente",
     "GET /api/ingredientes?id=chile_ancho",
     "GET /api/hipotesis",
-    "GET /api/hipotesis/LHC-003",
+    "GET /api/hipotesis/{id}",
   ];
   const testAndDevelopmentEndpoints = [
     "GET /api/account",

@@ -134,6 +134,7 @@ export default function IngredientLab() {
   const [families, setFamilies] = useState<string[]>([]);
   const [search, setSearch] = useState("");
   const [family, setFamily] = useState("todas");
+  const [openFamilies, setOpenFamilies] = useState<string[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [objective, setObjective] = useState(objectives[0]);
   const [inspectedIngredient, setInspectedIngredient] = useState<Ingredient | null>(null);
@@ -231,6 +232,21 @@ export default function IngredientLab() {
         .filter((group) => group.ingredients.length > 0),
     [families, filteredIngredients],
   );
+
+  const visibleOpenFamilies = openFamilies.filter((familyName) =>
+    groupedIngredients.some((group) => group.family === familyName),
+  );
+  const expandedFamilies = visibleOpenFamilies.length
+    ? visibleOpenFamilies
+    : groupedIngredients.slice(0, 1).map((group) => group.family);
+
+  function setFamilyOpen(familyName: string, open: boolean) {
+    setOpenFamilies((current) =>
+      open
+        ? [...new Set([...current, familyName])]
+        : current.filter((candidate) => candidate !== familyName),
+    );
+  }
   const selectedIngredients = selectedIds
     .map((id) => ingredients.find((ingredient) => ingredient.id === id))
     .filter((ingredient) => ingredient !== undefined);
@@ -334,16 +350,17 @@ export default function IngredientLab() {
 
           <div className="ingredient-groups" data-testid="ingredient-catalog">
             {groupedIngredients.map((group) => (
-              <section
+              <details
                 className="ingredient-family-group"
                 key={group.family}
                 data-family={group.family}
-                aria-labelledby={`family-${group.family}`}
+                open={expandedFamilies.includes(group.family)}
+                onToggle={(event) => setFamilyOpen(group.family, event.currentTarget.open)}
               >
-                <div className="family-group-heading">
+                <summary className="family-group-heading">
                   <h3 id={`family-${group.family}`}>{familyLabel(group.family)}</h3>
                   <span>{group.ingredients.length} componentes</span>
-                </div>
+                </summary>
                 <div className="ingredient-grid">
                   {group.ingredients.map((ingredient, index) => {
                     const isSelected = selectedIds.includes(ingredient.id);
@@ -385,7 +402,7 @@ export default function IngredientLab() {
                     );
                   })}
                 </div>
-              </section>
+              </details>
             ))}
           </div>
           {!loading && filteredIngredients.length === 0 && (

@@ -6,6 +6,7 @@ import { resetReservations } from "../../../../server/modules/events/reservation
 import { resetFirePresets } from "../../../../server/modules/fire-planner/preset-service";
 import { resetMembershipPreferences } from "../../../../server/modules/membership/preference-service";
 import { resetCatalog } from "../../../../server/modules/catalog/catalog-service";
+import { resetHypotheses } from "../../../lib/hypothesis-store";
 
 export async function POST() {
   if (getLumbreEnvironment() !== "test") {
@@ -17,6 +18,7 @@ export async function POST() {
   await resetFirePresets();
   await resetMembershipPreferences();
   await resetCatalog();
+  await resetHypotheses();
   await resetAuthentication();
   return Response.json({ reset: true, seedVersion, message: "Demo data restored" });
 }

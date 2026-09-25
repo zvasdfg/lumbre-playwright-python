@@ -31,4 +31,4 @@ def test_deployed_public_catalogs(api: LumbreApi, test_log: TestLogger) -> None:
         assert observed_counts["products"] >= 7
         assert observed_counts["events"] >= 3
         assert observed_counts["ingredients"] > 0
-        assert observed_counts["hypotheses"] > 0
+        assert observed_counts["hypotheses"] == 0

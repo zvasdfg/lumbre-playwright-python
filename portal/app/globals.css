@@ -124,6 +124,13 @@ h1 em { color: var(--ember); font: inherit; }
 .recipe-card > p { min-height: 43px; margin: 0; color: var(--text-muted); line-height: 1.55; font-size: 12px; }
 .recipe-card > button { display: flex; justify-content: space-between; width: 100%; margin-top: 20px; padding: 12px 0; border: 0; border-top: 1px solid #c9c5b8; background: transparent; text-transform: uppercase; letter-spacing: .1em; font-size: 10px; font-weight: 800; cursor: pointer; }
 .empty-state { grid-column: 1 / -1; padding: 80px 20px; text-align: center; font-family: var(--font-exo), sans-serif; font-size: 22px; color: #73756e; }
+.recipe-pagination { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; margin-top: 54px; padding-top: 22px; border-top: 1px solid #c9c5b8; }
+.recipe-pagination > button, .recipe-pagination div button { min-width: 38px; height: 38px; border: 1px solid #aaa69a; background: transparent; color: var(--ink); font-family: var(--font-exo), sans-serif; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+.recipe-pagination > button { padding: 0 18px; }
+.recipe-pagination button:disabled { opacity: .35; cursor: not-allowed; }
+.recipe-pagination div { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
+.recipe-pagination div button[aria-current="page"] { border-color: var(--ember); background: var(--ember); color: white; }
+.recipe-pagination p { grid-column: 1 / -1; margin: 0; color: var(--text-muted); font-size: 10px; text-align: center; text-transform: uppercase; letter-spacing: .08em; }
 
 .ingredient-lab { padding: 120px 8vw; background: var(--surface-dark); color: var(--text-on-dark); border-top: 12px solid var(--ember); }
 .lab-intro { display: grid; grid-template-columns: 1fr 390px; gap: 70px; align-items: end; margin-bottom: 60px; }
@@ -145,10 +152,14 @@ h1 em { color: var(--ember); font: inherit; }
 .catalog-status { min-height: 20px; color: var(--subtle-on-dark); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
 .lab-error { padding: 12px; border-left: 4px solid #dc7446; background: #3e2722; color: #f2d6ca; font-size: 12px; }
 .ingredient-groups { display: grid; gap: 52px; }
-.ingredient-family-group { min-width: 0; }
-.family-group-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 18px; padding: 0 0 12px; border-bottom: 1px solid #55574f; }
+.ingredient-family-group { min-width: 0; border-bottom: 1px solid #55574f; }
+.family-group-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 18px 0; cursor: pointer; list-style: none; }
+.family-group-heading::-webkit-details-marker { display: none; }
+.family-group-heading::after { content: '+'; flex: 0 0 auto; color: var(--accent-on-dark); font-family: var(--font-exo), sans-serif; font-size: 22px; font-weight: 700; }
+.ingredient-family-group[open] .family-group-heading::after { content: '−'; }
 .family-group-heading h3 { margin: 0; color: var(--cream); font-family: var(--font-exo), sans-serif; font-size: 25px; font-style: italic; font-weight: 800; text-transform: uppercase; }
-.family-group-heading span { color: var(--subtle-on-dark); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
+.family-group-heading span { margin-left: auto; color: var(--subtle-on-dark); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
+.ingredient-family-group .ingredient-grid { padding-bottom: 28px; }
 .ingredient-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px 14px; }
 .ingredient-card { min-width: 0; }
 .ingredient-specimen { position: relative; display: grid; width: 100%; height: 155px; place-items: center; overflow: hidden; border: 0; background: #55544d; cursor: pointer; }
@@ -374,6 +385,8 @@ footer small { grid-column: 1 / -1; border-top: 1px solid #4a4c46; margin-top: 5
   .recipes-section, .events-section { padding: 85px 28px; }
   .section-heading { grid-template-columns: 1fr; }
   .recipe-grid { grid-template-columns: 1fr 1fr; }
+  .recipe-pagination { grid-template-columns: 1fr 1fr; }
+  .recipe-pagination div { grid-column: 1 / -1; grid-row: 1; }
   .ingredient-lab { padding: 85px 28px; }
   .lab-intro { grid-template-columns: 1fr; gap: 30px; }
   .lab-workspace { grid-template-columns: 1fr; }
@@ -396,6 +409,8 @@ footer small { grid-column: 1 / -1; border-top: 1px solid #4a4c46; margin-top: 5
   .hero-visual { min-height: 470px; }
   .recipe-toolbar { align-items: stretch; flex-direction: column; }
   .recipe-grid, .product-grid { grid-template-columns: 1fr; }
+  .recipe-pagination > button { padding: 0 10px; }
+  .recipe-pagination div button { min-width: 34px; height: 34px; }
   .lab-toolbar { grid-template-columns: 1fr; }
   .ingredient-grid { grid-template-columns: 1fr 1fr; }
   .lab-manifesto dl { grid-template-columns: 1fr; }

@@ -25,13 +25,13 @@ in locators and expected values when it is part of the product contract.
 | Signal | Current result |
 | --- | ---: |
 | API case IDs / executions | 78 / 102 |
-| Browser case IDs / executions | 54 / 58 |
+| Browser case IDs / executions | 56 / 60 |
 | Framework unit case IDs / executions | 3 / 12 |
-| Unique committed risks | 132 |
-| Total Pytest executions | 172 |
-| Test files | 131 |
+| Unique committed risks | 134 |
+| Total Pytest executions | 174 |
+| Test files | 133 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 172 passed; 72.33 s with 4 isolated workers |
+| Latest validation | 174 passed; 72.86 s with 4 isolated workers |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -163,7 +163,7 @@ Priority definitions:
 | API-008 | Ingredient detail contains research and experiment data | P1 | API contract |
 | API-009 | Formula validation reports duplicate and unknown items by position | P0 | API negative |
 | API-010 | Ingredient order does not create a duplicate hypothesis | P0 | API persistence |
-| API-011 | Registry identities remain unique and recommendations retain sources | P1 | API integrity |
+| API-011 | A new laboratory starts with an empty hypothesis registry | P1 | API isolation |
 | API-012 | Classic SPG duplicate counter persists through its resource endpoint | P1 | API persistence |
 | API-013 | A unique formula creates and persists a hypothesis with `201` | P0 | API persistence |
 | API-014 | An unknown hypothesis returns a stable `404` contract | P1 | API negative |
@@ -283,6 +283,8 @@ Priority definitions:
 | UI-050 | A sold-out product is visibly unavailable and cannot be added to the cart | P1 | UI inventory presentation |
 | UI-051 | A customer cancels a pending order from account history | P1 | E2E cancellation feedback |
 | UI-052 | Public privacy disclosure exposes the deployed data boundary and retention | P0 | UI transparency + compliance gate |
+| UI-053 | Recipe pagination renders at most six distinct cards per page | P1 | UI navigation |
+| UI-054 | Ingredient families start collapsed and expose cumin with its owned image | P1 | UI component + visual contract |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

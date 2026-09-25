@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from playwright.sync_api import Locator, Page
 
 
@@ -13,6 +15,10 @@ class IngredientLab:
         self.family_select = self.root.get_by_label("Familia")
         self.catalog_status = self.root.locator(".catalog-status")
         self.catalog = self.root.get_by_test_id("ingredient-catalog")
+        self.family_groups = self.catalog.locator("details.ingredient-family-group")
+        self.open_family_groups = self.catalog.locator(
+            "details.ingredient-family-group[open]"
+        )
         self.ingredient_cards = self.catalog.get_by_test_id("ingredient-card")
         self.specimen_buttons = self.catalog.locator("button.ingredient-specimen")
         self.specimen_images = self.specimen_buttons.locator("img")
@@ -39,11 +45,21 @@ class IngredientLab:
 
     def ingredient_card(self, ingredient_name: str) -> Locator:
         return self.ingredient_cards.filter(
-            has=self.page.get_by_role("heading", name=ingredient_name, exact=True)
+            has=self.page.locator(
+                "h3",
+                has_text=re.compile(f"^{re.escape(ingredient_name)}$", re.IGNORECASE),
+            )
         )
 
+    def _reveal_ingredient(self, ingredient_name: str) -> Locator:
+        card = self.ingredient_card(ingredient_name)
+        family_group = card.locator("xpath=ancestor::details")
+        if family_group.get_attribute("open") is None:
+            family_group.locator("summary").click()
+        return card
+
     def open_ingredient(self, ingredient_name: str) -> None:
-        self.ingredient_card(ingredient_name).get_by_role(
+        self._reveal_ingredient(ingredient_name).get_by_role(
             "button",
             name=f"Inspeccionar {ingredient_name}",
         ).click()
@@ -54,7 +70,7 @@ class IngredientLab:
         )
 
     def add_ingredient(self, ingredient_name: str) -> None:
-        self.ingredient_card(ingredient_name).get_by_role(
+        self._reveal_ingredient(ingredient_name).get_by_role(
             "button",
             name="Agregar",
             exact=True,

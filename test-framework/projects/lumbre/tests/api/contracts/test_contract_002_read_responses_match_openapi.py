@@ -37,6 +37,15 @@ def test_read_response_matches_openapi(
     path: str,
 ) -> None:
     with test_log.step(f"Request the {resource_kind} representation"):
+        if resource_kind == "hypothesis":
+            created = api.create_hypothesis(
+                {
+                    "ingredient_ids": ["sal_kosher", "pimienta_negra"],
+                    "objective": "Costra para res",
+                }
+            )
+            assert created.status == 201
+
         payloads: dict[str, Any] = {
             "api_index": api.api_index,
             "health": api.health,
@@ -48,7 +57,7 @@ def test_read_response_matches_openapi(
             "ingredients": api.ingredients,
             "ingredient": lambda: api.ingredient("sal_kosher").json(),
             "hypotheses": api.hypotheses,
-            "hypothesis": lambda: api.hypothesis("LHC-003").json(),
+            "hypothesis": lambda: api.hypothesis("LHC-001").json(),
         }
         payload = payloads[resource_kind]()
         test_log.values(

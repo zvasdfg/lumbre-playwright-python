@@ -232,18 +232,16 @@ business oracle; schema checks complement rather than replace them.
 ## 7. Mutable-data isolation
 
 Hypothesis creation and duplicate counters persist to D1 so the suite exercises
-the same storage boundary required by the Workers runtime. Version-controlled
-JSON remains editorial seed input and is never a request-time write target.
+the same storage boundary required by the Workers runtime. The registry starts
+empty, making every stored combination attributable to a user action.
 
 The local runner performs this lifecycle:
 
 ```mermaid
 flowchart LR
     Seed[SQL migrations and seed metadata] --> Temp[Create temporary D1 state]
-    JSON[Version-controlled hypothesis JSON] --> Server[Start portal]
     Temp --> Server
-    Server --> Import[Import bundled hypotheses into D1]
-    Import --> Tests[Execute tests]
+    Server --> Tests[Execute tests against an empty registry]
     Tests --> Temp
     Temp --> Cleanup[Stop server and delete D1 state]
 ```
@@ -386,13 +384,13 @@ the test selection instead of relying on the framework's generic Node mode.
 
 | Environment | Mutation policy | Test-only routes | Registry implementation |
 | --- | --- | --- | --- |
-| `development` | Enabled for local exploration | Hidden | Local D1 initialized from bundled seeds |
+| `development` | Enabled for local exploration | Hidden | Local D1 with user-created hypotheses |
 | `test` | Enabled for contract and persistence tests | Enabled | Per-run temporary D1 |
-| `production` | Anonymous cart writes enabled; account access and protected business writes disabled | Hidden as `404` | Remote D1 catalog/cart plus bundled immutable hypotheses |
+| `production` | Anonymous cart writes enabled; account access and protected business writes disabled | Hidden as `404` | Remote D1 catalog/cart plus an empty read-only hypothesis registry |
 
 Production uses defense in depth: the UI does not collect membership data or
 offer hypothesis creation, protected mutations require authenticated roles,
-and the hypothesis store refuses write operations. Anonymous cart routes are the
+and the hypothesis route refuses write operations. Anonymous cart routes are the
 explicit exception: they resolve an opaque cookie and constrain every D1 query
 to its session. The public registry does not depend on a writable filesystem.
 

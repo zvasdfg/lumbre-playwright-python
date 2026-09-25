@@ -13,11 +13,14 @@ def test_recipe_filters_return_only_matching_cards(home: HomePage, test_log: Tes
         home.filter_recipes(selected_filter)
         test_log.values(selected_filter=selected_filter)
 
-    with test_log.step("Validate the filtered recipe count"):
-        expect(home.recipe_cards).to_have_count(33)
+    with test_log.step("Validate the first filtered page"):
+        expect(home.recipe_cards).to_have_count(6)
+        expect(home.recipe_page_status).to_have_text("Mostrando 1–6 de 33 recetas")
         test_log.values(
             observed_card_count=home.recipe_cards.count(),
-            expected_card_count=33,
+            observed_page_status=home.recipe_page_status.inner_text(),
+            expected_card_count=6,
+            expected_filtered_count=33,
         )
 
     with test_log.step("Validate a representative recipe from the category"):

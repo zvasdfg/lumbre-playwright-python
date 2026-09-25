@@ -12,6 +12,8 @@ import AdminCatalog from "./admin-catalog";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
+const recipesPerPage = 6;
+
 type CartItem = {
   productId: number;
   name: string;
@@ -107,6 +109,7 @@ export default function ClubPortal() {
   const appRef = useRef<HTMLElement>(null);
   const [recipeFilter, setRecipeFilter] = useState<RecipeFilter>("todos");
   const [search, setSearch] = useState("");
+  const [recipePage, setRecipePage] = useState(1);
   const [cart, setCart] = useState<Cart>(emptyCart);
   const [account, setAccount] = useState<Account | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
@@ -133,6 +136,16 @@ export default function ClubPortal() {
       return matchesCategory && matchesSearch;
     });
   }, [recipeFilter, search]);
+  const recipePageCount = Math.max(1, Math.ceil(filteredRecipes.length / recipesPerPage));
+  const visibleRecipes = filteredRecipes.slice(
+    (recipePage - 1) * recipesPerPage,
+    recipePage * recipesPerPage,
+  );
+
+  function changeRecipePage(page: number) {
+    setRecipePage(Math.min(Math.max(page, 1), recipePageCount));
+    document.getElementById("recetas")?.scrollIntoView({ behavior: "smooth" });
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -567,18 +580,19 @@ export default function ClubPortal() {
             {([[
               "todos", "Todas"
             ], ["directo", "Fuego directo"], ["lento", "Lento y ahumado"], ["vegetales", "Vegetales"]] as const).map(([value, label]) => (
-              <button key={value} type="button" aria-pressed={recipeFilter === value} onClick={() => setRecipeFilter(value)}>{label}</button>
+              <button key={value} type="button" aria-pressed={recipeFilter === value} onClick={() => { setRecipeFilter(value); setRecipePage(1); }}>{label}</button>
             ))}
           </div>
-          <label className="search-field"><span className="sr-only">Buscar recetas</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar receta..." /><span aria-hidden="true">⌕</span></label>
+          <label className="search-field"><span className="sr-only">Buscar recetas</span><input value={search} onChange={(event) => { setSearch(event.target.value); setRecipePage(1); }} placeholder="Buscar receta..." /><span aria-hidden="true">⌕</span></label>
         </div>
         {filteredRecipes.length ? (
+          <>
           <div className="recipe-grid" aria-live="polite">
-            {filteredRecipes.map((recipe, index) => (
+            {visibleRecipes.map((recipe, index) => (
               <article className="recipe-card" key={recipe.id} data-testid="recipe-card">
                 <div className={`recipe-art ${recipe.tone}`}>
                   <Image src={recipe.image} alt={`Fotografía de ${recipe.title}`} fill sizes="(max-width: 520px) 100vw, (max-width: 850px) 50vw, 33vw" />
-                  <span>{String(index + 1).padStart(3, "0")}</span>
+                  <span>{String((recipePage - 1) * recipesPerPage + index + 1).padStart(3, "0")}</span>
                   <small>{recipe.categoryLabel}</small>
                 </div>
                 <div className="recipe-meta"><span>{recipe.categoryLabel}</span><span>{recipe.time} · {recipe.level}</span></div>
@@ -587,6 +601,27 @@ export default function ClubPortal() {
               </article>
             ))}
           </div>
+          <nav className="recipe-pagination" aria-label="Páginas de recetas">
+            <button type="button" disabled={recipePage === 1} onClick={() => changeRecipePage(recipePage - 1)}>← Anterior</button>
+            <div>
+              {Array.from({ length: recipePageCount }, (_, index) => index + 1).map((page) => (
+                <button
+                  type="button"
+                  key={page}
+                  aria-label={`Ir a página ${page}`}
+                  aria-current={recipePage === page ? "page" : undefined}
+                  onClick={() => changeRecipePage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+            <button type="button" disabled={recipePage === recipePageCount} onClick={() => changeRecipePage(recipePage + 1)}>Siguiente →</button>
+            <p data-testid="recipe-page-status">
+              Mostrando {(recipePage - 1) * recipesPerPage + 1}–{Math.min(recipePage * recipesPerPage, filteredRecipes.length)} de {filteredRecipes.length} recetas
+            </p>
+          </nav>
+          </>
         ) : <p className="empty-state">No encontramos recetas con esos criterios. Prueba otra búsqueda.</p>}
       </section>
 

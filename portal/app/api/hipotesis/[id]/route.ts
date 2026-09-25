@@ -1,7 +1,4 @@
-import {
-  ensureRecommendedHypotheses,
-  listHypotheses,
-} from "../../../lib/hypothesis-store";
+import { listHypotheses } from "../../../lib/hypothesis-store";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -10,7 +7,6 @@ type RouteContext = {
 export async function GET(_request: Request, context: RouteContext) {
   const { id } = await context.params;
   try {
-    await ensureRecommendedHypotheses();
     const records = await listHypotheses();
     const hypothesis = records.find((record) => record.id === id);
     if (!hypothesis) {

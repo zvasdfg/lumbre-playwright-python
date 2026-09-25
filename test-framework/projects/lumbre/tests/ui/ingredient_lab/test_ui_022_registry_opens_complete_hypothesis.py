@@ -2,6 +2,7 @@ import pytest
 from playwright.sync_api import expect
 
 from automation.core.reporting import TestLogger
+from projects.lumbre.api.lumbre_api import LumbreApi
 from projects.lumbre.pages.home_page import HomePage
 
 
@@ -12,10 +13,25 @@ from projects.lumbre.pages.home_page import HomePage
 )
 def test_registry_opens_complete_hypothesis(
     home: HomePage,
+    api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    lab = home.ingredient_lab
-    hypothesis_id = "LHC-003"
+    hypothesis_id = "LHC-001"
+
+    with test_log.step("Register a formula and reload its user-created archive"):
+        response = api.create_hypothesis(
+            {
+                "ingredient_ids": ["sal_kosher", "pimienta_negra", "ajo_granulado"],
+                "objective": "Costra para res",
+            }
+        )
+        assert response.status == 201
+        home.open()
+        lab = home.ingredient_lab
+        test_log.values(
+            observed_status=response.status,
+            observed_hypothesis_id=response.json()["data"]["id"],
+        )
 
     with test_log.step("Find a known hypothesis in the registry"):
         card = lab.hypothesis_card(hypothesis_id)

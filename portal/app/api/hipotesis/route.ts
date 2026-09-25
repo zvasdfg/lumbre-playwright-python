@@ -1,7 +1,6 @@
 import { createExperimentProtocol, ingredients } from "../../lib/ingredients";
 import { isProductionReadOnly, readOnlyResponse } from "../../lib/environment";
 import {
-  ensureRecommendedHypotheses,
   experimentObjectives,
   findOrCreateHypothesis,
   listHypotheses,
@@ -15,13 +14,12 @@ type HypothesisRequest = {
 
 export async function GET() {
   try {
-    await ensureRecommendedHypotheses();
     const records = await listHypotheses();
     return Response.json({ data: records, count: records.length });
   } catch {
     return Response.json(
       {
-        error: "The recommended hypothesis registry could not be initialized",
+        error: "The hypothesis registry could not be read",
       },
       { status: 500 },
     );

@@ -1,12 +1,5 @@
 import { eq } from "drizzle-orm";
-import {
-  createExperimentProtocol,
-  ingredients,
-  type ExperimentProtocol,
-} from "./ingredients";
-import { isProductionReadOnly } from "./environment";
-import { hypothesisSeeds } from "./hypothesis-seeds";
-import { recommendedFormulas } from "./recommended-formulas";
+import { type ExperimentProtocol } from "./ingredients";
 import { getDatabase } from "../../server/platform/database/client";
 import { hypotheses } from "../../server/platform/database/schema";
 
@@ -18,8 +11,6 @@ export const experimentObjectives = {
 } as const;
 
 export type ExperimentObjective = keyof typeof experimentObjectives;
-
-let seedPromise: Promise<void> | null = null;
 
 function serializeRecord(record: ExperimentProtocol) {
   return JSON.stringify(record);
@@ -44,78 +35,7 @@ function seedValues(record: ExperimentProtocol) {
   };
 }
 
-async function ensureBundledHypotheses() {
-  if (!seedPromise) {
-    seedPromise = (async () => {
-      const database = getDatabase();
-      const batchSize = 10;
-      for (let index = 0; index < hypothesisSeeds.length; index += batchSize) {
-        const batch = hypothesisSeeds.slice(index, index + batchSize).map(seedValues);
-        await database.insert(hypotheses).values(batch).onConflictDoNothing();
-      }
-    })().catch((error) => {
-        seedPromise = null;
-        throw error;
-      });
-  }
-
-  await seedPromise;
-}
-
-export async function ensureRecommendedHypotheses() {
-  if (isProductionReadOnly()) return;
-
-  for (const recommendation of recommendedFormulas) {
-    const selectedIngredients = recommendation.ingredientIds.map((ingredientId) => {
-      const ingredient = ingredients.find((candidate) => candidate.id === ingredientId);
-      if (!ingredient) {
-        throw new Error(
-          `Recommended formula '${recommendation.id}' references missing ingredient '${ingredientId}'`,
-        );
-      }
-      return ingredient;
-    });
-    const prefix = experimentObjectives[recommendation.objective].prefix;
-    const signature = `${prefix}:${[...recommendation.ingredientIds].sort().join("+")}`;
-    await findOrCreateHypothesis(
-      signature,
-      recommendation.objective,
-      (id) =>
-        createExperimentProtocol(
-          id,
-          signature,
-          selectedIngredients,
-          recommendation.objective,
-          {
-            status: "recomendado_sin_validar",
-            registryType: "recomendacion_investigada",
-            hypothesis: recommendation.hypothesis,
-            recommendation: {
-              id: recommendation.id,
-              nombre: recommendation.name,
-              fundamento: recommendation.rationale,
-              adaptacion: recommendation.adaptation,
-              proporciones: recommendation.proportions.map(({ ingredientId, parts }) => ({
-                ingrediente_id: ingredientId,
-                partes: parts,
-              })),
-              fuentes: recommendation.sources.map(({ title, url }) => ({ titulo: title, url })),
-            },
-          },
-        ),
-      { refreshRecommended: true },
-    );
-  }
-}
-
 export async function listHypotheses(): Promise<ExperimentProtocol[]> {
-  if (isProductionReadOnly()) {
-    return hypothesisSeeds
-      .map((record) => structuredClone(record))
-      .sort((left, right) => left.id.localeCompare(right.id));
-  }
-
-  await ensureBundledHypotheses();
   const rows = await getDatabase()
     .select({
       recordJson: hypotheses.recordJson,
@@ -128,23 +48,21 @@ export async function listHypotheses(): Promise<ExperimentProtocol[]> {
     .sort((left, right) => left.id.localeCompare(right.id));
 }
 
+export async function resetHypotheses(): Promise<void> {
+  await getDatabase().delete(hypotheses);
+}
+
 export async function findOrCreateHypothesis(
   signature: string,
   objective: ExperimentObjective,
   buildRecord: (id: string) => ExperimentProtocol,
-  options: { refreshRecommended?: boolean; incrementDuplicateCount?: boolean } = {},
+  options: { incrementDuplicateCount?: boolean } = {},
 ) {
-  if (isProductionReadOnly()) {
-    throw new Error("The production hypothesis registry is read-only");
-  }
-
   const database = getDatabase();
   const records = await listHypotheses();
   const existing = records.find((record) => record.firma === signature);
   if (existing) {
-    const shouldRefresh =
-      existing.schema_version !== 5 ||
-      (options.refreshRecommended && existing.tipo_registro === "recomendacion_investigada");
+    const shouldRefresh = existing.schema_version !== 5;
     const currentDuplicateCount = existing.contador_repeticiones ?? 0;
     let resolvedRecord = shouldRefresh
       ? {

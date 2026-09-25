@@ -45,7 +45,7 @@ Lumbre has an explicit product environment boundary:
 | --- | --- | --- | --- |
 | `development` | Local product development | Public reads, passwordless accounts, and business writes; test reset hidden | Local D1, initialized from versioned JSON seed data |
 | `test` | Automated local suite | Current read/write and account behavior plus deterministic auth/reset hooks | Fresh temporary D1 created by the runner |
-| `production` | Deployment-ready public demo | Public reads and anonymous cart writes; account access and protected mutations are unavailable; test reset returns `404` | Remote D1 cart plus bundled, immutable technical sheets |
+| `production` | Deployment-ready public demo | Public reads and anonymous cart writes; account access and protected mutations are unavailable; test reset returns `404` | Remote D1 cart plus an initially empty technical-sheet registry |
 
 `npm run dev` defaults to `development`. A production build defaults to
 `production`. `scripts/test-local.sh` explicitly sets both `LUMBRE_ENV=test`
@@ -59,8 +59,8 @@ embedded into the client bundle at build time.
 In production, the membership form is replaced with a privacy notice and the
 experiment creation control is disabled. The anonymous cart remains available
 through an opaque protected cookie and D1, while product, membership, and
-hypothesis mutations are rejected. The hypothesis registry remains browsable
-from bundled seed data without filesystem access. This makes the portal
+hypothesis mutations are rejected. The initially empty hypothesis registry remains
+browsable without filesystem access. This makes the portal
 suitable for a future public demonstration while preserving the richer mutable
 system under test locally.
 
@@ -71,7 +71,8 @@ delivery adapter, production URL, and secret bindings are configured.
 ## Product areas
 
 - Lumbre identity and outdoor-fire community content.
-- Recipe category filters, search, and recipe feedback.
+- Paginated recipe catalog with six cards per page, category filters, search,
+  and recipe feedback.
 - Product catalog, server-priced persistent cart, authenticated checkout,
   deterministic local payments, provider-hosted checkout, and account-owned
   order history with server-owned inventory.
@@ -79,9 +80,9 @@ delivery adapter, production URL, and secret bindings are configured.
   cooking preferences, explicit consent history, and recovery.
 - Fire planning with cooking-style and vegetable-reserve calculations,
   anonymous local presets, and synchronized account presets.
-- Ingredient catalog with research detail, family filters, and search.
+- Collapsible ingredient families with research detail, filters, and search.
 - Two-to-six-component experiment bench and generated technical hypotheses.
-- Registered technical sheets for crust, bark, chicken, and vegetables.
+- User-created technical sheets for crust, bark, chicken, and vegetables.
 - Outdoor event selection and reservation feedback.
 - Authenticated group reservations with live capacity and account history.
 
@@ -331,11 +332,11 @@ owning test accounts.
 
 ## Hypothesis persistence
 
-Hypotheses originate as independent, version-controlled JSON resources under
-`data/hypotheses`. On first use, development and test import those records into
-D1. The API then validates each ingredient, canonicalizes ingredient order,
-reuses an existing sheet instead of duplicating it, and increments the D1
-repetition counter for duplicate submissions.
+The hypothesis registry starts empty. Development and test users create the
+records that appear in D1; no editorial combinations are injected at startup.
+The API validates each ingredient, canonicalizes ingredient order, reuses an
+existing sheet instead of duplicating it, and increments the D1 repetition
+counter for duplicate submissions.
 
 Technical IDs use:
 
@@ -349,8 +350,8 @@ directory, apply every SQL migration, and seed the database before the portal
 starts. Persistence assertions therefore exercise the production-shaped
 repository without changing source JSON or the developer's local database.
 
-Worker request handlers never write to the filesystem. Production serves the
-bundled hypothesis registry read-only and persists only anonymous commerce data
+Worker request handlers never write to the filesystem. Production exposes the
+empty hypothesis registry read-only and persists only anonymous commerce data
 to D1; authenticated hosted business writes remain a later migration phase.
 
 ## Research data
@@ -358,11 +359,10 @@ to D1; authenticated hosted business writes remain a later migration phase.
 Ingredient records include origin, compounds, thermal behavior, sensory and
 compatibility scores, starting dosage, storage, sourcing, bibliography, and a
 proposed experiment. They remain `documentado_sin_validar` until Lumbre runs the
-corresponding kitchen trial. Recommended formulas likewise distinguish
-researched adaptations from user-created drafts.
+corresponding kitchen trial. Formula evidence can identify a documented flavor
+structure, but every technical sheet in the registry is created by a user.
 
 - [Ingredient evidence and taxonomy](app/api/ingredientes/METHODOLOGY.md)
-- [Hypothesis registry behavior](data/hypotheses/README.md)
 
 ## Development commands
 

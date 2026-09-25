@@ -13,12 +13,16 @@ def test_classic_spg_duplicate_increments_counter(
     api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    hypothesis_id = "LHC-003"
+    hypothesis_id = "LHC-001"
+    payload = {
+        "ingredient_ids": ["sal_kosher", "pimienta_negra", "ajo_granulado"],
+        "objective": "Costra para res",
+    }
 
-    with test_log.step("Read the current Classic SPG repetition counter"):
-        initial_response = api.hypothesis(hypothesis_id)
+    with test_log.step("Register Classic SPG for the first time"):
+        initial_response = api.create_hypothesis(payload)
         initial_spg = initial_response.json()["data"]
-        initial_count = initial_spg.get("contador_repeticiones", 0)
+        initial_count = initial_spg["contador_repeticiones"]
 
         test_log.values(
             hypothesis_id=hypothesis_id,
@@ -26,10 +30,6 @@ def test_classic_spg_duplicate_increments_counter(
         )
 
     with test_log.step("Submit the Classic SPG formula again"):
-        payload = {
-            "ingredient_ids": ["sal_kosher", "pimienta_negra", "ajo_granulado"],
-            "objective": "Costra para res",
-        }
         response = api.create_hypothesis(payload)
         result = response.json()
 
@@ -59,6 +59,6 @@ def test_classic_spg_duplicate_increments_counter(
         assert result["data"]["id"] == hypothesis_id
         assert result["duplicate_count"] == initial_count + 1
         assert result["data"]["contador_repeticiones"] == initial_count + 1
-        assert initial_response.status == 200
+        assert initial_response.status == 201
         assert persisted_response.status == 200
         assert persisted_count == initial_count + 1

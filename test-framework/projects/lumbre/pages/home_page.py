@@ -36,6 +36,11 @@ class HomePage(BasePage):
         self.recipe_art = self.recipe_cards.locator(".recipe-art")
         self.recipe_images = self.recipe_cards.locator(".recipe-art img")
         self.recipe_search = page.get_by_placeholder("Buscar receta...")
+        self.recipe_pagination = page.get_by_role("navigation", name="Páginas de recetas")
+        self.recipe_page_status = page.get_by_test_id("recipe-page-status")
+        self.next_recipe_page = self.recipe_pagination.get_by_role(
+            "button", name="Siguiente"
+        )
         self.product_cards = page.get_by_test_id("product-card")
         self.product_images = self.product_cards.locator(".product-art img")
         self.privacy_link = page.get_by_role("link", name="Privacidad y datos")
@@ -46,6 +51,11 @@ class HomePage(BasePage):
 
     def search_recipes(self, text: str) -> None:
         self.recipe_search.fill(text)
+
+    def go_to_recipe_page(self, page_number: int) -> None:
+        self.recipe_pagination.get_by_role(
+            "button", name=f"Ir a página {page_number}", exact=True
+        ).click()
 
     def add_product(self, product_name: str) -> None:
         current_quantity = int(self.header.cart_quantity.inner_text())

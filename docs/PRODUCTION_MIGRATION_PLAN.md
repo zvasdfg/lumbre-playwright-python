@@ -396,8 +396,9 @@ Migrate one capability per vertical slice:
 3. membership preferences — completed in Phase 6C;
 4. administrative products and events — completed in Phase 6D.
 
-Existing hypothesis JSON remains the reviewed editorial seed source. D1 is the
-validated development/test write target and the Worker never writes JSON.
+The hypothesis registry now starts empty and records only combinations created
+through the API. D1 remains the validated development/test write target and the
+Worker never writes JSON.
 
 Phase 6A completion evidence:
 
@@ -642,7 +643,9 @@ pre-hardening four-worker baseline passed 168 executions in 71.75 seconds
 versus 135.12 seconds sequentially, a 46.9% reduction in Pytest execution time.
 The Phase 7A regression passed all 171 executions in 103.94 seconds with four
 isolated workers. The production release-candidate regression passed all 172
-executions in 72.33 seconds with four isolated workers.
+executions in 72.33 seconds with four isolated workers. The latest catalog
+regression passed all 174 executions in 72.86 seconds with four isolated
+workers after adding recipe-pagination and laboratory-accordion coverage.
 
 Lumbre is not yet ready for production traffic without operator work. Its
 isolated staging Worker and D1 resource are deployed, the remote smoke gate

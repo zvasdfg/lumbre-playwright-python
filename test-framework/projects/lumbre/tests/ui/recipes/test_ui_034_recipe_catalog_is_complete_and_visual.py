@@ -1,3 +1,5 @@
+from math import ceil
+
 import pytest
 from playwright.sync_api import expect
 
@@ -16,30 +18,52 @@ def test_recipe_catalog_is_complete_and_visual(
 ) -> None:
     expected_recipe_count = 100
 
-    with test_log.step("Read the complete recipe catalog"):
-        expect(home.recipe_cards).to_have_count(expected_recipe_count)
-        observed_titles = home.recipe_cards.get_by_role("heading").all_inner_texts()
-        observed_sources = home.recipe_images.evaluate_all(
-            "images => images.map(image => "
-            "new URL(image.src).searchParams.get('url') ?? "
-            "image.getAttribute('src'))"
-        )
-        observed_alt_texts = home.recipe_images.evaluate_all(
-            "images => images.map(image => image.getAttribute('alt'))"
-        )
-        observed_overlays = home.recipe_art.evaluate_all(
-            "elements => elements.map(element => "
-            "getComputedStyle(element, '::after').backgroundImage)"
-        )
+    with test_log.step("Read all 100 recipes through the paginated catalog"):
+        page_count = ceil(expected_recipe_count / 6)
+        observed_titles: list[str] = []
+        observed_sources: list[str] = []
+        observed_alt_texts: list[str] = []
+        observed_overlays: list[str] = []
+        observed_page_sizes: list[int] = []
+
+        for page_number in range(1, page_count + 1):
+            if page_number > 1:
+                home.go_to_recipe_page(page_number)
+            page_size = home.recipe_cards.count()
+            observed_page_sizes.append(page_size)
+            observed_titles.extend(home.recipe_cards.get_by_role("heading").all_inner_texts())
+            observed_sources.extend(
+                home.recipe_images.evaluate_all(
+                    "images => images.map(image => "
+                    "new URL(image.src).searchParams.get('url') ?? "
+                    "image.getAttribute('src'))"
+                )
+            )
+            observed_alt_texts.extend(
+                home.recipe_images.evaluate_all(
+                    "images => images.map(image => image.getAttribute('alt'))"
+                )
+            )
+            observed_overlays.extend(
+                home.recipe_art.evaluate_all(
+                    "elements => elements.map(element => "
+                    "getComputedStyle(element, '::after').backgroundImage)"
+                )
+            )
+
         test_log.values(
             observed_recipe_count=len(observed_titles),
             expected_recipe_count=expected_recipe_count,
+            observed_page_count=page_count,
+            observed_page_sizes=observed_page_sizes,
             observed_unique_titles=len(set(observed_titles)),
             observed_unique_sources=len(set(observed_sources)),
             observed_unique_overlays=len(set(observed_overlays)),
         )
 
     with test_log.step("Validate unique recipes and image ownership"):
+        assert all(page_size <= 6 for page_size in observed_page_sizes)
+        assert observed_page_sizes[-1] == 4
         assert len(set(observed_titles)) == expected_recipe_count
         assert len(set(observed_sources)) == expected_recipe_count
         assert all(source for source in observed_sources)

@@ -23,18 +23,18 @@ reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 132 |
-| Automated functional risks | 132 |
-| Pytest executions | 172 |
-| Test files | 131 |
+| Committed functional risks | 134 |
+| Automated functional risks | 134 |
+| Pytest executions | 174 |
+| Test files | 133 |
 | API cases / executions | 78 / 102 |
-| Browser cases / executions | 54 / 58 |
+| Browser cases / executions | 56 / 60 |
 | Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (42/42) |
-| Latest full-suite result | 172 passed in 72.33 s with 4 isolated workers |
+| Latest full-suite result | 174 passed in 72.86 s with 4 isolated workers |
 
-**100% refers to the repository's 132-item committed functional-risk catalog.**
+**100% refers to the repository's 134-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -58,7 +58,8 @@ Lumbre is a cooking-at-the-fire portal with:
 - products, events, membership, cart, and fire planning;
 - a researched ingredient catalog grouped by flavor family;
 - an experiment bench supporting formulas of up to six components;
-- technical hypotheses for beef crust, bark, chicken, and vegetables;
+- an initially empty registry for user-created beef crust, bark, chicken, and
+  vegetable hypotheses;
 - duplicate-formula detection and persisted repetition counters;
 - JSON APIs used directly by API tests and indirectly by UI workflows;
 - D1-backed hypotheses, anonymous carts, passwordless local accounts, and
