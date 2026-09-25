@@ -308,6 +308,8 @@ receive card details.
 signatures, mismatched provider sessions, order IDs, MXN amounts, and currency.
 Processed event IDs are persisted for replay safety, while only a SHA-256 hash
 of the payload is stored. The cart is cleared only after a verified paid event.
+When Stripe or its signing secret is not configured, the route returns `404`
+before reading the request body so the dormant integration is not exposed.
 
 Copy `.dev.vars.example` to `.dev.vars` to exercise a live test-mode provider.
 Use only Stripe test credentials and forward sandbox webhooks to the local

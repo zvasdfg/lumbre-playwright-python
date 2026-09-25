@@ -494,6 +494,7 @@
         "responses": {
           "200": { "$ref": "#/components/responses/ProviderEventResponse" },
           "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
           "422": { "$ref": "#/components/responses/ValidationErrorResponse" },
           "503": { "$ref": "#/components/responses/ProviderUnavailableResponse" }
         }

@@ -1,4 +1,5 @@
 import {
+  isStripeWebhookEnabled,
   InvalidProviderEventError,
   InvalidWebhookSignatureError,
   processStripeWebhook,
@@ -6,6 +7,10 @@ import {
 } from "../../../../../server/modules/commerce/stripe-webhook";
 
 export async function POST(request: Request) {
+  if (!isStripeWebhookEnabled()) {
+    return Response.json({ error: "Not found" }, { status: 404 });
+  }
+
   const signature = request.headers.get("Stripe-Signature");
   if (!signature) return Response.json({ error: "Stripe-Signature is required" }, { status: 400 });
   const rawBody = await request.text();

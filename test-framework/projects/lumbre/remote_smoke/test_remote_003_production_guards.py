@@ -20,6 +20,7 @@ def test_deployed_production_guards(api: LumbreApi, test_log: TestLogger) -> Non
             ),
             "membership_write": api.create_member({}),
             "hypothesis_write": api.create_hypothesis({}),
+            "stripe_webhook": api.stripe_webhook("{}"),
         }
         observed_statuses = {
             name: response.status
@@ -33,4 +34,5 @@ def test_deployed_production_guards(api: LumbreApi, test_log: TestLogger) -> Non
             "account_magic_link": 503,
             "membership_write": 405,
             "hypothesis_write": 405,
+            "stripe_webhook": 404,
         }

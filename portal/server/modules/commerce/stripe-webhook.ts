@@ -34,6 +34,20 @@ export class InvalidWebhookSignatureError extends Error {}
 export class InvalidProviderEventError extends Error {}
 export class WebhookConfigurationError extends Error {}
 
+function webhookSecret(): string | undefined {
+  return (
+    serverBinding("STRIPE_WEBHOOK_SECRET") ??
+    (getLumbreEnvironment() === "test"
+      ? "whsec_lumbre_test_webhook_secret_2026"
+      : undefined)
+  );
+}
+
+export function isStripeWebhookEnabled(): boolean {
+  if (getLumbreEnvironment() === "test") return true;
+  return serverBinding("PAYMENT_PROVIDER") === "stripe" && Boolean(webhookSecret());
+}
+
 function hex(bytes: ArrayBuffer): string {
   return [...new Uint8Array(bytes)].map((value) => value.toString(16).padStart(2, "0")).join("");
 }
@@ -48,11 +62,7 @@ function constantTimeEqual(left: string, right: string): boolean {
 }
 
 async function verifySignature(rawBody: string, signatureHeader: string): Promise<void> {
-  const secret =
-    serverBinding("STRIPE_WEBHOOK_SECRET") ??
-    (getLumbreEnvironment() === "test"
-      ? "whsec_lumbre_test_webhook_secret_2026"
-      : undefined);
+  const secret = webhookSecret();
   if (!secret) throw new WebhookConfigurationError("Stripe webhook signing is not configured");
   const parts = signatureHeader.split(",").map((part) => part.split("=", 2));
   const timestamp = parts.find(([key]) => key === "t")?.[1];
