@@ -3,6 +3,7 @@ from playwright.sync_api import expect
 
 from automation.core.reporting import TestLogger
 from projects.lumbre.pages.home_page import HomePage
+from projects.lumbre.pages.privacy_page import PrivacyPage
 
 
 @pytest.mark.ui
@@ -10,7 +11,7 @@ from projects.lumbre.pages.home_page import HomePage
 @pytest.mark.remote_smoke
 @pytest.mark.case(
     "REMOTE-UI-001",
-    "The deployed portal renders its critical content and image assets",
+    "The deployed portal renders critical content, images, and its privacy disclosure",
 )
 def test_deployed_home_and_assets(home: HomePage, test_log: TestLogger) -> None:
     with test_log.step("Validate the deployed home and seeded content"):
@@ -40,3 +41,17 @@ def test_deployed_home_and_assets(home: HomePage, test_log: TestLogger) -> None:
         )
         assert observed_recipe_width > 0
         assert observed_product_width > 0
+
+    with test_log.step("Validate the deployed privacy disclosure"):
+        privacy = PrivacyPage(home.page, home.base_url)
+        home.open_privacy_notice()
+        expect(privacy.heading).to_be_visible()
+        expect(privacy.anonymous_cart_section).to_contain_text(
+            "30 días de inactividad"
+        )
+        expect(privacy.operational_logs_section).to_contain_text("tres días")
+        test_log.values(
+            observed_url=home.page.url,
+            observed_cart_retention=privacy.anonymous_cart_section.inner_text(),
+            observed_log_retention=privacy.operational_logs_section.inner_text(),
+        )

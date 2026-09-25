@@ -492,3 +492,16 @@ For an actual production incident:
 Do not use the rehearsal script as a production restore command. Time Travel is
 an in-place, destructive operation; the returned previous bookmark is the
 immediate rollback point if the selected recovery point was wrong.
+
+## Data governance and public disclosure
+
+The public footer links to `/privacidad`, which explains the deliberately
+limited deployed data boundary in Mexican Spanish. The engineering inventory,
+retention decisions, incident severities, evidence rules, and production
+blockers live in
+[`docs/DATA_GOVERNANCE_AND_INCIDENT_RESPONSE.md`](../docs/DATA_GOVERNANCE_AND_INCIDENT_RESPONSE.md).
+
+The public page does not pretend to be a legally complete privacy notice.
+Production identity, address, request channel, and legal/communications
+ownership must be supplied before accounts, orders, reservations, payments, or
+membership collection can be enabled.

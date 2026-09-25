@@ -25,13 +25,13 @@ in locators and expected values when it is part of the product contract.
 | Signal | Current result |
 | --- | ---: |
 | API case IDs / executions | 78 / 102 |
-| Browser case IDs / executions | 53 / 57 |
+| Browser case IDs / executions | 54 / 58 |
 | Framework unit case IDs / executions | 3 / 12 |
-| Unique committed risks | 131 |
-| Total Pytest executions | 171 |
-| Test files | 130 |
+| Unique committed risks | 132 |
+| Total Pytest executions | 172 |
+| Test files | 131 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 171 passed; 103.94 s with 4 isolated workers |
+| Latest validation | 172 passed; 65.90 s with 4 isolated workers |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,10 +50,10 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 76 | 76 | 100% |
+| P0 | 77 | 77 | 100% |
 | P1 | 49 | 49 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **131** | **131** | **100%** |
+| **Total** | **132** | **132** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
 secondary API route-operation signal is `42/42 = 100%`. Contract
@@ -71,11 +71,11 @@ reset or seed a remote target, and run only through `scripts/test-staging.sh`.
 | `REMOTE-001` | Health, D1 readiness, request correlation, CSP, HSTS, and security headers | API |
 | `REMOTE-002` | Public recipe, product, event, ingredient, and hypothesis catalogs contain the expected seed | API |
 | `REMOTE-003` | Test reset, account access, membership writes, and laboratory writes remain unavailable | API negative |
-| `REMOTE-UI-001` | Home, critical catalogs, and representative optimized images render | Chromium UI |
+| `REMOTE-UI-001` | Home, critical catalogs, optimized images, and the public privacy disclosure render | Chromium UI |
 
-The first deployed gate passed `4/4` in 9.14 seconds on 2026-09-25. The
+The current deployed gate passed `4/4` in 10.17 seconds on 2026-09-25. The
 timestamped HTML evidence is
-`reports/runs/lumbre-staging-smoke-2026-09-25_11-31-37.html`.
+`reports/runs/lumbre-staging-smoke-2026-09-25_12-10-40.html`.
 
 ### Framework quality catalog
 
@@ -282,6 +282,7 @@ Priority definitions:
 | UI-049 | Deactivating an event removes it from the public agenda | P1 | E2E administrative projection |
 | UI-050 | A sold-out product is visibly unavailable and cannot be added to the cart | P1 | UI inventory presentation |
 | UI-051 | A customer cancels a pending order from account history | P1 | E2E cancellation feedback |
+| UI-052 | Public privacy disclosure exposes the deployed data boundary and retention | P0 | UI transparency + compliance gate |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

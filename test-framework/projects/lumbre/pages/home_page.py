@@ -38,6 +38,7 @@ class HomePage(BasePage):
         self.recipe_search = page.get_by_placeholder("Buscar receta...")
         self.product_cards = page.get_by_test_id("product-card")
         self.product_images = self.product_cards.locator(".product-art img")
+        self.privacy_link = page.get_by_role("link", name="Privacidad y datos")
         self.fire_planner = FirePlanner(page)
 
     def filter_recipes(self, label: str) -> None:
@@ -96,3 +97,6 @@ class HomePage(BasePage):
 
     def open_membership_with_keyboard(self) -> None:
         self.header.open_membership_with_keyboard()
+
+    def open_privacy_notice(self) -> None:
+        self.privacy_link.click()

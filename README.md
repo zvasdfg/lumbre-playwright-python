@@ -23,18 +23,18 @@ reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 131 |
-| Automated functional risks | 131 |
-| Pytest executions | 171 |
-| Test files | 130 |
+| Committed functional risks | 132 |
+| Automated functional risks | 132 |
+| Pytest executions | 172 |
+| Test files | 131 |
 | API cases / executions | 78 / 102 |
-| Browser cases / executions | 53 / 57 |
+| Browser cases / executions | 54 / 58 |
 | Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (42/42) |
-| Latest full-suite result | 171 passed with 4 isolated workers |
+| Latest full-suite result | 172 passed in 65.90 s with 4 isolated workers |
 
-**100% refers to the repository's 131-item committed functional-risk catalog.**
+**100% refers to the repository's 132-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -261,11 +261,13 @@ The equivalent regression benchmark is:
 | Pre-hardening sequential baseline | 1 | 168 passed | 135.12 s |
 | Pre-hardening isolated parallel baseline | 4 | 168 passed | 71.75 s |
 | Phase 7A isolated parallel validation | 4 | 171 passed | 103.94 s |
+| Phase 7B privacy and governance validation | 4 | 172 passed | 65.90 s |
 
 The comparable pre-hardening runs measured a 46.9% reduction in Pytest
 execution time, or approximately 1.88x speedup. Target startup and D1 migration
-time is outside the Pytest duration. The Phase 7A row is the current security
-baseline and is not compared to an outdated sequential case count.
+time is outside the Pytest duration. The Phase 7B row is the current baseline;
+it is not used as a performance comparison because the case count and machine
+load differ from the earlier benchmark.
 Passing `-n` to `test-local.sh` is rejected because multiple workers must not
 reset the same database.
 
@@ -336,6 +338,7 @@ status.
 - [Engineering case studies](docs/ENGINEERING_CASE_STUDIES.md)
 - [Architecture and design decisions](docs/ARCHITECTURE.md)
 - [Production architecture migration plan](docs/PRODUCTION_MIGRATION_PLAN.md)
+- [Data governance and incident response](docs/DATA_GOVERNANCE_AND_INCIDENT_RESPONSE.md)
 - [Adding another automation project](docs/ADDING_A_PROJECT.md)
 - [Guided UI test creation protocol](docs/GUIDED_UI_TEST_PROTOCOL.md)
 - [Key Playwright notes](docs/KEY_PLAYWRIGHT_NOTES.md)

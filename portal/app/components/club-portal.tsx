@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { events as eventSeeds, products as productSeeds, recipes, type FireEvent, type Product } from "../lib/data";
 import { isPublicProductionReadOnly } from "../lib/environment";
 import FirePlanner from "./fire-planner";
@@ -640,7 +641,7 @@ export default function ClubPortal() {
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
         <div><p>Explora</p><a href="#recetas">Recetas</a><a href="#laboratorio">Laboratorio</a><a href="#tienda">Tienda</a><a href="#agenda">Agenda</a></div>
-        <div><p>Comunidad</p><button type="button" onClick={() => setJoinOpen(true)}>Membresía</button><a href="/api/health">Estado de la API</a><a href="/api/recipes">API de recetas</a><a href="/api/ingredientes">API de ingredientes</a></div>
+        <div><p>Comunidad</p><button type="button" onClick={() => setJoinOpen(true)}>Membresía</button><Link href="/privacidad">Privacidad y datos</Link><a href="/api/health">Estado de la API</a><a href="/api/recipes">API de recetas</a><a href="/api/ingredientes">API de ingredientes</a></div>
         <small>© 2026 Lumbre · Diseñado alrededor del fuego en México.</small>
       </footer>
 

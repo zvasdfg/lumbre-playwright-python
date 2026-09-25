@@ -560,7 +560,12 @@ Phase 6G completion evidence:
   manual dispatch; remote activation and first GitHub-hosted run require the
   workflow to reach the default branch;
 - provision production secrets and document rotation and revocation;
-- publish privacy, retention, and incident-response policies;
+- implemented 2026-09-25: published the current-demo data inventory, retention
+  matrix, incident roles/severity/runbook, production blockers, and a public
+  Mexican-Spanish `/privacidad` disclosure; local acceptance validation passed
+  as part of the 172-execution regression, staging Worker version
+  `90cf9dbd-03b3-465e-8119-e9cbab5887a4` was promoted, and the expanded remote
+  smoke gate passed `4/4` in 10.17 seconds;
 - confirm GitHub Actions failure notifications for the repository owner and
   name a secondary incident owner before production;
 - establish staging before enabling live email or Stripe adapters.
@@ -624,7 +629,8 @@ Its runner starts one portal and temporary D1 database per worker, maps
 pre-hardening four-worker baseline passed 168 executions in 71.75 seconds
 versus 135.12 seconds sequentially, a 46.9% reduction in Pytest execution time.
 The Phase 7A regression passed all 171 executions in 103.94 seconds with four
-isolated workers.
+isolated workers. The current Phase 7B privacy and governance regression passed
+all 172 executions in 65.90 seconds with four isolated workers.
 
 Lumbre is not yet ready for production traffic without operator work. Its
 isolated staging Worker and D1 resource are deployed, the remote smoke gate
