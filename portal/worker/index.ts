@@ -1,9 +1,4 @@
 /** Cloudflare Worker entry point for Lumbre. */
-import {
-  DEFAULT_DEVICE_SIZES,
-  DEFAULT_IMAGE_SIZES,
-  handleImageOptimization,
-} from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { getLumbreEnvironment } from "../app/lib/environment";
 import { cleanupExpiredAnonymousSessions } from "../server/modules/sessions/session-service";
@@ -13,13 +8,6 @@ interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   ABUSE_RATE_LIMITER?: RateLimit;
-  IMAGES: {
-    input(stream: ReadableStream): {
-      transform(options: Record<string, unknown>): {
-        output(options: { format: string; quality: number }): Promise<{ response(): Response }>;
-      };
-    };
-  };
 }
 
 interface ExecutionContext {
@@ -106,26 +94,7 @@ async function routeRequest(
   request: Request,
   env: Env,
   ctx: ExecutionContext,
-  url: URL,
 ): Promise<Response> {
-  if (url.pathname === "/_vinext/image") {
-    const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
-    return handleImageOptimization(
-      request,
-      {
-        fetchAsset: (path) => env.ASSETS.fetch(new Request(new URL(path, request.url))),
-        transformImage: async (body, { width, format, quality }) => {
-          const result = await env.IMAGES
-            .input(body)
-            .transform(width > 0 ? { width } : {})
-            .output({ format, quality });
-          return result.response();
-        },
-      },
-      allowedWidths,
-    );
-  }
-
   return handler.fetch(request, env, ctx);
 }
 
@@ -150,7 +119,7 @@ const worker = {
           key: `${rateLimitScope(url)}:${rateLimitActor(correlatedRequest)}`,
         });
         response = outcome.success
-          ? await routeRequest(correlatedRequest, env, ctx, url)
+          ? await routeRequest(correlatedRequest, env, ctx)
           : Response.json(
               { error: "Too many requests", requestId },
               {
@@ -159,7 +128,7 @@ const worker = {
               },
             );
       } else {
-        response = await routeRequest(correlatedRequest, env, ctx, url);
+        response = await routeRequest(correlatedRequest, env, ctx);
       }
     } catch (error) {
       console.error(JSON.stringify({

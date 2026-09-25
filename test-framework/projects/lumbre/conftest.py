@@ -97,5 +97,7 @@ def administrator_home(
 
 
 @pytest.fixture(autouse=True)
-def reset_scenario(api: LumbreApi) -> None:
+def reset_scenario(request: pytest.FixtureRequest, api: LumbreApi) -> None:
+    if request.node.get_closest_marker("remote_smoke") is not None:
+        return
     api.reset_demo_data()

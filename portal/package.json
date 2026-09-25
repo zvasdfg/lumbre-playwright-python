@@ -18,6 +18,10 @@
     "db:seed:local": "wrangler d1 execute lumbre-db --local --file=./db/seed.sql",
     "db:migrate:remote": "wrangler d1 migrations apply lumbre-db --remote",
     "db:seed:remote": "wrangler d1 execute lumbre-db --remote --file=./db/seed.sql",
+    "db:migrate:staging": "wrangler d1 migrations apply DB --env staging --remote",
+    "db:seed:staging": "wrangler d1 execute DB --env staging --remote --file=./db/seed.sql",
+    "deploy:staging:check": "vinext-cloudflare deploy --env staging --dry-run",
+    "deploy:staging": "vinext-cloudflare deploy --env staging",
     "cf:typegen": "wrangler types"
   },
   "dependencies": {
@@ -35,6 +39,7 @@
     "@types/node": "22.19.19",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "@vinext/cloudflare": "1.0.0-beta.10",
     "@vitejs/plugin-react": "6.1.1",
     "@vitejs/plugin-rsc": "0.5.35",
     "drizzle-kit": "0.31.11",

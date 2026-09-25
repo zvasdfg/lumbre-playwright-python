@@ -372,6 +372,10 @@ npm run db:migrate:local
 npm run db:seed:local
 npm run db:migrate:remote
 npm run db:seed:remote
+npm run db:migrate:staging
+npm run db:seed:staging
+npm run deploy:staging:check
+npm run deploy:staging
 npm run cf:typegen
 npm run lint
 npm run typecheck
@@ -389,12 +393,12 @@ Rerun `npm run cf:typegen` whenever `wrangler.jsonc` bindings change.
 `npm run build` produces the vinext/Cloudflare-compatible build. The production
 result is a protected public-demo candidate with anonymous cart support.
 
-## Remote D1 preparation
+## Remote deployment preparation
 
-The Cloudflare account has one remote `lumbre-db` in WNAM. Its real binding ID
-is versioned in `wrangler.jsonc`; database IDs identify a resource and are not
-credentials. OAuth tokens remain in Wrangler's user configuration outside the
-repository.
+The Cloudflare account has isolated `lumbre-db` and `lumbre-db-staging`
+databases in WNAM. Their binding IDs are versioned in `wrangler.jsonc`;
+database IDs identify resources and are not credentials. OAuth tokens remain
+in Wrangler's user configuration outside the repository.
 
 After an explicit production database change, apply only committed migrations
 and then the idempotent metadata seed:
@@ -407,5 +411,21 @@ npm run db:seed:remote
 Both commands mutate the remote database and must never be used by the local or
 parallel test runners. On 2026-09-24 the remote database was verified with all
 13 migrations, 23 tables, seven catalog products, three events, the expected
-seed version, and the anonymous-session expiry index. The Worker itself has not
-yet been deployed.
+seed version, and the anonymous-session expiry index.
+
+Staging uses the same committed migrations and deterministic metadata seed but
+has its own D1 binding and rate-limit namespace:
+
+```bash
+npm run db:migrate:staging
+npm run db:seed:staging
+npm run deploy:staging:check
+npm run deploy:staging
+```
+
+On 2026-09-25 Worker version
+`6471f464-40e5-4e88-8307-79377fbb6d20` was deployed as
+`lumbre-portal-staging` at
+`https://lumbre-portal-staging.lumbre-portal.workers.dev`. The first remote
+smoke gate passed all four checks after DNS propagation. No production Worker
+has been deployed.

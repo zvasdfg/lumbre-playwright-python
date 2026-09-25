@@ -20,6 +20,7 @@ class Settings:
     viewport_width: int
     viewport_height: int
     worker_base_urls: tuple[str, ...]
+    proxy_server: str | None
 
     @classmethod
     def from_environment(cls, environment: Mapping[str, str] | None = None) -> Settings:
@@ -37,6 +38,7 @@ class Settings:
                 for url in values.get("AUTOMATION_WORKER_BASE_URLS", "").split(",")
                 if url.strip()
             ),
+            proxy_server=values.get("PLAYWRIGHT_PROXY") or None,
         )
 
     def base_url_for_worker(self, worker_id: str) -> str:

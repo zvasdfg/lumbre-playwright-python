@@ -1,9 +1,9 @@
 # Lumbre Production Architecture Migration Plan
 
 > Status: Portal feature migration paused after Phase 6G and accepted as the
-> Reference SUT v1 on 2026-09-24. The active engineering track has returned to
-> the Playwright framework; production hardening remains an explicit future
-> deployment phase.
+> Reference SUT v1 on 2026-09-24. Phase 7A hardening is complete and the Phase
+> 7B staging Worker, isolated D1, and remote Playwright smoke gate are live;
+> production deployment remains gated by the operator work below.
 
 ## 1. Purpose
 
@@ -112,7 +112,7 @@ with names only and no secret values.
 | Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
 | Products | D1 catalog with server-owned stock, public sold-out projection, revision-protected admin writes, server-priced carts, and an edit workspace | Image-aware creation UI remains pending |
 | Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
-| Database | Drizzle schema, SQL migrations, deterministic seed, and Worker `DB` binding | Remote provisioning and operational backups remain pending |
+| Database | Drizzle schema, SQL migrations, deterministic seed, remote production/staging D1 resources, and Worker `DB` bindings | Operational backup and restore rehearsal remains pending |
 
 The production switch is a safe public-demo boundary: reads and anonymous cart
 writes are enabled, while account access, membership, catalog, and laboratory
@@ -540,6 +540,15 @@ Phase 6G completion evidence:
 - completed 2026-09-24: created the remote WNAM D1 database, replaced the
   placeholder binding ID, applied all 13 migrations, seeded its version, and
   verified catalog counts and the session-expiry index;
+- completed 2026-09-25: created an isolated WNAM staging D1 database, applied
+  all migrations, verified its seed, configured explicit production-safe
+  environment bindings, and deployed `lumbre-portal-staging`;
+- implemented 2026-09-25: added a four-case remote smoke gate that is excluded
+  from local regression, avoids remote state reset, and archives its own HTML
+  report;
+- completed 2026-09-25: confirmed the account-level `workers.dev` subdomain,
+  resolved corporate proxy routing explicitly for Playwright, and passed the
+  first remote smoke gate `4/4` in 9.14 seconds;
 - define and test D1 backup/export and restoration procedures;
 - provision production secrets and document rotation and revocation;
 - publish privacy, retention, and incident-response policies;
@@ -608,10 +617,11 @@ versus 135.12 seconds sequentially, a 46.9% reduction in Pytest execution time.
 The Phase 7A regression passed all 171 executions in 103.94 seconds with four
 isolated workers.
 
-Lumbre is not yet ready for public traffic without operator work. The remote D1
-resource is provisioned and migrated; Phase 7B must still establish secrets,
-backup/restore validation, monitoring, privacy ownership, and a remote smoke
-gate.
+Lumbre is not yet ready for production traffic without operator work. Its
+isolated staging Worker and D1 resource are deployed and the remote smoke gate
+passes. Phase 7B must still establish backup/restore validation, monitoring,
+privacy ownership, and the secrets required before any protected provider is
+enabled.
 
 Optional portal backlog, not an active phase:
 

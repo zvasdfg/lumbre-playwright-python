@@ -343,9 +343,12 @@ status.
 
 ## Current scope
 
-The repository currently optimizes for deterministic local execution. A remote
-D1 resource is provisioned and migrated, but the Worker has not been deployed;
-CI artifact publishing also remains future work. Local and test modes exercise
+The repository currently optimizes for deterministic local execution. Remote
+production and staging D1 resources are provisioned and migrated, and an
+isolated staging Worker is live at
+`https://lumbre-portal-staging.lumbre-portal.workers.dev`. Its four-case remote
+smoke gate passes; CI artifact publishing also remains future work. Local and
+test modes exercise
 passwordless accounts, role authorization, reusable authenticated browser
 state, and account-owned carts. The production build still exposes only public
 reads and a D1-backed anonymous cart while account access and unprotected

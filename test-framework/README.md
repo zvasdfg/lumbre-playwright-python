@@ -150,6 +150,30 @@ four isolated workers. The earlier like-for-like 168-execution benchmark took
 135.12 seconds sequentially and 71.75 seconds with four workers. Measurements
 use Pytest's reported duration and exclude target provisioning.
 
+### Deployed staging smoke gate
+
+The remote smoke suite is deliberately outside the normal local `testpaths`.
+It never calls the reset fixture, performs public reads, verifies rejected
+production-only operations, and renders one browser page. Run it only against
+an explicitly selected HTTPS staging target:
+
+```bash
+./scripts/test-staging.sh -q
+
+# Override the target without changing repository configuration
+STAGING_BASE_URL=https://example.workers.dev ./scripts/test-staging.sh -q
+```
+
+The runner rejects localhost and non-HTTPS targets and archives a timestamped
+`lumbre-staging-smoke-*.html` report. It must not be expanded with successful
+business mutations; those belong in isolated local/test environments.
+When the host defines `HTTPS_PROXY` or `HTTP_PROXY`, the runner passes it to
+Playwright explicitly through `PLAYWRIGHT_PROXY`; local runners leave this
+setting empty and continue connecting directly to their isolated targets.
+The first deployed run passed all four checks in 9.14 seconds on 2026-09-25;
+its archived report is
+`reports/runs/lumbre-staging-smoke-2026-09-25_11-31-37.html`.
+
 Against an already-running portal:
 
 ```bash

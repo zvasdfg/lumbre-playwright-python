@@ -23,6 +23,7 @@ pytestmark = [
                 "locale": "es-MX",
                 "viewport": (1440, 1000),
                 "worker_base_urls": (),
+                "proxy_server": None,
             },
         ),
         (
@@ -34,6 +35,7 @@ pytestmark = [
                 "VIEWPORT_WIDTH": "1280",
                 "VIEWPORT_HEIGHT": "720",
                 "AUTOMATION_WORKER_BASE_URLS": ("http://localhost:3200/, http://localhost:3201"),
+                "PLAYWRIGHT_PROXY": "http://proxy.example.test:8080",
             },
             {
                 "base_url": "https://example.test",
@@ -45,6 +47,7 @@ pytestmark = [
                     "http://localhost:3200",
                     "http://localhost:3201",
                 ),
+                "proxy_server": "http://proxy.example.test:8080",
             },
         ),
     ],
@@ -62,6 +65,7 @@ def test_settings_resolve_environment(
     assert settings.locale == expected["locale"]
     assert (settings.viewport_width, settings.viewport_height) == expected["viewport"]
     assert settings.worker_base_urls == expected["worker_base_urls"]
+    assert settings.proxy_server == expected["proxy_server"]
 
 
 def test_settings_reject_non_numeric_timeout() -> None:

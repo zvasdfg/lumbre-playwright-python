@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
+from typing import Any
 
 import pytest
 from playwright.sync_api import APIRequestContext, Playwright
@@ -16,7 +17,7 @@ def app_url(worker_id: str) -> str:
 
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args: dict) -> dict:
-    return {
+    context_args = {
         **browser_context_args,
         "locale": settings.locale,
         "viewport": {
@@ -24,11 +25,17 @@ def browser_context_args(browser_context_args: dict) -> dict:
             "height": settings.viewport_height,
         },
     }
+    if settings.proxy_server:
+        context_args["proxy"] = {"server": settings.proxy_server}
+    return context_args
 
 
 @pytest.fixture(scope="session")
 def api_request_context(playwright: Playwright, app_url: str) -> Iterator[APIRequestContext]:
-    context = playwright.request.new_context(base_url=app_url)
+    context_options: dict[str, Any] = {"base_url": app_url}
+    if settings.proxy_server:
+        context_options["proxy"] = {"server": settings.proxy_server}
+    context = playwright.request.new_context(**context_options)
     yield context
     context.dispose()
 

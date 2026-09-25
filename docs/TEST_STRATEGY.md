@@ -60,6 +60,23 @@ secondary API route-operation signal is `42/42 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
+### Deployment smoke gate
+
+Deployment checks are a separate operational gate and do not inflate the local
+functional-risk denominator. They live outside the default `testpaths`, never
+reset or seed a remote target, and run only through `scripts/test-staging.sh`.
+
+| Case | Deployed contract | Layer |
+| --- | --- | --- |
+| `REMOTE-001` | Health, D1 readiness, request correlation, CSP, HSTS, and security headers | API |
+| `REMOTE-002` | Public recipe, product, event, ingredient, and hypothesis catalogs contain the expected seed | API |
+| `REMOTE-003` | Test reset, account access, membership writes, and laboratory writes remain unavailable | API negative |
+| `REMOTE-UI-001` | Home, critical catalogs, and representative optimized images render | Chromium UI |
+
+The first deployed gate passed `4/4` in 9.14 seconds on 2026-09-25. The
+timestamped HTML evidence is
+`reports/runs/lumbre-staging-smoke-2026-09-25_11-31-37.html`.
+
 ### Framework quality catalog
 
 | ID | Reusable behavior protected | Executions |
