@@ -16,6 +16,7 @@ portal/node_modules/
 portal/.next/
 portal/dist/
 portal/.wrangler/
+portal/.d1-backups/
 portal/.npm-cache/
 portal/.env*
 !portal/.env.example

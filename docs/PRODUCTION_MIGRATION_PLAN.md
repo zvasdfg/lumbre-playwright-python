@@ -549,7 +549,11 @@ Phase 6G completion evidence:
 - completed 2026-09-25: confirmed the account-level `workers.dev` subdomain,
   resolved corporate proxy routing explicitly for Playwright, and passed the
   first remote smoke gate `4/4` in 9.14 seconds;
-- define and test D1 backup/export and restoration procedures;
+- completed 2026-09-25: added guarded D1 export and recovery tooling, captured
+  metadata, bookmark, SQL, and SHA-256 evidence, restored the export into an
+  isolated local D1, and rehearsed remote Time Travel against staging with a
+  disposable probe; the final post-recovery smoke gate passed `4/4` in 8.97
+  seconds;
 - provision production secrets and document rotation and revocation;
 - publish privacy, retention, and incident-response policies;
 - add deployed health monitoring, alert ownership, and a post-deployment smoke
@@ -618,10 +622,11 @@ The Phase 7A regression passed all 171 executions in 103.94 seconds with four
 isolated workers.
 
 Lumbre is not yet ready for production traffic without operator work. Its
-isolated staging Worker and D1 resource are deployed and the remote smoke gate
-passes. Phase 7B must still establish backup/restore validation, monitoring,
-privacy ownership, and the secrets required before any protected provider is
-enabled.
+isolated staging Worker and D1 resource are deployed, the remote smoke gate
+passes, and both portable and point-in-time D1 recovery paths have been
+rehearsed. Phase 7B must still establish monitoring and alert ownership,
+privacy/incident ownership, and the secrets required before any protected
+provider is enabled.
 
 Optional portal backlog, not an active phase:
 

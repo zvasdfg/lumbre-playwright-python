@@ -20,6 +20,8 @@
     "db:seed:remote": "wrangler d1 execute lumbre-db --remote --file=./db/seed.sql",
     "db:migrate:staging": "wrangler d1 migrations apply DB --env staging --remote",
     "db:seed:staging": "wrangler d1 execute DB --env staging --remote --file=./db/seed.sql",
+    "db:backup:staging": "bash ./scripts/d1-backup.sh staging",
+    "db:restore:rehearse": "bash ./scripts/d1-restore-rehearsal.sh",
     "deploy:staging:check": "vinext-cloudflare deploy --env staging --dry-run",
     "deploy:staging": "vinext-cloudflare deploy --env staging",
     "cf:typegen": "wrangler types"

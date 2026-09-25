@@ -429,3 +429,66 @@ On 2026-09-25 Worker version
 `https://lumbre-portal-staging.lumbre-portal.workers.dev`. The first remote
 smoke gate passed all four checks after DNS propagation. No production Worker
 has been deployed.
+
+## D1 backup and recovery runbook
+
+D1 Time Travel is the primary short-window recovery mechanism. On the Workers
+Free plan it retains seven days of history and resolves a recovery point to a
+specific minute. Portable SQL exports provide an independent, locally
+verifiable copy. Lumbre currently targets an RPO of one minute while a Time
+Travel point remains available, a 24-hour RPO once scheduled exports exist,
+and an operator RTO of 30 minutes including validation. These are project
+objectives, not Cloudflare service guarantees.
+
+Create a portable staging backup without changing remote data:
+
+```bash
+npm run db:backup:staging
+```
+
+The command writes a timestamped SQL export, database metadata, recovery
+bookmark, and SHA-256 checksum under `.d1-backups/`. That directory is ignored
+by Git because a real backup can contain account, session, order, or other
+personal data. Backup files must be kept access-controlled and must not be
+attached to public test reports.
+
+Before a production migration, create a manual export with an explicit guard:
+
+```bash
+D1_PRODUCTION_BACKUP_CONFIRM=lumbre-db \
+  bash ./scripts/d1-backup.sh production
+```
+
+Rehearse both recovery paths only against staging:
+
+```bash
+D1_RESTORE_REHEARSAL_CONFIRM=lumbre-db-staging \
+  npm run db:restore:rehearse
+```
+
+The rehearsal verifies the checksum, imports the full export into a fresh local
+D1 database, compares schema and critical table counts, writes a uniquely named
+remote probe, restores staging to the captured bookmark, and proves the probe
+was removed without changing the baseline. It deliberately refuses any target
+other than `lumbre-db-staging`. Follow it with the external acceptance gate:
+
+```bash
+../scripts/test-staging.sh -q
+```
+
+For an actual production incident:
+
+1. stop deployments and business writes;
+2. capture the current bookmark and SQL export so the recovery can be undone;
+3. resolve the desired bookmark with `wrangler d1 time-travel info` using the
+   incident timestamp;
+4. have a second operator verify the database, timestamp, and incident record;
+5. restore with `wrangler d1 time-travel restore`;
+6. validate `/api/health`, catalog invariants, and the remote smoke gate before
+   reopening writes;
+7. retain the incident timeline, chosen bookmarks, checksum, and validation
+   evidence without publishing the SQL data.
+
+Do not use the rehearsal script as a production restore command. Time Travel is
+an in-place, destructive operation; the returned previous bookmark is the
+immediate rollback point if the selected recovery point was wrong.

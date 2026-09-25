@@ -355,6 +355,11 @@ reads and a D1-backed anonymous cart while account access and unprotected
 business mutations remain disabled, the reset route stays hidden, and the
 membership UI collects no personal data.
 
+The D1 operational gate now includes timestamped, checksummed SQL exports, a
+guarded staging-only recovery rehearsal, and a verified Time Travel rollback.
+The post-recovery remote Playwright smoke suite passed `4/4`; monitoring,
+operational policy ownership, and the final production deployment remain open.
+
 ## Author
 
 Built by [Isaac Arellano](https://github.com/zvasdfg) as a practical quality
