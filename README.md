@@ -339,6 +339,7 @@ status.
 - [Architecture and design decisions](docs/ARCHITECTURE.md)
 - [Production architecture migration plan](docs/PRODUCTION_MIGRATION_PLAN.md)
 - [Data governance and incident response](docs/DATA_GOVERNANCE_AND_INCIDENT_RESPONSE.md)
+- [Secrets and release gates](docs/SECRETS_AND_RELEASE_GATES.md)
 - [Adding another automation project](docs/ADDING_A_PROJECT.md)
 - [Guided UI test creation protocol](docs/GUIDED_UI_TEST_PROTOCOL.md)
 - [Key Playwright notes](docs/KEY_PLAYWRIGHT_NOTES.md)

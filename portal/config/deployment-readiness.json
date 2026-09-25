@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "environments": {
+    "staging": {
+      "worker": "lumbre-portal-staging",
+      "wranglerEnvironment": "staging"
+    },
+    "production": {
+      "worker": "lumbre-portal",
+      "wranglerEnvironment": null
+    }
+  },
+  "profiles": {
+    "public-demo": {
+      "description": "Public catalogs and anonymous cart only",
+      "deployable": true,
+      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER"],
+      "requiredVariables": ["LUMBRE_ENV", "NEXT_PUBLIC_LUMBRE_ENV"],
+      "requiredSecrets": [],
+      "blockers": []
+    },
+    "accounts": {
+      "description": "Authenticated accounts and account-owned features",
+      "deployable": false,
+      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER"],
+      "requiredVariables": [
+        "LUMBRE_ENV",
+        "NEXT_PUBLIC_LUMBRE_ENV",
+        "BETTER_AUTH_URL"
+      ],
+      "requiredSecrets": ["BETTER_AUTH_SECRET"],
+      "blockers": [
+        "Implement and verify a production email delivery adapter",
+        "Implement account deletion or documented anonymization",
+        "Publish a legally reviewed integral privacy notice",
+        "Assign communications/legal and secondary incident owners"
+      ]
+    },
+    "commerce": {
+      "description": "Authenticated checkout with Stripe-hosted payment",
+      "deployable": false,
+      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER"],
+      "requiredVariables": [
+        "LUMBRE_ENV",
+        "NEXT_PUBLIC_LUMBRE_ENV",
+        "BETTER_AUTH_URL",
+        "PAYMENT_PROVIDER"
+      ],
+      "requiredSecrets": [
+        "BETTER_AUTH_SECRET",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET"
+      ],
+      "blockers": [
+        "Complete every accounts-profile blocker",
+        "Define refund handling before paid-order cancellation",
+        "Approve production payment retention and incident procedures"
+      ]
+    }
+  }
+}

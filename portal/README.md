@@ -374,6 +374,10 @@ npm run db:migrate:remote
 npm run db:seed:remote
 npm run db:migrate:staging
 npm run db:seed:staging
+npm run readiness:offline
+npm run readiness:staging
+npm run readiness:production
+npm run test:readiness
 npm run deploy:staging:check
 npm run deploy:staging
 npm run cf:typegen
@@ -392,6 +396,22 @@ so the learning suite remains zero-configuration; production has no fallback.
 Rerun `npm run cf:typegen` whenever `wrangler.jsonc` bindings change.
 `npm run build` produces the vinext/Cloudflare-compatible build. The production
 result is a protected public-demo candidate with anonymous cart support.
+
+## Deployment readiness and secret boundaries
+
+`config/deployment-readiness.json` separates the currently authorized
+`public-demo` from the blocked `accounts` and `commerce` profiles. The
+readiness CLI validates required Wrangler bindings and environment variables,
+then compares the selected profile with remote secret **names only**. It fails
+on missing requirements, unresolved activation blockers, and unexpected stale
+provider secrets.
+
+The staging public-demo profile currently requires no secrets. This is
+intentional: authentication, email, and Stripe remain disabled. Run
+`npm run readiness:staging` before promotion and `npm run test:readiness` after
+changing the manifest or CLI. Creation, rotation, revocation, evidence, and
+incident procedures are documented in
+[`docs/SECRETS_AND_RELEASE_GATES.md`](../docs/SECRETS_AND_RELEASE_GATES.md).
 
 ## Remote deployment preparation
 

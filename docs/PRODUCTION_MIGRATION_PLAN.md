@@ -559,7 +559,11 @@ Phase 6G completion evidence:
   emits HTML and JUnit evidence, retains artifacts for 14 days, and supports
   manual dispatch; remote activation and first GitHub-hosted run require the
   workflow to reach the default branch;
-- provision production secrets and document rotation and revocation;
+- implemented 2026-09-25: added an executable deployment-profile gate that
+  validates bindings, variables, activation blockers, and remote secret names
+  without reading values; documented secret creation, rotation, revocation,
+  evidence, and incident handling; staging `public-demo` is ready with no
+  attached provider secrets, while accounts and commerce remain blocked;
 - implemented 2026-09-25: published the current-demo data inventory, retention
   matrix, incident roles/severity/runbook, production blockers, and a public
   Mexican-Spanish `/privacidad` disclosure; local acceptance validation passed
@@ -635,9 +639,10 @@ all 172 executions in 65.90 seconds with four isolated workers.
 Lumbre is not yet ready for production traffic without operator work. Its
 isolated staging Worker and D1 resource are deployed, the remote smoke gate
 passes, and both portable and point-in-time D1 recovery paths have been
-rehearsed. Phase 7B must still establish monitoring and alert ownership,
-privacy/incident ownership, and the secrets required before any protected
-provider is enabled.
+rehearsed. Secret and profile readiness are now executable gates; protected
+provider secrets are intentionally absent while those profiles remain blocked.
+Phase 7B must still establish monitoring-alert ownership and assign the two
+remaining privacy/incident roles before production traffic is authorized.
 
 Optional portal backlog, not an active phase:
 
