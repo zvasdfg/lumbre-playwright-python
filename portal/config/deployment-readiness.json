@@ -7,7 +7,7 @@
     },
     "production": {
       "worker": "lumbre-portal",
-      "wranglerEnvironment": null
+      "wranglerEnvironment": "production"
     }
   },
   "profiles": {

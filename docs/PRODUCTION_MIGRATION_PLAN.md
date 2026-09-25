@@ -1,9 +1,10 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: Portal feature migration paused after Phase 6G and accepted as the
-> Reference SUT v1 on 2026-09-24. Phase 7A hardening is complete and the Phase
-> 7B staging Worker, isolated D1, and remote Playwright smoke gate are live;
-> production deployment remains gated by the operator work below.
+> Status: release candidate. Phase 7A hardening is complete; staging, remote
+> Playwright smoke, recovery rehearsal, privacy, and secret gates are live.
+> The production public-demo preflight and guarded D1 export pass. The explicit
+> production promotion is the only remaining technical release action before
+> the first public URL is live.
 
 ## 1. Purpose
 
@@ -91,10 +92,9 @@ all framework static checks, seven focused order-lifecycle executions, and all
 164 Pytest executions in 141.87 seconds. Its archived report is
 `reports/runs/lumbre-report-2026-09-24_11-39-05.html`.
 
-The partial vinext capability is `next/font/google`: fonts are loaded from a
-CDN rather than self-hosted at build time. This does not block the migration,
-but production readiness requires replacing it with a local font before public
-deployment.
+The former `next/font/google` dependency was removed before the production
+release candidate. Lumbre now uses a system-font stack, so rendering does not
+contact a font CDN or disclose visitor network metadata to that provider.
 
 Cloudflare local secret files use the `.dev.vars` convention. They are now
 ignored by Git, while an optional `.dev.vars.example` may be committed later
@@ -564,6 +564,14 @@ Phase 6G completion evidence:
   without reading values; documented secret creation, rotation, revocation,
   evidence, and incident handling; staging `public-demo` is ready with no
   attached provider secrets, while accounts and commerce remain blocked;
+- completed 2026-09-25: removed the external Google Fonts runtime dependency,
+  generalized the read-only remote smoke runner for staging and production,
+  added a guarded production backup command, and passed the six-stage
+  production public-demo preflight including build and Cloudflare dry-run;
+- completed 2026-09-25: isolated production in an explicit Wrangler environment
+  after the regression caught a test-environment override, reran all 172
+  executions successfully in 72.33 seconds, and captured the pre-release D1
+  export with metadata, Time Travel bookmark, and SHA-256 checksum;
 - implemented 2026-09-25: published the current-demo data inventory, retention
   matrix, incident roles/severity/runbook, production blockers, and a public
   Mexican-Spanish `/privacidad` disclosure; local acceptance validation passed
@@ -633,8 +641,8 @@ Its runner starts one portal and temporary D1 database per worker, maps
 pre-hardening four-worker baseline passed 168 executions in 71.75 seconds
 versus 135.12 seconds sequentially, a 46.9% reduction in Pytest execution time.
 The Phase 7A regression passed all 171 executions in 103.94 seconds with four
-isolated workers. The current Phase 7B privacy and governance regression passed
-all 172 executions in 65.90 seconds with four isolated workers.
+isolated workers. The production release-candidate regression passed all 172
+executions in 72.33 seconds with four isolated workers.
 
 Lumbre is not yet ready for production traffic without operator work. Its
 isolated staging Worker and D1 resource are deployed, the remote smoke gate

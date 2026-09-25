@@ -16,6 +16,8 @@
   --accent-on-dark: #ff9a6c;
   --text-muted: #50534c;
   --text-subtle: #61645c;
+  --font-exo: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Arial, sans-serif;
+  --font-mulish: "Avenir Next", "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
 * { box-sizing: border-box; }

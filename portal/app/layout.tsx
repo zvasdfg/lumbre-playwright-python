@@ -1,16 +1,5 @@
 import type { Metadata } from "next";
-import { Exo, Mulish } from "next/font/google";
 import "./globals.css";
-
-const exo = Exo({
-  variable: "--font-exo",
-  subsets: ["latin"],
-});
-
-const mulish = Mulish({
-  variable: "--font-mulish",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Lumbre | Laboratorio de cocina al fuego",
@@ -28,11 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es-MX">
-      <body
-        className={`${exo.variable} ${mulish.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

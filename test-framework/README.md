@@ -145,8 +145,8 @@ Use the sequential runner for headed learning runs. Parallel headed execution
 opens several browsers concurrently and is intended only for targeted
 diagnosis, not normal instruction.
 
-The current Phase 7B privacy and governance regression passed 172 executions
-in 65.90 seconds with four isolated workers. The earlier like-for-like
+The production release-candidate regression passed 172 executions in 72.33
+seconds with four isolated workers. The earlier like-for-like
 168-execution benchmark took 135.12 seconds sequentially and 71.75 seconds
 with four workers. Measurements use Pytest's reported duration and exclude
 target provisioning; runs with different case counts are not compared as a

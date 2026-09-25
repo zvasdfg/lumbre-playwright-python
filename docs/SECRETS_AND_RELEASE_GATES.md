@@ -79,7 +79,7 @@ Production example:
 
 ```bash
 cd portal
-npx wrangler secret put BETTER_AUTH_SECRET
+npx wrangler secret put BETTER_AUTH_SECRET --env production
 ```
 
 `wrangler secret put` creates and immediately deploys a new Worker version.
@@ -108,7 +108,7 @@ Worker binding:
 ```bash
 cd portal
 npx wrangler secret delete SECRET_NAME --env staging
-# Omit --env staging only when intentionally targeting production.
+# Use --env production only when intentionally targeting production.
 ```
 
 Deletion also creates and deploys a new Worker version. Validate the expected

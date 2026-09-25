@@ -380,6 +380,8 @@ npm run readiness:production
 npm run test:readiness
 npm run deploy:staging:check
 npm run deploy:staging
+npm run release:production:preflight
+npm run deploy:production
 npm run cf:typegen
 npm run lint
 npm run typecheck
@@ -444,11 +446,44 @@ npm run deploy:staging
 ```
 
 On 2026-09-25 Worker version
-`6471f464-40e5-4e88-8307-79377fbb6d20` was deployed as
+`90cf9dbd-03b3-465e-8119-e9cbab5887a4` was deployed as
 `lumbre-portal-staging` at
 `https://lumbre-portal-staging.lumbre-portal.workers.dev`. The first remote
 smoke gate passed all four checks after DNS propagation. No production Worker
 has been deployed.
+
+### Production public-demo release
+
+The production command intentionally deploys only the protected public-demo
+profile. Accounts, membership writes, reservations, hosted checkout, and
+administration remain unavailable.
+
+```bash
+cd portal
+
+# Read-only checks, build, and Cloudflare package dry-run.
+npm run release:production:preflight
+
+# Capture a guarded export before changing the Worker that uses this D1.
+D1_PRODUCTION_BACKUP_CONFIRM=lumbre-db npm run db:backup:production
+
+# This is the only state-changing promotion command.
+npm run deploy:production
+
+# From the repository root, validate the deployed security boundary.
+cd ..
+./scripts/test-production.sh -q
+
+# Back in portal/, compare remote secret names with the public-demo profile.
+cd portal
+npm run readiness:production
+```
+
+The expected initial URL is
+`https://lumbre-portal.lumbre-portal.workers.dev`. Override
+`PRODUCTION_BASE_URL` when a custom domain is introduced. Do not run the
+production smoke before deployment: a missing target is correctly treated as a
+failed release.
 
 ## D1 backup and recovery runbook
 

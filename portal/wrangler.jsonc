@@ -4,10 +4,6 @@
   "main": "./worker/index.ts",
   "compatibility_date": "2026-05-22",
   "compatibility_flags": ["nodejs_compat"],
-  "vars": {
-    "LUMBRE_ENV": "production",
-    "NEXT_PUBLIC_LUMBRE_ENV": "production"
-  },
   "observability": {
     "enabled": true,
     "logs": {
@@ -45,6 +41,37 @@
     }
   ],
   "env": {
+    "production": {
+      "name": "lumbre-portal",
+      "vars": {
+        "LUMBRE_ENV": "production",
+        "NEXT_PUBLIC_LUMBRE_ENV": "production"
+      },
+      "images": {
+        "binding": "IMAGES"
+      },
+      "ratelimits": [
+        {
+          "name": "ABUSE_RATE_LIMITER",
+          "namespace_id": "1001001",
+          "simple": {
+            "limit": 30,
+            "period": 60
+          }
+        }
+      ],
+      "triggers": {
+        "crons": ["0 4 * * *"]
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "lumbre-db",
+          "database_id": "cfe21e00-9638-4d62-9dc8-409debceb4b4",
+          "migrations_dir": "drizzle"
+        }
+      ]
+    },
     "staging": {
       "name": "lumbre-portal-staging",
       "vars": {

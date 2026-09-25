@@ -32,7 +32,7 @@ reporting, and risk-based test strategy.
 | Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (42/42) |
-| Latest full-suite result | 172 passed in 65.90 s with 4 isolated workers |
+| Latest full-suite result | 172 passed in 72.33 s with 4 isolated workers |
 
 **100% refers to the repository's 132-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
@@ -262,12 +262,13 @@ The equivalent regression benchmark is:
 | Pre-hardening isolated parallel baseline | 4 | 168 passed | 71.75 s |
 | Phase 7A isolated parallel validation | 4 | 171 passed | 103.94 s |
 | Phase 7B privacy and governance validation | 4 | 172 passed | 65.90 s |
+| Production release-candidate validation | 4 | 172 passed | 72.33 s |
 
 The comparable pre-hardening runs measured a 46.9% reduction in Pytest
 execution time, or approximately 1.88x speedup. Target startup and D1 migration
-time is outside the Pytest duration. The Phase 7B row is the current baseline;
-it is not used as a performance comparison because the case count and machine
-load differ from the earlier benchmark.
+time is outside the Pytest duration. The release-candidate row is the current
+baseline; it is not used as a performance comparison because the case count
+and machine load differ from the earlier benchmark.
 Passing `-n` to `test-local.sh` is rejected because multiple workers must not
 reset the same database.
 
@@ -365,8 +366,12 @@ membership UI collects no personal data.
 
 The D1 operational gate now includes timestamped, checksummed SQL exports, a
 guarded staging-only recovery rehearsal, and a verified Time Travel rollback.
-The post-recovery remote Playwright smoke suite passed `4/4`; monitoring,
-operational policy ownership, and the final production deployment remain open.
+The post-recovery remote Playwright smoke suite passed `4/4`. The public-demo
+production preflight now passes build, type, lint, readiness, unit, and
+Cloudflare package checks without an external font dependency. The guarded D1
+export is complete; the explicit production promotion is the only remaining
+technical release step. Protected personal-data features stay blocked by
+separate ownership and provider gates.
 
 ## Author
 

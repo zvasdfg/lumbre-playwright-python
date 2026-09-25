@@ -19,8 +19,8 @@ case "$TARGET" in
       exit 2
     fi
     DATABASE_LABEL="lumbre-db"
-    DATABASE_SELECTOR="lumbre-db"
-    WRANGLER_ENV_ARGS=()
+    DATABASE_SELECTOR="DB"
+    WRANGLER_ENV_ARGS=(--env production)
     ;;
   *)
     echo "Usage: $0 [staging|production]" >&2
