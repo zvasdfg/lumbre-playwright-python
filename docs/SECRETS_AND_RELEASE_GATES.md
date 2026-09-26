@@ -135,6 +135,48 @@ degraded/disabled behavior and execute the incident procedure in
 - The public account and commerce profiles remain blocked until their complete
   operational, privacy, provider, and ownership prerequisites are implemented.
 
+## 7. GitHub Actions continuous deployment
+
+`.github/workflows/deploy.yml` is the delivery pipeline for the default branch.
+It validates pull requests without deploying. A push to `main`, or a manual
+workflow dispatch, follows this ordered gate:
+
+1. install the locked portal dependencies with `npm ci`;
+2. run the readiness unit tests, TypeScript check, lint, production build, and
+   staging deployment dry-run;
+3. validate the staging binding and secret-name contract;
+4. deploy staging and run the four-case Python/Playwright remote smoke gate;
+5. only after staging passes, validate and deploy production;
+6. run the production remote smoke gate and retain both HTML and JUnit evidence
+   for 14 days.
+
+Configure these GitHub Actions secrets either at repository level or in both
+the `staging` and `production` environments:
+
+| Secret | Purpose |
+| --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | Selects the Cloudflare account that owns both Workers |
+| `CLOUDFLARE_API_TOKEN` | Authorizes noninteractive Worker validation and deployment |
+
+Create a dedicated account-owned Cloudflare API token for CI. The current
+minimum policy used by Lumbre is `Workers Editor` plus `Account Settings Read`,
+scoped to the account that owns both Workers, with a one-year expiration. Do
+not use the broader `Edit Cloudflare Workers` template, which also grants
+unneeded Pages, KV, R2, container, tail, and route permissions. Never reuse the
+local Wrangler OAuth credential or store either CI value in the repository.
+
+The pipeline intentionally does **not** execute `db:migrate:*`, `db:seed:*`,
+backup, restore, secret-creation, or secret-deletion commands. A D1 schema or
+data change remains a separately reviewed operator action: capture the backup,
+apply the committed migration to staging, verify it, then repeat for production
+before pushing application code that requires the new schema.
+
+Use GitHub Environment protection rules if a human approval should remain
+between staging acceptance and production promotion. Without that optional
+rule, a passing staging job promotes automatically.
+
 Platform reference:
 
 - [Cloudflare Workers secrets](https://developers.cloudflare.com/workers/configuration/secrets/)
+- [Cloudflare Workers with GitHub Actions](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/)
+- [Cloudflare API token permissions](https://developers.cloudflare.com/fundamentals/api/reference/permissions/)

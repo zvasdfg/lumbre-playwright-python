@@ -1,0 +1,215 @@
+name: Deploy Lumbre
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lumbre-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: "22"
+  PYTHON_VERSION: "3.13"
+  HEADLESS: "true"
+
+jobs:
+  validate:
+    name: Validate release candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+
+      - name: Install portal dependencies
+        working-directory: portal
+        run: npm ci
+
+      - name: Validate deployment policy
+        working-directory: portal
+        run: npm run test:readiness
+
+      - name: Check TypeScript
+        working-directory: portal
+        run: npm run typecheck
+
+      - name: Check lint rules
+        working-directory: portal
+        run: npm run lint
+
+      - name: Build the portal
+        working-directory: portal
+        run: npm run build
+
+      - name: Validate the staging deployment command
+        working-directory: portal
+        run: npm run deploy:staging:check
+
+  deploy-staging:
+    name: Deploy and test staging
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: staging
+      url: https://lumbre-portal-staging.lumbre-portal.workers.dev
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      STAGING_BASE_URL: https://lumbre-portal-staging.lumbre-portal.workers.dev
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: test-framework/pyproject.toml
+
+      - name: Require Cloudflare deployment credentials
+        run: |
+          if [[ -z "$CLOUDFLARE_ACCOUNT_ID" || -z "$CLOUDFLARE_API_TOKEN" ]]; then
+            echo "::error::Configure CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN as repository or environment secrets."
+            exit 1
+          fi
+
+      - name: Install portal dependencies
+        working-directory: portal
+        run: npm ci
+
+      - name: Install the automation framework
+        run: |
+          python -m venv test-framework/.venv
+          test-framework/.venv/bin/python -m pip install --disable-pip-version-check -e ./test-framework
+
+      - name: Install the Chromium runtime
+        run: test-framework/.venv/bin/python -m playwright install --with-deps chromium
+
+      - name: Validate staging bindings and remote secret names
+        working-directory: portal
+        run: npm run readiness:staging
+
+      - name: Deploy staging
+        working-directory: portal
+        run: npm run deploy:staging
+
+      - name: Run staging acceptance smoke
+        run: ./scripts/test-staging.sh -q
+
+      - name: Publish staging evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: lumbre-staging-deploy-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            test-framework/reports/runs/lumbre-staging-smoke-*.html
+            test-framework/reports/runs/lumbre-staging-smoke-*.xml
+          if-no-files-found: warn
+          retention-days: 14
+
+  deploy-production:
+    name: Promote and test production
+    if: github.event_name != 'pull_request'
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: https://lumbre-portal.lumbre-portal.workers.dev
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      PRODUCTION_BASE_URL: https://lumbre-portal.lumbre-portal.workers.dev
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: test-framework/pyproject.toml
+
+      - name: Require Cloudflare deployment credentials
+        run: |
+          if [[ -z "$CLOUDFLARE_ACCOUNT_ID" || -z "$CLOUDFLARE_API_TOKEN" ]]; then
+            echo "::error::Configure CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN as repository or environment secrets."
+            exit 1
+          fi
+
+      - name: Install portal dependencies
+        working-directory: portal
+        run: npm ci
+
+      - name: Install the automation framework
+        run: |
+          python -m venv test-framework/.venv
+          test-framework/.venv/bin/python -m pip install --disable-pip-version-check -e ./test-framework
+
+      - name: Install the Chromium runtime
+        run: test-framework/.venv/bin/python -m playwright install --with-deps chromium
+
+      - name: Validate production bindings and remote secret names
+        working-directory: portal
+        run: npm run readiness:production
+
+      - name: Deploy production
+        working-directory: portal
+        run: npm run deploy:production
+
+      - name: Run production acceptance smoke
+        run: ./scripts/test-production.sh -q
+
+      - name: Publish production evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: lumbre-production-deploy-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            test-framework/reports/runs/lumbre-production-smoke-*.html
+            test-framework/reports/runs/lumbre-production-smoke-*.xml
+          if-no-files-found: warn
+          retention-days: 14

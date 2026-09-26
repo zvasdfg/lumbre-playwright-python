@@ -5,6 +5,7 @@
 # Playwright Python Automation Framework
 
 [![Staging synthetic monitor](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml/badge.svg)](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml)
+[![Deploy Lumbre](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/deploy.yml/badge.svg)](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/deploy.yml)
 
 Reusable quality-engineering portfolio framework built with **Python, Pytest,
 and Playwright**. Lumbre, a Next.js portal and API for Mexican outdoor-fire
@@ -334,7 +335,8 @@ open test-framework/reports/lumbre-report.html
 Generated reports are intentionally ignored by Git because a full
 self-contained report includes embedded screenshots and can exceed 20 MB. The
 PNG preview is the committed portfolio artifact; timestamped interactive HTML
-reports remain local until CI artifact publishing is introduced.
+reports remain local, while the deployment and monitor workflows publish their
+focused remote-smoke evidence as short-lived CI artifacts.
 
 ## Test strategy and traceability
 
@@ -365,12 +367,14 @@ migrated, and an isolated staging Worker is live at
 `https://lumbre-portal-staging.lumbre-portal.workers.dev`. Its four-case remote
 smoke gate passes. A least-privilege GitHub Actions synthetic monitor schedules
 that gate every six hours and retains its HTML and JUnit evidence for 14 days;
-it becomes active after the workflow reaches the default remote branch. Local
-and test modes exercise passwordless accounts, role authorization, reusable
-authenticated browser state, and account-owned carts. The next production
-candidate adds Resend-backed access for one allowlisted operator; public
-registration and commerce remain disabled, the reset route stays hidden, and
-the membership UI collects no personal data.
+the deployment workflow validates every pull request and, for every push to
+`main`, deploys staging, runs the Playwright smoke gate, promotes the same
+commit to production, and runs the production smoke gate. Local and test modes
+exercise passwordless accounts, role authorization, reusable authenticated
+browser state, and account-owned carts. Production provides Resend-backed
+access for one allowlisted operator; public registration and commerce remain
+disabled, the reset route stays hidden, and the membership UI collects no
+personal data.
 
 The D1 operational gate now includes timestamped, checksummed SQL exports, a
 guarded staging-only recovery rehearsal, and a verified Time Travel rollback.
