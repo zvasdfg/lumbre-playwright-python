@@ -27,6 +27,14 @@
         "limit": 30,
         "period": 60
       }
+    },
+    {
+      "name": "AUTH_RATE_LIMITER",
+      "namespace_id": "1001003",
+      "simple": {
+        "limit": 5,
+        "period": 60
+      }
     }
   ],
   "triggers": {
@@ -45,7 +53,14 @@
       "name": "lumbre-portal",
       "vars": {
         "LUMBRE_ENV": "production",
-        "NEXT_PUBLIC_LUMBRE_ENV": "production"
+        "NEXT_PUBLIC_LUMBRE_ENV": "production",
+        "NEXT_PUBLIC_AUTH_ENABLED": "true",
+        "AUTH_EMAIL_PROVIDER": "resend",
+        "AUTH_EMAIL_FROM": "Lumbre <onboarding@resend.dev>",
+        "BETTER_AUTH_URL": "https://lumbre-portal.lumbre-portal.workers.dev"
+      },
+      "secrets": {
+        "required": ["BETTER_AUTH_SECRET", "RESEND_API_KEY", "AUTH_ALLOWED_EMAIL"]
       },
       "images": {
         "binding": "IMAGES"
@@ -56,6 +71,14 @@
           "namespace_id": "1001001",
           "simple": {
             "limit": 30,
+            "period": 60
+          }
+        },
+        {
+          "name": "AUTH_RATE_LIMITER",
+          "namespace_id": "1001003",
+          "simple": {
+            "limit": 5,
             "period": 60
           }
         }
@@ -76,7 +99,14 @@
       "name": "lumbre-portal-staging",
       "vars": {
         "LUMBRE_ENV": "production",
-        "NEXT_PUBLIC_LUMBRE_ENV": "production"
+        "NEXT_PUBLIC_LUMBRE_ENV": "production",
+        "NEXT_PUBLIC_AUTH_ENABLED": "true",
+        "AUTH_EMAIL_PROVIDER": "resend",
+        "AUTH_EMAIL_FROM": "Lumbre <onboarding@resend.dev>",
+        "BETTER_AUTH_URL": "https://lumbre-portal-staging.lumbre-portal.workers.dev"
+      },
+      "secrets": {
+        "required": ["BETTER_AUTH_SECRET", "RESEND_API_KEY", "AUTH_ALLOWED_EMAIL"]
       },
       "images": {
         "binding": "IMAGES"
@@ -87,6 +117,14 @@
           "namespace_id": "1001002",
           "simple": {
             "limit": 30,
+            "period": 60
+          }
+        },
+        {
+          "name": "AUTH_RATE_LIMITER",
+          "namespace_id": "1001004",
+          "simple": {
+            "limit": 5,
             "period": 60
           }
         }

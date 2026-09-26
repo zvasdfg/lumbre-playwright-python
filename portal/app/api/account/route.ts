@@ -1,6 +1,15 @@
-import { authenticatedUser } from "../../../server/modules/auth/auth-service";
+import {
+  authenticatedUser,
+  isAuthenticationEnabled,
+} from "../../../server/modules/auth/auth-service";
 
 export async function GET(request: Request) {
   const user = await authenticatedUser(request);
-  return Response.json({ data: user }, { headers: { "Cache-Control": "private, no-store" } });
+  return Response.json(
+    {
+      data: user,
+      capabilities: { authentication: isAuthenticationEnabled() },
+    },
+    { headers: { "Cache-Control": "private, no-store" } },
+  );
 }

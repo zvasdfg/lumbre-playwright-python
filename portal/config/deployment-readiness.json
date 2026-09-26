@@ -19,18 +19,37 @@
       "requiredSecrets": [],
       "blockers": []
     },
+    "accounts-preview": {
+      "description": "Allowlisted passwordless account access without public registration",
+      "deployable": true,
+      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER", "AUTH_RATE_LIMITER"],
+      "requiredVariables": [
+        "LUMBRE_ENV",
+        "NEXT_PUBLIC_LUMBRE_ENV",
+        "NEXT_PUBLIC_AUTH_ENABLED",
+        "AUTH_EMAIL_PROVIDER",
+        "AUTH_EMAIL_FROM",
+        "BETTER_AUTH_URL"
+      ],
+      "requiredSecrets": [
+        "BETTER_AUTH_SECRET",
+        "RESEND_API_KEY",
+        "AUTH_ALLOWED_EMAIL"
+      ],
+      "blockers": []
+    },
     "accounts": {
       "description": "Authenticated accounts and account-owned features",
       "deployable": false,
-      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER"],
+      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER", "AUTH_RATE_LIMITER"],
       "requiredVariables": [
         "LUMBRE_ENV",
         "NEXT_PUBLIC_LUMBRE_ENV",
         "BETTER_AUTH_URL"
       ],
-      "requiredSecrets": ["BETTER_AUTH_SECRET"],
+      "requiredSecrets": ["BETTER_AUTH_SECRET", "RESEND_API_KEY"],
       "blockers": [
-        "Implement and verify a production email delivery adapter",
+        "Verify a sending domain and remove the single-recipient preview allowlist",
         "Implement account deletion or documented anonymization",
         "Publish a legally reviewed integral privacy notice",
         "Assign communications/legal and secondary incident owners"
@@ -39,7 +58,7 @@
     "commerce": {
       "description": "Authenticated checkout with Stripe-hosted payment",
       "deployable": false,
-      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER"],
+      "requiredBindings": ["ASSETS", "DB", "IMAGES", "ABUSE_RATE_LIMITER", "AUTH_RATE_LIMITER"],
       "requiredVariables": [
         "LUMBRE_ENV",
         "NEXT_PUBLIC_LUMBRE_ENV",

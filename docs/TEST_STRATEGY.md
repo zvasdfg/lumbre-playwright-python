@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 80 / 105 |
+| API case IDs / executions | 81 / 106 |
 | Browser case IDs / executions | 59 / 63 |
 | Framework unit case IDs / executions | 3 / 12 |
-| Unique committed risks | 139 |
-| Total Pytest executions | 180 |
-| Test files | 138 |
+| Unique committed risks | 140 |
+| Total Pytest executions | 181 |
+| Test files | 139 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 180 passed; 78.04 s with 4 isolated workers |
+| Latest validation | 181 passed; 80.60 s with 4 isolated workers |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,10 +50,10 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 81 | 81 | 100% |
+| P0 | 82 | 82 | 100% |
 | P1 | 52 | 52 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **139** | **139** | **100%** |
+| **Total** | **140** | **140** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
 secondary API route-operation signal is `48/48 = 100%`. Contract
@@ -70,7 +70,7 @@ reset or seed a remote target, and run only through `scripts/test-staging.sh`.
 | --- | --- | --- |
 | `REMOTE-001` | Health, D1 readiness, request correlation, CSP, HSTS, and security headers | API |
 | `REMOTE-002` | Public recipe, product, event, ingredient, and hypothesis catalogs contain the expected seed | API |
-| `REMOTE-003` | Test reset, account access, membership writes, and laboratory writes remain unavailable | API negative |
+| `REMOTE-003` | Test reset, commerce, and protected writes remain unavailable while non-allowlisted magic-link requests are indistinguishably accepted | API negative |
 | `REMOTE-UI-001` | Home, critical catalogs, optimized images, and the public privacy disclosure render | Chromium UI |
 
 The current deployed gate passed `4/4` in 10.17 seconds on 2026-09-25. The
@@ -229,6 +229,7 @@ Priority definitions:
 | API-074 | Repeated cart mutations are rejected at the Worker boundary | P0 | API abuse protection |
 | API-075 | Saved blends remain private to their authenticated owner | P0 | API ownership + authorization |
 | API-076 | A private blend reaches the public registry only after administrative approval | P0 | API workflow + role authorization + persistence |
+| API-077 | Repeated magic-link requests are rejected at the Worker boundary | P0 | API abuse protection |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |

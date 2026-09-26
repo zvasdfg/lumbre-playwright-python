@@ -145,7 +145,7 @@ Use the sequential runner for headed learning runs. Parallel headed execution
 opens several browsers concurrently and is intended only for targeted
 diagnosis, not normal instruction.
 
-The latest full regression passed 180 executions in 78.04 seconds with four
+The latest full regression passed 181 executions in 80.60 seconds with four
 isolated workers. The earlier like-for-like
 168-execution benchmark took 135.12 seconds sequentially and 71.75 seconds
 with four workers. Measurements use Pytest's reported duration and exclude

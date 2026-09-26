@@ -6,10 +6,12 @@
 
 ## 1. Scope and hard boundary
 
-The deployed production profile is a public demonstration. It enables public
-catalog reads and an anonymous cart. Authentication, membership enrollment,
-event reservations, authenticated presets, orders, payments, and administrative
-mutations remain disabled.
+The production candidate is a controlled account preview. It enables public
+catalog reads, an anonymous cart, and passwordless access for exactly one
+allowlisted operator email. It is not public registration. Membership
+enrollment, commerce, payments, and administrative mutations remain disabled.
+The allowlisted operator can exercise account-owned preferences, reservations,
+presets, and private blend drafts as production verification data.
 
 Those capabilities must not be enabled until all of the following exist:
 
@@ -34,7 +36,9 @@ it explicitly does not claim to be the missing integral notice.
 | Browser fire presets | Let a visitor reuse a plan without an account | Until the visitor deletes the preset or site storage | Browser `localStorage`; never sent to D1 while anonymous |
 | Account blend drafts and moderation notes | Preserve one account's private formula and its publication-review history | Archive hides the record but retains it until the pending account-deletion lifecycle removes it | Owner-scoped D1 queries, cascade on account deletion, and administrator-only moderation |
 | Application request logs | Diagnose API failures using request ID, method, path, status, and duration | Up to 3 days on the current Workers Free plan | Cloudflare Workers Logs provider limit |
-| Rate-limit actor key | Protect cart mutations from abuse using an anonymous session ID or client address | Provider-managed rate-limit window | Not written to an application table or custom log |
+| Allowlisted operator account | Verify passwordless sessions and account-owned features in production | Until the preview is removed or manual deletion is requested | Better Auth/D1 ownership rules; access limited by the email-delivery allowlist |
+| Transactional email | Deliver a one-time authentication URL to the allowlisted operator | Resend-managed according to the selected provider plan and account settings | Resend test sender; email and magic-link content leave Cloudflare only for the allowed recipient |
+| Rate-limit actor key | Protect cart mutations (30/minute) and independently protect magic-link requests (5/minute) using an anonymous session ID or client address | Provider-managed rate-limit window | Not written to an application table or custom log |
 | D1 Time Travel history | Recover from destructive database changes | 7 days on the current Workers Free plan | Cloudflare-managed point-in-time recovery |
 | Manual D1 exports | Pre-migration recovery and restore rehearsal | Delete within 7 days after validation unless attached to an active incident | Git-ignored local directory; operator-owned deletion |
 | Synthetic-monitor artifacts | Diagnose staging failures using public content and synthetic evidence | 14 days | GitHub Actions artifact setting |
@@ -45,8 +49,10 @@ session identifiers, authorization material, names, email addresses, delivery
 notes, provider secrets, or payment data. Test reports use `.example.test`
 identities and must never target real customer records.
 
-Cloudflare may process network metadata as the infrastructure provider. Lumbre
-does not add advertising analytics, fingerprinting, or behavioral profiling.
+Cloudflare may process network metadata as the infrastructure provider. Resend
+processes the allowlisted address and one-time authentication message as the
+transactional email provider. Lumbre does not add advertising analytics,
+fingerprinting, or behavioral profiling.
 
 ## 3. Dormant data model
 
@@ -62,8 +68,8 @@ features from production:
 - statutory order and transaction retention;
 - consent and administrative audit retention;
 - expired authentication and verification-record cleanup;
-- deletion of local-only magic-link delivery URLs before any production email
-  adapter is enabled.
+- provider retention and deletion evidence before expanding email beyond the
+  single-recipient preview.
 
 ## 4. Ownership
 
@@ -75,8 +81,9 @@ features from production:
 | Communications/legal reviewer | Unassigned — production blocker | Determines notification and external communication obligations |
 | Secondary incident owner | Unassigned — production blocker | Provides independent verification and coverage |
 
-No live personal-data feature may be enabled while either production-blocking
-role is unassigned.
+No public account registration or commerce feature may be enabled while either
+production-blocking role is unassigned. The single-operator preview remains a
+bounded technical verification exception owned by the repository owner.
 
 ## 5. Incident classification
 

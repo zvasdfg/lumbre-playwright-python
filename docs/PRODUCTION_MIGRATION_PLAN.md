@@ -1,10 +1,10 @@
 # Lumbre Production Architecture Migration Plan
 
-> Status: release candidate. Phase 7A hardening is complete; staging, remote
-> Playwright smoke, recovery rehearsal, privacy, and secret gates are live.
-> The production public-demo preflight and guarded D1 export pass. The explicit
-> production promotion is the only remaining technical release action before
-> the first public URL is live.
+> Status: controlled-account release candidate. The public demo is live and the
+> next slice adds one allowlisted passwordless account through Resend's test
+> sender. Code, readiness policy, commerce isolation, and abuse protection are
+> implemented; provider credentials and staging acceptance remain external
+> activation steps.
 
 ## 1. Purpose
 
@@ -111,14 +111,16 @@ with names only and no secret values.
 | Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
 | Hypotheses | Public D1 registry plus account-owned private blend drafts, submission state, and audited administrator moderation | Hosted workflow remains blocked until production identity and email are enabled |
 | Products | D1 catalog with server-owned stock, public sold-out projection, revision-protected admin writes, server-priced carts, and an edit workspace | Image-aware creation UI remains pending |
-| Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
+| Sessions | Anonymous session plus Better Auth account sessions backed by D1; local outbox and Resend delivery adapters | Public registration still needs a verified sending domain and full privacy lifecycle |
 | Database | Drizzle schema, SQL migrations, deterministic seed, remote production/staging D1 resources, and Worker `DB` bindings | Operational backup and restore rehearsal remains pending |
 
-The production switch is a safe public-demo boundary: reads and anonymous cart
-writes are enabled, while account access, membership, catalog, and laboratory
-writes stay disabled. Local and test modes exercise authenticated ownership and
-role authorization. Each additional hosted mutation must still be backed by
-persistence, validation, and an explicit access policy.
+The production switch is now a controlled-account boundary: reads and anonymous
+cart writes remain enabled, while one allowlisted operator can exercise
+account-owned data. Commerce, membership enrollment, catalog administration,
+and direct public-registry writes stay disabled. Local and test modes continue
+to exercise the full authenticated ownership and role model. Each additional
+hosted mutation must still be backed by persistence, validation, and an
+explicit access policy.
 
 ## 4. Architectural decision
 
@@ -565,6 +567,10 @@ Phase 6G completion evidence:
   without reading values; documented secret creation, rotation, revocation,
   evidence, and incident handling; staging `public-demo` is ready with no
   attached provider secrets, while accounts and commerce remain blocked;
+- implemented 2026-09-25: added the `accounts-preview` gate, Resend email
+  adapter, single-recipient suppression, magic-link rate limiting, and a
+  separate production commerce kill switch; provider secrets and staging
+  acceptance remain external activation steps;
 - completed 2026-09-25: removed the external Google Fonts runtime dependency,
   generalized the read-only remote smoke runner for staging and production,
   added a guarded production backup command, and passed the six-stage
@@ -649,21 +655,20 @@ workers after adding recipe-pagination and laboratory-accordion coverage. The
 account-owned blend workflow regression passed all 179 executions in 82.30
 seconds with four isolated workers. The responsive UI and anonymous
 session-blend regression passed all 180 executions in 78.04 seconds with four
-isolated workers.
+isolated workers. The controlled-account email and abuse-protection regression
+passed all 181 executions in 80.60 seconds with four isolated workers.
 
-Lumbre is not yet ready for production traffic without operator work. Its
-isolated staging Worker and D1 resource are deployed, the remote smoke gate
-passes, and both portable and point-in-time D1 recovery paths have been
-rehearsed. Secret and profile readiness are now executable gates; protected
-provider secrets are intentionally absent while those profiles remain blocked.
-Phase 7B must still establish monitoring-alert ownership and assign the two
-remaining privacy/incident roles before production traffic is authorized.
+Lumbre's anonymous public demo is deployable. The controlled account preview is
+code-complete but still requires operator-owned Resend and Better Auth secrets,
+staging deployment, and remote acceptance before production promotion. Public
+registration remains blocked until Lumbre has a verified sending domain,
+account deletion, the integral privacy notice, and assigned incident roles.
 
 Optional portal backlog, not an active phase:
 
 - account-owned event-reservation cancellation;
 - a provider-backed refund workflow before paid-order cancellation;
-- live email delivery and production authentication;
+- public, non-allowlisted email delivery and production registration;
 - live Stripe test-mode smoke coverage;
 - Phase 7B deployment operations.
 

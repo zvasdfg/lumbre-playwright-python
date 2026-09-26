@@ -129,6 +129,7 @@ export default function ClubPortal() {
   const [recipePage, setRecipePage] = useState(1);
   const [cart, setCart] = useState<Cart>(emptyCart);
   const [account, setAccount] = useState<Account | null>(null);
+  const [authenticationEnabled, setAuthenticationEnabled] = useState<boolean | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [adminCatalogOpen, setAdminCatalogOpen] = useState(false);
@@ -189,8 +190,12 @@ export default function ClubPortal() {
           setEventCatalog(eventResult.data);
         }
         if (accountResponse.ok) {
-          const accountResult = (await accountResponse.json()) as { data: Account | null };
+          const accountResult = (await accountResponse.json()) as {
+            data: Account | null;
+            capabilities: { authentication: boolean };
+          };
           setAccount(accountResult.data);
+          setAuthenticationEnabled(accountResult.capabilities.authentication);
           if (accountResult.data) {
             const [ordersResponse, reservationsResponse] = await Promise.all([
               fetch("/api/orders", { signal: controller.signal }),
@@ -535,7 +540,13 @@ export default function ClubPortal() {
           >
             {account ? account.name.split(" ")[0] : "Entrar"}
           </button>
-          <button className="header-cta" type="button" onClick={() => setJoinOpen(true)}>Únete al fuego</button>
+          <button
+            className="header-cta"
+            type="button"
+            onClick={() => readOnlyProduction ? setAccountOpen(true) : setJoinOpen(true)}
+          >
+            {readOnlyProduction ? (account ? "Mi cuenta" : "Crear cuenta") : "Únete al fuego"}
+          </button>
         </div>
       </header>
 
@@ -543,8 +554,8 @@ export default function ClubPortal() {
         <aside className="public-demo-banner" aria-label="Entorno público de demostración">
           <strong>Demostración pública protegida.</strong>
           <span>
-            Explora el catálogo, usa tu canasta y guarda blends temporales; ninguna fórmula
-            anónima se publica ni se asocia con una cuenta.
+            Explora el catálogo, usa tu canasta y guarda blends temporales. El acceso a cuenta
+            utiliza un enlace seguro por correo; ninguna fórmula anónima se publica.
           </span>
         </aside>
       )}
@@ -784,7 +795,12 @@ export default function ClubPortal() {
                   Cerrar sesión
                 </button>
               </div>
-            ) : readOnlyProduction ? (
+            ) : authenticationEnabled === null ? (
+              <div className="read-only-message" role="status">
+                <strong>Verificando acceso.</strong>
+                <p>Estamos comprobando que el correo transaccional esté disponible.</p>
+              </div>
+            ) : !authenticationEnabled ? (
               <div className="read-only-message" role="note">
                 <strong>Acceso en preparación.</strong>
                 <p>La demostración pública habilitará cuentas cuando tenga correo transaccional.</p>

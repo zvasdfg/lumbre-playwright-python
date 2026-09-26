@@ -45,7 +45,7 @@ Lumbre has an explicit product environment boundary:
 | --- | --- | --- | --- |
 | `development` | Local product development | Public reads, passwordless accounts, and business writes; test reset hidden | Local D1, initialized from versioned JSON seed data |
 | `test` | Automated local suite | Current read/write and account behavior plus deterministic auth/reset hooks | Fresh temporary D1 created by the runner |
-| `production` | Deployment-ready public demo | Public reads and anonymous cart writes; account access and protected mutations are unavailable; test reset returns `404` | Remote D1 cart plus an initially empty technical-sheet registry |
+| `production` | Controlled account preview | Public reads, anonymous cart writes, and passwordless access for one allowlisted operator; commerce and public-data mutations remain unavailable; test reset returns `404` | Remote D1 sessions, account-owned data, cart, and technical-sheet registry |
 
 `npm run dev` defaults to `development`. A production build defaults to
 `production`. `scripts/test-local.sh` explicitly sets both `LUMBRE_ENV=test`
@@ -56,17 +56,17 @@ Use [`.env.example`](.env.example) only when an explicit local override is
 useful. Keep its server and browser-facing values aligned; the public value is
 embedded into the client bundle at build time.
 
-In production, the membership form is replaced with a privacy notice and
-blend saving requests account access. The anonymous cart remains available
-through an opaque protected cookie and D1, while product, membership, and
-hypothesis mutations are rejected. The initially empty hypothesis registry remains
-browsable without filesystem access. This makes the portal
-suitable for a future public demonstration while preserving the richer mutable
-system under test locally.
+In production, the membership form remains replaced with a privacy notice. The
+anonymous cart remains available through an opaque protected cookie and D1,
+while commerce, product, membership, and direct public-hypothesis mutations are
+rejected. Account-owned blends, presets, preferences, and reservations become
+available only after the allowlisted operator signs in.
 
-Development and test use passwordless accounts backed by Better Auth and D1.
-Production account access stays deliberately disabled until a real email
-delivery adapter, production URL, and secret bindings are configured.
+Development and test use a deterministic D1 outbox for passwordless accounts.
+The production account preview uses Resend and its test sender, which can
+deliver only to the Resend account owner's allowlisted email until Lumbre has a
+verified domain. Every other address receives the same generic HTTP success but
+no email, preventing discovery of the allowlist.
 
 ## Product areas
 
@@ -95,7 +95,7 @@ delivery adapter, production URL, and secret bindings are configured.
 | `GET` | `/api` | API discovery | Informational; not committed |
 | `GET` | `/api/health` | Service, D1 readiness, and seed version | `API-001`, `API-021` |
 | `GET` | `/api/account` | Current authenticated account or anonymous null state | `API-025`, `API-026`, `CONTRACT-002` |
-| `POST` | `/api/account/magic-link` | Request passwordless account access | `API-025`–`API-029`, `CONTRACT-003` |
+| `POST` | `/api/account/magic-link` | Request passwordless account access | `API-025`–`API-029`, `API-077`, `CONTRACT-003` |
 | `POST` | `/api/account/logout` | Invalidate the current authenticated session | `API-026`, `API-029` |
 | `GET` | `/api/account/preferences` | Read account cooking preferences and consent history | `API-052`–`API-056`, `UI-044` |
 | `PUT` | `/api/account/preferences` | Create or update preferences and audit consent changes | `API-052`, `API-054`–`API-057`, `UI-044`, `UI-045` |
@@ -214,12 +214,12 @@ with the same request ID.
 
 Unsafe browser API methods reject cross-site requests before application state
 is allocated. The Stripe webhook is excluded because it uses its own signed
-provider contract. In production, Cloudflare's rate-limit binding permits 30
-public cart mutations per 60 seconds for each caller key; rejected requests
-return `429` with `Retry-After: 60`. Tests activate the same binding with a
+provider contract. In production, independent Cloudflare rate-limit bindings
+permit 30 public cart mutations and five magic-link requests per 60 seconds for
+each caller key; rejected requests return `429` with
+`Retry-After: 60`. Tests activate the same binding with a
 run-unique `X-Lumbre-Test-Rate-Limit-Key` so the boundary is deterministic
-without weakening production behavior. Protected mutation routes can receive
-their own scopes when production identity is enabled.
+without weakening production behavior.
 
 The Worker cron runs daily at `04:00 UTC` and deletes expired anonymous
 sessions. D1 cascades that deletion to their carts and items, and the expiry
@@ -232,7 +232,7 @@ production build also publishes HSTS. These controls are exercised by
 
 ## Passwordless accounts and authorization
 
-Development and test expose a passwordless magic-link flow. Better Auth owns
+All enabled environments expose a passwordless magic-link flow. Better Auth owns
 verification tokens, authenticated session records, opaque cookies, expiry,
 and one-time token consumption. Lumbre adds a server-owned `customer` or
 `admin` role and never accepts a role from the registration request.
@@ -242,6 +242,13 @@ readable only through `/api/local/auth/magic-link` outside production. This
 makes browser and API automation deterministic without printing tokens in logs
 or reports. Test reset seeds a known administrator identity; production does
 not seed an administrator or expose the outbox.
+
+Production dispatches through Resend's HTTPS API with an eight-second timeout.
+`AUTH_ALLOWED_EMAIL` is a secret binding and `AUTH_EMAIL_FROM` is a non-secret
+sender declaration. The test sender `onboarding@resend.dev` is deliberately a
+single-recipient preview, not public registration. Provider errors are reduced
+to the API's generic `500` contract; tokens, links, and recipient addresses are
+never written to application logs.
 
 On sign-in, an anonymous cart is promoted when no account cart exists. If both
 exist, matching product quantities are summed into one line and the anonymous
@@ -367,11 +374,11 @@ directory, apply every SQL migration, and seed the database before the portal
 starts. Persistence assertions therefore exercise the production-shaped
 repository without changing source JSON or the developer's local database.
 
-Worker request handlers never write to the filesystem. The public production
-profile still exposes the hypothesis registry read-only because hosted account
-authentication and email delivery remain disabled. Once that release gate is
-satisfied, the account-owned blend schema and moderation routes are ready to
-use without permitting anonymous publication.
+Worker request handlers never write to the filesystem. Production still
+exposes the hypothesis registry read-only to anonymous visitors. The
+allowlisted account may save a private blend and submit it for review, but no
+production administrator is seeded and anonymous publication remains
+impossible.
 
 ## Research data
 
@@ -397,7 +404,9 @@ npm run db:migrate:staging
 npm run db:seed:staging
 npm run readiness:offline
 npm run readiness:staging
+npm run readiness:public-demo
 npm run readiness:production
+npm run readiness:accounts:staging
 npm run test:readiness
 npm run deploy:staging:check
 npm run deploy:staging
@@ -411,9 +420,11 @@ npm run start
 ```
 
 For explicit local auth bindings, copy `.dev.vars.example` to `.dev.vars` and
-replace its placeholder secret. `.dev.vars` is ignored and must never be
-committed. The repository also supplies a non-production-only fallback secret
-so the learning suite remains zero-configuration; production has no fallback.
+replace its placeholder secret. Leave `AUTH_EMAIL_PROVIDER=outbox` for normal
+local automation; choose `resend` only for an intentional provider test.
+`.dev.vars` is ignored and must never be committed. The repository also
+supplies a non-production-only fallback secret so the learning suite remains
+zero-configuration; production has no fallback.
 
 `npm run db:generate` creates version-controlled SQL from the Drizzle schema.
 Rerun `npm run cf:typegen` whenever `wrangler.jsonc` bindings change.
@@ -422,18 +433,19 @@ result is a protected public-demo candidate with anonymous cart support.
 
 ## Deployment readiness and secret boundaries
 
-`config/deployment-readiness.json` separates the currently authorized
-`public-demo` from the blocked `accounts` and `commerce` profiles. The
+`config/deployment-readiness.json` separates `public-demo`, the deployable
+single-recipient `accounts-preview`, and the blocked public `accounts` and
+`commerce` profiles. The
 readiness CLI validates required Wrangler bindings and environment variables,
 then compares the selected profile with remote secret **names only**. It fails
 on missing requirements, unresolved activation blockers, and unexpected stale
 provider secrets.
 
-The staging public-demo profile currently requires no secrets. This is
-intentional: authentication, email, and Stripe remain disabled. Run
-`npm run readiness:staging` before promotion and `npm run test:readiness` after
-changing the manifest or CLI. Creation, rotation, revocation, evidence, and
-incident procedures are documented in
+The account preview requires `BETTER_AUTH_SECRET`, `RESEND_API_KEY`, and
+`AUTH_ALLOWED_EMAIL`; Stripe remains absent. Run
+`npm run readiness:accounts:staging` before staging promotion and
+`npm run test:readiness` after changing the manifest or CLI. Creation,
+rotation, revocation, evidence, and incident procedures are documented in
 [`docs/SECRETS_AND_RELEASE_GATES.md`](../docs/SECRETS_AND_RELEASE_GATES.md).
 
 ## Remote deployment preparation
@@ -471,16 +483,41 @@ On 2026-09-25 Worker version
 `lumbre-portal-staging` at
 `https://lumbre-portal-staging.lumbre-portal.workers.dev`. The first remote
 smoke gate passed all four checks after DNS propagation. No production Worker
-has been deployed.
+was changed by this implementation. The existing production public demo remains
+at `https://lumbre-portal.lumbre-portal.workers.dev`; the controlled account
+preview has not been promoted yet.
 
-### Production public-demo release
+### Controlled account-preview release
 
-The production command intentionally deploys only the protected public-demo
-profile. Accounts, membership writes, reservations, hosted checkout, and
-administration remain unavailable.
+The production command enables one allowlisted passwordless account. Public
+registration, membership writes, hosted checkout, and administration remain
+unavailable. Create the three required bindings through Wrangler's interactive
+prompt; never place their values in a shell command, file, issue, report, or
+chat.
 
 ```bash
 cd portal
+
+# Generate a different high-entropy Better Auth secret for each environment.
+openssl rand -base64 32
+
+# Enter values interactively. Start in staging.
+npx wrangler secret put BETTER_AUTH_SECRET --env staging
+npx wrangler secret put RESEND_API_KEY --env staging
+npx wrangler secret put AUTH_ALLOWED_EMAIL --env staging
+
+# Confirm names only, then deploy staging and rerun its smoke gate.
+npm run readiness:accounts:staging
+npm run deploy:staging
+cd ..
+./scripts/test-staging.sh -q
+cd portal
+
+# Repeat with a different Better Auth secret and the production provider values.
+openssl rand -base64 32
+npx wrangler secret put BETTER_AUTH_SECRET --env production
+npx wrangler secret put RESEND_API_KEY --env production
+npx wrangler secret put AUTH_ALLOWED_EMAIL --env production
 
 # Read-only checks, build, and Cloudflare package dry-run.
 npm run release:production:preflight
@@ -495,10 +532,15 @@ npm run deploy:production
 cd ..
 ./scripts/test-production.sh -q
 
-# Back in portal/, compare remote secret names with the public-demo profile.
+# Back in portal/, compare remote secret names with the account-preview profile.
 cd portal
 npm run readiness:production
 ```
+
+Each `secret put` creates a Worker version, so the staging remote-smoke gate
+must be rerun after secret configuration. The same email used to own the Resend
+account must be entered as
+`AUTH_ALLOWED_EMAIL` while the test sender is in use.
 
 The expected initial URL is
 `https://lumbre-portal.lumbre-portal.workers.dev`. Override

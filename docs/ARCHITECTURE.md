@@ -386,7 +386,7 @@ the test selection instead of relying on the framework's generic Node mode.
 | --- | --- | --- | --- |
 | `development` | Enabled for local exploration | Hidden | Local D1 with user-created hypotheses |
 | `test` | Enabled for contract and persistence tests | Enabled | Per-run temporary D1 |
-| `production` | Anonymous cart writes enabled; account access and protected business writes disabled | Hidden as `404` | Remote D1 catalog/cart plus an empty read-only hypothesis registry |
+| `production` | Anonymous cart writes plus one allowlisted account; commerce and public-data mutations disabled | Hidden as `404` | Remote D1 catalog, sessions, account-owned data, cart, and read-only public registry |
 
 Production uses defense in depth: the UI does not collect membership data or
 offer hypothesis creation, protected mutations require authenticated roles,
@@ -397,9 +397,9 @@ to its session. The public registry does not depend on a writable filesystem.
 Development and test use Better Auth with its Drizzle/D1 adapter and a
 passwordless magic-link plugin. The local delivery adapter writes only to an
 isolated D1 outbox so automation can retrieve a deterministic link. Production
-does not expose this adapter and refuses authentication until a real email
-provider and production secrets are configured. Account identity and the
-separate marketing-membership form do not share consent state.
+uses Resend's HTTPS API and suppresses every recipient except one secret
+allowlisted operator while the provider test sender is in use. Account identity
+and the separate marketing-membership form do not share consent state.
 
 `LUMBRE_ENV` selects server behavior. `NEXT_PUBLIC_LUMBRE_ENV` selects the
 matching browser experience and is fixed when the client bundle is built. Both

@@ -116,8 +116,17 @@ class LumbreApi:
             headers=headers,
         )
 
-    def request_magic_link(self, payload: dict[str, Any]) -> APIResponse:
-        return self._request.post("/api/account/magic-link", data=payload)
+    def request_magic_link(
+        self,
+        payload: dict[str, Any],
+        *,
+        headers: dict[str, str] | None = None,
+    ) -> APIResponse:
+        return self._request.post(
+            "/api/account/magic-link",
+            data=payload,
+            headers=headers,
+        )
 
     def latest_local_magic_link(self, email: str) -> APIResponse:
         return self._request.get("/api/local/auth/magic-link", params={"email": email})

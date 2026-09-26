@@ -6,10 +6,12 @@ import {
 } from "../../../../../server/modules/commerce/order-lifecycle";
 import { idempotencyKey } from "../../../../../server/modules/commerce/order-contracts";
 import { OrderNotFoundError } from "../../../../../server/modules/commerce/order-service";
+import { commerceUnavailableResponse, isCommerceEnabled } from "../../../../lib/environment";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function POST(request: Request, context: RouteContext) {
+  if (!isCommerceEnabled()) return commerceUnavailableResponse();
   const user = await authenticatedUser(request);
   if (!user) return Response.json({ error: "Authentication is required" }, { status: 401 });
   const key = idempotencyKey(request);

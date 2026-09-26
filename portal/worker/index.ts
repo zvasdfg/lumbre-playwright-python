@@ -8,6 +8,7 @@ interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   ABUSE_RATE_LIMITER?: RateLimit;
+  AUTH_RATE_LIMITER?: RateLimit;
 }
 
 interface ExecutionContext {
@@ -42,9 +43,18 @@ function rateLimitActor(request: Request): string {
 
 function shouldApplyRateLimit(request: Request, url: URL): boolean {
   if (!unsafeMethods.has(request.method) || !url.pathname.startsWith("/api/")) return false;
-  if (!url.pathname.startsWith("/api/cart/items")) return false;
+  const protectedMutation =
+    url.pathname.startsWith("/api/cart/items") ||
+    url.pathname.startsWith("/api/account/magic-link");
+  if (!protectedMutation) return false;
   if (getLumbreEnvironment() === "production") return true;
   return getLumbreEnvironment() === "test" && request.headers.has(testRateLimitKeyHeader);
+}
+
+function rateLimiter(env: Env, url: URL): RateLimit | undefined {
+  return url.pathname.startsWith("/api/account/magic-link")
+    ? env.AUTH_RATE_LIMITER
+    : env.ABUSE_RATE_LIMITER;
 }
 
 function rejectsCrossOriginMutation(request: Request, url: URL): boolean {
@@ -114,8 +124,8 @@ const worker = {
           { error: "Cross-origin mutation rejected", requestId },
           { status: 403, headers: { "Cache-Control": "no-store" } },
         );
-      } else if (shouldApplyRateLimit(correlatedRequest, url) && env.ABUSE_RATE_LIMITER) {
-        const outcome = await env.ABUSE_RATE_LIMITER.limit({
+      } else if (shouldApplyRateLimit(correlatedRequest, url) && rateLimiter(env, url)) {
+        const outcome = await rateLimiter(env, url)!.limit({
           key: `${rateLimitScope(url)}:${rateLimitActor(correlatedRequest)}`,
         });
         response = outcome.success

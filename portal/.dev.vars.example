@@ -3,6 +3,13 @@
 BETTER_AUTH_URL=http://localhost:3000
 BETTER_AUTH_SECRET=replace-with-at-least-32-random-characters
 
+# Controlled production-style email delivery without a verified domain.
+# Resend's testing sender can deliver only to the account owner's address.
+AUTH_EMAIL_PROVIDER=outbox
+AUTH_EMAIL_FROM="Lumbre <onboarding@resend.dev>"
+AUTH_ALLOWED_EMAIL=replace-with-the-resend-account-email
+RESEND_API_KEY=replace-with-resend-api-key
+
 # External hosted checkout. These values are server-only. Use Stripe test-mode
 # credentials locally and Cloudflare secret bindings in production.
 PAYMENT_PROVIDER=stripe

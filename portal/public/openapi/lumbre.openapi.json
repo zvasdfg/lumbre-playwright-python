@@ -1218,13 +1218,21 @@
       },
       "AccountResponse": {
         "type": "object",
-        "required": ["data"],
+        "required": ["data", "capabilities"],
         "properties": {
           "data": {
             "oneOf": [
               { "$ref": "#/components/schemas/Account" },
               { "type": "null" }
             ]
+          },
+          "capabilities": {
+            "type": "object",
+            "required": ["authentication"],
+            "properties": {
+              "authentication": { "type": "boolean" }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": false

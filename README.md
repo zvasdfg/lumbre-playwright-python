@@ -23,18 +23,18 @@ reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 139 |
-| Automated functional risks | 139 |
-| Pytest executions | 180 |
-| Test files | 138 |
-| API cases / executions | 80 / 105 |
+| Committed functional risks | 140 |
+| Automated functional risks | 140 |
+| Pytest executions | 181 |
+| Test files | 139 |
+| API cases / executions | 81 / 106 |
 | Browser cases / executions | 59 / 63 |
 | Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (48/48) |
-| Latest full-suite result | 180 passed in 78.04 s with 4 isolated workers |
+| Latest full-suite result | 181 passed in 80.60 s with 4 isolated workers |
 
-**100% refers to the repository's 139-item committed functional-risk catalog.**
+**100% refers to the repository's 140-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -82,8 +82,8 @@ Lumbre is a cooking-at-the-fire portal with:
 - account-owned cooking preferences with explicit newsletter consent history;
 - account-owned private blends with duplicate prevention, submission status,
   administrator moderation, and publication into the shared technical registry;
-- protected `customer` and `admin` roles, while production authentication stays
-  disabled until a real email provider and secrets are configured.
+- protected `customer` and `admin` roles plus a production-ready,
+  single-recipient passwordless preview that keeps public registration closed.
 
 ## Architecture at a glance
 
@@ -366,21 +366,19 @@ migrated, and an isolated staging Worker is live at
 smoke gate passes. A least-privilege GitHub Actions synthetic monitor schedules
 that gate every six hours and retains its HTML and JUnit evidence for 14 days;
 it becomes active after the workflow reaches the default remote branch. Local
-and test modes exercise
-passwordless accounts, role authorization, reusable authenticated browser
-state, and account-owned carts. The production build still exposes only public
-reads and a D1-backed anonymous cart while account access and unprotected
-business mutations remain disabled, the reset route stays hidden, and the
-membership UI collects no personal data.
+and test modes exercise passwordless accounts, role authorization, reusable
+authenticated browser state, and account-owned carts. The next production
+candidate adds Resend-backed access for one allowlisted operator; public
+registration and commerce remain disabled, the reset route stays hidden, and
+the membership UI collects no personal data.
 
 The D1 operational gate now includes timestamped, checksummed SQL exports, a
 guarded staging-only recovery rehearsal, and a verified Time Travel rollback.
-The post-recovery remote Playwright smoke suite passed `4/4`. The public-demo
-production preflight now passes build, type, lint, readiness, unit, and
-Cloudflare package checks without an external font dependency. The guarded D1
-export is complete; the explicit production promotion is the only remaining
-technical release step. Protected personal-data features stay blocked by
-separate ownership and provider gates.
+The post-recovery remote Playwright smoke suite passed `4/4`. The controlled
+account preview has an explicit readiness profile, email adapter, abuse limit,
+and commerce isolation. Provider secrets and staging acceptance are still
+required before promotion. Broader public accounts stay blocked by separate
+privacy, deletion, ownership, and verified-domain gates.
 
 ## Author
 

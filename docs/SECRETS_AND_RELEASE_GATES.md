@@ -7,13 +7,14 @@
 ## 1. Deployment profiles
 
 Lumbre does not treat one successful build as authorization to enable every
-implemented feature. `portal/config/deployment-readiness.json` defines three
+implemented feature. `portal/config/deployment-readiness.json` defines four
 explicit profiles:
 
 | Profile | Production state | Secret contract |
 | --- | --- | --- |
 | `public-demo` | Allowed | No provider secrets; public catalogs and anonymous cart only |
-| `accounts` | Blocked | `BETTER_AUTH_SECRET`, production URL, email delivery, deletion/retention, legal notice, and incident owners |
+| `accounts-preview` | Allowed | `BETTER_AUTH_SECRET`, `RESEND_API_KEY`, and one secret `AUTH_ALLOWED_EMAIL`; no public registration |
+| `accounts` | Blocked | Preview prerequisites plus a verified sending domain, deletion/retention, legal notice, and incident owners |
 | `commerce` | Blocked | Account prerequisites plus Stripe API/webhook secrets and payment/refund governance |
 
 The gate rejects both missing required secrets and unexpected secrets. An
@@ -34,7 +35,7 @@ cd portal
 npm run readiness:offline
 ```
 
-Compare the public-demo contract with the names attached to the deployed
+Compare the account-preview contract with the names attached to the deployed
 staging Worker:
 
 ```bash
@@ -46,11 +47,14 @@ The command invokes `wrangler secret list --format json`. Wrangler returns
 names and binding types, not values. The script reports names only and never
 reads `.dev.vars`.
 
-Once the production Worker exists, use:
+Once the production Worker exists, `readiness:production` validates the
+account-preview contract. Use `readiness:public-demo` only when intentionally
+rolling back to the anonymous public-demo profile:
 
 ```bash
 cd portal
 npm run readiness:production
+npm run readiness:public-demo
 ```
 
 A nonzero exit means the release is blocked. Do not bypass the gate by removing
@@ -73,6 +77,8 @@ Staging example:
 ```bash
 cd portal
 npx wrangler secret put BETTER_AUTH_SECRET --env staging
+npx wrangler secret put RESEND_API_KEY --env staging
+npx wrangler secret put AUTH_ALLOWED_EMAIL --env staging
 ```
 
 Production example:
@@ -80,6 +86,8 @@ Production example:
 ```bash
 cd portal
 npx wrangler secret put BETTER_AUTH_SECRET --env production
+npx wrangler secret put RESEND_API_KEY --env production
+npx wrangler secret put AUTH_ALLOWED_EMAIL --env production
 ```
 
 `wrangler secret put` creates and immediately deploys a new Worker version.
@@ -122,7 +130,9 @@ degraded/disabled behavior and execute the incident procedure in
 - `NEXT_PUBLIC_*` variables are public build configuration, never secrets.
 - Production-safe environment variables are explicit in `wrangler.jsonc`.
 - Real secret values never belong in automated-test parameters or evidence.
-- The account and commerce profiles remain blocked until their complete
+- `accounts-preview` is limited to the Resend account owner's email and is not
+  authorization for public registration.
+- The public account and commerce profiles remain blocked until their complete
   operational, privacy, provider, and ownership prerequisites are implemented.
 
 Platform reference:

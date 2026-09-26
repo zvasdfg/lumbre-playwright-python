@@ -3,8 +3,10 @@ import { createHostedCheckout, PaymentProviderUnavailableError } from "../../../
 import { idempotencyKey } from "../../../../../server/modules/commerce/order-contracts";
 import { OrderAlreadyPaidError, OrderNotFoundError } from "../../../../../server/modules/commerce/order-service";
 import { InventoryReservationConflictError, InventoryUnavailableError } from "../../../../../server/modules/commerce/inventory-service";
+import { commerceUnavailableResponse, isCommerceEnabled } from "../../../../lib/environment";
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+  if (!isCommerceEnabled()) return commerceUnavailableResponse();
   const user = await authenticatedUser(request);
   if (!user) return Response.json({ error: "Authentication is required" }, { status: 401 });
   const key = idempotencyKey(request);

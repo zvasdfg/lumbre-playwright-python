@@ -5,6 +5,10 @@ import { magicLink } from "better-auth/plugins";
 import { getLumbreEnvironment } from "../../../app/lib/environment";
 import { getDatabase } from "../../platform/database/client";
 import { account, magicLinkDeliveries, session, user, verification } from "./auth-schema";
+import {
+  deliverMagicLink,
+  isAuthenticationDeliveryConfigured,
+} from "./magic-link-delivery";
 
 const localSecret = "lumbre-local-auth-secret-not-for-production-2026";
 
@@ -31,19 +35,7 @@ function authBaseUrl(request?: Request): string {
 }
 
 export function isAuthenticationEnabled(): boolean {
-  return getLumbreEnvironment() !== "production";
-}
-
-async function deliverMagicLink(email: string, url: string): Promise<void> {
-  if (!isAuthenticationEnabled()) {
-    throw new Error("A production email provider has not been configured");
-  }
-
-  await getDatabase().insert(magicLinkDeliveries).values({
-    id: crypto.randomUUID(),
-    email: email.trim().toLocaleLowerCase("en"),
-    url,
-  });
+  return isAuthenticationDeliveryConfigured();
 }
 
 export function getAuth(request?: Request) {

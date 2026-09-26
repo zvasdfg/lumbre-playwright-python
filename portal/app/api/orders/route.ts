@@ -1,6 +1,7 @@
 import { authenticatedUser, isAuthenticationEnabled } from "../../../server/modules/auth/auth-service";
 import { createOrderRequest, idempotencyKey, parseJsonBody } from "../../../server/modules/commerce/order-contracts";
 import { createOrder, EmptyCartError, listOrders } from "../../../server/modules/commerce/order-service";
+import { commerceUnavailableResponse, isCommerceEnabled } from "../../lib/environment";
 
 async function authorizedUser(request: Request) {
   if (!isAuthenticationEnabled()) return null;
@@ -8,6 +9,7 @@ async function authorizedUser(request: Request) {
 }
 
 export async function GET(request: Request) {
+  if (!isCommerceEnabled()) return commerceUnavailableResponse();
   const user = await authorizedUser(request);
   if (!user) return Response.json({ error: "Authentication is required" }, { status: 401 });
   const data = await listOrders(user.id);
@@ -15,6 +17,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!isCommerceEnabled()) return commerceUnavailableResponse();
   const user = await authorizedUser(request);
   if (!user) return Response.json({ error: "Authentication is required" }, { status: 401 });
   const key = idempotencyKey(request);
