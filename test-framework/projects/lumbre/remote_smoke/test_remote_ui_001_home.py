@@ -44,11 +44,10 @@ def test_deployed_home_and_assets(home: HomePage, test_log: TestLogger) -> None:
 
     with test_log.step("Validate that production exposes the passwordless account form"):
         home.page.get_by_role("button", name="Crear cuenta", exact=True).click()
+        expect(home.account.heading).to_have_text("Crea tu cuenta.")
         expect(home.account.request_link_button).to_be_visible()
         test_log.values(
-            observed_account_heading=home.account.root.get_by_role(
-                "heading", name="Tu lugar junto al fuego."
-            ).inner_text(),
+            observed_account_heading=home.account.heading.inner_text(),
             observed_access_action=home.account.request_link_button.inner_text(),
         )
         home.account.root.get_by_role("button", name="Cerrar acceso").click()

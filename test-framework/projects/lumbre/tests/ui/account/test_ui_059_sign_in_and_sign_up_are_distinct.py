@@ -16,24 +16,24 @@ def test_sign_in_and_sign_up_are_distinct(
 ) -> None:
     with test_log.step("Open the account modal through the sign-in action"):
         home.open_account()
-        expect(home.account.root.get_by_role("heading")).to_have_text("Entra a Lumbre.")
+        expect(home.account.heading).to_have_text("Entra a Lumbre.")
         expect(home.account.email_input).to_be_visible()
         expect(home.account.name_input).to_be_hidden()
         expect(home.account.request_link_button).to_have_text("Enviar enlace para entrar")
         test_log.values(
-            observed_heading=home.account.root.get_by_role("heading").inner_text(),
+            observed_heading=home.account.heading.inner_text(),
             observed_name_field=False,
             observed_submit_label=home.account.request_link_button.inner_text(),
         )
 
     with test_log.step("Switch to the explicit account creation form"):
         home.account.sign_up_mode_button.click()
-        expect(home.account.root.get_by_role("heading")).to_have_text("Crea tu cuenta.")
+        expect(home.account.heading).to_have_text("Crea tu cuenta.")
         expect(home.account.name_input).to_be_visible()
         expect(home.account.email_input).to_be_visible()
         expect(home.account.request_link_button).to_have_text("Crear cuenta con enlace")
         test_log.values(
-            observed_heading=home.account.root.get_by_role("heading").inner_text(),
+            observed_heading=home.account.heading.inner_text(),
             observed_name_field=True,
             observed_submit_label=home.account.request_link_button.inner_text(),
         )
@@ -49,4 +49,3 @@ def test_sign_in_and_sign_up_are_distinct(
             observed_name_field=False,
             observed_email_focused=True,
         )
-

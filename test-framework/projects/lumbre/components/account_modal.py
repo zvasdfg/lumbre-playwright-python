@@ -8,6 +8,7 @@ class AccountModal:
 
     def __init__(self, page: Page) -> None:
         self.root = page.get_by_test_id("account-modal")
+        self.heading = self.root.get_by_role("heading")
         self.sign_in_mode_button = self.root.get_by_role(
             "button", name="Entrar", exact=True
         )
