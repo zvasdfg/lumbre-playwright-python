@@ -16,7 +16,11 @@ from projects.lumbre.api.lumbre_api import LumbreApi
         (
             "magic_link",
             "/api/account/magic-link",
-            {"name": "Ana Contrato", "email": "acceso.contrato@example.test"},
+            {
+                "mode": "sign-up",
+                "name": "Ana Contrato",
+                "email": "acceso.contrato@example.test",
+            },
         ),
         (
             "cart_item",

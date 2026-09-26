@@ -7,13 +7,16 @@ class AccountModal:
     """Actions and locators for passwordless account access."""
 
     def __init__(self, page: Page) -> None:
-        self.root = page.get_by_role("dialog", name="Tu lugar junto al fuego.")
+        self.root = page.get_by_test_id("account-modal")
+        self.sign_in_mode_button = self.root.get_by_role(
+            "button", name="Entrar", exact=True
+        )
+        self.sign_up_mode_button = self.root.get_by_role(
+            "button", name="Crear cuenta", exact=True
+        )
         self.name_input = self.root.get_by_label("Nombre para tu cuenta")
         self.email_input = self.root.get_by_label("Correo de acceso")
-        self.request_link_button = self.root.get_by_role(
-            "button",
-            name="Enviar enlace de acceso",
-        )
+        self.request_link_button = self.root.get_by_test_id("account-magic-link-submit")
         self.link_sent_status = self.root.get_by_role("status")
         self.logout_button = self.root.get_by_role("button", name="Cerrar sesión")
         self.order_history = self.root.get_by_test_id("order-history")
@@ -40,7 +43,13 @@ class AccountModal:
         )
 
     def request_magic_link(self, *, name: str, email: str) -> None:
+        self.sign_up_mode_button.click()
         self.name_input.fill(name)
+        self.email_input.fill(email)
+        self.request_link_button.click()
+
+    def request_sign_in_link(self, *, email: str) -> None:
+        self.sign_in_mode_button.click()
         self.email_input.fill(email)
         self.request_link_button.click()
 

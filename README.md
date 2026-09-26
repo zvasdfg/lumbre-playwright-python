@@ -24,18 +24,18 @@ reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 140 |
-| Automated functional risks | 140 |
-| Pytest executions | 181 |
-| Test files | 139 |
-| API cases / executions | 81 / 106 |
-| Browser cases / executions | 59 / 63 |
+| Committed functional risks | 144 |
+| Automated functional risks | 144 |
+| Pytest executions | 185 |
+| Test files | 143 |
+| API cases / executions | 83 / 108 |
+| Browser cases / executions | 61 / 65 |
 | Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
 | API route-operation coverage | 100% (48/48) |
-| Latest full-suite result | 181 passed in 80.60 s with 4 isolated workers |
+| Latest full-suite result | 185 passed in 59.36 s with 4 isolated workers |
 
-**100% refers to the repository's 140-item committed functional-risk catalog.**
+**100% refers to the repository's 144-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 

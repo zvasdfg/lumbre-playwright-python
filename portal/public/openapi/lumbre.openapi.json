@@ -1247,13 +1247,27 @@
         "additionalProperties": false
       },
       "MagicLinkRequest": {
-        "type": "object",
-        "required": ["name", "email"],
-        "properties": {
-          "name": { "type": "string", "minLength": 2, "maxLength": 100 },
-          "email": { "type": "string", "format": "email", "maxLength": 254 }
-        },
-        "additionalProperties": false
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["mode", "email"],
+            "properties": {
+              "mode": { "const": "sign-in" },
+              "email": { "type": "string", "format": "email", "maxLength": 254 }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["mode", "name", "email"],
+            "properties": {
+              "mode": { "const": "sign-up" },
+              "name": { "type": "string", "minLength": 2, "maxLength": 80 },
+              "email": { "type": "string", "format": "email", "maxLength": 254 }
+            },
+            "additionalProperties": false
+          }
+        ]
       },
       "MagicLinkResponse": {
         "type": "object",

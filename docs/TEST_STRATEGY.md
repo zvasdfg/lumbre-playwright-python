@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 81 / 106 |
-| Browser case IDs / executions | 59 / 63 |
+| API case IDs / executions | 83 / 108 |
+| Browser case IDs / executions | 61 / 65 |
 | Framework unit case IDs / executions | 3 / 12 |
-| Unique committed risks | 140 |
-| Total Pytest executions | 181 |
-| Test files | 139 |
+| Unique committed risks | 144 |
+| Total Pytest executions | 185 |
+| Test files | 143 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 181 passed; 80.60 s with 4 isolated workers |
+| Latest validation | 185 passed; 59.36 s with 4 isolated workers |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -230,6 +230,8 @@ Priority definitions:
 | API-075 | Saved blends remain private to their authenticated owner | P0 | API ownership + authorization |
 | API-076 | A private blend reaches the public registry only after administrative approval | P0 | API workflow + role authorization + persistence |
 | API-077 | Repeated magic-link requests are rejected at the Worker boundary | P0 | API abuse protection |
+| API-078 | An existing account signs in by email without resubmitting profile fields | P0 | API passwordless authentication |
+| API-079 | Sign-in for an unknown email returns a neutral response without creating an account | P0 | API identity boundary + anti-enumeration response |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -291,6 +293,8 @@ Priority definitions:
 | UI-056 | An authenticated cook saves a blend without publishing it | P0 | E2E ownership + privacy default |
 | UI-057 | An administrator reviews a submitted blend before it reaches the public laboratory | P0 | E2E moderation + publication |
 | UI-058 | Primary sections preserve viewport rhythm and expose complete mobile navigation | P1 | Responsive UI + accessibility |
+| UI-059 | Sign-in and account creation expose distinct fields, labels, and focus behavior | P0 | UI identity workflow + accessibility |
+| UI-060 | A technical sheet provides an A4 preview and invokes browser printing | P1 | UI print contract + media styling |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

@@ -90,6 +90,15 @@ export type AuthenticatedUser = {
 
 export type AccountSummary = AuthenticatedUser;
 
+export async function accountNameForEmail(email: string): Promise<string | null> {
+  const existing = await getDatabase()
+    .select({ name: user.name })
+    .from(user)
+    .where(eq(user.email, email.trim().toLocaleLowerCase("en")))
+    .get();
+  return existing?.name ?? null;
+}
+
 const testAdministrator = {
   id: "00000000-0000-4000-8000-000000000001",
   name: "Administración Lumbre",

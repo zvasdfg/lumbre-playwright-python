@@ -377,6 +377,12 @@ Tests that validate sign-in still perform the full UI flow; tests whose
 precondition is merely “authenticated customer” reuse the fixture. No token or
 magic-link URL is written to logs or reports.
 
+Account creation and returning-user sign-in share the same short-lived magic
+link mechanism but expose different contracts. Sign-up requires a name and
+email. Sign-in accepts only an existing email, preserves the stored profile,
+and returns the same neutral response when the account does not exist so the
+public endpoint does not disclose account membership.
+
 ## 8. Environment boundary
 
 The portal resolves one of three explicit environments. The local runner owns

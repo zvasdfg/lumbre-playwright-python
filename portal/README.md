@@ -85,6 +85,8 @@ no email, preventing discovery of the allowlist.
   that never mutate the public hypothesis registry or an account.
 - Account-owned private blends for crust, bark, chicken, and vegetables, with
   explicit submission and administrator approval before public publication.
+- Public technical sheets with a branded A4 preview and isolated browser-print
+  layout that omits portal controls and navigation.
 - Outdoor event selection and reservation feedback.
 - Authenticated group reservations with live capacity and account history.
 
@@ -95,7 +97,7 @@ no email, preventing discovery of the allowlist.
 | `GET` | `/api` | API discovery | Informational; not committed |
 | `GET` | `/api/health` | Service, D1 readiness, and seed version | `API-001`, `API-021` |
 | `GET` | `/api/account` | Current authenticated account or anonymous null state | `API-025`, `API-026`, `CONTRACT-002` |
-| `POST` | `/api/account/magic-link` | Request passwordless account access | `API-025`–`API-029`, `API-077`, `CONTRACT-003` |
+| `POST` | `/api/account/magic-link` | Request passwordless sign-in or explicit account creation | `API-025`–`API-029`, `API-077`–`API-079`, `UI-059`, `CONTRACT-003` |
 | `POST` | `/api/account/logout` | Invalidate the current authenticated session | `API-026`, `API-029` |
 | `GET` | `/api/account/preferences` | Read account cooking preferences and consent history | `API-052`–`API-056`, `UI-044` |
 | `PUT` | `/api/account/preferences` | Create or update preferences and audit consent changes | `API-052`, `API-054`–`API-057`, `UI-044`, `UI-045` |

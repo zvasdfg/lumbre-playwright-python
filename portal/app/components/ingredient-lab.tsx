@@ -705,17 +705,18 @@ export default function IngredientLab({ account }: IngredientLabProps) {
 
       {inspectedHypothesis && (
         <div
-          className="modal-backdrop"
+          className="modal-backdrop hypothesis-print-backdrop"
           role="presentation"
           onMouseDown={(event) =>
             event.target === event.currentTarget && setInspectedHypothesis(null)
           }
         >
           <section
-            className="modal hypothesis-sheet"
+            className="modal hypothesis-sheet hypothesis-print-region"
             role="dialog"
             aria-modal="true"
             aria-labelledby="hypothesis-sheet-title"
+            data-testid="hypothesis-print-preview"
           >
             <button
               className="modal-close"
@@ -725,6 +726,28 @@ export default function IngredientLab({ account }: IngredientLabProps) {
             >
               ×
             </button>
+            <div className="hypothesis-sheet-toolbar" aria-label="Acciones de la ficha técnica">
+              <span>Vista previa · formato A4</span>
+              <button type="button" onClick={() => window.print()}>
+                Imprimir ficha
+              </button>
+            </div>
+            <header className="hypothesis-print-header">
+              <div>
+                <Image
+                  src="/brand/lumbre-logo-primary.png"
+                  alt="Lumbre"
+                  width={70}
+                  height={74}
+                  unoptimized
+                />
+                <span>Laboratorio de fuego<br />Ficha técnica de experimentación</span>
+              </div>
+              <dl>
+                <div><dt>Documento</dt><dd>{inspectedHypothesis.id}</dd></div>
+                <div><dt>Estado</dt><dd>{statusLabel(inspectedHypothesis.estado)}</dd></div>
+              </dl>
+            </header>
             <p className="section-index">FICHA TÉCNICA · {statusLabel(inspectedHypothesis.estado)}</p>
             <h2 id="hypothesis-sheet-title">{inspectedHypothesis.id}</h2>
             <span className="hypothesis-sheet-objective">{objectiveLabel(inspectedHypothesis.objetivo)}</span>

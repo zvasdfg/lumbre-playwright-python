@@ -130,3 +130,9 @@ class IngredientLab:
         return self.page.get_by_role("dialog").filter(
             has=self.page.get_by_role("heading", name=hypothesis_id, exact=True)
         )
+
+    def print_hypothesis(self, hypothesis_id: str) -> None:
+        self.hypothesis_dialog(hypothesis_id).get_by_role(
+            "button",
+            name="Imprimir ficha",
+        ).click()

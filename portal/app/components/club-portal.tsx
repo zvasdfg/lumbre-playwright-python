@@ -13,6 +13,7 @@ import FireAlmanac from "./fire-almanac";
 import AccountBlends from "./account-blends";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
+type AccountMode = "sign-in" | "sign-up";
 
 const recipesPerPage = 6;
 const showAgenda = false;
@@ -132,6 +133,7 @@ export default function ClubPortal() {
   const [authenticationEnabled, setAuthenticationEnabled] = useState<boolean | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [accountMode, setAccountMode] = useState<AccountMode>("sign-in");
   const [adminCatalogOpen, setAdminCatalogOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null);
@@ -299,6 +301,17 @@ export default function ClubPortal() {
     setMagicLinkRequested(true);
   }
 
+  function openAccount(mode: AccountMode = "sign-in") {
+    setAccountMode(mode);
+    setMagicLinkRequested(false);
+    setAccountOpen(true);
+  }
+
+  function selectAccountMode(mode: AccountMode) {
+    setAccountMode(mode);
+    setMagicLinkRequested(false);
+  }
+
   async function logout() {
     const response = await fetch("/api/account/logout", {
       method: "POST",
@@ -347,7 +360,7 @@ export default function ClubPortal() {
     if (!selectedEvent || submitting) return;
     if (!account) {
       setSelectedEvent(null);
-      setAccountOpen(true);
+      openAccount("sign-in");
       showToast("Inicia sesión para reservar y consultar tus encuentros.");
       return;
     }
@@ -389,7 +402,7 @@ export default function ClubPortal() {
   function startCheckout() {
     if (!account) {
       setCartOpen(false);
-      setAccountOpen(true);
+      openAccount("sign-in");
       showToast("Inicia sesión para proteger y consultar tus compras.");
       return;
     }
@@ -525,7 +538,7 @@ export default function ClubPortal() {
             <a href="#laboratorio">Laboratorio</a>
             <a href="#tienda">Provisiones</a>
             <button type="button" onClick={() => setCartOpen(true)}>Canasta · {cart.totalQuantity}</button>
-            <button type="button" onClick={() => setAccountOpen(true)}>{account ? account.name.split(" ")[0] : "Entrar"}</button>
+            <button type="button" onClick={() => openAccount("sign-in")}>{account ? account.name.split(" ")[0] : "Entrar"}</button>
           </div>
         </details>
         <div className="header-actions">
@@ -536,14 +549,14 @@ export default function ClubPortal() {
             className="cart-button"
             type="button"
             data-testid="account-button"
-            onClick={() => setAccountOpen(true)}
+            onClick={() => openAccount("sign-in")}
           >
             {account ? account.name.split(" ")[0] : "Entrar"}
           </button>
           <button
             className="header-cta"
             type="button"
-            onClick={() => readOnlyProduction ? setAccountOpen(true) : setJoinOpen(true)}
+            onClick={() => readOnlyProduction ? openAccount(account ? "sign-in" : "sign-up") : setJoinOpen(true)}
           >
             {readOnlyProduction ? (account ? "Mi cuenta" : "Crear cuenta") : "Únete al fuego"}
           </button>
@@ -744,10 +757,16 @@ export default function ClubPortal() {
 
       {accountOpen && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setAccountOpen(false)}>
-          <section className="modal compact" role="dialog" aria-modal="true" aria-labelledby="account-title">
+          <section className="modal compact" role="dialog" aria-modal="true" aria-labelledby="account-title" data-testid="account-modal">
             <button className="modal-close" type="button" onClick={() => setAccountOpen(false)} aria-label="Cerrar acceso">×</button>
             <p className="section-index">CUENTA LUMBRE</p>
-            <h2 id="account-title">Tu lugar junto al fuego.</h2>
+            <h2 id="account-title">
+              {account
+                ? "Tu lugar junto al fuego."
+                : accountMode === "sign-in"
+                  ? "Entra a Lumbre."
+                  : "Crea tu cuenta."}
+            </h2>
             {account ? (
               <div className="read-only-message">
                 <strong>{account.name}</strong>
@@ -811,12 +830,55 @@ export default function ClubPortal() {
                 <p>El enlace es único, vence en diez minutos y sólo puede utilizarse una vez.</p>
               </div>
             ) : (
-              <form onSubmit={requestMagicLink}>
-                <label>Nombre para tu cuenta<input name="name" required minLength={2} autoFocus /></label>
-                <label>Correo de acceso<input name="email" type="email" required /></label>
-                <button className="button button-primary" type="submit">Enviar enlace de acceso</button>
-                <small>Crear una cuenta no te suscribe a mensajes de membresía.</small>
-              </form>
+              <>
+                <div className="account-mode-switch" aria-label="Tipo de acceso">
+                  <button
+                    type="button"
+                    aria-pressed={accountMode === "sign-in"}
+                    onClick={() => selectAccountMode("sign-in")}
+                  >
+                    Entrar
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={accountMode === "sign-up"}
+                    onClick={() => selectAccountMode("sign-up")}
+                  >
+                    Crear cuenta
+                  </button>
+                </div>
+                <form onSubmit={requestMagicLink}>
+                  <input name="mode" type="hidden" value={accountMode} />
+                  {accountMode === "sign-up" && (
+                    <label>
+                      Nombre para tu cuenta
+                      <input name="name" required minLength={2} autoFocus />
+                    </label>
+                  )}
+                  <label>
+                    Correo de acceso
+                    <input
+                      key={accountMode}
+                      name="email"
+                      type="email"
+                      required
+                      autoFocus={accountMode === "sign-in"}
+                    />
+                  </label>
+                  <button
+                    className="button button-primary"
+                    data-testid="account-magic-link-submit"
+                    type="submit"
+                  >
+                    {accountMode === "sign-in" ? "Enviar enlace para entrar" : "Crear cuenta con enlace"}
+                  </button>
+                  <small>
+                    {accountMode === "sign-in"
+                      ? "Si la cuenta existe, recibirás un enlace único que vence en diez minutos."
+                      : "Crear una cuenta no te suscribe a mensajes de membresía."}
+                  </small>
+                </form>
+              </>
             )}
           </section>
         </div>
