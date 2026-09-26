@@ -23,18 +23,18 @@ reporting, and risk-based test strategy.
 
 | Signal | Current result |
 | --- | ---: |
-| Committed functional risks | 134 |
-| Automated functional risks | 134 |
-| Pytest executions | 174 |
-| Test files | 133 |
-| API cases / executions | 78 / 102 |
-| Browser cases / executions | 56 / 60 |
+| Committed functional risks | 139 |
+| Automated functional risks | 139 |
+| Pytest executions | 180 |
+| Test files | 138 |
+| API cases / executions | 80 / 105 |
+| Browser cases / executions | 59 / 63 |
 | Framework unit cases / executions | 3 / 12 |
 | Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (42/42) |
-| Latest full-suite result | 174 passed in 70.52 s with 4 isolated workers |
+| API route-operation coverage | 100% (48/48) |
+| Latest full-suite result | 180 passed in 78.04 s with 4 isolated workers |
 
-**100% refers to the repository's 134-item committed functional-risk catalog.**
+**100% refers to the repository's 139-item committed functional-risk catalog.**
 It is not a source-code line-coverage claim. Parameterized variants do not
 inflate the risk-coverage calculation.
 
@@ -80,6 +80,8 @@ Lumbre is a cooking-at-the-fire portal with:
 - account-owned fire-planner presets synchronized across browser contexts,
   with deterministic import of anonymous browser-local plans;
 - account-owned cooking preferences with explicit newsletter consent history;
+- account-owned private blends with duplicate prevention, submission status,
+  administrator moderation, and publication into the shared technical registry;
 - protected `customer` and `admin` roles, while production authentication stays
   disabled until a real email provider and secrets are configured.
 
@@ -159,6 +161,8 @@ lumbre-playwright-python/
   ownership and one-statement conditional creation at the capacity boundary.
 - Role-protected product and event administration with optimistic revisions,
   public projections, capacity invariants, and append-only audit evidence.
+- Private account blend storage and an explicit draft → submitted →
+  published/rejected moderation lifecycle with an audited administrator action.
 - An administrator-only browser workspace with public-catalog refresh,
   explicit deactivation feedback, and recoverable stale-revision conflicts.
 - Server-owned inventory with atomic reservation, idempotent finalization,
@@ -344,6 +348,7 @@ status.
 - [Architecture and design decisions](docs/ARCHITECTURE.md)
 - [Production architecture migration plan](docs/PRODUCTION_MIGRATION_PLAN.md)
 - [Data governance and incident response](docs/DATA_GOVERNANCE_AND_INCIDENT_RESPONSE.md)
+- [Responsive UI audit](docs/UI_AUDIT.md)
 - [Secrets and release gates](docs/SECRETS_AND_RELEASE_GATES.md)
 - [Adding another automation project](docs/ADDING_A_PROJECT.md)
 - [Guided UI test creation protocol](docs/GUIDED_UI_TEST_PROTOCOL.md)

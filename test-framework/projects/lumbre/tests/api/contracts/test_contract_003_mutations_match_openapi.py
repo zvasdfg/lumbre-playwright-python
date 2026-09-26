@@ -46,6 +46,15 @@ from projects.lumbre.api.lumbre_api import LumbreApi
                 "objective": "Costra para res",
             },
         ),
+        (
+            "account_blend",
+            "/api/account/blends",
+            {
+                "title": "SPG contractual",
+                "ingredient_ids": ["sal_kosher", "pimienta_negra", "ajo_granulado"],
+                "objective": "Costra para res",
+            },
+        ),
     ],
 )
 @pytest.mark.case(
@@ -75,6 +84,7 @@ def test_mutation_request_and_response_match_openapi(
             "cart_item": administrator_api.add_cart_item,
             "membership": administrator_api.create_member,
             "hypothesis": administrator_api.create_hypothesis,
+            "account_blend": administrator_api.save_account_blend,
         }
         response: APIResponse = operations[operation_kind](payload)
         response_payload = response.json()

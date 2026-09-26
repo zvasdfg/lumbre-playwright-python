@@ -20,9 +20,12 @@ def test_selected_ingredient_can_be_removed(
     with test_log.step("Add two ingredients to the experiment bench"):
         for ingredient_name in selected_names:
             lab.add_ingredient(ingredient_name)
+        blend_title = "Blend temporal de prueba"
+        lab.blend_title_input.fill(blend_title)
         expect(lab.selected_items).to_have_count(2)
         expect(lab.create_protocol_button).to_be_enabled()
         test_log.values(
+            blend_title=blend_title,
             selected_ingredients=selected_names,
             observed_selected_count=lab.selected_items.count(),
         )

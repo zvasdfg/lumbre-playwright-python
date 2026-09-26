@@ -24,14 +24,14 @@ in locators and expected values when it is part of the product contract.
 
 | Signal | Current result |
 | --- | ---: |
-| API case IDs / executions | 78 / 102 |
-| Browser case IDs / executions | 56 / 60 |
+| API case IDs / executions | 80 / 105 |
+| Browser case IDs / executions | 59 / 63 |
 | Framework unit case IDs / executions | 3 / 12 |
-| Unique committed risks | 134 |
-| Total Pytest executions | 174 |
-| Test files | 133 |
+| Unique committed risks | 139 |
+| Total Pytest executions | 180 |
+| Test files | 138 |
 | Supported engines | Chromium, Firefox, WebKit |
-| Latest validation | 174 passed; 70.52 s with 4 isolated workers |
+| Latest validation | 180 passed; 78.04 s with 4 isolated workers |
 
 Parameterized executions do not inflate risk coverage. `UI-011`, for example,
 runs two close mechanisms but protects one committed behavior. Framework unit
@@ -50,13 +50,13 @@ the catalog below.
 
 | Priority | Automated | Committed | Coverage |
 | --- | ---: | ---: | ---: |
-| P0 | 77 | 77 | 100% |
-| P1 | 49 | 49 | 100% |
+| P0 | 81 | 81 | 100% |
+| P1 | 52 | 52 | 100% |
 | P2 | 6 | 6 | 100% |
-| **Total** | **132** | **132** | **100%** |
+| **Total** | **139** | **139** | **100%** |
 
 This is functional-risk coverage, not Python or TypeScript line coverage. The
-secondary API route-operation signal is `42/42 = 100%`. Contract
+secondary API route-operation signal is `48/48 = 100%`. Contract
 parametrization adds execution depth without inflating the functional-risk
 denominator.
 
@@ -227,6 +227,8 @@ Priority definitions:
 | API-072 | API responses expose correlation and browser security controls | P1 | API security headers + observability |
 | API-073 | Cross-site browser mutations cannot allocate cart state | P0 | API CSRF boundary |
 | API-074 | Repeated cart mutations are rejected at the Worker boundary | P0 | API abuse protection |
+| API-075 | Saved blends remain private to their authenticated owner | P0 | API ownership + authorization |
+| API-076 | A private blend reaches the public registry only after administrative approval | P0 | API workflow + role authorization + persistence |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |
@@ -247,8 +249,8 @@ Priority definitions:
 | UI-015 | Ingredient catalog combines family and search filters | P1 | UI |
 | UI-016 | Ingredient sheet exposes research and adds to the formula | P1 | UI component |
 | UI-017 | Experiment bench enforces the six-component limit | P0 | UI boundary |
-| UI-018 | Known formula reuses its existing technical sheet | P0 | E2E deduplication |
-| UI-019 | Unique formula creates and displays a technical sheet | P0 | E2E persistence |
+| UI-018 | An anonymous duplicate formula reuses its existing session blend without a server mutation | P0 | Browser-session deduplication + privacy |
+| UI-019 | An anonymous blend survives reload only in the current browser session | P0 | Session storage + privacy boundary |
 | UI-020 | Fewer than two ingredients cannot create a sheet | P0 | UI boundary |
 | UI-021 | Removing an ingredient updates the experiment bench | P1 | UI state |
 | UI-022 | Registry opens the selected complete technical sheet | P1 | UI component |
@@ -285,6 +287,9 @@ Priority definitions:
 | UI-053 | Recipe pagination renders at most six distinct cards per page | P1 | UI navigation |
 | UI-054 | Ingredient families start collapsed and expose cumin with its owned image | P1 | UI component + visual contract |
 | UI-055 | Floating fire almanac opens on its cover and supports page-by-page reading | P1 | UI navigation + accessibility |
+| UI-056 | An authenticated cook saves a blend without publishing it | P0 | E2E ownership + privacy default |
+| UI-057 | An administrator reviews a submitted blend before it reaches the public laboratory | P0 | E2E moderation + publication |
+| UI-058 | Primary sections preserve viewport rhythm and expose complete mobile navigation | P1 | Responsive UI + accessibility |
 | ERR-001 | Membership API failure keeps the form available for retry | P1 | UI route control |
 | BROWSER-001 | Critical home contract passes in all supported engines | P1 | Cross-browser |
 

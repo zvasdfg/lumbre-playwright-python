@@ -28,14 +28,21 @@ class IngredientLab:
         )
         self.selected_items = self.selected_ingredients.locator("li:not(.empty-slot)")
         self.objective_select = self.root.get_by_label("Objetivo de la prueba")
+        self.blend_title_input = self.root.get_by_label("Nombre de tu blend")
+        self.save_blend_button = self.root.get_by_role(
+            "button",
+            name="Guardar en mis blends",
+        )
         self.create_protocol_button = self.root.get_by_role(
             "button",
-            name="Crear protocolo",
+            name="Guardar en esta sesión",
         )
         self.selection_limit = self.root.locator(".bench-limit")
         self.protocol_result = self.root.locator(".protocol-result")
         self.registry = self.root.get_by_test_id("hypothesis-registry")
         self.hypothesis_cards = self.registry.locator("article.hypothesis-card")
+        self.session_library = self.root.get_by_test_id("session-blends")
+        self.session_blend_cards = self.session_library.locator("article.session-blend-card")
 
     def search(self, text: str) -> None:
         self.search_input.fill(text)
@@ -96,6 +103,19 @@ class IngredientLab:
 
     def create_protocol(self) -> None:
         self.create_protocol_button.click()
+
+    def save_session_blend(self, title: str) -> None:
+        self.blend_title_input.fill(title)
+        self.create_protocol_button.click()
+
+    def session_blend(self, title: str) -> Locator:
+        return self.session_blend_cards.filter(
+            has=self.page.get_by_role("heading", name=title, exact=True)
+        )
+
+    def save_account_blend(self, title: str) -> None:
+        self.blend_title_input.fill(title)
+        self.save_blend_button.click()
 
     def hypothesis_card(self, hypothesis_id: str) -> Locator:
         return self.hypothesis_cards.filter(has=self.page.get_by_text(hypothesis_id, exact=True))

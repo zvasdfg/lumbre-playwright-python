@@ -19,6 +19,7 @@ class AccountModal:
         self.order_history = self.root.get_by_test_id("order-history")
         self.reservation_history = self.root.get_by_test_id("reservation-history")
         self.preferences = self.root.get_by_test_id("membership-preferences")
+        self.blends = self.root.get_by_test_id("account-blends")
         self.preferred_fuel_select = self.preferences.get_by_label("Combustible favorito")
         self.equipment_select = self.preferences.get_by_label("Equipo habitual")
         self.cooking_style_select = self.preferences.get_by_label(
@@ -45,6 +46,12 @@ class AccountModal:
 
     def order(self, order_id: str) -> Locator:
         return self.order_history.locator(f'[data-order-id="{order_id}"]')
+
+    def blend(self, title: str) -> Locator:
+        return self.blends.locator("article").filter(has_text=title)
+
+    def submit_blend(self, title: str) -> None:
+        self.blend(title).get_by_role("button", name="Solicitar publicación").click()
 
     def cancel_order(self, order_id: str) -> None:
         short_id = order_id[:8].upper()

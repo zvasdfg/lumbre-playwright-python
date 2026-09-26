@@ -109,7 +109,7 @@ with names only and no secret values.
 | Membership | Stateless enrollment plus account-owned D1 preferences and consent events | Enrollment record and production messaging delivery remain pending |
 | Event reservation | D1 account reservation plus derived capacity and revision-protected administrative capacity | Cancellation remains pending |
 | Fire-planner presets | D1 for authenticated accounts; browser `localStorage` for visitors | Offline conflict resolution beyond deterministic sign-in import remains pending |
-| Hypotheses | D1 in development/test; bundled JSON seeds in production | Hosted writes require identity and authorization |
+| Hypotheses | Public D1 registry plus account-owned private blend drafts, submission state, and audited administrator moderation | Hosted workflow remains blocked until production identity and email are enabled |
 | Products | D1 catalog with server-owned stock, public sold-out projection, revision-protected admin writes, server-priced carts, and an edit workspace | Image-aware creation UI remains pending |
 | Sessions | Anonymous session plus Better Auth account sessions backed by D1 | Production email delivery remains intentionally disabled |
 | Database | Drizzle schema, SQL migrations, deterministic seed, remote production/staging D1 resources, and Worker `DB` bindings | Operational backup and restore rehearsal remains pending |
@@ -645,7 +645,11 @@ The Phase 7A regression passed all 171 executions in 103.94 seconds with four
 isolated workers. The production release-candidate regression passed all 172
 executions in 72.33 seconds with four isolated workers. The latest catalog
 regression passed all 174 executions in 70.52 seconds with four isolated
-workers after adding recipe-pagination and laboratory-accordion coverage.
+workers after adding recipe-pagination and laboratory-accordion coverage. The
+account-owned blend workflow regression passed all 179 executions in 82.30
+seconds with four isolated workers. The responsive UI and anonymous
+session-blend regression passed all 180 executions in 78.04 seconds with four
+isolated workers.
 
 Lumbre is not yet ready for production traffic without operator work. Its
 isolated staging Worker and D1 resource are deployed, the remote smoke gate

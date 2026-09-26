@@ -145,8 +145,8 @@ Use the sequential runner for headed learning runs. Parallel headed execution
 opens several browsers concurrently and is intended only for targeted
 diagnosis, not normal instruction.
 
-The latest full regression passed 174 executions in 70.52
-seconds with four isolated workers. The earlier like-for-like
+The latest full regression passed 180 executions in 78.04 seconds with four
+isolated workers. The earlier like-for-like
 168-execution benchmark took 135.12 seconds sequentially and 71.75 seconds
 with four workers. Measurements use Pytest's reported duration and exclude
 target provisioning; runs with different case counts are not compared as a
@@ -311,4 +311,5 @@ available prefixes and examples.
 - [Guided UI test creation protocol](../docs/GUIDED_UI_TEST_PROTOCOL.md)
 - [Engineering case studies](../docs/ENGINEERING_CASE_STUDIES.md)
 - [Key Playwright notes](../docs/KEY_PLAYWRIGHT_NOTES.md)
+- [Responsive UI audit](../docs/UI_AUDIT.md)
 - [Playwright Python snippets](../docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)

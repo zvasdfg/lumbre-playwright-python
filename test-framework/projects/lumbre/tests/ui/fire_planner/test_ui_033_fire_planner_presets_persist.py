@@ -53,6 +53,14 @@ def test_fire_planner_presets_persist(
         expect(planner.weather_select).to_have_value("viento")
         expect(planner.serving_time_input).to_have_value("16:30")
         expect(planner.vegetable_reserve_checkbox).to_be_checked()
+        expect(planner.recommendation_status).to_be_visible()
+        expect(planner.preset_message).to_have_text(
+            f"Preset {preset_name} cargado y calculado."
+        )
+        test_log.values(
+            observed_message=planner.preset_message.inner_text(),
+            observed_recommendation=planner.recommendation_status.inner_text(),
+        )
 
     with test_log.step("Reload and validate browser-local persistence"):
         home.page.reload(wait_until="domcontentloaded")

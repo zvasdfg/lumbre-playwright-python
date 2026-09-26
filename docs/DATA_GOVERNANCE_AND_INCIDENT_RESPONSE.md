@@ -32,6 +32,7 @@ it explicitly does not claim to be the missing integral notice.
 | Anonymous session ID | Protect one visitor's cart without identity data | 30 days after last cart activity | Protected cookie plus D1 expiry; daily scheduled deletion |
 | Anonymous cart items | Restore product IDs and quantities for that anonymous session | Same as the anonymous session | Cascading D1 deletion |
 | Browser fire presets | Let a visitor reuse a plan without an account | Until the visitor deletes the preset or site storage | Browser `localStorage`; never sent to D1 while anonymous |
+| Account blend drafts and moderation notes | Preserve one account's private formula and its publication-review history | Archive hides the record but retains it until the pending account-deletion lifecycle removes it | Owner-scoped D1 queries, cascade on account deletion, and administrator-only moderation |
 | Application request logs | Diagnose API failures using request ID, method, path, status, and duration | Up to 3 days on the current Workers Free plan | Cloudflare Workers Logs provider limit |
 | Rate-limit actor key | Protect cart mutations from abuse using an anonymous session ID or client address | Provider-managed rate-limit window | Not written to an application table or custom log |
 | D1 Time Travel history | Recover from destructive database changes | 7 days on the current Workers Free plan | Cloudflare-managed point-in-time recovery |

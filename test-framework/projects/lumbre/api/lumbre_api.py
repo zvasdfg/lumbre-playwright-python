@@ -191,6 +191,24 @@ class LumbreApi:
     def delete_fire_preset(self, preset_id: str) -> APIResponse:
         return self._request.delete(f"/api/fire-presets/{preset_id}")
 
+    def account_blends(self) -> APIResponse:
+        return self._request.get("/api/account/blends")
+
+    def save_account_blend(self, payload: dict[str, Any]) -> APIResponse:
+        return self._request.post("/api/account/blends", data=payload)
+
+    def submit_account_blend(self, blend_id: str) -> APIResponse:
+        return self._request.post(f"/api/account/blends/{blend_id}/submit", data={})
+
+    def archive_account_blend(self, blend_id: str) -> APIResponse:
+        return self._request.delete(f"/api/account/blends/{blend_id}")
+
+    def admin_blends(self) -> APIResponse:
+        return self._request.get("/api/admin/blends")
+
+    def moderate_blend(self, blend_id: str, payload: dict[str, Any]) -> APIResponse:
+        return self._request.patch(f"/api/admin/blends/{blend_id}", data=payload)
+
     def reset_demo_data_response(self) -> APIResponse:
         return self._request.post("/api/test/reset")
 

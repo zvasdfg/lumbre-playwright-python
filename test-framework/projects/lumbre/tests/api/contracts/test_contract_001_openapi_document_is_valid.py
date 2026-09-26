@@ -35,4 +35,4 @@ def test_openapi_document_is_valid(
     with test_log.step("Validate the declared contract baseline"):
         assert document["openapi"].startswith("3.1.")
         assert document["jsonSchemaDialect"] == "https://json-schema.org/draft/2020-12/schema"
-        assert observed_operations == 42
+        assert observed_operations == 48

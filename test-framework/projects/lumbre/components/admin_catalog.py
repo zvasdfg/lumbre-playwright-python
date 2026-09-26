@@ -25,6 +25,13 @@ class AdminCatalog:
             name="Guardar producto",
         )
         self.event_form = self.root.get_by_test_id("admin-event-form")
+        self.blend_review_list = self.root.get_by_test_id("admin-blend-review-list")
+        self.blend_review = self.root.get_by_test_id("admin-blend-review")
+        self.moderation_note = self.blend_review.get_by_label("Nota editorial")
+        self.approve_blend_button = self.blend_review.get_by_role(
+            "button",
+            name="Aprobar y publicar",
+        )
         self.event_capacity_input = self.event_form.get_by_label("Capacidad")
         self.event_active_checkbox = self.event_form.get_by_label(
             "Encuentro visible en la agenda.",
@@ -44,6 +51,9 @@ class AdminCatalog:
     def event(self, event_id: int) -> Locator:
         return self.root.get_by_test_id(f"admin-event-{event_id}")
 
+    def blend(self, blend_id: str) -> Locator:
+        return self.root.get_by_test_id(f"admin-blend-{blend_id}")
+
     def select_product(self, product_id: int) -> None:
         self.product(product_id).click()
 
@@ -61,6 +71,12 @@ class AdminCatalog:
     def set_event_active(self, active: bool) -> None:
         self.event_active_checkbox.set_checked(active)
         self.save_event_button.click()
+
+    def approve_blend(self, blend_id: str, note: str = "") -> None:
+        self.blend(blend_id).click()
+        if note:
+            self.moderation_note.fill(note)
+        self.approve_blend_button.click()
 
     def close(self) -> None:
         self.close_button.click()

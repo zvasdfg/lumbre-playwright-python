@@ -67,7 +67,10 @@ class FirePlanner:
         return self.preset_library.locator("article").filter(has_text=name)
 
     def load_preset(self, name: str) -> None:
-        self.preset(name).get_by_role("button", name="Cargar").click()
+        self.preset(name).get_by_role(
+            "button",
+            name=f"Cargar preset {name}",
+        ).click()
 
     def delete_preset(self, name: str) -> None:
         self.preset(name).get_by_role("button", name="Eliminar").click()
