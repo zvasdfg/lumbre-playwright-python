@@ -26,6 +26,39 @@ export const hypotheses = sqliteTable(
   (table) => [uniqueIndex("hypotheses_signature_unique").on(table.signature)],
 );
 
+export const userBlends = sqliteTable(
+  "user_blends",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => authUser.id, { onDelete: "cascade" }),
+    signature: text("signature").notNull(),
+    title: text("title").notNull(),
+    objective: text("objective").notNull(),
+    recordJson: text("record_json").notNull(),
+    status: text("status", {
+      enum: ["draft", "submitted", "published", "rejected", "archived"],
+    })
+      .notNull()
+      .default("draft"),
+    moderationNote: text("moderation_note"),
+    publishedHypothesisId: text("published_hypothesis_id").references(
+      () => hypotheses.id,
+      { onDelete: "set null" },
+    ),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    submittedAt: text("submitted_at"),
+    publishedAt: text("published_at"),
+  },
+  (table) => [
+    uniqueIndex("user_blends_user_signature_unique").on(table.userId, table.signature),
+    index("user_blends_user_updated_index").on(table.userId, table.updatedAt),
+    index("user_blends_status_updated_index").on(table.status, table.updatedAt),
+  ],
+);
+
 export const anonymousSessions = sqliteTable(
   "anonymous_sessions",
   {
@@ -309,7 +342,7 @@ export const administrativeAuditEvents = sqliteTable(
       .notNull()
       .references(() => authUser.id, { onDelete: "restrict" }),
     resourceType: text("resource_type", {
-      enum: ["product", "event", "order"],
+      enum: ["product", "event", "order", "blend"],
     }).notNull(),
     resourceId: text("resource_id").notNull(),
     action: text("action", { enum: ["created", "updated"] }).notNull(),

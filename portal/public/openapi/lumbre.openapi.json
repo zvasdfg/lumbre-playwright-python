@@ -80,6 +80,64 @@
         }
       }
     },
+    "/api/account/blends": {
+      "get": {
+        "operationId": "listAccountBlends",
+        "tags": ["Laboratory"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Private blends owned by the authenticated account",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserBlendCollection" } } }
+          },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" }
+        }
+      },
+      "post": {
+        "operationId": "createAccountBlend",
+        "tags": ["Laboratory"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserBlendCreateRequest" } } }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/UserBlendMutationResponse" },
+          "201": { "$ref": "#/components/responses/UserBlendMutationResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
+        }
+      }
+    },
+    "/api/account/blends/{id}": {
+      "delete": {
+        "operationId": "archiveAccountBlend",
+        "tags": ["Laboratory"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/BlendId" }],
+        "responses": {
+          "204": { "description": "Blend archived" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ConflictResponse" }
+        }
+      }
+    },
+    "/api/account/blends/{id}/submit": {
+      "post": {
+        "operationId": "submitAccountBlend",
+        "tags": ["Laboratory"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/BlendId" }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/UserBlendDetailResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ConflictResponse" }
+        }
+      }
+    },
     "/api/account/magic-link": {
       "post": {
         "operationId": "requestAccountMagicLink",
@@ -252,6 +310,42 @@
           "200": { "$ref": "#/components/responses/AdministrativeAuditCollectionResponse" },
           "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
           "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" }
+        }
+      }
+    },
+    "/api/admin/blends": {
+      "get": {
+        "operationId": "listSubmittedBlends",
+        "tags": ["Laboratory"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Blends awaiting editorial moderation",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserBlendCollection" } } }
+          },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" }
+        }
+      }
+    },
+    "/api/admin/blends/{id}": {
+      "patch": {
+        "operationId": "moderateSubmittedBlend",
+        "tags": ["Laboratory"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/BlendId" }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BlendModerationRequest" } } }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/UserBlendDetailResponse" },
+          "400": { "$ref": "#/components/responses/ValidationErrorResponse" },
+          "401": { "$ref": "#/components/responses/AuthenticationRequiredResponse" },
+          "403": { "$ref": "#/components/responses/AuthorizationRequiredResponse" },
+          "404": { "$ref": "#/components/responses/NotFoundResponse" },
+          "409": { "$ref": "#/components/responses/ConflictResponse" },
+          "422": { "$ref": "#/components/responses/ValidationErrorResponse" }
         }
       }
     },
@@ -804,6 +898,12 @@
         "required": true,
         "schema": { "type": "string", "format": "uuid" }
       },
+      "BlendId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string", "format": "uuid" }
+      },
       "IdempotencyKey": {
         "name": "Idempotency-Key",
         "in": "header",
@@ -930,6 +1030,18 @@
         "description": "Authentication is not configured for the active environment",
         "content": {
           "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+        }
+      },
+      "UserBlendMutationResponse": {
+        "description": "Created or deduplicated blend owned by the authenticated account",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/UserBlendMutation" } }
+        }
+      },
+      "UserBlendDetailResponse": {
+        "description": "Account-owned blend after a lifecycle transition",
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/UserBlendDetail" } }
         }
       },
       "MembershipPreferencesResponse": {
@@ -1980,6 +2092,103 @@
           "data": { "type": "array", "items": { "$ref": "#/components/schemas/Hypothesis" } },
           "count": { "type": "integer", "minimum": 0 }
         },
+        "additionalProperties": false
+      },
+      "UserBlendStatus": {
+        "type": "string",
+        "enum": ["draft", "submitted", "published", "rejected", "archived"]
+      },
+      "BlendProtocol": {
+        "type": "object",
+        "required": ["schema_version", "id", "firma", "objetivo", "componentes", "hipotesis", "formula", "perfil_esperado", "metodo", "estado", "contador_repeticiones", "creado_en"],
+        "properties": {
+          "schema_version": { "const": 5 },
+          "id": { "type": "string", "pattern": "^BLD-[A-F0-9]{8}$" },
+          "firma": { "type": "string", "pattern": "^LH[CBVP]:" },
+          "objetivo": { "$ref": "#/components/schemas/HypothesisObjective" },
+          "componentes": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "$ref": "#/components/schemas/HypothesisComponent" } },
+          "hipotesis": { "type": "string", "minLength": 1 },
+          "formula": { "$ref": "#/components/schemas/FormulaEvidence" },
+          "perfil_esperado": { "type": "array", "items": { "$ref": "#/components/schemas/ExpectedProfile" } },
+          "metodo": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "estado": { "type": "string", "enum": ["borrador", "recomendado_sin_validar"] },
+          "tipo_registro": { "type": "string", "enum": ["hipotesis_usuario", "recomendacion_investigada"] },
+          "recomendacion": { "$ref": "#/components/schemas/Recommendation" },
+          "contador_repeticiones": { "type": "integer", "minimum": 0 },
+          "creado_en": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "UserBlend": {
+        "type": "object",
+        "required": ["id", "title", "objective", "status", "protocol", "moderationNote", "publishedHypothesisId", "createdAt", "updatedAt", "submittedAt", "publishedAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string", "minLength": 3, "maxLength": 80 },
+          "objective": { "$ref": "#/components/schemas/HypothesisObjective" },
+          "status": { "$ref": "#/components/schemas/UserBlendStatus" },
+          "protocol": { "$ref": "#/components/schemas/BlendProtocol" },
+          "moderationNote": { "type": ["string", "null"] },
+          "publishedHypothesisId": {
+            "oneOf": [
+              { "type": "string", "pattern": "^LH[CBVP]-[0-9]{3}$" },
+              { "type": "null" }
+            ]
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "submittedAt": { "type": ["string", "null"], "format": "date-time" },
+          "publishedAt": { "type": ["string", "null"], "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "UserBlendCollection": {
+        "type": "object",
+        "required": ["data", "count"],
+        "properties": {
+          "data": { "type": "array", "items": { "$ref": "#/components/schemas/UserBlend" } },
+          "count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "UserBlendCreateRequest": {
+        "type": "object",
+        "required": ["title", "ingredient_ids", "objective"],
+        "properties": {
+          "title": { "type": "string", "minLength": 3, "maxLength": 80 },
+          "ingredient_ids": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 6,
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^[a-z0-9_]+$" }
+          },
+          "objective": { "$ref": "#/components/schemas/HypothesisObjective" }
+        },
+        "additionalProperties": false
+      },
+      "BlendModerationRequest": {
+        "type": "object",
+        "required": ["decision"],
+        "properties": {
+          "decision": { "type": "string", "enum": ["approve", "reject"] },
+          "note": { "type": "string", "maxLength": 280 }
+        },
+        "additionalProperties": false
+      },
+      "UserBlendMutation": {
+        "type": "object",
+        "required": ["data", "created"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/UserBlend" },
+          "created": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "UserBlendDetail": {
+        "type": "object",
+        "required": ["data"],
+        "properties": { "data": { "$ref": "#/components/schemas/UserBlend" } },
         "additionalProperties": false
       },
       "HypothesisDetail": {

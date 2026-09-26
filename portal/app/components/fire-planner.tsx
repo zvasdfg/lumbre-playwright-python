@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 type CookingStyle = "directo" | "dos_zonas" | "lento";
 type FuelType = "carbon" | "briquetas" | "lena";
@@ -192,6 +192,7 @@ function createRecommendation(configuration: PlannerConfiguration): FireRecommen
 }
 
 export default function FirePlanner({ authenticated }: { authenticated: boolean }) {
+  const outputRef = useRef<HTMLElement>(null);
   const [configuration, setConfiguration] = useState(initialConfiguration);
   const [recommendation, setRecommendation] = useState<FireRecommendation | null>(null);
   const [presetName, setPresetName] = useState("");
@@ -265,8 +266,11 @@ export default function FirePlanner({ authenticated }: { authenticated: boolean 
 
   function applyPlan(nextConfiguration: PlannerConfiguration, message: string) {
     setConfiguration(nextConfiguration);
-    setRecommendation(null);
+    setRecommendation(createRecommendation(nextConfiguration));
     setPresetMessage(message);
+    window.requestAnimationFrame(() => {
+      outputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
   }
 
   function persistLocalPresets(nextPresets: PlannerPreset[]) {
@@ -385,7 +389,7 @@ export default function FirePlanner({ authenticated }: { authenticated: boolean 
           <button className="button button-primary planner-calculate" type="submit">Construir plan de fuego</button>
         </form>
 
-        <section className="planner-output" aria-label="Plan de fuego">
+        <section className="planner-output" aria-label="Plan de fuego" ref={outputRef}>
           <div className="planner-panel-heading"><span>02</span><div><strong>PLAN DE CAMPO</strong><small>Una guía para observar, no un piloto automático.</small></div></div>
           {recommendation ? (
             <div className="planner-result" role="status" aria-label="Recomendación de combustible">
@@ -418,7 +422,7 @@ export default function FirePlanner({ authenticated }: { authenticated: boolean 
               <span>{preset.configuration.guests} PERSONAS · {preset.configuration.durationHours} H</span>
               <h4>{preset.name}</h4>
               <p>{preset.configuration.cookingStyle.replaceAll("_", " ")} · {fuelLabels[preset.configuration.fuelType]}</p>
-              <div><button type="button" onClick={() => applyPlan(preset.configuration, `Preset ${preset.name} cargado.`)}>Cargar</button><button type="button" onClick={() => void deletePreset(preset)} aria-label={`Eliminar preset ${preset.name}`}>Eliminar</button></div>
+              <div><button type="button" onClick={() => applyPlan(preset.configuration, `Preset ${preset.name} cargado y calculado.`)} aria-label={`Cargar preset ${preset.name}`}>Cargar</button><button type="button" onClick={() => void deletePreset(preset)} aria-label={`Eliminar preset ${preset.name}`}>Eliminar</button></div>
             </article>
           )) : <p className="preset-empty">Aún no hay presets guardados. Tu primera configuración puede convertirse en el inicio de un protocolo.</p>}
         </div>

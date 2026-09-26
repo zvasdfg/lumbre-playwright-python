@@ -56,8 +56,8 @@ Use [`.env.example`](.env.example) only when an explicit local override is
 useful. Keep its server and browser-facing values aligned; the public value is
 embedded into the client bundle at build time.
 
-In production, the membership form is replaced with a privacy notice and the
-experiment creation control is disabled. The anonymous cart remains available
+In production, the membership form is replaced with a privacy notice and
+blend saving requests account access. The anonymous cart remains available
 through an opaque protected cookie and D1, while product, membership, and
 hypothesis mutations are rejected. The initially empty hypothesis registry remains
 browsable without filesystem access. This makes the portal
@@ -81,8 +81,10 @@ delivery adapter, production URL, and secret bindings are configured.
 - Fire planning with cooking-style and vegetable-reserve calculations,
   anonymous local presets, and synchronized account presets.
 - Collapsible ingredient families with research detail, filters, and search.
-- Two-to-six-component experiment bench and generated technical hypotheses.
-- User-created technical sheets for crust, bark, chicken, and vegetables.
+- Two-to-six-component experiment bench with anonymous, session-only blends
+  that never mutate the public hypothesis registry or an account.
+- Account-owned private blends for crust, bark, chicken, and vegetables, with
+  explicit submission and administrator approval before public publication.
 - Outdoor event selection and reservation feedback.
 - Authenticated group reservations with live capacity and account history.
 
@@ -97,7 +99,13 @@ delivery adapter, production URL, and secret bindings are configured.
 | `POST` | `/api/account/logout` | Invalidate the current authenticated session | `API-026`, `API-029` |
 | `GET` | `/api/account/preferences` | Read account cooking preferences and consent history | `API-052`–`API-056`, `UI-044` |
 | `PUT` | `/api/account/preferences` | Create or update preferences and audit consent changes | `API-052`, `API-054`–`API-057`, `UI-044`, `UI-045` |
+| `GET` | `/api/account/blends` | Read blends owned by the authenticated account | `API-075`, `API-076`, `UI-056` |
+| `POST` | `/api/account/blends` | Save or reuse a private account-owned blend | `API-075`, `API-076`, `UI-056`, `CONTRACT-003` |
+| `DELETE` | `/api/account/blends/:id` | Archive an owned blend that is not under review | `API-075` |
+| `POST` | `/api/account/blends/:id/submit` | Submit an owned draft or rejected blend for review | `API-076`, `UI-057` |
 | `GET` | `/api/admin/accounts` | Role-protected account summaries | `API-028` |
+| `GET` | `/api/admin/blends` | Read the administrator moderation queue | `API-076`, `UI-057` |
+| `PATCH` | `/api/admin/blends/:id` | Approve or reject one submitted blend | `API-076`, `UI-057` |
 | `GET` | `/api/admin/products` | Complete product catalog with revisions | `API-058`, `API-059` |
 | `POST` | `/api/admin/products` | Create a product under the administrator role | `API-004`, `API-018`, `API-058`, `CONTRACT-003` |
 | `PATCH` | `/api/admin/products/:id` | Update an immutable product ID with optimistic concurrency | `API-059`, `API-060` |
@@ -346,14 +354,24 @@ Technical IDs use:
 - `LHV`: ember-cooked vegetables;
 - `LHP`: direct-fire chicken.
 
+Authenticated users do not write directly to this public registry. Their
+formula is first stored in `user_blends` with a private `BLD-...` protocol ID.
+An owner may submit a draft for review; only an administrator can approve it
+and create or reuse the corresponding public `LH...` sheet. Rejection keeps the
+blend private with an editorial note, and every moderation decision is written
+to the administrative audit log. A unique `(user_id, signature)` constraint
+prevents duplicate private blends without merging data across accounts.
+
 Automated runs set `LUMBRE_D1_STATE_DIR` to a new temporary Wrangler state
 directory, apply every SQL migration, and seed the database before the portal
 starts. Persistence assertions therefore exercise the production-shaped
 repository without changing source JSON or the developer's local database.
 
-Worker request handlers never write to the filesystem. Production exposes the
-empty hypothesis registry read-only and persists only anonymous commerce data
-to D1; authenticated hosted business writes remain a later migration phase.
+Worker request handlers never write to the filesystem. The public production
+profile still exposes the hypothesis registry read-only because hosted account
+authentication and email delivery remain disabled. Once that release gate is
+satisfied, the account-owned blend schema and moderation routes are ready to
+use without permitting anonymous publication.
 
 ## Research data
 

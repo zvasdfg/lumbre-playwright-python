@@ -10,11 +10,26 @@ import IngredientLab from "./ingredient-lab";
 import AccountPreferences from "./account-preferences";
 import AdminCatalog from "./admin-catalog";
 import FireAlmanac from "./fire-almanac";
+import AccountBlends from "./account-blends";
 
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 
 const recipesPerPage = 6;
 const showAgenda = false;
+
+function paginationItems(currentPage: number, pageCount: number): Array<number | string> {
+  if (pageCount <= 7) return Array.from({ length: pageCount }, (_, index) => index + 1);
+  const visiblePages = new Set([1, pageCount, currentPage - 1, currentPage, currentPage + 1]);
+  const pages = [...visiblePages]
+    .filter((page) => page >= 1 && page <= pageCount)
+    .sort((left, right) => left - right);
+  const items: Array<number | string> = [];
+  pages.forEach((page, index) => {
+    if (index > 0 && page - pages[index - 1] > 1) items.push(`ellipsis-${page}`);
+    items.push(page);
+  });
+  return items;
+}
 
 type CartItem = {
   productId: number;
@@ -496,6 +511,18 @@ export default function ClubPortal() {
           <a href="#laboratorio">Laboratorio</a>
           <a href="#tienda">Provisiones</a>
         </nav>
+        <details className="mobile-nav">
+          <summary>Menú</summary>
+          <div>
+            <a href="#metodo">Método</a>
+            <a href="#planificador">Planificador</a>
+            <a href="#recetas">Recetas</a>
+            <a href="#laboratorio">Laboratorio</a>
+            <a href="#tienda">Provisiones</a>
+            <button type="button" onClick={() => setCartOpen(true)}>Canasta · {cart.totalQuantity}</button>
+            <button type="button" onClick={() => setAccountOpen(true)}>{account ? account.name.split(" ")[0] : "Entrar"}</button>
+          </div>
+        </details>
         <div className="header-actions">
           <button className="cart-button" type="button" onClick={() => setCartOpen(true)} aria-label={`Abrir canasta, ${cart.totalQuantity} productos`}>
             Canasta <span>{cart.totalQuantity}</span>
@@ -516,8 +543,8 @@ export default function ClubPortal() {
         <aside className="public-demo-banner" aria-label="Entorno público de demostración">
           <strong>Demostración pública protegida.</strong>
           <span>
-            Explora el catálogo y usa tu canasta anónima; membresía y laboratorio no reciben
-            datos personales.
+            Explora el catálogo, usa tu canasta y guarda blends temporales; ninguna fórmula
+            anónima se publica ni se asocia con una cuenta.
           </span>
         </aside>
       )}
@@ -545,22 +572,11 @@ export default function ClubPortal() {
         </div>
       </section>
 
-      <section className="intro" id="metodo">
-        <p className="section-index">01 — MÉTODO LUMBRE</p>
-        <p className="intro-statement">El fuego también<br />se puede leer.</p>
-        <div>
-          <p className="intro-copy">No perseguimos una receta perfecta. Construimos criterios: qué combustible usar, dónde colocar el alimento, qué señales observar y qué cambiar en la próxima prueba.</p>
-          <a className="text-link light" href="#principios">Leer los principios →</a>
-        </div>
-      </section>
-
-      <FirePlanner authenticated={Boolean(account)} />
-
-      <section className="knowledge-section" id="principios" aria-labelledby="knowledge-title">
+      <section className="knowledge-section" id="metodo" aria-labelledby="knowledge-title">
         <div className="knowledge-heading">
-          <p className="section-index">03 — CONOCIMIENTO DE CAMPO</p>
+          <p className="section-index">01 — MÉTODO LUMBRE</p>
           <h2 id="knowledge-title">Antes de cocinar,<br />diseña el fuego.</h2>
-          <p>Cuatro decisiones convierten una intuición en un proceso que otra persona puede repetir.</p>
+          <p>No perseguimos una receta perfecta. Cuatro decisiones convierten una intuición en un proceso que otra persona puede repetir.</p>
         </div>
         <div className="knowledge-grid">
           <article><span>01 / COMBUSTIBLE</span><h3>Elige por duración, no sólo por aroma.</h3><p>Carbón para respuesta rápida; leña estable y bien seca cuando el tiempo y el humo forman parte del resultado.</p><strong>VARIABLE: ENERGÍA</strong></article>
@@ -571,9 +587,11 @@ export default function ClubPortal() {
         <aside className="knowledge-note"><span>PRINCIPIO DE CAMPO</span><p>La brasa no es un fondo escénico: es una fuente de energía que se distribuye, se agota y deja señales.</p></aside>
       </section>
 
+      <FirePlanner authenticated={Boolean(account)} />
+
       <section className="recipes-section" id="recetas">
         <div className="section-heading">
-          <div><p className="section-index">04 — RECETARIO DE CAMPO</p><h2>Casos para<br />poner a prueba.</h2></div>
+          <div><p className="section-index">03 — RECETARIO DE CAMPO</p><h2>Casos para<br />poner a prueba.</h2></div>
           <p>Cada receta es una ruta de aprendizaje: método, tiempo y nivel para practicar una habilidad específica frente al fuego.</p>
         </div>
         <div className="recipe-toolbar">
@@ -605,17 +623,21 @@ export default function ClubPortal() {
           <nav className="recipe-pagination" aria-label="Páginas de recetas">
             <button type="button" disabled={recipePage === 1} onClick={() => changeRecipePage(recipePage - 1)}>← Anterior</button>
             <div>
-              {Array.from({ length: recipePageCount }, (_, index) => index + 1).map((page) => (
-                <button
-                  type="button"
-                  key={page}
-                  aria-label={`Ir a página ${page}`}
-                  aria-current={recipePage === page ? "page" : undefined}
-                  onClick={() => changeRecipePage(page)}
-                >
-                  {page}
-                </button>
-              ))}
+              {paginationItems(recipePage, recipePageCount).map((item) =>
+                typeof item === "number" ? (
+                  <button
+                    type="button"
+                    key={item}
+                    aria-label={`Ir a página ${item}`}
+                    aria-current={recipePage === item ? "page" : undefined}
+                    onClick={() => changeRecipePage(item)}
+                  >
+                    {item}
+                  </button>
+                ) : (
+                  <span className="pagination-ellipsis" aria-hidden="true" key={item}>…</span>
+                ),
+              )}
             </div>
             <button type="button" disabled={recipePage === recipePageCount} onClick={() => changeRecipePage(recipePage + 1)}>Siguiente →</button>
             <p data-testid="recipe-page-status">
@@ -626,10 +648,10 @@ export default function ClubPortal() {
         ) : <p className="empty-state">No encontramos recetas con esos criterios. Prueba otra búsqueda.</p>}
       </section>
 
-      <IngredientLab />
+      <IngredientLab account={account} />
 
       <section className="shop-section" id="tienda">
-        <div className="shop-heading"><p className="section-index">06 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />protocolos.</h2><p>Mezclas nacidas en el laboratorio y listas para llevar al fuego. La herramienta y la merch acompañan el oficio; el sabor es el punto de partida.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>
+        <div className="shop-heading"><p className="section-index">05 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />protocolos.</h2><p>Mezclas nacidas en el laboratorio y listas para llevar al fuego. La herramienta y la merch acompañan el oficio; el sabor es el punto de partida.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>
         <div className="product-grid">
           {productCatalog.map((product) => (
             <article
@@ -721,6 +743,7 @@ export default function ClubPortal() {
                 <p>{account.email}</p>
                 <p>Perfil: {account.role === "admin" ? "administración" : "cliente"}</p>
                 <AccountPreferences />
+                <AccountBlends />
                 {account.role === "admin" && (
                   <button className="button button-quiet full admin-catalog-button" type="button" onClick={() => { setAccountOpen(false); setAdminCatalogOpen(true); }}>
                     Administrar catálogo

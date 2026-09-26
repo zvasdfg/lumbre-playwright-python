@@ -3,57 +3,8 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { isPublicProductionReadOnly } from "../lib/environment";
-
-type Ingredient = {
-  id: string;
-  nombre: string;
-  familia: string;
-  estado: string;
-  descripcion: string;
-  perfil_sensorial: Record<string, number | null>;
-  compatibilidad: Record<string, number | null>;
-  experimentos: unknown[];
-};
-
-type ExperimentProtocol = {
-  schema_version?: number;
-  id: string;
-  firma: string;
-  objetivo: string;
-  componentes: Array<{ id: string; nombre: string; familia: string }>;
-  hipotesis: string;
-  formula?: {
-    level: "referenced" | "close" | "experimental";
-    formula_id: string | null;
-    formula_name: string;
-    conclusion: string;
-    matched_roles: string[];
-    missing_roles: string[];
-    additional_profiles: Array<{
-      role: string;
-      ingredients: string[];
-      contribution: string;
-    }>;
-    sources: Array<{ title: string; url: string }>;
-  };
-  perfil_esperado?: Array<{
-    attribute: string;
-    intensity: number;
-    ingredients: string[];
-  }>;
-  metodo: string[];
-  estado: string;
-  tipo_registro?: "hipotesis_usuario" | "recomendacion_investigada";
-  recomendacion?: {
-    id: string;
-    nombre: string;
-    fundamento: string;
-    adaptacion: string;
-    proporciones: Array<{ ingrediente_id: string; partes: number }>;
-    fuentes: Array<{ titulo: string; url: string }>;
-  };
-  creado_en: string;
-};
+import { buildExpectedProfile, buildFormulaEvidence } from "../lib/flavor-formulas";
+import type { ExperimentProtocol, Ingredient } from "../lib/ingredients";
 
 type CatalogResponse = {
   data: Ingredient[];
@@ -67,12 +18,96 @@ type HypothesisResponse = {
   count: number;
 };
 
+type IngredientLabProps = {
+  account: { id: string; name: string } | null;
+};
+
+type SavedBlend = {
+  id: string;
+  title: string;
+  status: "draft" | "submitted" | "published" | "rejected" | "archived";
+  protocol: ExperimentProtocol;
+};
+
+type SessionBlend = {
+  id: string;
+  title: string;
+  protocol: ExperimentProtocol;
+};
+
+const SESSION_BLEND_STORAGE_KEY = "lumbre.ingredient-lab.session-blends.v1";
+const SESSION_BLEND_LIMIT = 20;
+
 const objectives = [
   "Costra para res",
   "Bark para cocción lenta",
   "Vegetales a las brasas",
   "Pollo al fuego directo",
 ];
+
+function readSessionBlends(): SessionBlend[] {
+  try {
+    const stored = window.sessionStorage.getItem(SESSION_BLEND_STORAGE_KEY);
+    if (!stored) return [];
+    const parsed: unknown = JSON.parse(stored);
+    if (!Array.isArray(parsed)) throw new Error("Session blend storage is not a collection");
+    return parsed.filter(
+      (item): item is SessionBlend =>
+        typeof item === "object" &&
+        item !== null &&
+        typeof (item as SessionBlend).id === "string" &&
+        typeof (item as SessionBlend).title === "string" &&
+        typeof (item as SessionBlend).protocol?.firma === "string",
+    );
+  } catch {
+    window.sessionStorage.removeItem(SESSION_BLEND_STORAGE_KEY);
+    return [];
+  }
+}
+
+function sessionBlendId(blends: SessionBlend[]) {
+  const sequence = blends.reduce((highest, blend) => {
+    const match = /^SES-(\d+)$/.exec(blend.id);
+    return Math.max(highest, match ? Number(match[1]) : 0);
+  }, 0) + 1;
+  return `SES-${String(sequence).padStart(3, "0")}`;
+}
+
+function buildSessionProtocol(
+  id: string,
+  signature: string,
+  selectedIngredients: Ingredient[],
+  objective: string,
+): ExperimentProtocol {
+  const formula = buildFormulaEvidence(selectedIngredients, objective);
+  return {
+    schema_version: 5,
+    id,
+    firma: signature,
+    objetivo: objective,
+    componentes: selectedIngredients.map(({ id: ingredientId, nombre, familia }) => ({
+      id: ingredientId,
+      nombre,
+      familia,
+    })),
+    hipotesis: formula.conclusion,
+    formula,
+    perfil_esperado: buildExpectedProfile(selectedIngredients),
+    metodo: [
+      "Preparar una muestra control sin sazonador.",
+      formula.level === "referenced"
+        ? `Preparar una segunda muestra con la estructura de referencia ${formula.formula_name}.`
+        : "Preparar una segunda muestra con la fórmula de referencia más cercana cuando exista.",
+      "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+      "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
+      "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia.",
+    ],
+    estado: "borrador",
+    tipo_registro: "hipotesis_usuario",
+    contador_repeticiones: 0,
+    creado_en: new Date().toISOString(),
+  };
+}
 
 function familyLabel(family: string) {
   const labels: Record<string, string> = {
@@ -128,7 +163,7 @@ function formulaNameLabel(name: string) {
   return visibleText(name);
 }
 
-export default function IngredientLab() {
+export default function IngredientLab({ account }: IngredientLabProps) {
   const readOnlyProduction = isPublicProductionReadOnly();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [families, setFamilies] = useState<string[]>([]);
@@ -137,6 +172,9 @@ export default function IngredientLab() {
   const [openFamilies, setOpenFamilies] = useState<string[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [objective, setObjective] = useState(objectives[0]);
+  const [blendTitle, setBlendTitle] = useState("");
+  const [savedBlend, setSavedBlend] = useState<SavedBlend | null>(null);
+  const [sessionBlends, setSessionBlends] = useState<SessionBlend[]>([]);
   const [inspectedIngredient, setInspectedIngredient] = useState<Ingredient | null>(null);
   const [hypotheses, setHypotheses] = useState<ExperimentProtocol[]>([]);
   const [inspectedHypothesis, setInspectedHypothesis] = useState<ExperimentProtocol | null>(null);
@@ -150,7 +188,10 @@ export default function IngredientLab() {
   const [hypothesisError, setHypothesisError] = useState("");
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => setHydrated(true));
+    const frame = window.requestAnimationFrame(() => {
+      setSessionBlends(readSessionBlends());
+      setHydrated(true);
+    });
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
@@ -174,21 +215,6 @@ export default function IngredientLab() {
     loadCatalog();
     return () => controller.abort();
   }, []);
-
-  async function refreshHypotheses(signal?: AbortSignal) {
-    try {
-      const response = await fetch("/api/hipotesis", { signal });
-      if (!response.ok) throw new Error("No fue posible consultar las fichas registradas.");
-      const registry = (await response.json()) as HypothesisResponse;
-      setHypotheses(registry.data);
-    } catch (requestError) {
-      if ((requestError as Error).name !== "AbortError") {
-        setHypothesisError((requestError as Error).message);
-      }
-    } finally {
-      if (!signal?.aborted) setLoadingHypotheses(false);
-    }
-  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -254,6 +280,7 @@ export default function IngredientLab() {
   function toggleIngredient(id: string) {
     setProtocol(null);
     setProtocolCreated(null);
+    setSavedBlend(null);
     setSelectedIds((current) => {
       if (current.includes(id)) return current.filter((selectedId) => selectedId !== id);
       if (current.length === 6) return current;
@@ -262,33 +289,95 @@ export default function IngredientLab() {
   }
 
   async function createProtocol() {
-    if (readOnlyProduction) {
-      setError("La creación de fichas está disponible únicamente en el entorno de pruebas.");
-      return;
-    }
-
     setCreating(true);
     setError("");
     try {
-      const response = await fetch("/api/hipotesis", {
+      const accountOwned = Boolean(account);
+      const title = blendTitle.trim();
+      if (title.length < 3) {
+        throw new Error("Asigna un nombre de al menos tres caracteres a tu blend.");
+      }
+
+      if (!accountOwned) {
+        const signature = `SESSION:${objective}:${[...selectedIds].sort().join("+")}`;
+        const existing = sessionBlends.find((blend) => blend.protocol.firma === signature);
+        if (existing) {
+          setProtocol(existing.protocol);
+          setProtocolCreated(false);
+          setInspectedHypothesis(existing.protocol);
+          setBlendTitle(existing.title);
+          return;
+        }
+        if (sessionBlends.length >= SESSION_BLEND_LIMIT) {
+          throw new Error("Esta sesión alcanzó el límite de 20 blends.");
+        }
+        const id = sessionBlendId(sessionBlends);
+        const createdProtocol = buildSessionProtocol(
+          id,
+          signature,
+          selectedIngredients,
+          objective,
+        );
+        const createdBlend = { id, title, protocol: createdProtocol };
+        const nextBlends = [...sessionBlends, createdBlend];
+        window.sessionStorage.setItem(SESSION_BLEND_STORAGE_KEY, JSON.stringify(nextBlends));
+        setSessionBlends(nextBlends);
+        setProtocol(createdProtocol);
+        setProtocolCreated(true);
+        setInspectedHypothesis(createdProtocol);
+        return;
+      }
+
+      const response = await fetch("/api/account/blends", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ingredient_ids: selectedIds, objective }),
+        body: JSON.stringify({
+          title,
+          ingredient_ids: selectedIds,
+          objective,
+        }),
       });
       const result = (await response.json()) as {
-        data?: ExperimentProtocol;
+        data?: ExperimentProtocol | SavedBlend;
         error?: string;
         created?: boolean;
       };
       if (!response.ok || !result.data) {
         throw new Error("No fue posible crear la ficha técnica. Revisa los componentes seleccionados.");
       }
-      setProtocol(result.data);
+      const createdProtocol = (result.data as SavedBlend).protocol;
+      setProtocol(createdProtocol);
       setProtocolCreated(result.created ?? false);
-      setInspectedHypothesis(result.data);
-      setLoadingHypotheses(true);
-      setHypothesisError("");
-      await refreshHypotheses();
+      setInspectedHypothesis(createdProtocol);
+      setSavedBlend(result.data as SavedBlend);
+    } catch (requestError) {
+      setError((requestError as Error).message);
+    } finally {
+      setCreating(false);
+    }
+  }
+
+  function removeSessionBlend(blend: SessionBlend) {
+    const nextBlends = sessionBlends.filter((candidate) => candidate.id !== blend.id);
+    window.sessionStorage.setItem(SESSION_BLEND_STORAGE_KEY, JSON.stringify(nextBlends));
+    setSessionBlends(nextBlends);
+    if (protocol?.id === blend.protocol.id) {
+      setProtocol(null);
+      setProtocolCreated(null);
+    }
+  }
+
+  async function submitSavedBlend() {
+    if (!savedBlend) return;
+    setCreating(true);
+    setError("");
+    try {
+      const response = await fetch(`/api/account/blends/${savedBlend.id}/submit`, {
+        method: "POST",
+      });
+      if (!response.ok) throw new Error("No fue posible enviar el blend a revisión.");
+      const result = (await response.json()) as { data: SavedBlend };
+      setSavedBlend(result.data);
     } catch (requestError) {
       setError((requestError as Error).message);
     } finally {
@@ -300,7 +389,7 @@ export default function IngredientLab() {
     <section className="ingredient-lab" id="laboratorio" aria-labelledby="lab-title">
       <div className="lab-intro">
         <div>
-          <p className="section-index">05 — LABORATORIO DE SABOR</p>
+          <p className="section-index">04 — LABORATORIO DE SABOR</p>
           <h2 id="lab-title">Experimenta antes<br />de encender.</h2>
         </div>
         <div className="lab-manifesto">
@@ -414,9 +503,9 @@ export default function IngredientLab() {
           <p className="section-index">MESA DE PRUEBA</p>
           <h3 id="bench-title">Fórmula experimental</h3>
           <p>
-            {readOnlyProduction
-              ? "Explora combinaciones de 2 a 6 componentes. La creación de fichas está desactivada en esta demostración pública."
-              : "Selecciona entre 2 y 6 componentes. Cada combinación única se registra como ficha técnica local."}
+            {account
+              ? "Selecciona entre 2 y 6 componentes. El blend se guarda primero como borrador privado en tu cuenta."
+              : "Selecciona entre 2 y 6 componentes. El blend se guarda sólo durante esta sesión y nunca se publica ni se agrega a una cuenta."}
           </p>
 
           <ol className="selected-ingredients" aria-label="Componentes seleccionados">
@@ -438,17 +527,32 @@ export default function IngredientLab() {
               {objectives.map((item) => <option key={item} value={item}>{objectiveLabel(item)}</option>)}
             </select>
           </label>
+          <label className="experiment-objective">
+            <span>Nombre de tu blend</span>
+            <input
+              type="text"
+              minLength={3}
+              maxLength={80}
+              value={blendTitle}
+              placeholder="Ej. Corteza dulce de la casa"
+              onChange={(event) => setBlendTitle(event.target.value)}
+            />
+          </label>
           <button
             className="button button-primary create-protocol"
             type="button"
-            disabled={readOnlyProduction || !hydrated || selectedIds.length < 2 || creating}
+            disabled={!hydrated || selectedIds.length < 2 || creating || blendTitle.trim().length < 3}
             onClick={createProtocol}
           >
-            {readOnlyProduction ? "Entorno de solo lectura" : creating ? "Documentando..." : "Crear protocolo"}
+            {creating
+              ? "Documentando..."
+              : account
+                ? "Guardar en mis blends"
+                : "Guardar en esta sesión"}
           </button>
-          {readOnlyProduction && (
+          {!account && (
             <small className="read-only-note">
-              Las fichas publicadas pueden consultarse, pero este entorno no modifica el registro.
+              Se conserva al recargar esta pestaña y se elimina al cerrar la sesión del navegador.
             </small>
           )}
           {selectedIds.length === 6 && <small className="bench-limit">La mesa admite un máximo de 6 componentes.</small>}
@@ -456,13 +560,65 @@ export default function IngredientLab() {
           {protocol && (
             <div className="protocol-result" role="region" aria-live="polite" aria-labelledby="protocol-title">
               <span>{protocol.id} · {statusLabel(protocol.estado)}</span>
-              <h4 id="protocol-title">{protocolCreated ? "Hipótesis registrada" : "Hipótesis existente"}</h4>
+              <h4 id="protocol-title">
+                {savedBlend
+                  ? protocolCreated ? "Blend guardado" : "Blend existente"
+                  : protocolCreated ? "Blend guardado en esta sesión" : "Blend ya guardado en esta sesión"}
+              </h4>
               <p>{visibleText(protocol.hipotesis)}</p>
               <ol>{protocol.metodo.map((step) => <li key={step}>{visibleText(step)}</li>)}</ol>
+              {savedBlend?.status === "draft" || savedBlend?.status === "rejected" ? (
+                <button className="button button-quiet" type="button" disabled={creating} onClick={() => void submitSavedBlend()}>
+                  Solicitar publicación
+                </button>
+              ) : null}
+              {savedBlend?.status === "submitted" && <strong>En revisión editorial.</strong>}
+              {savedBlend?.status === "published" && <strong>Publicado en el laboratorio.</strong>}
             </div>
           )}
         </aside>
       </div>
+
+      {!account && (
+        <section className="session-blend-library" aria-labelledby="session-blends-title">
+          <div className="registry-heading">
+            <div>
+              <p className="section-index">ARCHIVO TEMPORAL DEL NAVEGADOR</p>
+              <h3 id="session-blends-title">Blends de esta sesión</h3>
+            </div>
+            <span aria-live="polite">{sessionBlends.length} / {SESSION_BLEND_LIMIT} blends</span>
+          </div>
+          {sessionBlends.length === 0 ? (
+            <div className="registry-empty">
+              <strong>Tu mesa todavía está vacía.</strong>
+              <p>Las fórmulas que guardes aquí no se publican y no aparecerán en Mis blends.</p>
+            </div>
+          ) : (
+            <div className="session-blend-grid" data-testid="session-blends">
+              {sessionBlends.map((blend) => (
+                <article className="session-blend-card" key={blend.id}>
+                  <span>{blend.id} · SESIÓN ACTUAL</span>
+                  <h4>{blend.title}</h4>
+                  <p>{objectiveLabel(blend.protocol.objetivo)}</p>
+                  <ul>
+                    {blend.protocol.componentes.map((component) => (
+                      <li key={component.id}>{component.nombre}</li>
+                    ))}
+                  </ul>
+                  <div>
+                    <button type="button" onClick={() => setInspectedHypothesis(blend.protocol)}>
+                      Abrir ficha
+                    </button>
+                    <button type="button" onClick={() => removeSessionBlend(blend)} aria-label={`Eliminar blend ${blend.title}`}>
+                      Eliminar
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       <section
         className="hypothesis-registry"

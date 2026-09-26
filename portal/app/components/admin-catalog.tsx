@@ -25,6 +25,18 @@ type AdministrativeEvent = {
   revision: number;
 };
 
+type AdministrativeBlend = {
+  id: string;
+  title: string;
+  objective: string;
+  status: "submitted";
+  protocol: {
+    componentes: Array<{ id: string; nombre: string; familia: string }>;
+    hipotesis: string;
+  };
+  submittedAt: string | null;
+};
+
 type AdminCatalogProps = {
   onClose: () => void;
   onCatalogChanged: () => Promise<void>;
@@ -37,30 +49,39 @@ function replaceRecord<T extends { id: number }>(records: T[], updated: T) {
 export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalogProps) {
   const [products, setProducts] = useState<AdministrativeProduct[]>([]);
   const [events, setEvents] = useState<AdministrativeEvent[]>([]);
+  const [blends, setBlends] = useState<AdministrativeBlend[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<AdministrativeProduct | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<AdministrativeEvent | null>(null);
+  const [selectedBlend, setSelectedBlend] = useState<AdministrativeBlend | null>(null);
+  const [moderationNote, setModerationNote] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
   async function loadCatalog() {
     try {
-      const [productsResponse, eventsResponse] = await Promise.all([
+      const [productsResponse, eventsResponse, blendsResponse] = await Promise.all([
         fetch("/api/admin/products"),
         fetch("/api/admin/events"),
+        fetch("/api/admin/blends"),
       ]);
-      if (!productsResponse.ok || !eventsResponse.ok) {
+      if (!productsResponse.ok || !eventsResponse.ok || !blendsResponse.ok) {
         throw new Error("Administrative catalog request failed");
       }
       const productResult = (await productsResponse.json()) as { data: AdministrativeProduct[] };
       const eventResult = (await eventsResponse.json()) as { data: AdministrativeEvent[] };
+      const blendResult = (await blendsResponse.json()) as { data: AdministrativeBlend[] };
       setProducts(productResult.data);
       setEvents(eventResult.data);
+      setBlends(blendResult.data);
       setSelectedProduct((current) => current
         ? productResult.data.find((product) => product.id === current.id) ?? null
         : null);
       setSelectedEvent((current) => current
         ? eventResult.data.find((event) => event.id === current.id) ?? null
+        : null);
+      setSelectedBlend((current) => current
+        ? blendResult.data.find((blend) => blend.id === current.id) ?? null
         : null);
     } catch (error) {
       console.error("The administrative catalog could not be loaded", error);
@@ -74,17 +95,20 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
     const controller = new AbortController();
     async function loadInitialCatalog() {
       try {
-        const [productsResponse, eventsResponse] = await Promise.all([
+        const [productsResponse, eventsResponse, blendsResponse] = await Promise.all([
           fetch("/api/admin/products", { signal: controller.signal }),
           fetch("/api/admin/events", { signal: controller.signal }),
+          fetch("/api/admin/blends", { signal: controller.signal }),
         ]);
-        if (!productsResponse.ok || !eventsResponse.ok) {
+        if (!productsResponse.ok || !eventsResponse.ok || !blendsResponse.ok) {
           throw new Error("Administrative catalog request failed");
         }
         const productResult = (await productsResponse.json()) as { data: AdministrativeProduct[] };
         const eventResult = (await eventsResponse.json()) as { data: AdministrativeEvent[] };
+        const blendResult = (await blendsResponse.json()) as { data: AdministrativeBlend[] };
         setProducts(productResult.data);
         setEvents(eventResult.data);
+        setBlends(blendResult.data);
       } catch (error) {
         if (!controller.signal.aborted) {
           console.error("The administrative catalog could not be loaded", error);
@@ -179,6 +203,32 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
     }
   }
 
+  async function moderateBlend(decision: "approve" | "reject") {
+    if (!selectedBlend) return;
+    setSaving(true);
+    setMessage("");
+    try {
+      const response = await fetch(`/api/admin/blends/${selectedBlend.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          decision,
+          ...(moderationNote.trim() ? { note: moderationNote.trim() } : {}),
+        }),
+      });
+      if (!response.ok) throw new Error(`Blend moderation failed with ${response.status}`);
+      setBlends((current) => current.filter((blend) => blend.id !== selectedBlend.id));
+      setSelectedBlend(null);
+      setModerationNote("");
+      setMessage(decision === "approve" ? "Blend publicado." : "Blend devuelto con observaciones.");
+    } catch (error) {
+      console.error("The blend could not be moderated", error);
+      setMessage("No pudimos completar la revisión del blend.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <section className="modal admin-catalog-modal" role="dialog" aria-modal="true" aria-labelledby="admin-catalog-title">
@@ -195,7 +245,7 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
               <h3 id="admin-products-title">Productos</h3>
               <div className="admin-record-list">
                 {products.map((product) => (
-                  <button key={product.id} type="button" data-testid={`admin-product-${product.id}`} aria-pressed={selectedProduct?.id === product.id} onClick={() => { setSelectedProduct({ ...product }); setSelectedEvent(null); setMessage(""); }}>
+                  <button key={product.id} type="button" data-testid={`admin-product-${product.id}`} aria-pressed={selectedProduct?.id === product.id} onClick={() => { setSelectedProduct({ ...product }); setSelectedEvent(null); setSelectedBlend(null); setMessage(""); }}>
                     <span>{product.name}</span><small>{product.active ? "Activo" : "Inactivo"} · Rev. {product.revision}</small>
                   </button>
                 ))}
@@ -205,14 +255,25 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
               <h3 id="admin-events-title">Encuentros</h3>
               <div className="admin-record-list">
                 {events.map((catalogEvent) => (
-                  <button key={catalogEvent.id} type="button" data-testid={`admin-event-${catalogEvent.id}`} aria-pressed={selectedEvent?.id === catalogEvent.id} onClick={() => { setSelectedEvent({ ...catalogEvent }); setSelectedProduct(null); setMessage(""); }}>
+                  <button key={catalogEvent.id} type="button" data-testid={`admin-event-${catalogEvent.id}`} aria-pressed={selectedEvent?.id === catalogEvent.id} onClick={() => { setSelectedEvent({ ...catalogEvent }); setSelectedProduct(null); setSelectedBlend(null); setMessage(""); }}>
                     <span>{catalogEvent.title}</span><small>{catalogEvent.active ? "Activo" : "Inactivo"} · Rev. {catalogEvent.revision}</small>
                   </button>
                 ))}
               </div>
             </section>
+            <section aria-labelledby="admin-blends-title">
+              <h3 id="admin-blends-title">Blends por revisar</h3>
+              <div className="admin-record-list" data-testid="admin-blend-review-list">
+                {blends.length === 0 && <p>No hay blends pendientes.</p>}
+                {blends.map((blend) => (
+                  <button key={blend.id} type="button" data-testid={`admin-blend-${blend.id}`} aria-pressed={selectedBlend?.id === blend.id} onClick={() => { setSelectedBlend(blend); setSelectedProduct(null); setSelectedEvent(null); setModerationNote(""); setMessage(""); }}>
+                    <span>{blend.title}</span><small>{blend.objective}</small>
+                  </button>
+                ))}
+              </div>
+            </section>
             <section className="admin-editor" aria-label="Editor del catálogo">
-              {!selectedProduct && !selectedEvent && <p>Selecciona un producto o encuentro para editarlo.</p>}
+              {!selectedProduct && !selectedEvent && !selectedBlend && <p>Selecciona un producto, encuentro o blend para revisarlo.</p>}
               {selectedProduct && (
                 <form onSubmit={saveProduct} data-testid="admin-product-form">
                   <h3>Editar producto #{selectedProduct.id}</h3>
@@ -236,6 +297,24 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
                   <label className="checkbox"><input type="checkbox" checked={selectedEvent.active} onChange={(event) => setSelectedEvent((current) => current && ({ ...current, active: event.target.checked }))} /> Encuentro visible en la agenda.</label>
                   <button className="button button-primary" type="submit" disabled={saving}>{saving ? "Guardando..." : "Guardar encuentro"}</button>
                 </form>
+              )}
+              {selectedBlend && (
+                <div data-testid="admin-blend-review">
+                  <h3>{selectedBlend.title}</h3>
+                  <p>{selectedBlend.objective}</p>
+                  <strong>Componentes</strong>
+                  <p>{selectedBlend.protocol.componentes.map((component) => component.nombre).join(" · ")}</p>
+                  <strong>Hipótesis</strong>
+                  <p>{selectedBlend.protocol.hipotesis}</p>
+                  <label>
+                    Nota editorial
+                    <textarea value={moderationNote} maxLength={280} onChange={(event) => setModerationNote(event.target.value)} />
+                  </label>
+                  <div className="admin-blend-actions">
+                    <button className="button button-primary" type="button" disabled={saving} onClick={() => void moderateBlend("approve")}>Aprobar y publicar</button>
+                    <button className="button button-quiet" type="button" disabled={saving || moderationNote.trim().length === 0} onClick={() => void moderateBlend("reject")}>Devolver con observaciones</button>
+                  </div>
+                </div>
               )}
             </section>
           </div>
