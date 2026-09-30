@@ -15,6 +15,7 @@ tmp/
 portal/node_modules/
 portal/.next/
 portal/dist/
+portal/dist-static/
 portal/.wrangler/
 portal/.d1-backups/
 portal/.npm-cache/

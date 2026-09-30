@@ -9,7 +9,7 @@
     "dev": "vinext dev",
     "dev:next": "next dev",
     "dev:cloudflare": "vinext dev",
-    "build": "vinext build",
+    "build": "npm run build:static",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern worker-configuration.d.ts",
     "typecheck": "tsc --noEmit",
@@ -31,13 +31,16 @@
     "readiness:accounts:production": "node ./scripts/deployment-readiness.mjs --environment production --profile accounts-preview",
     "test:readiness": "node --test ./scripts/deployment-readiness.test.mjs",
     "deploy:staging:check": "CLOUDFLARE_ENV=staging vinext build && wrangler deploy --config dist/server/wrangler.json --dry-run",
-    "deploy:staging": "CLOUDFLARE_ENV=staging vinext build && wrangler deploy --config dist/server/wrangler.json",
+    "deploy:staging": "node scripts/deployment-paused.mjs",
     "deploy:production:check": "CLOUDFLARE_ENV=production vinext build && wrangler deploy --config dist/server/wrangler.json --dry-run",
-    "deploy:production": "CLOUDFLARE_ENV=production vinext build && wrangler deploy --config dist/server/wrangler.json",
+    "deploy:production": "node scripts/deployment-paused.mjs",
     "release:public-demo:preflight": "bash ./scripts/production-preflight.sh",
     "release:production:preflight": "bash ./scripts/accounts-preflight.sh",
     "release:accounts:preflight": "bash ./scripts/accounts-preflight.sh",
-    "cf:typegen": "wrangler types"
+    "cf:typegen": "wrangler types",
+    "build:static": "vite build --config static/vite.config.ts && node scripts/check-static.mjs",
+    "preview:static": "vite preview --config static/vite.config.ts",
+    "build:backend": "vinext build"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.7.6",

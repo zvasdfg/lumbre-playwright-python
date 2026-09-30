@@ -1,11 +1,54 @@
 # Lumbre Production Architecture Migration Plan
 
+## Current direction: static public portal (2026-09-30)
+
+The user has paused the custom commerce/account backend and its administrator UI.
+The public target is now static-only; see [Static portal](STATIC_PORTAL.md).
+The work below is preserved history, not the current deployment plan. No push,
+production deployment or Cloudflare deletion is authorized before local acceptance.
+
 ## Active work: inventory-backed store administration (2026-09-30)
 
 The requested sequence is: restore the deployment pipeline, simplify catalog
 maintenance, then expand the administrator UI. This section supersedes earlier
-catalog scope where they conflict. Phase A is implemented locally and under
-release verification. Phase B remains planned, not delivered.
+catalog scope where they conflict. Phase A is deployed (run 36765376628 passed
+staging and production acceptance, four tests each). Phase B1 is implemented
+locally for user review only; no push or deployment is authorized yet.
+
+### Phase B1: local product authoring
+
+The administrator profile opens the existing catalog workspace. Select **Nuevo
+sazonador**, enter a unique LMB-F-NNN code, name, description, net content, image
+description, 2–6 ingredients, whole-peso price and counted stock. Image selection
+currently reuses four existing product assets: check the label matches before
+publishing. Uploading or generating new product imagery is not part of B1.
+
+- **Guardar borrador** persists a complete private declaration in D1. Drafts
+  require complete fields (not partial autosave); they are always inactive and
+  excluded from both public catalogs, even if an API caller sends active=true.
+- **Vista previa** validates the form and shows its public presentation. Editing
+  a field invalidates the preview. **Publicar en tienda y laboratorio** then
+  updates the same record; the public lab derives its declaration from it.
+- Publication status lives in the existing JSON details column. Missing status
+  means already published for backwards compatibility; no schema migration or
+  data reset is required. Codes become immutable on first save, including drafts.
+- Published records cannot return to draft. Unchecking store visibility archives
+  the item while keeping its technical sheet and history.
+- Save errors keep entered data. Revision conflicts require reloading the
+  catalog before another attempt. Existing role and origin checks still apply.
+- Unsaved form edits are not persisted; save before switching records or closing.
+
+Local walkthrough: open http://localhost:3000, sign in using the existing test
+administrator admin@lumbre.example.test, retrieve its development magic link via
+the local delivery endpoint, then open the profile and **Administrar catálogo**.
+This deterministic administrator is test-only; production roles are not changed.
+
+Verification: API-083 covers private draft, explicit publish, rejected downgrade
+and archive preservation; UI-062 covers creation, reload, preview and publication.
+The admin regression uses a disposable local database, not the manual demo data.
+Remaining Phase B work: image upload/storage, reasoned inventory adjustments,
+partial drafts/autosave, stronger unsaved-change navigation guards and a full
+administrator workspace beyond the existing modal.
 
 ### Release repair prerequisite
 
@@ -26,8 +69,11 @@ was requested. Staging subsequently passed; production migrated and deployed,
 but its immediate smoke received old-version responses. A later production
 smoke passed 4/4. Deployment now waits up to 120 seconds for two consecutive
 healthy probes before executing acceptance once; exhausted readiness still
-fails the job. Final pipeline acceptance is pending. Never skip the migration
-gate to work around an authorization failure.
+fails the job. Run 36765376628 (commit 4b29111) passed all three jobs, including
+four acceptance tests per environment. The intermittent UI initialization timeout
+did not reproduce in that run; its root cause is not confirmed. Browser navigation
+now attaches failed requests, pending paths and JavaScript errors to failures.
+Never skip the migration gate to work around an authorization failure.
 
 ### Phase A: one operational catalog
 
