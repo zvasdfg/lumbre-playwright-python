@@ -121,6 +121,10 @@ jobs:
         working-directory: portal
         run: npm run readiness:staging
 
+      - name: Apply staging database migrations
+        working-directory: portal
+        run: npm run db:migrate:staging
+
       - name: Deploy staging
         working-directory: portal
         run: npm run deploy:staging
@@ -195,6 +199,10 @@ jobs:
       - name: Validate production bindings and remote secret names
         working-directory: portal
         run: npm run readiness:production
+
+      - name: Apply production database migrations
+        working-directory: portal
+        run: npm run db:migrate:remote
 
       - name: Deploy production
         working-directory: portal
