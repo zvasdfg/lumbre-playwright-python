@@ -1,5 +1,95 @@
 # Lumbre Production Architecture Migration Plan
 
+## Active work: inventory-backed store administration (2026-09-30)
+
+The requested sequence is: restore the deployment pipeline, simplify catalog
+maintenance, then expand the administrator UI. This section supersedes earlier
+catalog scope where they conflict. Implementation is pending except for the
+remote smoke assertion correction.
+
+### Release repair prerequisite
+
+Staging reproduces two failures after commit f8fdbbd: health returns 503 with
+`seed-mismatch` (D1 reports `2026.07.03`, application expects `2026.09.30`), and
+REMOTE-002 incorrectly expects an empty hypothesis archive. The corrected test
+requires the four production codes in both products and public records.
+
+Read-only migration inspection found 0013, 0014 and 0015 pending in both remote
+environments. Migration 0013 deletes all hypotheses. Do not blindly apply the
+pending chain. Reconcile the migration ledger against actual schema, preserve
+existing records, export a backup, and obtain authorization for the remote
+repair before proceeding. Validate staging first, then production. Never mark
+a migration applied unless its intended non-destructive schema/data state has
+been verified. Future deployment automation needs an explicit migration policy
+and must reject destructive pending migrations rather than execute them silently.
+
+### Phase A: one operational catalog
+
+- Show only LMB-F-001, LMB-F-002, LMB-F-003 and LMB-F-004. Archive the seven legacy
+  items by setting them inactive; preserve IDs and historical order references.
+- Set each seasoning to 99 MXN. Keep the current whole-peso price convention;
+  provider conversion remains at the payment boundary.
+- Preserve actual stock. Initial quantity is unknown, so retain zero until an
+  administrator records a count. Always display the price and show `Agotado`
+  when unavailable. Purchase availability follows stock and the commerce gate.
+- Store product code, description, image, net content and ordered ingredient
+  references in D1 alongside price, stock, active status and revision. Eliminate
+  runtime metadata overrides and per-product image maps in React.
+- Generate the public laboratory production sheet from the same product and
+  ingredient data. Give each blend one stable public code; do not duplicate its
+  ingredients in an independently maintained hypothesis record. Public product
+  sheets do not disclose manufacturing proportions.
+- Keep user experiments and moderation independent. An out-of-stock blend
+  remains readable in the public archive. Archiving a product stops its sale;
+  its previously published technical sheet remains identifiable as archived.
+- Bootstrap existing products once with an additive migration. Subsequent
+  edits must persist across deployments and must not be overwritten by seeds.
+
+Definition of done: exactly four store cards, each priced at 99 MXN; matching
+public lab records; zero stock blocks purchase; an inventory or price update
+through the existing admin API is reflected without a build. Verify inactive
+products cannot be purchased, historical orders still load, and stale edits
+return a revision conflict. Commerce tests create explicit stocked fixtures
+instead of depending on legacy merchandise or fabricated production stock.
+
+### Phase B: administrator workspace
+
+Reuse `admin-catalog.tsx`, `/api/admin/products`, the server-side admin role
+check, revision checks, audit events and inventory reservation services.
+The current UI edits existing products but lacks complete product authoring.
+Expose the workspace from the authenticated administrator profile. Customers
+must not gain access through direct API requests or client-side role changes.
+Provision the first administrator through a controlled server-side operation
+against a verified account, with an audit record; never through registration.
+
+Add one form for product name/code, description, image, net content, ingredients,
+price, inventory and publication state. Support draft, preview, publish and
+archive. Publishing a blend validates all required fields and makes its shared
+technical sheet available in the public lab in the same database operation.
+Image upload/storage is a separate implementation slice with file validation;
+reuse existing local assets until that slice is delivered.
+
+Use audited inventory adjustments with quantity delta, reason, actor and expected
+revision. Preserve reservation/sale/release behavior and reject edits that race
+with checkout. User-facing success must mean the database transaction completed.
+
+Definition of done: an admin creates a draft, previews and publishes it once;
+the product appears in store and public lab without code changes. Verify 401/403,
+conflicting edits, invalid ingredients, duplicate product codes, stock contention,
+archive behavior and audit history with focused API and Playwright scenarios.
+
+### Simpler operator workflow
+
+Create product → select ingredients → attach image → enter price and counted
+stock → preview → publish. Routine catalog changes do not require separate
+content-engine packages, source edits, migrations or deployments. The content
+engine remains available for creating editorial assets; it is not the inventory
+system. One shared service owns publication validation and the two public views.
+
+Deliver Phase A and Phase B as separate reviewable releases with timestamped
+test reports. Roll back application code independently of additive schema;
+restore data only from a verified backup if required. Do not reset remote seeds.
+
 > Status: controlled-account release candidate. The public demo is live and the
 > next slice adds one allowlisted passwordless account through Resend's test
 > sender. Code, readiness policy, commerce isolation, and abuse protection are
