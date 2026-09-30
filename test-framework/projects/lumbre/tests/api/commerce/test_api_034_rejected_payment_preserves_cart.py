@@ -12,7 +12,7 @@ def test_rejected_payment_preserves_cart(
     openapi_contract: OpenApiContract,
     test_log: TestLogger,
 ) -> None:
-    authenticated_api.add_cart_item({"productId": 113, "quantity": 1})
+    authenticated_api.add_cart_item({"productId": 123, "quantity": 1})
     order = authenticated_api.create_order(
         {"customerName": "Cliente Fixture", "customerEmail": "fixture.customer@example.test"},
         "rejected-order",
@@ -37,4 +37,4 @@ def test_rejected_payment_preserves_cart(
         cart = authenticated_api.cart()["data"]
         test_log.values(observed_cart=cart, expected_quantity=1)
         assert cart["totalQuantity"] == 1
-        assert cart["items"][0]["productId"] == 113
+        assert cart["items"][0]["productId"] == 123

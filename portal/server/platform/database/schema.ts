@@ -314,6 +314,7 @@ export const catalogProducts = sqliteTable("catalog_products", {
   price: integer("price").notNull(),
   stock: integer("stock").notNull().default(0),
   badge: text("badge"),
+  details: text("details", { mode: "json" }).$type<import("../../../app/lib/production-products").ProductDetails>(),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
   revision: integer("revision").notNull().default(1),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),

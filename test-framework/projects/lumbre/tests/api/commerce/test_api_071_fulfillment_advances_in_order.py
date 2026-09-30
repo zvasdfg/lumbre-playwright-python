@@ -15,7 +15,7 @@ def test_fulfillment_advances_in_order(
     openapi_contract: OpenApiContract,
     test_log: TestLogger,
 ) -> None:
-    administrator_api.add_cart_item({"productId": 112, "quantity": 1})
+    administrator_api.add_cart_item({"productId": 122, "quantity": 1})
     order = administrator_api.create_order(
         {
             "customerName": "Administración Lumbre",

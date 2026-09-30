@@ -13,7 +13,7 @@ def test_rejected_payment_preserves_inventory(
     administrator_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    product_id = 112
+    product_id = 122
     initial_stock = 5
     product = next(
         item for item in administrator_api.admin_products().json()["data"]

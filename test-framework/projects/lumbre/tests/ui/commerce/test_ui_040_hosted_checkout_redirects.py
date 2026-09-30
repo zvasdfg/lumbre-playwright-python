@@ -40,11 +40,11 @@ def test_hosted_checkout_redirects(
     )
 
     with test_log.step("Prepare an authenticated order for hosted checkout"):
-        authenticated_home.add_product("Blend LHC-003 · SPG clásico")
+        authenticated_home.add_product("Sazonador multiuso")
         authenticated_home.open_cart()
         authenticated_home.cart.checkout()
         expect(authenticated_home.checkout.root).to_be_visible()
-        test_log.values(observed_checkout_visible=True, expected_cart_total="$260")
+        test_log.values(observed_checkout_visible=True, expected_cart_total="$99")
 
     with test_log.step("Request the hosted Checkout Session from the browser"):
         with authenticated_home.page.expect_request(

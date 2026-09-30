@@ -38,7 +38,9 @@ def test_blend_publication_requires_review(api: LumbreApi, test_log: TestLogger)
         )
         assert submitted.status == 200
         assert submitted.json()["data"]["status"] == "submitted"
-        assert api.hypotheses()["count"] == 0
+        public_records = api.hypotheses()["data"]
+        assert len(public_records) == 4
+        assert all(item.get("tipo_registro") == "producto_produccion" for item in public_records)
         assert api.logout().status == 200
 
     with test_log.step("Publish the submitted blend as an administrator"):
@@ -71,7 +73,9 @@ def test_blend_publication_requires_review(api: LumbreApi, test_log: TestLogger)
             observed_owner_status=owned["status"],
             observed_owner_publication=owned["publishedHypothesisId"],
         )
-        assert [item["id"] for item in public_registry["data"]] == ["LHC-001"]
+        assert {item["id"] for item in public_registry["data"]} == {
+            "LHC-001", "LMB-F-001", "LMB-F-002", "LMB-F-003", "LMB-F-004"
+        }
         assert owned["id"] == blend_id
         assert owned["status"] == "published"
         assert owned["publishedHypothesisId"] == "LHC-001"

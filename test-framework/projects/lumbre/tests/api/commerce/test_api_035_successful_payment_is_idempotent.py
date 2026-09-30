@@ -12,7 +12,7 @@ def test_successful_payment_is_idempotent(
     openapi_contract: OpenApiContract,
     test_log: TestLogger,
 ) -> None:
-    authenticated_api.add_cart_item({"productId": 111, "quantity": 3})
+    authenticated_api.add_cart_item({"productId": 121, "quantity": 3})
     order = authenticated_api.create_order(
         {"customerName": "Cliente Fixture", "customerEmail": "fixture.customer@example.test"},
         "approved-order",
@@ -45,4 +45,4 @@ def test_successful_payment_is_idempotent(
         assert cart == {"items": [], "totalQuantity": 0, "total": 0}
         assert history["count"] == 1
         assert history["data"][0]["status"] == "paid"
-        assert history["data"][0]["total"] == 780
+        assert history["data"][0]["total"] == 297

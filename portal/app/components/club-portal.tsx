@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { events as eventSeeds, products as productSeeds, recipes, type FireEvent, type Product } from "../lib/data";
+import { events as eventSeeds, recipes, type FireEvent, type Product } from "../lib/data";
 import { isPublicProductionReadOnly } from "../lib/environment";
 import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
@@ -100,20 +100,6 @@ function productCategoryLabel(category: Product["category"]) {
   return category;
 }
 
-function productImage(product: Product) {
-  if (product.image) return product.image;
-  const images: Record<number, string> = {
-    101: "/editorial/products/pinzas-forja-45.jpg",
-    102: "/editorial/products/mandil-lumbre-01.jpg",
-    103: "/editorial/products/gorra-brasa-baja-v2.jpg",
-    104: "/editorial/products/playera-despues-del-humo-v2.jpg",
-    111: "/editorial/blend-spg.jpg",
-    112: "/editorial/blend-pollo-ahumado.jpg",
-    113: "/editorial/blend-umami.jpg",
-  };
-  return images[product.id];
-}
-
 function productInitials(name: string) {
   return name
     .split(/\s+/)
@@ -139,7 +125,7 @@ export default function ClubPortal() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [productCatalog, setProductCatalog] = useState<Product[]>(productSeeds);
+  const [productCatalog, setProductCatalog] = useState<Product[]>([]);
   const [eventCatalog, setEventCatalog] = useState<AvailableEvent[]>(eventSeeds);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [magicLinkRequested, setMagicLinkRequested] = useState(false);
@@ -676,7 +662,7 @@ export default function ClubPortal() {
       <IngredientLab account={account} />
 
       <section className="shop-section" id="tienda">
-        <div className="shop-heading"><p className="section-index">05 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />protocolos.</h2><p>Mezclas nacidas en el laboratorio y listas para llevar al fuego. La herramienta y la merch acompañan el oficio; el sabor es el punto de partida.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>
+        <div className="shop-heading"><p className="section-index">05 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />sazonadores.</h2><p>Cuatro mezclas para llevar al fuego. Conoce sus ingredientes y consulta sus fichas en nuestro laboratorio.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>
         <div className="product-grid">
           {productCatalog.map((product) => (
             <article
@@ -687,9 +673,9 @@ export default function ClubPortal() {
             >
               <div className={`product-art product-${product.category}`}>
                 {product.badge && <span className="product-badge">{product.badge}</span>}
-                {productImage(product) ? (
+                {product.image ? (
                   <Image
-                    src={productImage(product)}
+                    src={product.image}
                     alt={product.imageAlt ?? `Fotografía de ${product.name}`}
                     fill
                     sizes="(max-width: 520px) 100vw, 33vw"
@@ -707,8 +693,8 @@ export default function ClubPortal() {
                 <p className="product-ingredients"><strong>Ingredientes:</strong> {product.ingredients.join(", ")}.</p>
               )}
               <div>
-                <strong>{product.purchaseEnabled === false ? `Contenido neto ${product.netContent} · Venta próximamente` : product.stock > 0 ? currency.format(product.price) : "Agotado"}</strong>
-                <button type="button" disabled={product.purchaseEnabled === false || product.stock === 0} onClick={() => void addToCart(product)} aria-label={product.purchaseEnabled === false ? `${product.name}: venta próximamente` : product.stock > 0 ? `Agregar ${product.name} a la canasta` : `${product.name} agotado`}>{product.purchaseEnabled === false ? "·" : product.stock > 0 ? "+" : "×"}</button>
+                <strong>{currency.format(product.price)}{product.netContent ? ` · ${product.netContent}` : ""}{product.stock === 0 ? " · Agotado" : ""}</strong>
+                <button type="button" disabled={product.purchaseEnabled === false || product.stock === 0} onClick={() => void addToCart(product)} aria-label={product.stock > 0 ? `Agregar ${product.name} a la canasta` : `${product.name} agotado`}>{product.stock > 0 ? "+" : "×"}</button>
               </div>
             </article>
           ))}

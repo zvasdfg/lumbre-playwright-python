@@ -18,7 +18,9 @@ export async function POST() {
   await resetReservations();
   await resetFirePresets();
   await resetMembershipPreferences();
-  await resetCatalog();
+  // Explicit fixture inventory, reachable only after the test-environment guard.
+  // Production migrations retain actual stock and never call this endpoint.
+  await resetCatalog(40);
   await resetUserBlends();
   await resetHypotheses();
   await resetAuthentication();

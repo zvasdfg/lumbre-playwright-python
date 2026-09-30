@@ -46,7 +46,9 @@ def test_account_blends_are_private(api: LumbreApi, test_log: TestLogger) -> Non
         )
         assert created.status == 201
         assert payload["data"]["status"] == "draft"
-        assert api.hypotheses()["count"] == 0
+        public_records = api.hypotheses()["data"]
+        assert len(public_records) == 4
+        assert all(item.get("tipo_registro") == "producto_produccion" for item in public_records)
         assert api.logout().status == 200
 
     with test_log.step("Keep the blend out of a second account collection"):

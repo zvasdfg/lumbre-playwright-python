@@ -77,8 +77,10 @@ async function projectCart(cartId: string): Promise<CartView> {
     .where(eq(cartItems.cartId, cartId))
     .orderBy(asc(cartItems.id));
 
-  const items = await Promise.all(rows.map(async ({ productId, quantity }) => {
-    const product = await catalogProduct(productId);
+  const projected = await Promise.all(rows.map(async ({ productId, quantity }) => {
+    const product = await findPublicProduct(productId);
+    // Retired products must not break existing carts or remain purchasable.
+    if (!product) return null;
     return {
       productId,
       name: product.name,
@@ -88,6 +90,7 @@ async function projectCart(cartId: string): Promise<CartView> {
       lineTotal: product.price * quantity,
     };
   }));
+  const items = projected.filter((item): item is CartItemView => item !== null);
 
   return {
     items,

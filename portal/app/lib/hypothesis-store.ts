@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { type ExperimentProtocol } from "./ingredients";
 import { getDatabase } from "../../server/platform/database/client";
-import { hypotheses } from "../../server/platform/database/schema";
-import { productionArchiveRecords } from "./production-products";
+import { hypotheses, catalogProducts } from "../../server/platform/database/schema";
+import { productionArchiveRecord } from "./production-products";
 
 export const experimentObjectives = {
   "Costra para res": { prefix: "LHC", subject: "una costra equilibrada para res" },
@@ -45,10 +45,14 @@ export async function listHypotheses(): Promise<ExperimentProtocol[]> {
     .from(hypotheses);
 
   const persistedRecords = rows.map((row) => parseRecord(row.recordJson, row.duplicateCount));
-  const persistedIds = new Set(persistedRecords.map((record) => record.id));
+  const products = await getDatabase().select().from(catalogProducts)
+    .where(eq(catalogProducts.category, "blends"));
+  const productionRecords = products.flatMap((product) => product.details
+    ? [productionArchiveRecord({ ...product, details: product.details })] : []);
+  const productionIds = new Set(productionRecords.map((record) => record.id));
   return [
-    ...productionArchiveRecords.filter((record) => !persistedIds.has(record.id)),
-    ...persistedRecords,
+    ...productionRecords,
+    ...persistedRecords.filter((record) => !productionIds.has(record.id)),
   ].sort((left, right) => left.id.localeCompare(right.id));
 }
 

@@ -14,7 +14,7 @@ def test_cart_removes_an_added_product(
     home: HomePage,
     test_log: TestLogger,
 ) -> None:
-    product_name = "Pinzas Forja 45"
+    product_name = "Sazonador multiuso"
 
     with test_log.step("Add a product and open the cart"):
         home.add_product(product_name)

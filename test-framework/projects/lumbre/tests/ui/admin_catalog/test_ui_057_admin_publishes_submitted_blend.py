@@ -49,8 +49,8 @@ def test_admin_publishes_submitted_blend(
         expect(admin.message).to_have_text("Blend publicado.")
         expect(admin.blend(blend_id)).to_have_count(0)
         published = api.hypotheses()["data"]
-        assert len(published) == 1
-        published_hypothesis = published[0]
+        assert len(published) == 5
+        published_hypothesis = next(item for item in published if item["id"] == "LHC-001")
         test_log.values(
             observed_admin_message=admin.message.inner_text(),
             observed_pending_blend_count=admin.blend(blend_id).count(),

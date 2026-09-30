@@ -17,7 +17,7 @@ def test_reserved_order_cancellation_releases_inventory_once(
     test_log: TestLogger,
     starting_state: str,
 ) -> None:
-    product_id = 111
+    product_id = 121
     product = next(
         item for item in administrator_api.admin_products().json()["data"]
         if item["id"] == product_id

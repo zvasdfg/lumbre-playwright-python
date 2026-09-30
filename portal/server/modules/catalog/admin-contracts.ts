@@ -1,7 +1,21 @@
 import { z } from "zod";
 import { parseJsonBody } from "../commerce/cart-contracts";
+import { ingredients } from "../../../app/lib/ingredients";
 
 export { parseJsonBody };
+
+const productDetails = z.object({
+  productCode: z.string().regex(/^LMB-F-\d{3}$/),
+  description: z.string().trim().min(3).max(1000),
+  components: z.array(z.object({
+    id: z.string().refine((id) => ingredients.some((item) => item.id === id)),
+    nombre: z.string().trim().min(1).max(100),
+    familia: z.string().trim().min(1).max(60),
+  }).strict()).min(2).max(6).refine((items) => new Set(items.map((item) => item.id)).size === items.length),
+  image: z.string().regex(/^\/editorial\/[a-zA-Z0-9/_-]+\.(jpeg|jpg|png|webp)$/),
+  imageAlt: z.string().trim().min(3).max(200),
+  netContent: z.string().trim().min(1).max(40),
+}).strict();
 
 const productFields = {
   name: z.string().trim().min(3).max(100),
@@ -10,9 +24,13 @@ const productFields = {
   stock: z.number().int().min(0).max(1_000_000).optional(),
   badge: z.string().trim().min(1).max(40).nullable().optional(),
   active: z.boolean().optional(),
+  details: productDetails.optional(),
 };
 
-export const createProductRequest = z.object(productFields).strict();
+export const createProductRequest = z.object(productFields).strict().refine(
+  (product) => product.category !== "blends" || Boolean(product.details),
+  { message: "Blends require their public laboratory details" },
+);
 export const updateProductRequest = z
   .object({
     expectedRevision: z.number().int().min(1),
@@ -22,6 +40,7 @@ export const updateProductRequest = z
     stock: productFields.stock,
     badge: productFields.badge,
     active: productFields.active,
+    details: productFields.details,
   })
   .strict()
   .refine(

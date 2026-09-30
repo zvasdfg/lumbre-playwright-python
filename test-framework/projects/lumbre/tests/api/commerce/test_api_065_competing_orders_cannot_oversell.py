@@ -13,7 +13,7 @@ def test_competing_orders_cannot_oversell(
     administrator_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    product_id = 113
+    product_id = 123
     product = next(
         item for item in administrator_api.admin_products().json()["data"]
         if item["id"] == product_id

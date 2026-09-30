@@ -4,8 +4,8 @@
 
 The requested sequence is: restore the deployment pipeline, simplify catalog
 maintenance, then expand the administrator UI. This section supersedes earlier
-catalog scope where they conflict. Implementation is pending except for the
-remote smoke assertion correction.
+catalog scope where they conflict. Phase A is implemented locally and under
+release verification. Phase B remains planned, not delivered.
 
 ### Release repair prerequisite
 
@@ -14,14 +14,16 @@ Staging reproduces two failures after commit f8fdbbd: health returns 503 with
 REMOTE-002 incorrectly expects an empty hypothesis archive. The corrected test
 requires the four production codes in both products and public records.
 
-Read-only migration inspection found 0013, 0014 and 0015 pending in both remote
-environments. Migration 0013 deletes all hypotheses. Do not blindly apply the
-pending chain. Reconcile the migration ledger against actual schema, preserve
-existing records, export a backup, and obtain authorization for the remote
-repair before proceeding. Validate staging first, then production. Never mark
-a migration applied unless its intended non-destructive schema/data state has
-been verified. Future deployment automation needs an explicit migration policy
-and must reject destructive pending migrations rather than execute them silently.
+Both remote databases were exported before the authorized repair. The pending
+destructive cleanup in 0013 was retired as a no-op; migrations 0013–0015 were
+applied without clearing hypotheses. Staging remote smoke then passed 4/4.
+Deployment now applies migrations before deploying each environment. The next
+run exposed missing D1 access on the CI token (Cloudflare 7403). D1 Write was
+added to the named account token with explicit approval, but the rerun still
+returned 7403. A separate personal token has recent use and lacks D1 permission;
+its D1 Edit permission was also added with explicit approval and a new rerun
+was requested. Remote acceptance is still pending. Never skip the migration
+gate to work around an authorization failure.
 
 ### Phase A: one operational catalog
 
@@ -79,6 +81,33 @@ conflicting edits, invalid ingredients, duplicate product codes, stock contentio
 archive behavior and audit history with focused API and Playwright scenarios.
 
 ### Simpler operator workflow
+
+Phase A API workflow (administrator session required):
+
+1. Read `/api/admin/products` to inspect the current catalog and revisions.
+2. POST `/api/admin/products` once with `name`, `category: "blends"`, whole-peso
+   `price`, counted `stock`, `active`, and `details`. The latter contains
+   `productCode` (`LMB-F-NNN`), `description`, `image`, `imageAlt`, `netContent`,
+   and 2–6 unique known `components` (`id`, `nombre`, `familia`). Reuse an existing
+   `/editorial/` image asset; uploading new assets is not implemented yet.
+3. The same D1 record supplies `/api/products` and `/api/hipotesis`; do not add a
+   second hypothesis JSON or edit React product maps. Published codes are stable.
+4. PATCH `/api/admin/products/{id}` with `expectedRevision` and changed fields.
+   Existing admin UI supports price/stock edits. Complete ingredient/image
+   authoring and draft/preview publication are Phase B, not current UI features.
+5. Set `active: false` to remove a product from sale. Its laboratory declaration
+   remains with an archive notice. Historical order snapshots remain untouched.
+
+Migration 0016 initializes metadata/prices and archives legacy IDs once, leaving
+stock untouched. Subsequent deployments do not overwrite catalog edits. The
+test-only reset explicitly supplies 40 units per product for commerce scenarios;
+these are synthetic test fixtures, never production inventory. Local regression
+evidence: 140 passed in `lumbre-inventory-2026-09-30-verified.html` (ignored report
+artifact). The complete suite subsequently passed 176 tests; the final focused
+validation passed another four cases, including three API-082 variants rejecting
+incomplete, unknown and repeated ingredients. API-080 covers shared catalog/lab
+data; API-081 covers archived carts. Type checking, lint and production build
+were also verified. Remote release acceptance remains a separate gate.
 
 Create product → select ingredients → attach image → enter price and counted
 stock → preview → publish. Routine catalog changes do not require separate

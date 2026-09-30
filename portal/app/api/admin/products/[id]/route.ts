@@ -6,6 +6,7 @@ import { authorizeAdministrator } from "../../../../../server/modules/catalog/ad
 import {
   CatalogResourceNotFoundError,
   CatalogRevisionConflictError,
+  CatalogValidationError,
   updateProduct,
 } from "../../../../../server/modules/catalog/catalog-service";
 
@@ -29,6 +30,9 @@ export async function PATCH(request: Request, context: RouteContext) {
       data: await updateProduct(authorization.user.id, productId, parsed.data),
     });
   } catch (error) {
+    if (error instanceof CatalogValidationError) {
+      return Response.json({ error: error.message }, { status: 422 });
+    }
     if (error instanceof CatalogResourceNotFoundError) {
       return Response.json({ error: error.message }, { status: 404 });
     }

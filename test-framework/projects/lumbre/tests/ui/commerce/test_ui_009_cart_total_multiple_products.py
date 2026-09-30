@@ -15,10 +15,10 @@ def test_cart_total_sums_multiple_products(
     test_log: TestLogger,
 ) -> None:
     product_names = (
-        "Pinzas Forja 45",
-        "Mandil Lumbre 01",
+        "Sazonador multiuso",
+        "Sazonador para carne de res",
     )
-    expected_total = "$2,030"
+    expected_total = "$198"
 
     with test_log.step("Add two products to the cart"):
         for product_name in product_names:

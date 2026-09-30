@@ -16,7 +16,7 @@ def test_cart_merge_combines_matching_items(api: LumbreApi, test_log: TestLogger
         assert api.request_magic_link({"name": "Fusión Brasa", "email": email}).status == 200
         first_link = api.latest_local_magic_link(email).json()["data"]["url"]
         assert api.follow_magic_link(first_link).status == 200
-        account_cart = api.add_cart_item({"productId": 101, "quantity": 2}).json()["data"]
+        account_cart = api.add_cart_item({"productId": 121, "quantity": 2}).json()["data"]
         test_log.values(
             observed_account_quantity=account_cart["totalQuantity"],
             observed_account_lines=len(account_cart["items"]),
@@ -24,7 +24,7 @@ def test_cart_merge_combines_matching_items(api: LumbreApi, test_log: TestLogger
 
     with test_log.step("Create a matching anonymous line after logout"):
         assert api.logout().status == 200
-        anonymous_cart = api.add_cart_item({"productId": 101, "quantity": 3}).json()["data"]
+        anonymous_cart = api.add_cart_item({"productId": 121, "quantity": 3}).json()["data"]
         test_log.values(
             observed_anonymous_quantity=anonymous_cart["totalQuantity"],
             observed_anonymous_lines=len(anonymous_cart["items"]),

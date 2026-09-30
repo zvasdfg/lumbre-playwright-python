@@ -232,6 +232,9 @@ Priority definitions:
 | API-077 | Repeated magic-link requests are rejected at the Worker boundary | P0 | API abuse protection |
 | API-078 | An existing account signs in by email without resubmitting profile fields | P0 | API passwordless authentication |
 | API-079 | Sign-in for an unknown email returns a neutral response without creating an account | P0 | API identity boundary + anti-enumeration response |
+| API-080 | A persisted blend supplies the store and laboratory; updates propagate without a build | P0 | API shared catalog + inventory + duplicate codes |
+| API-081 | An archived product leaves the store without breaking existing carts or removing its public sheet | P0 | API catalog lifecycle |
+| API-082 | Missing details, unknown ingredients and duplicate ingredients are rejected without catalog mutation | P0 | API catalog validation (three variants) |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |

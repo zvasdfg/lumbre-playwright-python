@@ -8,8 +8,8 @@ from projects.lumbre.pages.home_page import HomePage
 @pytest.mark.ui
 @pytest.mark.case("UI-005", "Adding a product updates feedback and the cart count")
 def test_product_can_be_added_to_cart(home: HomePage, test_log: TestLogger) -> None:
-    with test_log.step("Add Pinzas Forja 45 to the cart"):
-        product_name = "Pinzas Forja 45"
+    with test_log.step("Add Sazonador multiuso to the cart"):
+        product_name = "Sazonador multiuso"
         home.add_product(product_name)
         test_log.values(added_product=product_name)
 

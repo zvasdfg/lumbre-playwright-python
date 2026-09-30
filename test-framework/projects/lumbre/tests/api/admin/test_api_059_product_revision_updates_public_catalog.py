@@ -17,7 +17,7 @@ def test_product_revision_updates_public_catalog(
 ) -> None:
     with test_log.step("Read the administrative product and capture its current revision"):
         response = administrator_api.admin_products()
-        product = next(item for item in response.json()["data"] if item["id"] == 111)
+        product = next(item for item in response.json()["data"] if item["id"] == 121)
         test_log.values(
             product_id=product["id"],
             old_price=product["price"],

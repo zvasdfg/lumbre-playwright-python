@@ -15,7 +15,7 @@ def test_checkout_communicates_completion(
     test_log: TestLogger,
 ) -> None:
     with test_log.step("Add a product and open the cart"):
-        product_name = "Pinzas Forja 45"
+        product_name = "Sazonador multiuso"
         home.add_product(product_name)
         home.open_cart()
         expect(home.cart.product_named(product_name)).to_be_visible()

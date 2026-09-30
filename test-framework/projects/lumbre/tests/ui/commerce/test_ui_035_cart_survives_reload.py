@@ -14,7 +14,7 @@ def test_anonymous_cart_survives_reload(
     home: HomePage,
     test_log: TestLogger,
 ) -> None:
-    product_name = "Pinzas Forja 45"
+    product_name = "Sazonador multiuso"
 
     with test_log.step("Add a product to the anonymous cart"):
         home.add_product(product_name)
@@ -36,9 +36,9 @@ def test_anonymous_cart_survives_reload(
     with test_log.step("Validate the restored product and server total"):
         home.open_cart()
         expect(home.cart.product_named(product_name)).to_be_visible()
-        expect(home.cart.total).to_have_text("$740")
+        expect(home.cart.total).to_have_text("$99")
         test_log.values(
             observed_product=home.cart.product_named(product_name).inner_text(),
             observed_total=home.cart.total.inner_text(),
-            expected_total="$740",
+            expected_total="$99",
         )

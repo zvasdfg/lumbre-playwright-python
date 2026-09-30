@@ -14,7 +14,7 @@ def test_stale_product_update_is_recoverable(
     administrator_home: HomePage,
     test_log: TestLogger,
 ) -> None:
-    product_id = 111
+    product_id = 121
     attempted_price = 299
     captured_payload: dict[str, object] = {}
 

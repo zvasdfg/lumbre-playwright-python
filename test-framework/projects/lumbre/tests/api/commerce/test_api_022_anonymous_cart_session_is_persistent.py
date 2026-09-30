@@ -25,7 +25,7 @@ def test_anonymous_cart_session_is_persistent(
         )
 
     with test_log.step("Add a catalog product to the session cart"):
-        mutation = api.add_cart_item({"productId": 101, "quantity": 1})
+        mutation = api.add_cart_item({"productId": 121, "quantity": 1})
         mutated_cart = mutation.json()["data"]
         set_cookie = mutation.headers.get("set-cookie", "")
         test_log.values(
@@ -43,7 +43,7 @@ def test_anonymous_cart_session_is_persistent(
         test_log.values(
             observed_items=persisted_cart["items"],
             observed_total=persisted_cart["total"],
-            expected_total=740,
+            expected_total=99,
         )
 
         assert response.status == 200
@@ -55,4 +55,4 @@ def test_anonymous_cart_session_is_persistent(
         assert "Max-Age=" in set_cookie
         assert mutation.status == 201
         assert persisted_cart == mutated_cart
-        assert persisted_cart["total"] == 740
+        assert persisted_cart["total"] == 99

@@ -13,11 +13,11 @@ def test_order_snapshot_uses_server_prices(
     test_log: TestLogger,
 ) -> None:
     with test_log.step("Add a catalog product with a known server price"):
-        cart_response = authenticated_api.add_cart_item({"productId": 111, "quantity": 2})
+        cart_response = authenticated_api.add_cart_item({"productId": 121, "quantity": 2})
         cart = cart_response.json()["data"]
-        test_log.values(observed_cart=cart, expected_total=520)
+        test_log.values(observed_cart=cart, expected_total=198)
         assert cart_response.status == 201
-        assert cart["total"] == 520
+        assert cart["total"] == 198
 
     with test_log.step("Reject a checkout payload that attempts to provide its own total"):
         manipulated = authenticated_api.create_order(
@@ -45,9 +45,9 @@ def test_order_snapshot_uses_server_prices(
             observed_status=response.status,
             observed_total=order["total"],
             observed_items=order["items"],
-            expected_total=520,
+            expected_total=198,
         )
         assert response.status == 201
-        assert order["total"] == 520
-        assert order["items"][0]["unitPrice"] == 260
-        assert order["items"][0]["lineTotal"] == 520
+        assert order["total"] == 198
+        assert order["items"][0]["unitPrice"] == 99
+        assert order["items"][0]["lineTotal"] == 198

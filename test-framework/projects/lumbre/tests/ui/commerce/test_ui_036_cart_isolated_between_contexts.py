@@ -16,7 +16,7 @@ def test_anonymous_cart_is_isolated_between_contexts(
     app_url: str,
     test_log: TestLogger,
 ) -> None:
-    product_name = "Pinzas Forja 45"
+    product_name = "Sazonador multiuso"
 
     with test_log.step("Add a product in the primary browser context"):
         home.add_product(product_name)

@@ -13,7 +13,7 @@ def test_anonymous_cart_merges_into_account(api: LumbreApi, test_log: TestLogger
     email = "canasta@example.test"
 
     with test_log.step("Create an anonymous cart before authentication"):
-        response = api.add_cart_item({"productId": 101, "quantity": 2})
+        response = api.add_cart_item({"productId": 121, "quantity": 2})
         anonymous_cart = response.json()["data"]
         test_log.values(
             observed_status=response.status,

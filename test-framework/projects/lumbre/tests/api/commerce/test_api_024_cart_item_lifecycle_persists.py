@@ -11,8 +11,8 @@ from projects.lumbre.api.lumbre_api import LumbreApi
 )
 def test_cart_item_lifecycle_persists(api: LumbreApi, test_log: TestLogger) -> None:
     with test_log.step("Add the same product twice to the anonymous cart"):
-        first_response = api.add_cart_item({"productId": 101, "quantity": 1})
-        second_response = api.add_cart_item({"productId": 101, "quantity": 2})
+        first_response = api.add_cart_item({"productId": 121, "quantity": 1})
+        second_response = api.add_cart_item({"productId": 121, "quantity": 2})
         cart_after_repeated_adds = second_response.json()["data"]
         test_log.values(
             observed_first_status=first_response.status,
@@ -28,23 +28,23 @@ def test_cart_item_lifecycle_persists(api: LumbreApi, test_log: TestLogger) -> N
         assert cart_after_repeated_adds["items"][0]["quantity"] == 3
 
     with test_log.step("Replace the persisted line-item quantity"):
-        update_response = api.update_cart_item(101, 4)
+        update_response = api.update_cart_item(121, 4)
         updated_cart = update_response.json()["data"]
         test_log.values(
             observed_status=update_response.status,
             observed_quantity=updated_cart["items"][0]["quantity"],
             observed_line_total=updated_cart["items"][0]["lineTotal"],
             observed_cart_total=updated_cart["total"],
-            expected_cart_total=2960,
+            expected_cart_total=396,
         )
 
         assert update_response.status == 200
         assert updated_cart["items"][0]["quantity"] == 4
-        assert updated_cart["items"][0]["lineTotal"] == 2960
+        assert updated_cart["items"][0]["lineTotal"] == 396
         assert api.cart()["data"] == updated_cart
 
     with test_log.step("Remove the persisted line item"):
-        remove_response = api.remove_cart_item(101)
+        remove_response = api.remove_cart_item(121)
         removed_cart = remove_response.json()["data"]
         persisted_cart = api.cart()["data"]
         test_log.values(

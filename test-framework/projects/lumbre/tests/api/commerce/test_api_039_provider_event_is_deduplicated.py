@@ -13,7 +13,7 @@ def test_provider_event_is_deduplicated(
     authenticated_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    authenticated_api.add_cart_item({"productId": 113, "quantity": 1})
+    authenticated_api.add_cart_item({"productId": 123, "quantity": 1})
     order = authenticated_api.create_order(
         {"customerName": "Cliente Fixture", "customerEmail": "fixture.customer@example.test"},
         "deduplicated-event-order",

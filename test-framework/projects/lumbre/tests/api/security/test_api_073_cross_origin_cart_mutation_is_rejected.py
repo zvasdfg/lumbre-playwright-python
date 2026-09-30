@@ -15,7 +15,7 @@ def test_cross_origin_cart_mutation_is_rejected(
 ) -> None:
     with test_log.step("Submit a cart mutation from a cross-site browser context"):
         response = api.add_cart_item(
-            {"productId": 101, "quantity": 1},
+            {"productId": 121, "quantity": 1},
             headers={
                 "Sec-Fetch-Site": "cross-site",
             },

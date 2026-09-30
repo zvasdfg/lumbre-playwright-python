@@ -30,6 +30,6 @@ def test_blends_lead_store_catalog(home: HomePage, test_log: TestLogger) -> None
         )
 
     with test_log.step("Validate that blends appear before merchandise"):
-        expect(home.product_cards).to_have_count(11)
+        expect(home.product_cards).to_have_count(4)
         assert observed_names == expected_blends
         assert observed_categories == ["blends", "blends", "blends", "blends"]

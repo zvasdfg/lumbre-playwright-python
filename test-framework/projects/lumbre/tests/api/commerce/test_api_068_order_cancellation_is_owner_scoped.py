@@ -21,7 +21,7 @@ def test_order_cancellation_is_owner_scoped(
 ) -> None:
     with test_log.step("Create an order owned by the first account"):
         sign_in(api, name="Primera Cuenta", email="primer.pedido@example.test")
-        api.add_cart_item({"productId": 112, "quantity": 1})
+        api.add_cart_item({"productId": 122, "quantity": 1})
         order = api.create_order(
             {
                 "customerName": "Primera Cuenta",

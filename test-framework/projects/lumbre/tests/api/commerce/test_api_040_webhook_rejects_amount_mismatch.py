@@ -13,7 +13,7 @@ def test_webhook_rejects_amount_mismatch(
     authenticated_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    authenticated_api.add_cart_item({"productId": 111, "quantity": 1})
+    authenticated_api.add_cart_item({"productId": 121, "quantity": 1})
     order = authenticated_api.create_order(
         {"customerName": "Cliente Fixture", "customerEmail": "fixture.customer@example.test"},
         "amount-mismatch-order",

@@ -13,7 +13,7 @@ def test_fulfillment_requires_admin_role(
     authenticated_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    authenticated_api.add_cart_item({"productId": 111, "quantity": 1})
+    authenticated_api.add_cart_item({"productId": 121, "quantity": 1})
     order = authenticated_api.create_order(
         {
             "customerName": "Cliente Fixture",

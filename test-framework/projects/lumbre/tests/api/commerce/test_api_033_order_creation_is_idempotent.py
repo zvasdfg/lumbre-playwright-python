@@ -10,7 +10,7 @@ def test_order_creation_is_idempotent(
     authenticated_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    authenticated_api.add_cart_item({"productId": 112, "quantity": 1})
+    authenticated_api.add_cart_item({"productId": 122, "quantity": 1})
     payload = {
         "customerName": "Cliente Fixture",
         "customerEmail": "fixture.customer@example.test",

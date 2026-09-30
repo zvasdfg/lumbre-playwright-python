@@ -11,7 +11,7 @@ def test_signed_checkout_event_pays_order(
     authenticated_api: LumbreApi,
     test_log: TestLogger,
 ) -> None:
-    authenticated_api.add_cart_item({"productId": 112, "quantity": 2})
+    authenticated_api.add_cart_item({"productId": 122, "quantity": 2})
     order = authenticated_api.create_order(
         {"customerName": "Cliente Fixture", "customerEmail": "fixture.customer@example.test"},
         "webhook-paid-order",

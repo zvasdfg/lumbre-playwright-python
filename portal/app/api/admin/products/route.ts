@@ -5,6 +5,7 @@ import {
 import { authorizeAdministrator } from "../../../../server/modules/catalog/admin-authorization";
 import {
   createProduct,
+  CatalogRevisionConflictError,
   listAdministrativeProducts,
 } from "../../../../server/modules/catalog/catalog-service";
 
@@ -24,6 +25,13 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return Response.json({ error: "Valid product data is required" }, { status: 422 });
   }
-  const data = await createProduct(authorization.user.id, parsed.data);
-  return Response.json({ data, created: true }, { status: 201 });
+  try {
+    const data = await createProduct(authorization.user.id, parsed.data);
+    return Response.json({ data, created: true }, { status: 201 });
+  } catch (error) {
+    if (error instanceof CatalogRevisionConflictError) {
+      return Response.json({ error: error.message }, { status: 409 });
+    }
+    throw error;
+  }
 }

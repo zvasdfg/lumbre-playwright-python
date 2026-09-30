@@ -14,8 +14,8 @@ def test_sold_out_product_is_not_actionable(
     administrator_home: HomePage,
     test_log: TestLogger,
 ) -> None:
-    product_id = 111
-    product_name = "Blend LHC-003 · SPG clásico"
+    product_id = 121
+    product_name = "Sazonador multiuso"
 
     with test_log.step("Set a store product inventory to zero"):
         administrator_home.open_admin_catalog()

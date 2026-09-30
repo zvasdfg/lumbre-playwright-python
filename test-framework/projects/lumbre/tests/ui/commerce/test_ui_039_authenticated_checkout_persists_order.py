@@ -14,7 +14,7 @@ def test_authenticated_checkout_persists_order(
     authenticated_home: HomePage,
     test_log: TestLogger,
 ) -> None:
-    product_name = "Blend LHC-003 · SPG clásico"
+    product_name = "Sazonador multiuso"
 
     with test_log.step("Add a blend and open the authenticated checkout"):
         authenticated_home.add_product(product_name)
@@ -43,9 +43,9 @@ def test_authenticated_checkout_persists_order(
         authenticated_home.checkout.root.get_by_role("button", name="Cerrar", exact=True).click()
         authenticated_home.open_account()
         expect(authenticated_home.account.order_history).to_contain_text("Pagado")
-        expect(authenticated_home.account.order_history).to_contain_text("$260")
+        expect(authenticated_home.account.order_history).to_contain_text("$99")
         test_log.values(
             observed_order_history=authenticated_home.account.order_history.inner_text(),
             expected_status="Pagado",
-            expected_total="$260",
+            expected_total="$99",
         )

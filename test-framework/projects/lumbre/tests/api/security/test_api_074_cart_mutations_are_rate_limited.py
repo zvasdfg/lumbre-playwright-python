@@ -21,7 +21,7 @@ def test_cart_mutations_are_rate_limited(
     with test_log.step("Consume the allowed cart-mutation budget"):
         accepted_statuses = [
             api.add_cart_item(
-                {"productId": 101, "quantity": 1},
+                {"productId": 121, "quantity": 1},
                 headers=headers,
             ).status
             for _ in range(30)
@@ -34,7 +34,7 @@ def test_cart_mutations_are_rate_limited(
 
     with test_log.step("Exceed the cart-mutation budget"):
         rejected = api.add_cart_item(
-            {"productId": 101, "quantity": 1},
+            {"productId": 121, "quantity": 1},
             headers=headers,
         )
         payload = rejected.json()
@@ -50,4 +50,3 @@ def test_cart_mutations_are_rate_limited(
         assert payload["error"] == "Too many requests"
         assert payload["requestId"] == rejected.headers["x-request-id"]
         assert rejected.headers["retry-after"] == "60"
-

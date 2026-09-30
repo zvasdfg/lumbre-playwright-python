@@ -25,7 +25,7 @@ from projects.lumbre.api.lumbre_api import LumbreApi
         (
             "cart_item",
             "/api/cart/items",
-            {"productId": 101, "quantity": 1},
+            {"productId": 121, "quantity": 1},
         ),
         (
             "product",

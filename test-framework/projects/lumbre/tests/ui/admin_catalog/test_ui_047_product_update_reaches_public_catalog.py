@@ -14,8 +14,8 @@ def test_product_update_reaches_public_catalog(
     administrator_home: HomePage,
     test_log: TestLogger,
 ) -> None:
-    product_id = 111
-    product_name = "Blend LHC-003 · SPG clásico"
+    product_id = 121
+    product_name = "Sazonador multiuso"
     updated_price = 275
 
     with test_log.step("Open catalog administration and select a product"):
@@ -24,7 +24,7 @@ def test_product_update_reaches_public_catalog(
         expect(admin.root).to_be_visible()
         expect(admin.product(product_id)).to_be_visible()
         admin.select_product(product_id)
-        expect(admin.product_price_input).to_have_value("260")
+        expect(admin.product_price_input).to_have_value("99")
         test_log.values(
             product_id=product_id,
             product_name=product_name,

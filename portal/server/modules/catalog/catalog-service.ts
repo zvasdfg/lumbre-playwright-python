@@ -1,6 +1,5 @@
 import { and, asc, desc, eq, sql } from "drizzle-orm";
 import { events as eventSeeds, products as productSeeds } from "../../../app/lib/data";
-import { productionProductMetadata } from "../../../app/lib/production-products";
 import { getDatabase } from "../../platform/database/client";
 import {
   administrativeAuditEvents,
@@ -18,12 +17,13 @@ import type {
 export class CatalogResourceNotFoundError extends Error {}
 export class CatalogRevisionConflictError extends Error {}
 export class EventCapacityConflictError extends Error {}
+export class CatalogValidationError extends Error {}
 
 export type ProductRecord = typeof catalogProducts.$inferSelect;
 export type EventRecord = typeof catalogEvents.$inferSelect;
 
 function publicProduct(product: ProductRecord) {
-  const metadata = productionProductMetadata[product.id];
+  const metadata = product.details;
   return {
     id: product.id,
     name: product.name,
@@ -31,7 +31,12 @@ function publicProduct(product: ProductRecord) {
     price: product.price,
     stock: product.stock,
     ...(product.badge ? { badge: product.badge } : {}),
-    ...(metadata ?? {}),
+    ...(metadata ? {
+      productCode: metadata.productCode, description: metadata.description,
+      image: metadata.image, imageAlt: metadata.imageAlt, netContent: metadata.netContent,
+      ingredients: metadata.components.map((item) => item.nombre),
+    } : {}),
+    purchaseEnabled: product.stock > 0 && product.price > 0,
   };
 }
 
@@ -94,12 +99,19 @@ export async function listAdministrativeProducts() {
 }
 
 export async function createProduct(actorUserId: string, input: CreateProductInput) {
+  if (input.details) {
+    const duplicate = await getDatabase().select({ id: catalogProducts.id }).from(catalogProducts)
+      .where(sql`json_extract(${catalogProducts.details}, '$.productCode') = ${input.details.productCode}`).get();
+    if (duplicate) throw new CatalogRevisionConflictError("Product code already exists");
+  }
   const now = new Date().toISOString();
   const id = await nextIdentifier("product");
   const [created] = await getDatabase()
     .insert(catalogProducts)
     .values({ id, ...input, stock: input.stock ?? 0, badge: input.badge ?? null, active: input.active ?? true, createdAt: now, updatedAt: now })
+    .onConflictDoNothing()
     .returning();
+  if (!created) throw new CatalogRevisionConflictError("Product identity already exists; reload the catalog");
   await recordAudit(actorUserId, "product", id, "created", null, created);
   return created;
 }
@@ -117,6 +129,12 @@ export async function updateProduct(
     .get();
   if (!before) throw new CatalogResourceNotFoundError("Product not found");
   const { expectedRevision, ...changes } = input;
+  if (before.details && changes.details && changes.details.productCode !== before.details.productCode) {
+    throw new CatalogValidationError("Published product codes cannot be changed");
+  }
+  if ((changes.category ?? before.category) === "blends" && !(changes.details ?? before.details)) {
+    throw new CatalogValidationError("Blends require their public laboratory details");
+  }
   const [updated] = await database
     .update(catalogProducts)
     .set({ ...changes, revision: expectedRevision + 1, updatedAt: new Date().toISOString() })
@@ -208,19 +226,20 @@ export async function listAuditEvents() {
   }));
 }
 
-export async function resetCatalog(): Promise<void> {
+export async function resetCatalog(testStock = 0): Promise<void> {
   const database = getDatabase();
   await database.delete(administrativeAuditEvents);
   await database.delete(catalogProducts);
   await database.delete(catalogEvents);
   await database.insert(catalogProducts).values(
-    productSeeds.map(({ id, name, category, price, stock, badge }) => ({
+    productSeeds.map(({ id, name, category, price, stock, badge, details }) => ({
       id,
       name,
       category,
       price,
-      stock,
+      stock: testStock || stock,
       badge: badge ?? null,
+      details,
     })),
   );
   await database.insert(catalogEvents).values(
