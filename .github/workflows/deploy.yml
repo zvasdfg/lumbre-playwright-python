@@ -130,7 +130,9 @@ jobs:
         run: npm run deploy:staging
 
       - name: Run staging acceptance smoke
-        run: ./scripts/test-staging.sh -q
+        run: |
+          node portal/scripts/wait-deployed.mjs "$STAGING_BASE_URL"
+          ./scripts/test-staging.sh -q
 
       - name: Publish staging evidence
         if: always()
@@ -209,7 +211,10 @@ jobs:
         run: npm run deploy:production
 
       - name: Run production acceptance smoke
-        run: ./scripts/test-production.sh -q
+        # Do not retry tests to conceal failures during edge propagation.
+        run: |
+          node portal/scripts/wait-deployed.mjs "$PRODUCTION_BASE_URL"
+          ./scripts/test-production.sh -q
 
       - name: Publish production evidence
         if: always()

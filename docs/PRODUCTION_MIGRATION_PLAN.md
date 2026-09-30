@@ -22,7 +22,11 @@ run exposed missing D1 access on the CI token (Cloudflare 7403). D1 Write was
 added to the named account token with explicit approval, but the rerun still
 returned 7403. A separate personal token has recent use and lacks D1 permission;
 its D1 Edit permission was also added with explicit approval and a new rerun
-was requested. Remote acceptance is still pending. Never skip the migration
+was requested. Staging subsequently passed; production migrated and deployed,
+but its immediate smoke received old-version responses. A later production
+smoke passed 4/4. Deployment now waits up to 120 seconds for two consecutive
+healthy probes before executing acceptance once; exhausted readiness still
+fails the job. Final pipeline acceptance is pending. Never skip the migration
 gate to work around an authorization failure.
 
 ### Phase A: one operational catalog
