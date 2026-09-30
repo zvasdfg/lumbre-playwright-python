@@ -25,8 +25,36 @@ jobs:
           cache-dependency-path: portal/package-lock.json
       - run: npm ci
         working-directory: portal
+      - name: Check types and recipe content
+        run: |
+          npx tsc --noEmit --incremental false
+          node --experimental-strip-types scripts/check-recipes.mjs
+        working-directory: portal
+      - name: Audit dependencies
+        run: npm audit --audit-level=high --registry=https://registry.npmjs.org
+        working-directory: portal
       - run: npm run build:static
         working-directory: portal
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.13"
+      - name: Install browser test tools
+        run: |
+          python -m pip install -e ./test-framework 'pypdf>=6,<7'
+          python -m playwright install --with-deps chromium
+      - name: Test static portal and storage recovery
+        run: |
+          npm run preview:static --prefix portal > /tmp/lumbre-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3001/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3001/ > /dev/null
+          python portal/scripts/test-static.py
+          python portal/scripts/check-static-print.py
+          python portal/scripts/test-storage-recovery.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: lumbre-static

@@ -38,9 +38,19 @@ function readSessionBlends(): SessionBlend[] {
         typeof (item as SessionBlend).id === "string" &&
         typeof (item as SessionBlend).title === "string" &&
         typeof (item as SessionBlend).protocol?.firma === "string",
-    );
+    ).slice(0, SESSION_BLEND_LIMIT).flatMap(item => {
+      const stored = item as SessionBlend;
+      if (!/^SES-\d+$/.test(stored.id) || stored.title.length < 3 || stored.title.length > 80 ||
+        !objectives.includes(stored.protocol.objetivo) || !Array.isArray(stored.protocol.componentes)) return [];
+      const ids = stored.protocol.componentes.map(component => component?.id);
+      const components = ingredients.filter(component => ids.includes(component.id));
+      if (components.length < 2 || components.length > 6 || components.length !== ids.length) return [];
+      const signature = `SESSION:${stored.protocol.objetivo}:${[...ids].sort().join("+")}`;
+      const rebuilt = buildSessionProtocol(stored.id, signature, components, stored.protocol.objetivo);
+      if (typeof stored.protocol.creado_en !== "string" || !Number.isFinite(Date.parse(stored.protocol.creado_en))) return [];
+      return [{ id: stored.id, title: stored.title, protocol: { ...rebuilt, creado_en: stored.protocol.creado_en } }];
+    });
   } catch {
-    window.sessionStorage.removeItem(SESSION_BLEND_STORAGE_KEY);
     return [];
   }
 }
@@ -232,8 +242,8 @@ export default function IngredientLab() {
     setError("");
     try {
       const title = blendTitle.trim();
-      if (title.length < 3) {
-        throw new Error("Asigna un nombre de al menos tres caracteres a tu blend.");
+      if (title.length < 3 || title.length > 80) {
+        throw new Error("Asigna un nombre de entre 3 y 80 caracteres a tu blend.");
       }
 
       {
@@ -275,7 +285,12 @@ export default function IngredientLab() {
 
   function removeSessionBlend(blend: SessionBlend) {
     const nextBlends = sessionBlends.filter((candidate) => candidate.id !== blend.id);
-    window.sessionStorage.setItem(SESSION_BLEND_STORAGE_KEY, JSON.stringify(nextBlends));
+    try {
+      window.sessionStorage.setItem(SESSION_BLEND_STORAGE_KEY, JSON.stringify(nextBlends));
+    } catch {
+      setError("No se pudo eliminar el blend. Revisa los permisos de almacenamiento del navegador.");
+      return;
+    }
     setSessionBlends(nextBlends);
     if (protocol?.id === blend.protocol.id) {
       setProtocol(null);
@@ -476,7 +491,7 @@ export default function IngredientLab() {
           {sessionBlends.length === 0 ? (
             <div className="registry-empty">
               <strong>Tu mesa todavía está vacía.</strong>
-              <p>Las fórmulas que guardes aquí no se publican y no aparecerán en Mis blends.</p>
+              <p>Las fórmulas que guardes aquí son privadas de esta sesión y no se publican.</p>
             </div>
           ) : (
             <div className="session-blend-grid" data-testid="session-blends">

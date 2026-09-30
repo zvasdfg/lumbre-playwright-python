@@ -21,6 +21,7 @@ export default defineConfig({
       }
     },
     closeBundle() {
+      cpSync(resolve(root, "_headers"), resolve(outDir, "_headers"));
       // Explicit public asset allowlist: no OpenAPI documents or server artifacts.
       for (const directory of ["brand", "editorial"]) {
         cpSync(resolve(portal, "public", directory), resolve(outDir, directory), { recursive: true });

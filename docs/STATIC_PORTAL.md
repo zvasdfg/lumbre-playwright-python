@@ -58,24 +58,36 @@ backend on port 3000. `npm run build` also builds the static artifact.
 ## Preserved legacy application
 
 `app/` and `server/` remain for the automation framework and to preserve pending
-admin work. `npm run dev` still starts that legacy test application; it is not the
-static preview. `npm run build:backend` is for legacy compatibility checks only.
+admin work. `npm run dev` starts the static development server; `npm start` serves
+the static build. Use `npm run dev:backend` / `npm run start:backend` explicitly for
+the legacy test application. `npm run build:backend` is for legacy compatibility checks only.
 Static interactive components live in `static/`; they share public data, styles
 and the almanac but contain no account/commerce network logic. Do not propagate
 backend changes into these components.
 
-GitHub Actions now builds a static artifact without deploying. The scheduled legacy
-monitor has been removed; manual invocation remains available. Production/staging
-deployment scripts fail closed. No hosting provider has been selected for the
-static artifact yet.
+GitHub Actions builds a static artifact without deploying. The scheduled legacy
+monitor has been removed; manual invocation remains available. Legacy production/staging
+deployment scripts fail closed. Explicit static publication uses `npm run deploy:static`
+from `portal/`, with the separate `wrangler.static.jsonc` configuration: assets only,
+no application entrypoint, no D1 bindings, no cron triggers and no SPA fallback for API paths.
+Cloudflare serves `_headers` from the static build, including CSP and frame protection.
 
-## Production retirement (not performed)
+## Production static cutover — 2026-09-30
 
-Local changes do not disable the existing production Worker or D1 database.
-After explicit approval: export required data, validate a static deployment, switch
-traffic, disable the legacy Worker/API, revoke unused secrets, and retire D1 only
-after verifying the backup and retention decision. Do not delete cloud resources
-merely because this build passes. No push or production change before local acceptance.
+Following explicit user approval, the production `lumbre-portal` deployment was
+replaced with the static artifact at https://lumbre-portal.lumbre-portal.workers.dev/.
+Initial version: `841047b1-858b-40b9-99de-3f04f8e806b8`.
+Storage hardening version: `97ab644e-54bc-4903-af41-20357cdf1b8c`.
+Verified: homepage 200 with security headers; `/api/auth/get-session`, `/api/cart`
+and `/admin` return 404; public navigation has no account/cart controls and the
+almanac contains 24 notes. The legacy backend is no longer served on this production URL.
+D1 data and previously stored secrets were not deleted. Their retention, backup
+and eventual cleanup are separate actions. Staging was subsequently replaced by
+an assets-only deployment with workers.dev and preview URLs disabled using
+`wrangler.staging-retired.jsonc`, version `940b3fc6-3d31-42db-ad7f-e15fc5136265`.
+A cache-busted GET to the staging session endpoint returned 404. Future pushes
+still validate only; static publication remains an explicit manual command.
+The manual legacy staging monitor is not applicable while that environment is retired.
 
 ## Verification
 
@@ -84,3 +96,14 @@ served artifact with Playwright: no account/cart controls or API traffic, catalo
 recipe pagination, local presets, temporary blends, almanac and API-path 404s.
 Run it using the automation framework's Python environment after starting the preview.
 Legacy API/admin tests are not evidence for this static artifact.
+
+CI also checks TypeScript, all recipe records, static acceptance/PDF structure,
+storage recovery and npm advisories at high severity or above. Storage tests use
+isolated contexts; malformed records are ignored without deleting browser data.
+Presets are limited to 50 and blends to 20. Failed writes do not report success.
+The project npm registry is explicitly public; workstation corporate settings are
+not changed. Local advisory checks may still require a trusted certificate chain.
+Known legacy tooling debt: drizzle-kit includes deprecated esbuild-kit packages
+and esbuild 0.18.20 (GHSA-67mh-4wv8-2f99, development server only). These packages
+are not part of the static browser artifact. Full backend dependency isolation
+remains pending; do not force an incompatible transitive override to hide warnings.
