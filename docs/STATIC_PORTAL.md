@@ -3,6 +3,31 @@
 The public target is now a client-only static artifact. Commerce, login, registration,
 membership, administration and account-backed storage are not part of this artifact.
 The four seasonings remain an informational catalog, not a functioning shop.
+Recipe buttons now open the shared printable dialog, not a toast placeholder.
+All 100 recipes now have explicit quantities, servings, fire setup, timing,
+four preparation steps, doneness criteria and source links. The canonical content
+is `portal/app/lib/recipe-preparations.ts`; cards derive their time from it.
+These are original culinary proposals, not kitchen-tested recipes or copied source
+recipes. The disclosure stays visible in the dialog and printout. Sources support
+technique/safety, not empirical validation of these exact quantities. See
+[the recipe review](RECIPE_CONTENT_REVIEW.md) for scope and verification.
+Print actions remain
+visible in sticky toolbars for products, recipes and experimental formulas.
+Each card opens a keyboard-accessible product dialog with declared ingredients,
+editorial flavor expectations, suggested pairings and a five-taste contribution
+radar chart. Profiles live in `portal/static/product-profiles.ts`. The ordinal axes are
+editorial estimates from ingredient records, not measured intensity, percentages
+or a weighted formulation. Ratios and sensory validation remain unknown. Do not
+remove that disclosure without actual product evidence.
+
+The public registry opens the exact same product component by product code.
+Experimental records retain their hypothesis/method sheet. Both print from a
+body-level portal: print CSS removes the rest of the app with display:none rather
+than reserving the hidden page height. Product dialogs include an Imprimir ficha
+action. Long experimental records may legitimately span multiple content pages.
+`test-static.py` creates four product PDFs and one experimental PDF in `/tmp`;
+`scripts/check-static-print.py` checks page counts, nonblank text and final-section
+presence with pypdf. PDF rendering still requires visual review for clipping.
 
 ## Run locally
 
