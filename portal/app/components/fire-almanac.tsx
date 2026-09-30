@@ -28,6 +28,15 @@ const almanacPages: AlmanacPage[] = [
   { document: "013", title: "Pimienta antes vs. después", image: "/editorial/almanac/page-013.jpeg", alt: "Infografía comparativa del uso de pimienta antes y después de cocinar", width: 1145, height: 1374 },
   { document: "014", title: "El grano de pimienta", image: "/editorial/almanac/page-014.jpeg", alt: "Infografía sobre tipos, anatomía y molienda de la pimienta", width: 1145, height: 1374 },
   { document: "015", title: "Tamaño de partícula", image: "/editorial/almanac/page-015.jpeg", alt: "Infografía sobre tamaños de partícula en un sazonador", width: 1254, height: 1254 },
+  { document: "016", title: "Por qué algunos sazonadores se desprenden", image: "/editorial/almanac/page-016.jpeg", alt: "Infografía sobre adhesión del sazonador y condiciones de la superficie", width: 1254, height: 1254 },
+  { document: "017", title: "Cómo construir un sazonador base", image: "/editorial/almanac/page-017.jpeg", alt: "Infografía sobre estructura, proporciones de referencia y mezcla de un sazonador base", width: 1254, height: 1254 },
+  { document: "018", title: "Qué pasa cuando aumentas la sal 10 %", image: "/editorial/almanac/page-018.jpeg", alt: "Infografía comparativa de variaciones en la cantidad de sal", width: 1254, height: 1254 },
+  { document: "019", title: "Qué pasa cuando aumentas la pimienta", image: "/editorial/almanac/page-019.jpeg", alt: "Infografía sobre cantidad y molienda de pimienta en un sazonador", width: 1254, height: 1254 },
+  { document: "020", title: "Umami en la carne", image: "/editorial/almanac/page-020.jpeg", alt: "Infografía sobre umami y su incorporación en un sazonador", width: 1254, height: 1254 },
+  { document: "021", title: "Cómo incorporar café a un sazonador", image: "/editorial/almanac/page-021.jpeg", alt: "Infografía sobre tostado, molienda y proporción de café en mezclas secas", width: 1254, height: 1254 },
+  { document: "022", title: "Café claro vs. medio vs. oscuro en carne", image: "/editorial/almanac/page-022.jpeg", alt: "Infografía comparativa de tres niveles de tostado de café para carne", width: 1254, height: 1254 },
+  { document: "023", title: "¿Puede un ingrediente estar presente sin saber a él?", image: "/editorial/almanac/page-023.jpeg", alt: "Infografía sobre ingredientes que aportan sabor sin ser protagonistas", width: 1254, height: 1254 },
+  { document: "024", title: "Cómo hacer una prueba A/B de un sazonador", image: "/editorial/almanac/page-024.jpeg", alt: "Infografía sobre comparación de muestras, control de variables y registro de resultados", width: 1254, height: 1254 },
 ];
 
 export default function FireAlmanac() {
@@ -88,7 +97,7 @@ export default function FireAlmanac() {
       >
         <span aria-hidden="true">▤</span>
         <strong>Almanaque</strong>
-        <small>15 notas de campo</small>
+        <small>{almanacPages.length} notas de campo</small>
       </button>
 
       {open && (
@@ -171,7 +180,7 @@ export default function FireAlmanac() {
                         <Image src="/brand/lumbre-logo-primary.png" alt="Lumbre" width={90} height={96} unoptimized />
                         <p>EDICIÓN 01 · CUADERNO DE CAMPO</p>
                         <h2>Almanaque<br /><em>de fuego</em></h2>
-                        <span>15 notas técnicas para observar, encender y cocinar con intención.</span>
+                        <span>{almanacPages.length} notas técnicas para observar, encender y cocinar con intención.</span>
                       </div>
                       <button type="button" onClick={() => goToPage(1)}>Abrir el almanaque <span aria-hidden="true">→</span></button>
                     </div>
