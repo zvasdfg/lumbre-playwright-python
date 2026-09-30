@@ -4,6 +4,13 @@ from playwright.sync_api import expect, sync_playwright
 
 BASE_URL = "http://127.0.0.1:3001"
 
+def check_print_action(page, sheet):
+    page.evaluate("() => { window.__printCalls = 0; window.print = () => { window.__printCalls += 1; }; }")
+    button = sheet.get_by_role("button", name="Imprimir ficha", exact=True)
+    expect(button).to_be_in_viewport()
+    button.click()
+    assert page.evaluate("window.__printCalls") == 1, "Print button did not call window.print"
+
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch()
     for width in (1440, 390):
@@ -22,7 +29,57 @@ with sync_playwright() as playwright:
         expect(page.get_by_role("button", name="Entrar", exact=True)).to_have_count(0)
         expect(page.locator(".cart-button, .cart-drawer")).to_have_count(0)
         expect(page.get_by_test_id("product-card")).to_have_count(4)
+        for index, name in enumerate(("Sazonador multiuso", "Sazonador para carne de res", "Sazonador para carne de cerdo", "Sazonador para carne de pollo")):
+            trigger = page.get_by_role("button", name=f"Ver ficha de {name}", exact=True)
+            trigger.click()
+            sheet = page.get_by_role("dialog", name=name, exact=True)
+            expect(sheet).to_be_visible()
+            expect(sheet.get_by_role("heading", name="¿Con qué combinarlo?", exact=True)).to_be_visible()
+            expect(sheet.locator(".taste-chart li")).to_have_count(5)
+            expect(sheet.locator("svg.taste-radar")).to_be_visible()
+            expect(sheet.locator(".radar-point")).to_have_count(5)
+            expect(sheet.locator(".taste-radar text")).to_have_text(["Dulce", "Salado", "Ácido", "Amargo", "Umami"])
+            expect(sheet).to_contain_text("no una medición del producto")
+            expect(sheet.locator(".product-pairings li")).to_have_count(3)
+            expect(sheet.get_by_role("button", name="Imprimir ficha", exact=True)).to_be_visible()
+            check_print_action(page, sheet)
+            content = sheet.inner_text()
+            if width == 1440:
+                page.pdf(path=f"/tmp/lumbre-print-product-{index + 1}.pdf", prefer_css_page_size=True, print_background=True)
+            assert sheet.evaluate("e => e.scrollWidth <= e.clientWidth"), "Sheet overflow"
+            if index == 0:
+                sheet.locator("svg.taste-radar").scroll_into_view_if_needed()
+                page.screenshot(path=str(Path("/tmp") / f"lumbre-product-sheet-{width}.png"))
+                page.keyboard.press("Escape")
+            else:
+                sheet.get_by_role("button", name="Cerrar ficha de producto", exact=True).click()
+            expect(sheet).to_have_count(0)
+            expect(trigger).to_be_focused()
+            registry_card = page.get_by_test_id("hypothesis-registry").locator(".hypothesis-card").nth(index)
+            registry_card.get_by_role("button", name="Abrir ficha", exact=True).click()
+            expect(sheet).to_be_visible()
+            assert sheet.inner_text() == content, "Registry and provisions must show the same product sheet"
+            sheet.get_by_role("button", name="Cerrar ficha de producto", exact=True).click()
         expect(page.get_by_test_id("recipe-card")).to_have_count(6)
+        for index in range(3):
+            recipe_card = page.get_by_test_id("recipe-card").nth(index)
+            title = recipe_card.locator("h3").inner_text()
+            recipe_trigger = recipe_card.get_by_role("button")
+            recipe_trigger.click()
+            recipe_sheet = page.get_by_role("dialog", name=title, exact=True)
+            expect(recipe_sheet).to_be_visible()
+            expect(recipe_sheet).to_contain_text("Preparación paso a paso")
+            expect(recipe_sheet.locator(".recipe-method li")).to_have_count(4)
+            expect(recipe_sheet).to_contain_text("todavía no probada en cocina")
+            check_print_action(page, recipe_sheet)
+            assert recipe_sheet.evaluate("e => e.scrollWidth <= e.clientWidth")
+            if width == 1440:
+                page.pdf(path=f"/tmp/lumbre-print-recipe-{index + 1}.pdf", prefer_css_page_size=True, print_background=True)
+            if index == 0:
+                page.screenshot(path=f"/tmp/lumbre-recipe-{width}.png")
+            page.keyboard.press("Escape")
+            expect(recipe_sheet).to_have_count(0)
+            expect(recipe_trigger).to_be_focused()
         page.get_by_role("button", name="Ir a página 2", exact=True).click()
         expect(page.get_by_test_id("recipe-page-status")).to_contain_text("7–12")
 
@@ -46,6 +103,12 @@ with sync_playwright() as playwright:
         page.get_by_label("Nombre de tu blend", exact=True).fill("SPG local")
         page.get_by_role("button", name="Guardar en esta sesión", exact=True).click()
         expect(page.get_by_test_id("hypothesis-print-preview")).to_be_visible()
+        experiment = page.get_by_test_id("hypothesis-print-preview")
+        check_print_action(page, experiment)
+        experiment.evaluate("e => e.scrollTop = e.scrollHeight")
+        check_print_action(page, experiment)
+        if width == 1440:
+            page.pdf(path="/tmp/lumbre-print-experiment.pdf", prefer_css_page_size=True, print_background=True)
         page.get_by_role("button", name="Cerrar ficha técnica", exact=True).click()
         page.reload()
         expect(page.get_by_test_id("session-blends")).to_contain_text("SPG local")

@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 import Image from "./image";
-import { recipes } from "../app/lib/data";
+import { recipes, type Recipe } from "../app/lib/data";
+import RecipeSheet from "./recipe-sheet";
 import { productionProducts } from "../app/lib/production-products";
 import FirePlanner from "./fire-planner";
 import IngredientLab from "./ingredient-lab";
 import FireAlmanac from "../app/components/fire-almanac";
+import ProductSheet from "./product-sheet";
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 const recipesPerPage = 6;
 const currency = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
@@ -27,10 +29,11 @@ function paginationItems(currentPage: number, pageCount: number): Array<number |
 
 
 export default function StaticPortal() {
+  const [selectedProduct, setSelectedProduct] = useState<typeof productionProducts[number] | null>(null);
   const [recipeFilter, setRecipeFilter] = useState<RecipeFilter>("todos");
   const [search, setSearch] = useState("");
   const [recipePage, setRecipePage] = useState(1);
-  const [toast, showToast] = useState("");
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const filteredRecipes = useMemo(() => {
     const normalized = search.trim().toLocaleLowerCase("es");
     return recipes.filter((recipe) => {
@@ -144,7 +147,7 @@ export default function StaticPortal() {
                 </div>
                 <div className="recipe-meta"><span>{recipe.categoryLabel}</span><span>{recipe.time} · {recipe.level}</span></div>
                 <h3>{recipe.title}</h3><p>{recipe.description}</p>
-                <button type="button" onClick={() => showToast(`Abriendo ${recipe.title}.`)} aria-label={`Ver receta ${recipe.title}`}>Ver receta <span>↗</span></button>
+                <button type="button" onClick={() => setSelectedRecipe(recipe)} aria-label={`Ver receta ${recipe.title}`}>Ver receta <span>↗</span></button>
               </article>
             ))}
           </div>
@@ -212,10 +215,13 @@ export default function StaticPortal() {
               <div>
                 <strong>{currency.format(product.price)}{product.netContent ? ` · ${product.netContent}` : ""}</strong><span>Catálogo informativo · venta en línea no disponible</span>
               </div>
+              <button className="product-card-open" type="button" aria-label={`Ver ficha de ${product.name}`} onClick={() => setSelectedProduct(product)}><span>Ver ficha del sazonador ↗</span></button>
             </article>
           ))}
         </div>
       </section>
+
+      {selectedProduct && <ProductSheet product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
 
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
@@ -227,7 +233,7 @@ export default function StaticPortal() {
       <FireAlmanac />
 
 
-      {toast && <div className="toast" role="status">{toast}<button type="button" onClick={() => showToast("")} aria-label="Cerrar mensaje">×</button></div>}
+      {selectedRecipe && <RecipeSheet recipe={selectedRecipe} onClose={() => setSelectedRecipe(null)} />}
     </main>
   );
 }

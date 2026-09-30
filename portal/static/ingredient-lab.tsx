@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "./image";
+import { createPortal } from "react-dom";
+import ProductSheet from "./product-sheet";
 import { useEffect, useMemo, useState } from "react";
 import { ingredients, ingredientFamilies as families } from "../app/lib/ingredients";
 import { productionProducts, productionArchiveRecord } from "../app/lib/production-products";
@@ -589,7 +591,10 @@ export default function IngredientLab() {
         </div>
       )}
 
-      {inspectedHypothesis && (
+      {inspectedHypothesis && productionProducts.some(product => product.details.productCode === inspectedHypothesis.id) && (
+        <ProductSheet product={productionProducts.find(product => product.details.productCode === inspectedHypothesis.id)!} onClose={() => setInspectedHypothesis(null)} />
+      )}
+      {inspectedHypothesis && !productionProducts.some(product => product.details.productCode === inspectedHypothesis.id) && createPortal(
         <div
           className="modal-backdrop hypothesis-print-backdrop"
           role="presentation"
@@ -763,7 +768,7 @@ export default function IngredientLab() {
               }).format(new Date(inspectedHypothesis.creado_en))}
             </small>
           </section>
-        </div>
+        </div>, document.body
       )}
     </section>
   );

@@ -1,0 +1,637 @@
+/** Portal recipe catalog, revision 1. Original proposals; not kitchen-tested. */
+export type RecipePreparation = {
+  servings: number;
+  total: string;
+  timing: string;
+  fire: string;
+  ingredients: string[];
+  steps: string[];
+  doneness: string;
+  sources: RecipeSourceId[];
+};
+
+export const recipeSources = {
+  handling: { title: "USDA FSIS · Manejo de alimentos y sobrantes", url: "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/steps-keep-food-safe", scope: "Refrigeración, separación de crudos y recalentado." },
+  outdoor: { title: "CDC · Carbón y monóxido de carbono", url: "https://www.cdc.gov/carbon-monoxide/about/index.html", scope: "Nunca quemar carbón en interiores." },
+  tamales: { title: "Rick Bayless · Tamales de elote", url: "https://www.rickbayless.com/recipe/fresh-corn-tamales/", scope: "Referencia del uso de elote fresco y cocción al vapor; versión y proporciones propias." },
+  pozole: { title: "Rick Bayless · Técnica de pozole", url: "https://www.rickbayless.com/recipe/classic-white-pozole-with-all-the-trimmings/", scope: "Cocción de maíz pozolero y control del líquido; aquí se usa maíz precocido y adobo propio." },
+  plank: { title: "Weber · Salmón sobre tabla", url: "https://www.weber.com/US/en/recipes/seafood/cedar-planked-salmon/weber-106580.html", scope: "Uso de tabla culinaria de cedro, no madera de construcción." },
+  temperatures: { title: "FoodSafety.gov · Temperaturas internas mínimas", url: "https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures", scope: "Temperaturas de seguridad y reposo; no valida esta formulación." },
+  seafood: { title: "FDA · Preparación segura de pescados y mariscos", url: "https://www.fda.gov/food/buy-store-serve-safe-food/selecting-and-serving-fresh-and-frozen-seafood-safely", scope: "Manejo y cocción de pescados y mariscos." },
+  grill: { title: "Weber · Cocción directa e indirecta", url: "https://www.weber.com/US/en/blog/tips-techniques/how-to-cook-anything-on-your-grill-mastering-direct-indirect-and-2-zone-grilling/weber-2417449.html", scope: "Configuración de zonas de calor; cantidades y sazón son propuestas Lumbre." },
+  vegetables: { title: "Weber · Verduras a la parrilla", url: "https://www.weber.com/US/en/blog/tips-techniques/top-tips-for-grilling-vegetables/weber-48939.html", scope: "Corte y manejo de vegetales sobre la parrilla." },
+  smoke: { title: "USDA FSIS · Ahumado de carne y aves", url: "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/smoking-meat-and-poultry", scope: "Control de temperatura del ahumador y de los alimentos." },
+  brick: { title: "Weber · Pollo bajo peso", url: "https://www.weber.com/US/en/recipes/poultry/chicken-under-bricks/weber-2032.html", scope: "Referencia de técnica; no se reproduce la receta original." },
+} as const;
+export type RecipeSourceId = keyof typeof recipeSources;
+export const recipeEditorialNote = "Propuesta culinaria Lumbre · revisión 1. Cantidades y tiempos orientativos desarrollados para este recetario; todavía no probada en cocina. Las fuentes respaldan técnicas y seguridad, no el resultado de esta receta. La imagen es ilustrativa.";
+export const recipeSafetyNote = "Usa el asador únicamente al aire libre. Lava los vegetales; separa alimentos crudos y listos para comer. Descongela y marina en refrigeración a 4 °C o menos. Usa un termómetro: el color y los minutos no sustituyen la temperatura interna. Refrigera sobrantes antes de 2 horas (1 hora si el ambiente supera 32 °C); recalienta a 74 °C. Usa lácteos pasteurizados y revisa las etiquetas por alérgenos.";
+
+// Each entry is explicit: no fallback recipe or title-driven generation at runtime.
+// Compact authoring helper splits only lists; it never invents ingredients or steps.
+function recipe(servings: number, total: string, timing: string, fire: string, ingredients: string, steps: string[], doneness: string, sources: RecipeSourceId[] = ["grill", "temperatures"]): RecipePreparation {
+  return { servings, total, timing, fire, ingredients: ingredients.split(" | "), steps, doneness, sources: [...sources, "handling", "outdoor"] };
+}
+
+export const recipePreparations: Record<number, RecipePreparation> = {
+  76: recipe(4, "1 h", "20 min preparación · 35 min cocción · 5 min reposo; arroz ya cocido", "Indirecto a 190 °C, charola cubierta.", "4 pimientos grandes | 400 g de arroz cocido refrigerado | 150 g de queso Chihuahua pasteurizado | 100 g de jitomate | 10 g de perejil | 15 ml de aceite | 3 g de sal | 60 ml de agua", [
+    "Corta una tapa a los pimientos y retira semillas. Pica jitomate y perejil y mezcla con arroz, sal y la mitad del queso.",
+    "Aceita los pimientos y rellena sin compactar. Pon en charola con agua, coloca las tapas a un lado y cubre con aluminio.",
+    "Cocina 25 minutos en indirecto. Destapa, agrega el queso restante y cocina 10 minutos más.",
+    "Comprueba 74 °C en el centro del relleno, reposa 5 minutos y sirve. Usa arroz que se refrigeró oportunamente, no arroz dejado toda la noche fuera.",
+  ], "Relleno con arroz previamente cocido: recalentar a 74 °C.", ["vegetables", "temperatures"]),
+  77: recipe(4, "50 min", "15 min preparación · 30 min cocción · 5 min reposo", "Directo medio y acabado indirecto.", "2 berenjenas grandes | 60 g de tahini | 30 ml de jugo de limón | 40 ml de agua | 1 diente de ajo | 4 g de sal | 15 ml de aceite | 10 g de ajonjolí", [
+    "Lava y pincha las berenjenas con tenedor en varios puntos. Coloca enteras sobre la parrilla.",
+    "Asa 25–30 minutos, girando cada 6 minutos, hasta que la piel se oscurezca y la pulpa colapse. Termina en indirecto si la piel se quema antes de ablandar.",
+    "Mezcla tahini, limón, agua, ajo rallado y sal hasta salsa fluida. El sabor ahumado vendrá de la berenjena, no de quemar tahini.",
+    "Reposa 5 minutos, abre y retira piel quemada. Sirve la pulpa con salsa, aceite y ajonjolí.",
+  ], "Pulpa completamente suave, sin zonas esponjosas crudas.", ["vegetables"]),
+  78: recipe(4, "25 min", "10 min preparación · 15 min cocción", "Plancha o canastilla a fuego medio-alto.", "600 g de hongos ostra cultivados | 40 g de mantequilla | 2 dientes de ajo | 15 g de perejil | 4 g de sal | 10 ml de aceite", [
+    "Limpia los hongos y corta las bases duras; separa en racimos pequeños. Seca bien.",
+    "Dora con aceite por tandas 4–5 minutos por cara sin amontonarlos para evitar exceso de líquido.",
+    "Baja el calor y agrega mantequilla, ajo picado y sal; mueve 1–2 minutos para que el ajo no se queme.",
+    "Retira y termina con perejil picado. Usa hongos cultivados identificados, no recolectados sin asesoría.",
+  ], "Hongos cocidos, bordes dorados y tallos tiernos.", ["vegetables"]),
+  79: recipe(4, "45 min", "15 min preparación · 25 min cocción · 5 min reposo", "Sartén y zona indirecta a 190 °C.", "4 portobellos grandes | 250 g de huitlacoche limpio | 150 g de queso Oaxaca pasteurizado | 50 g de cebolla | 1 diente de ajo | 5 hojas de epazote | 20 ml de aceite | 3 g de sal", [
+    "Retira tallos de portobellos y pícalos. Sofríe cebolla y ajo con la mitad del aceite 3 minutos.",
+    "Agrega tallos, huitlacoche, epazote y sal. Cocina 10 minutos, removiendo hasta que el huitlacoche esté cocido.",
+    "Aceita los sombreros y rellena con el guiso; cubre con quesillo. Coloca en charola en indirecto 12–15 minutos.",
+    "Reposa 5 minutos y sirve. Si preparaste el relleno con anticipación y lo refrigeraste, verifica 74 °C al recalentar.",
+  ], "Portobello tierno, relleno caliente y queso fundido.", ["vegetables", "temperatures"]),
+  80: recipe(4, "1 h", "10 min preparación · 25 min hervor · 20 min plancha · 5 min reposo", "Olla con agua y plancha a calor medio-alto.", "800 g de papas pequeñas | 2 l de agua | 30 ml de aceite | 3 dientes de ajo | 4 g de romero | 6 g de sal", [
+    "Lava las papas y cuece en agua 20–25 minutos hasta que un cuchillo entre con facilidad. Escurre y deja evaporar 5 minutos.",
+    "Aplasta cada papa a 1.5 cm de grosor, manteniendo las piezas enteras.",
+    "Dora con aceite en plancha 7–10 minutos por lado. Agrega ajo y romero picados durante los últimos 2 minutos.",
+    "Sazona con sal, reposa 5 minutos y sirve; no añadas el ajo desde el inicio porque se quema antes de dorar las papas.",
+  ], "Centro suave y caras crujientes; desecha papas verdes o muy brotadas.", ["vegetables"]),
+  81: recipe(4, "1 h 15 min", "10 min preparación · 55 min cocción · 10 min reposo", "Indirecto a 200 °C.", "4 camotes de 200 g | 50 g de mantequilla | 35 g de piloncillo rallado | 2 g de canela | 2 g de sal", [
+    "Lava y pincha los camotes. Colócalos en charola sobre indirecto, sin enterrarlos en ceniza.",
+    "Cocina 45–60 minutos hasta que el cuchillo llegue fácilmente al centro, girando una vez.",
+    "Mezcla mantequilla suave, piloncillo, canela y sal. Abre una ranura a cada camote con cuidado del vapor.",
+    "Reparte mantequilla dentro, deja fundir y reposa 10 minutos antes de servir.",
+  ], "Camote tierno hasta el centro; el tiempo aumenta para piezas más grandes.", ["vegetables", "grill"]),
+  82: recipe(4, "1 h 20 min", "25 min preparación · 45 min cocción · 10 min reposo", "Indirecto a 190 °C, charola tapada.", "4 cebollas grandes | 150 g de queso Chihuahua pasteurizado | 60 g de pan molido | 10 g de perejil | 25 ml de aceite | 3 g de sal | 100 ml de agua", [
+    "Pela cebollas y corta la tapa. Ahueca con cuchara dejando dos capas externas y la base; pica 100 g del centro.",
+    "Sofríe ese centro con aceite 5 minutos. Mezcla con pan, perejil, sal y la mitad del queso; reserva los centros sobrantes para otra preparación.",
+    "Rellena cebollas, coloca en charola con agua y tapa. Cocina 35 minutos; destapa y agrega queso restante otros 10 minutos.",
+    "Comprueba que las paredes estén tiernas, reposa 10 minutos y sirve cada cebolla en plato hondo.",
+  ], "Cebolla suave al cuchillo y relleno caliente; no basta con que el queso dore.", ["vegetables"]),
+  83: recipe(4, "1 h", "10 min preparación · 40 min cocción · 10 min reposo", "Indirecto a 190 °C en paquetes de aluminio.", "4 cabezas de ajo | 30 ml de aceite de oliva | 2 g de sal | 250 g de pan", [
+    "Retira solo las pieles sueltas y corta la punta para exponer los dientes, sin desarmar la cabeza.",
+    "Coloca sobre aluminio, reparte aceite y sal y cierra los paquetes.",
+    "Cocina 35–45 minutos hasta que los dientes estén blandos. Tuesta rebanadas de pan durante los últimos minutos en otra zona limpia.",
+    "Reposa 10 minutos, exprime el ajo y unta el pan. Consume recién hecho; no conserves ajo sumergido en aceite a temperatura ambiente.",
+  ], "Dientes cremosos, no secos ni negros.", ["vegetables", "grill"]),
+  84: recipe(4, "30 min", "15 min preparación · 10 min cocción · 5 min reposo", "Directo medio-alto y charola perforada.", "600 g de jitomates firmes | 250 g de burrata pasteurizada | 25 g de albahaca | 35 ml de aceite de oliva | 4 g de sal | 1 g de pimienta", [
+    "Lava jitomates y parte los grandes por la mitad. Seca y unta con 10 ml de aceite.",
+    "Asa 6–10 minutos hasta marcas oscuras y pulpa aún firme. Usa charola perforada para piezas pequeñas.",
+    "Licúa albahaca con el aceite restante, sal y pimienta. Mantén burrata refrigerada hasta emplatar.",
+    "Reposa jitomates 5 minutos, reparte burrata y termina con aceite de albahaca. Sirve de inmediato.",
+  ], "Jitomate caliente, burrata fresca pasteurizada. Evita dejar lácteos al sol.", ["vegetables"]),
+  85: recipe(4, "1 h", "25 min preparación · 30 min cocción · 5 min reposo", "Directo para tatemar e indirecto a 190 °C para rellenos.", "4 chiles poblanos grandes | 400 g de frijol bayo cocido escurrido | 150 g de queso Chihuahua pasteurizado | 60 g de pepita pelada | 150 ml de agua | 10 g de cilantro | 3 g de sal", [
+    "Tatema poblanos 8–10 minutos, tapa en un recipiente 5 minutos y retira piel suelta. Abre una ranura y extrae semillas.",
+    "Tuesta pepita en sartén 2 minutos y licúa con agua, cilantro y sal; calienta la salsa 5 minutos sin dejar de mover.",
+    "Rellena poblanos con frijol y queso. Cocina en charola en indirecto 15–20 minutos hasta 74 °C en el relleno.",
+    "Reposa 5 minutos y sirve con salsa de pepita. El frijol se incorpora ya cocido, no seco.",
+  ], "Relleno de frijol recalentado: 74 °C.", ["vegetables", "temperatures"]),
+  86: recipe(4, "1 h", "15 min preparación · 35 min cocción · 10 min reposo", "Olla con agua y parrilla media-alta.", "4 alcachofas | 2 l de agua | 50 g de mantequilla | 2 dientes de ajo | 2 limones | 10 g de perejil | 4 g de sal", [
+    "Recorta puntas duras y tallo, parte a la mitad y retira la pelusa central. Frota cortes con un limón.",
+    "Hierve en agua 20–30 minutos hasta que la base esté tierna; escurre muy bien.",
+    "Funde mantequilla con ajo picado. Unta las mitades y asa 3–4 minutos por cara para marcar.",
+    "Reposa 10 minutos, sazona con sal y sirve con perejil y limón restante. Solo se come la base carnosa de hojas y corazón.",
+  ], "Base tierna y pelusa retirada; no intentes comer hojas duras enteras.", ["vegetables"]),
+  87: recipe(4, "40 min", "15 min preparación · 20 min cocción · 5 min reposo", "Canastilla o sartén a calor medio, con tapa al inicio.", "600 g de coles de Bruselas | 25 ml de aceite | 4 g de chile ancho molido | 20 g de miel | 30 g de pepita | 4 g de sal | 40 ml de agua", [
+    "Retira hojas maltratadas, lava y parte las coles. Mezcla con aceite y sal.",
+    "Coloca el corte hacia abajo en sartén, agrega agua y tapa 8 minutos. Destapa y dora otros 8–10 minutos.",
+    "Mezcla miel y chile y añade al final, moviendo un minuto fuera de la zona más caliente.",
+    "Reposa 5 minutos. Tuesta pepitas aparte y espolvorea antes de servir.",
+  ], "Centro tierno y hojas externas doradas; evita ennegrecer la miel.", ["vegetables"]),
+  88: recipe(4, "45 min", "15 min preparación · 25 min cocción · 5 min reposo", "Dos zonas, directo medio-alto e indirecto a 190 °C.", "1 repollo de 800 g | 25 ml de aceite | 60 g de pepita | 100 ml de agua | 20 ml de jugo de limón | 1 diente de ajo | 4 g de sal", [
+    "Corta el repollo en cuatro gajos conservando el corazón para mantenerlos unidos. Lava, escurre y unta aceite y la mitad de la sal.",
+    "Dora cada cara 4 minutos y termina 12–15 minutos en indirecto con tapa hasta tierno.",
+    "Tuesta pepita 2 minutos en sartén y licúa con agua, limón, ajo y sal restante.",
+    "Reposa 5 minutos y sirve con salsa. Retira capas totalmente carbonizadas; las marcas de dorado son suficientes.",
+  ], "El corazón debe ceder al cuchillo, no solo las hojas externas.", ["vegetables"]),
+  89: recipe(4, "30 min", "10 min preparación · 15 min cocción · 5 min reposo", "Canastilla en directo medio; tapa si los tallos son gruesos.", "700 g de brócoli | 25 ml de aceite | 50 g de parmesano | 2 limones | 3 g de sal | 50 ml de agua", [
+    "Lava y corta floretes con tallos de grosor parecido. Pela la parte fibrosa de los tallos gruesos.",
+    "Pon en sartén con agua, tapa y cocina 4 minutos. Escurre y mezcla con aceite y sal.",
+    "Dora en canastilla 6–10 minutos. Asa los limones por el lado del corte en una zona limpia.",
+    "Reposa 5 minutos, añade parmesano rallado y jugo de limón asado.",
+  ], "Tallos tiernos con ligera firmeza, floretes tostados sin reducirse a ceniza.", ["vegetables"]),
+  90: recipe(4, "50 min", "20 min preparación · 25 min cocción · 5 min reposo", "Directo medio y zona indirecta.", "4 puerros gruesos | 1 pimiento rojo | 1 jitomate | 50 g de nuez | 1 chile ancho | 100 ml de agua caliente | 1 diente de ajo | 20 ml de aceite | 15 ml de vinagre | 4 g de sal", [
+    "Abre ligeramente la parte verde de puerros para lavar tierra entre capas. Conserva las bases unidas. Remoja el ancho sin semillas 15 minutos.",
+    "Asa pimiento y jitomate 12–15 minutos. Retira piel y semillas del pimiento y licúa con nuez, ancho escurrido, ajo, aceite, vinagre y sal.",
+    "Asa puerros 15–25 minutos girando y terminando en indirecto hasta que el centro esté suave.",
+    "Reposa 5 minutos, retira capas externas quemadas y sirve con el romesco de nuez, una variante propuesta para este recetario.",
+  ], "Centro del puerro suave y limpio, sin tierra atrapada.", ["vegetables"]),
+  91: recipe(4, "25 min", "10 min preparación · 12 min cocción · 3 min reposo", "Plancha a fuego medio.", "4 endivias | 1 naranja | 40 g de nuez | 20 g de miel | 15 ml de aceite | 2 g de sal", [
+    "Parte las endivias a lo largo conservando la base. Lava y seca; pela naranja y separa gajos, recogiendo su jugo.",
+    "Unta endivias con aceite y sal. Dora el corte 4 minutos y voltea otros 3 minutos.",
+    "Agrega jugo de naranja y miel a la plancha o sartén y cocina 2 minutos a calor bajo para glasear.",
+    "Reposa 3 minutos y sirve con gajos y nuez picada. El amargor propio de la endivia no desaparece por completo.",
+  ], "Base tierna y hojas que conservan forma.", ["vegetables"]),
+  92: recipe(4, "25 min", "10 min preparación · 12 min cocción · 3 min reposo", "Directo medio-alto.", "4 calabacitas de 180 g | 200 g de ricotta pasteurizada | 10 g de menta | 1 limón | 20 ml de aceite | 3 g de sal | 1 g de pimienta", [
+    "Lava y corta calabacitas a lo largo en láminas de 1 cm. Unta aceite, sal y pimienta.",
+    "Mezcla ricotta con ralladura de limón y la mitad de la menta picada; conserva fría.",
+    "Asa calabacitas 3–5 minutos por lado hasta marcadas, sin cocerlas hasta deshacerse.",
+    "Reposa 3 minutos y reparte ricotta, menta restante y jugo de limón al servir.",
+  ], "Calabacita tierna pero firme; ricotta pasteurizada mantenida en frío.", ["vegetables"]),
+  93: recipe(4, "55 min", "20 min preparación · 30 min cocción · 5 min reposo", "Olla y parrilla media.", "3 chayotes | 3 guajillos sin semillas | 150 ml de agua caliente para adobo | 1 l de agua para cocer | 1 cebolla | 1 diente de ajo | 20 ml de aceite | 20 ml de vinagre | 4 g de sal", [
+    "Pela chayotes con guantes si irritan tus manos, retira semilla y corta gajos. Hierve 12–15 minutos hasta casi tiernos.",
+    "Remoja guajillos 15 minutos y licúa con su agua, ajo, vinagre y sal. Hierve el adobo 5 minutos.",
+    "Escurre chayotes y unta aceite y adobo. Asa 4–5 minutos por lado; cocina la cebolla en gajos a su lado hasta tierna.",
+    "Reposa 5 minutos y sirve con el adobo limpio restante, calentado previamente.",
+  ], "Chayote cocido con ligera firmeza y chile sin quemar.", ["vegetables"]),
+  94: recipe(4, "40 min", "10 min preparación · 25 min cocción · 5 min reposo", "Plancha y zona indirecta a 190 °C.", "2 bulbos de hinojo grandes | 40 g de mantequilla | 80 ml de jugo de naranja | 1 g de pimienta rosa | 3 g de sal | 10 ml de aceite", [
+    "Lava hinojo y corta en gajos de 2 cm conservando parte de la base. Reserva hojas tiernas para terminar.",
+    "Unta aceite y sal y dora los gajos 3–4 minutos por cara sobre la plancha.",
+    "Pasa a sartén con jugo de naranja y mantequilla. Tapa y cocina 12–15 minutos en indirecto hasta tierno.",
+    "Reposa 5 minutos y sirve con pimienta rosa ligeramente machacada y hojas reservadas.",
+  ], "Base tierna al cuchillo y salsa ligeramente reducida, no quemada.", ["vegetables"]),
+  95: recipe(4, "20 min", "15 min preparación · 3 min cocción · 2 min reposo", "Directo medio-alto, parrilla limpia.", "2 aguacates grandes firmes maduros | 200 g de jitomate | 40 g de cebolla | 1 serrano | 10 g de cilantro | 1 limón | 10 ml de aceite | 3 g de sal", [
+    "Pica jitomate, cebolla, serrano y cilantro lavados. Mezcla con limón y sal para el pico de gallo.",
+    "Parte aguacates, retira hueso y unta el corte con aceite; conserva cáscara para sostenerlos.",
+    "Marca por el corte 2–3 minutos sin mover, usando espátula para retirarlos sin romper.",
+    "Reposa 2 minutos y rellena con pico de gallo. Sirve al momento y no cocines hasta que la pulpa se deshaga.",
+  ], "Aguacate tibio y firme, no marrón ni amargo por sobrecocción.", ["vegetables"]),
+  96: recipe(4, "20 min", "10 min preparación · 8 min cocción · 2 min reposo", "Directo alto, rejilla limpia y bien precalentada.", "800 g de sandía sin cáscara en gajos de 2.5 cm | 10 ml de aceite neutro | 2 g de chile piquín molido | 2 g de sal | 1 limón", [
+    "Retira semillas grandes y seca la superficie de los gajos con papel limpio.",
+    "Unta una película de aceite y coloca sobre la rejilla caliente.",
+    "Asa 2–4 minutos por lado hasta marcar; no la dejes mucho tiempo porque pierde estructura.",
+    "Reposa 2 minutos y agrega chile, sal y limón fuera del fuego. Sirve tibia.",
+  ], "Marcas de parrilla y pulpa aún firme; no se requiere dorado uniforme.", ["vegetables", "grill"]),
+  97: recipe(4, "30 min", "10 min preparación · 15 min cocción · 5 min reposo", "Dos zonas, directo medio e indirecto suave.", "4 peras firmes maduras | 100 g de queso azul pasteurizado | 40 g de nuez | 25 g de miel | 10 ml de aceite", [
+    "Lava peras, parte y retira el corazón con cuchara. Unta el corte con aceite.",
+    "Dora por el corte 4–5 minutos. Voltea y coloca queso y nuez en la cavidad.",
+    "Termina 6–10 minutos en indirecto con tapa hasta que la pera esté tierna y el queso suave.",
+    "Reposa 5 minutos y agrega miel al servir, no antes de sellar.",
+  ], "Pera tierna que conserva forma; utiliza queso elaborado con leche pasteurizada.", ["vegetables"]),
+  98: recipe(4, "40 min", "10 min preparación · 25 min cocción · 5 min reposo", "Indirecto a 190–200 °C.", "4 plátanos machos maduros | 120 g de crema pasteurizada | 2 g de canela | 10 g de cacao sin azúcar | 20 g de piloncillo rallado", [
+    "Lava la cáscara y haz una ranura longitudinal sin partir el plátano por completo.",
+    "Coloca sobre charola en indirecto y cocina 20–30 minutos, hasta que la cáscara se oscurezca y la pulpa esté muy suave.",
+    "Abre con pinzas y espolvorea piloncillo y canela; regresa 2 minutos para fundir.",
+    "Reposa 5 minutos y sirve la pulpa con crema y cacao. No se come la cáscara.",
+  ], "Pulpa suave hasta el centro; un plátano verde necesita otra preparación y no es sustituto directo.", ["vegetables", "grill"]),
+  99: recipe(4, "30 min", "15 min preparación · 12 min cocción · 3 min reposo", "Directo medio-alto.", "800 g de piña pelada en rodajas de 1.5 cm | 1 chile pasilla seco | 15 ml de aceite | 1 limón | 2 g de sal", [
+    "Retira el centro duro de las rodajas. Quita tallo y semillas al pasilla; tuesta unos segundos por lado sin ennegrecer y muele.",
+    "Seca y unta las rodajas con aceite. Asa 4–6 minutos por lado hasta marcas y pulpa caliente.",
+    "Retira a una fuente limpia y espolvorea pasilla y sal fuera del fuego para no quemar el chile molido.",
+    "Reposa 3 minutos y termina con jugo de limón. Sirve como postre sin azúcar adicional o guarnición.",
+  ], "Piña tierna con estructura; desecha el chile si se quemó y sabe amargo.", ["vegetables"]),
+  100: recipe(4, "1 h 30 min", "20 min preparación · 60 min cocción · 10 min reposo", "Charola tapada en indirecto a 180–190 °C.", "4 membrillos de 200 g | 60 g de miel de mezquite | 2 clavos de olor | 200 ml de agua | 1 limón", [
+    "Lava membrillos y frota la pelusa; parte en cuartos con cuchillo firme y retira semillas y corazón duro. Frota con limón.",
+    "Pon en charola con agua, miel y clavos. Tapa muy bien con aluminio para retener vapor.",
+    "Cocina 45–60 minutos hasta tiernos al cuchillo. Destapa los últimos 10 minutos para reducir el jugo sin secarlo.",
+    "Reposa 10 minutos, retira ambos clavos y sirve con el almíbar. Si siguen duros, agrega agua caliente y prolonga la cocción.",
+  ], "Membrillo completamente tierno; no basta con dorar la superficie.", ["vegetables", "grill"]),
+  51: recipe(8, "3–4 h", "25 min preparación · 2–3 h cocción · 35 min reposo", "Indirecto a 160–170 °C.", "2 kg de pierna de cordero sin hueso | 16 g de sal | 5 g de romero | 4 g de salvia | 4 dientes de ajo | 35 ml de aceite | 2 g de pimienta", [
+    "Ata la pierna con hilo de cocina para un grosor uniforme. Pica hierbas y ajo y mezcla con aceite, sal y pimienta.",
+    "Cubre la pierna y coloca en rejilla sobre una charola, lejos de las brasas.",
+    "Cocina 2–3 horas; empieza a medir desde los 90 minutos. Retira al alcanzar 63 °C en varias zonas gruesas, sin basarte en el color.",
+    "Reposa 35 minutos, retira el hilo y corta rebanadas delgadas. Sirve con sus jugos calientes.",
+  ], "Cordero entero: mínimo 63 °C y 3 minutos de reposo. El tiempo cambia con el diámetro del rollo."),
+  52: recipe(8, "5–6 h", "40 min preparación · 4–5 h cocción · 20 min reposo", "Olla tapada junto a brasas, hervor suave constante.", "2 kg de diezmillo de res en trozos | 5 guajillos | 2 chiles anchos | 1 cebolla | 4 dientes de ajo | 40 ml de vinagre | 2 g de comino | 1 g de clavo molido | 16 g de sal | 1.5 l de agua", [
+    "Retira semillas y tallos de los chiles. Remoja en parte del agua caliente 15 minutos y licúa con cebolla, ajo, vinagre, comino y clavo.",
+    "Pon carne, adobo, sal y el agua restante en olla. Lleva a hervor y reduce el calor para mantener burbujeo suave.",
+    "Tapa y cocina 4–5 horas, removiendo ocasionalmente y reponiendo agua caliente si baja mucho el nivel.",
+    "Cuando la carne se deshebre fácilmente, reposa 20 minutos. Desgrasa el caldo y sirve junto a la carne.",
+  ], "Res: superar 63 °C; este guiso sigue cocinándose hasta ternura completa. Recalentar sobrantes a 74 °C."),
+  53: recipe(6, "6–8 h", "25 min preparación · 5–7 h cocción · 35 min reposo", "Indirecto a 140–150 °C, poco mezquite culinario.", "1.8 kg de cachete de res limpio | 14 g de sal | 5 g de pimienta | 1 cebolla | 3 dientes de ajo | 400 ml de caldo sin sal", [
+    "Retira tejido duro exterior del cachete y seca. Sazona con sal y pimienta.",
+    "Ahúma en rejilla 2 horas. Corta la cebolla y aplasta los ajos mientras se forma la corteza.",
+    "Pasa a una olla con cebolla, ajo y caldo. Tapa y cocina 3–5 horas más hasta que se pueda separar con tenedor.",
+    "Reposa 35 minutos. Cuela y hierve los jugos, retira grasa y sirve sobre el cachete.",
+  ], "Lleva al menos a 74 °C como criterio conservador y continúa hasta tierno, habitualmente cerca de 93–96 °C.", ["smoke", "temperatures"]),
+  54: recipe(6, "4–5 h", "25 min preparación · 3.5–4.5 h cocción · 10 min reposo", "Olla de hierro con tapa, calor suave y uniforme.", "2 kg de rabo de res en piezas | 400 g de jitomate | 1 cebolla | 2 zanahorias | 3 dientes de ajo | 200 ml de vino tinto | 700 ml de agua | 20 ml de aceite | 14 g de sal", [
+    "Seca el rabo y dora por tandas con aceite 10 minutos. Retira y sofríe cebolla, zanahoria y ajo picados.",
+    "Agrega jitomate picado y cocina 5 minutos. Vierte vino y raspa el fondo sin dejar restos quemados.",
+    "Regresa la carne, incorpora agua y sal. Tapa y cocina a hervor suave 3–4 horas, reponiendo líquido cuando sea necesario.",
+    "Cuando la carne se desprenda del hueso, reposa 10 minutos. Retira grasa superficial y sirve con la salsa reducida.",
+  ], "Además de superar 63 °C, el rabo debe ceder al tenedor; la seguridad mínima no garantiza ternura."),
+  55: recipe(4, "3–4 h", "25 min preparación · 2.5–3.5 h cocción · 10 min reposo", "Olla tapada a calor indirecto, aproximadamente 165 °C.", "4 piezas de osobuco de res de 300 g | 1 cebolla | 2 zanahorias | 2 ramas de apio | 500 ml de caldo sin sal | 150 ml de vino blanco | 25 ml de aceite | 10 g de sal | 15 g de perejil | 1 limón | 1 diente de ajo", [
+    "Dora el osobuco con aceite 3 minutos por lado. Retira y sofríe cebolla, zanahoria y apio picados 5 minutos.",
+    "Añade vino, caldo, sal y carne. Tapa y cocina 2.5–3.5 horas a hervor suave, revisando líquido.",
+    "Pica perejil, ajo y ralladura de limón para la gremolata; usa solo la parte amarilla de la cáscara limpia.",
+    "Cuando la carne esté muy tierna, reposa 10 minutos y sirve con gremolata y unas gotas de limón.",
+  ], "Carne cocida y tierna alrededor del hueso; debe superar 63 °C. Los jugos y tuétano estarán muy calientes."),
+  56: recipe(12, "6–9 h", "45 min preparación · 5–8 h cocción · 15 min reposo", "Asador con capacidad suficiente, indirecto a 160 °C y acabado a 210 °C.", "1 lechón limpio de 5 kg abierto por el carnicero | 40 g de sal | 50 ml de aceite | 6 dientes de ajo | 5 g de orégano | 300 ml de agua", [
+    "Confirma que el animal quepa sin tocar brasas o tapa. Seca muy bien la piel. Unta carne con ajo, orégano y la mitad de la sal; la piel solo con aceite y sal restante.",
+    "Coloca abierto sobre rejilla con charola de agua abajo. Cocina 5–8 horas girando la posición si hay zonas de calor desigual.",
+    "Mide jamones y paletas en varios puntos. Cuando estén cocidos y tiernos, sube a 210 °C por 15–25 minutos, vigilando la piel sin llama directa.",
+    "Reposa 15 minutos y porciona con herramientas adecuadas. No uses relleno ni inyección en esta propuesta.",
+  ], "Todas las zonas gruesas deben alcanzar al menos 63 °C y reposar 3 minutos; seguir el manual del equipo y continuar para ablandar paletas."),
+  57: recipe(8, "4–5 h", "30 min preparación · 3–4 h cocción · 30 min reposo", "Indirecto a 170 °C; acabado a 220 °C.", "2 kg de panceta de cerdo con piel para enrollar | 18 g de sal | 5 g de semilla de hinojo | 4 dientes de ajo | 5 g de romero | 2 g de pimienta", [
+    "Seca la piel. Pica ajo y romero y machaca hinojo; distribuye con pimienta y la mitad de la sal sobre la cara interior.",
+    "Enrolla firme con la piel afuera y ata con hilo culinario cada 3 cm. Sazona la piel con la sal restante.",
+    "Cocina en rejilla sobre bandeja 3–4 horas. Verifica el centro del rollo hasta 74 °C como criterio conservador para esta pieza enrollada.",
+    "Dora la piel 15–20 minutos a 220 °C sin llama directa. Reposa 30 minutos, retira todo el hilo y rebana.",
+  ], "Centro del rollo: 74 °C en esta propuesta conservadora; medir más de un punto."),
+  58: recipe(6, "4 h", "30 min preparación · 2 h marinado · 75 min cocción · 15 min reposo", "Asador con rosticero horizontal, calor indirecto a 190 °C; adaptación de trompo para casa.", "1.2 kg de cabeza de lomo de cerdo en bisteces delgados | 50 g de achiote | 3 guajillos | 100 ml de agua caliente | 50 ml de vinagre | 10 g de sal | 300 g de piña | 12 tortillas", [
+    "Remoja guajillos sin semillas 15 minutos y licúa con agua, achiote, vinagre y sal. Marina el cerdo 2 horas en refrigeración.",
+    "Monta capas firmes de carne en el eje del rosticero, formando un cilindro de no más de 10 cm de diámetro. Asegura según el manual.",
+    "Gira en indirecto 60–90 minutos y asa la piña aparte. No rebajes capas crudas: verifica al menos 74 °C en el centro del cilindro antes de cortar.",
+    "Reposa 15 minutos, rebana y dora por tandas en plancha. Sirve con tortillas calientes y piña picada.",
+  ], "Pieza apilada: se adopta 74 °C al centro. No es un procedimiento para trompo comercial con servicio continuo."),
+  59: recipe(8, "7–10 h", "30 min preparación · 6–9 h cocción · 30 min reposo; sin etapa de curado casero", "Indirecto a 135–145 °C, después vapor en recipiente tapado.", "2 kg de pecho de res comercial curado tipo corned beef crudo refrigerado | 15 g de pimienta gruesa | 12 g de semilla de cilantro molida | 5 g de ajo granulado | 500 ml de agua", [
+    "Compra pecho curado etiquetado para cocinar y sigue sus instrucciones de desalado si existen. No prepares sales de curado ni añadas nitritos a esta receta.",
+    "Seca y cubre con pimienta, cilantro y ajo. Ahúma 3–5 horas hasta fijar una corteza.",
+    "Pasa a rejilla dentro de olla con agua sin tocar la carne. Tapa y cocina al vapor 2–4 horas, reponiendo agua, hasta que la sonda entre fácilmente.",
+    "Reposa 30 minutos y corta fino contra la fibra. El producto debe mantenerse refrigerado: no es una conserva ni carne estable a temperatura ambiente.",
+  ], "Respeta la etiqueta del producto curado; termina completamente cocido y tierno, orientativamente 93–96 °C. No se valida aquí un proceso de curado.", ["smoke", "temperatures"]),
+  60: recipe(4, "45 min", "10 min preparación · 30 min cocción · 5 min reposo; cecina comercial refrigerada", "Indirecto a 140–150 °C con humo ligero; acabado en directo.", "700 g de cecina de res comercial de 8–10 mm | 15 ml de aceite | 1 g de pimienta | 2 limones", [
+    "Revisa que la cecina sea producto refrigerado para cocinar y sigue la etiqueta. No añadas sal; no se incluye elaboración ni secado casero.",
+    "Seca y unta aceite y pimienta. Ahúma 15–25 minutos en una sola capa, midiendo el centro desde temprano.",
+    "Dora 30–60 segundos por lado sobre directo si hace falta; evita prolongar tres horas una lámina que se resecaría.",
+    "Reposa 5 minutos, rebana y sirve con limón. Guarda sobrantes en refrigeración, no como carne seca de despensa.",
+  ], "Cecina de res para cocinar: al menos 63 °C y 3 minutos de reposo, o la indicación más exigente del fabricante.", ["smoke", "temperatures"]),
+  61: recipe(4, "1 h 45 min", "60 min remojo de tabla, con 15 min preparación simultánea · 35 min cocción · 10 min reposo", "Indirecto a 180–200 °C; tabla de cedro vendida para cocinar.", "800 g de salmón con piel en una pieza | 1 tabla culinaria de cedro | 30 g de mostaza | 15 g de azúcar morena | 4 g de sal | 1 limón", [
+    "Remoja la tabla según su fabricante, al menos 60 minutos. No uses madera tratada o de construcción. Revisa espinas del salmón.",
+    "Mezcla mostaza, azúcar y sal y unta la carne. Coloca con piel abajo sobre la tabla escurrida.",
+    "Cocina con tapa en indirecto 25–35 minutos hasta 63 °C. Mantén la tabla lejos de llamas; si se enciende, retírala de la zona caliente con guantes.",
+    "Reposa 10 minutos y sirve con limón. Coloca la tabla sobre una bandeja resistente al calor, nunca directamente sobre la mesa.",
+  ], "Salmón: 63 °C en la parte más gruesa.", ["plank", "seafood"]),
+  62: recipe(4, "1 h 30 min", "20 min preparación · 60 min cocción · 10 min reposo", "Ahumado caliente a 125–140 °C, no ahumado en frío.", "4 truchas evisceradas de 300 g | 7 g de sal | 10 g de eneldo fresco | 2 limones | 20 ml de aceite", [
+    "Seca las truchas y revisa la cavidad. Sazona con sal y aceite; coloca eneldo y unas rodajas de limón dentro.",
+    "Acomoda en rejilla aceitada lejos del combustible, con espacio entre pescados.",
+    "Ahúma 40–60 minutos y mide desde los 30 minutos. Retira cuando la carne más gruesa alcance 63 °C.",
+    "Reposa 10 minutos y sirve con limón restante. Esta trucha cocida sigue siendo perecedera y necesita refrigeración si no se consume.",
+  ], "Trucha: 63 °C; esta receta no produce pescado de conservación prolongada.", ["seafood", "smoke"]),
+  63: recipe(4, "3 h", "20 min preparación · 2 h 30 min cocción · 10 min reposo", "Olla de hierro junto a brasas, seguida de parrilla; sin fuego bajo aceite expuesto.", "1 pulpo limpio y descongelado de 1.2 kg | 1.5 l de agua | 200 ml de aceite de oliva | 4 dientes de ajo | 2 hojas de laurel | 4 g de sal | 1 limón", [
+    "Cuece el pulpo en agua a hervor suave 60–90 minutos hasta que un cuchillo entre en la parte gruesa con poca resistencia.",
+    "Escurre y separa tentáculos. Coloca en olla pequeña con aceite, ajo y laurel; calienta suavemente 30–40 minutos, sin freír ni dejar aceite cerca de llamas.",
+    "Saca y escurre muy bien. Dora en parrilla 2–3 minutos por lado, evitando que el aceite gotee sobre brasas.",
+    "Reposa 10 minutos y termina con sal y limón. No guardes ajo cubierto de aceite a temperatura ambiente.",
+  ], "El pulpo debe estar completamente cocido y tierno. Si se enfría entre etapas, refrigera y recalienta a 74 °C.", ["seafood", "temperatures", "grill"]),
+  64: recipe(6, "1 h 30 min", "20 min preparación · 70 min cocción; frijoles previamente cocidos", "Olla abierta a hervor suave, calor indirecto.", "900 g de frijoles bayos cocidos | 700 ml de caldo de frijol | 150 g de tocino | 150 g de chorizo fresco de cerdo | 250 g de jitomate | 1 cebolla | 1 serrano | 10 g de cilantro", [
+    "Pica tocino y cocina en olla 8 minutos. Agrega chorizo desmenuzado y cocina hasta 71 °C; retira exceso de grasa.",
+    "Incorpora cebolla y serrano picados, cocina 5 minutos y añade jitomate otros 8 minutos.",
+    "Agrega frijoles y caldo. Cocina destapado 40–50 minutos en indirecto con humo ligero, removiendo y agregando agua si espesa demasiado.",
+    "Comprueba que todo esté bien caliente y agrega cilantro. Prueba antes de añadir sal, pues tocino y chorizo pueden aportar suficiente.",
+  ], "Chorizo: 71 °C; frijoles previamente cocidos y refrigerados: recalentar a 74 °C. El tiempo no incluye cocer frijol seco."),
+  65: recipe(8, "4 h", "30 min preparación · 3 h 30 min cocción", "Olla grande de fondo grueso, hervor suave sobre calor controlado.", "1.5 kg de espaldilla de cerdo en cubos | 1 kg de maíz pozolero precocido enjuagado | 5 guajillos | 2 anchos | 1 cebolla | 4 dientes de ajo | 3 l de agua | 18 g de sal | 300 g de lechuga | 150 g de rábanos | 3 limones", [
+    "Pon cerdo, media cebolla, dos ajos y agua en olla. Lleva a hervor, retira espuma y cocina suavemente 90 minutos.",
+    "Desvena chiles y remoja 15 minutos en caldo caliente; licúa con la cebolla y ajo restantes. Cuela al caldo.",
+    "Agrega maíz precocido y sal y cocina 90–120 minutos más hasta que maíz y carne estén tiernos. Repón agua caliente si hace falta.",
+    "Lava y rebana lechuga y rábanos. Sirve el pozole con estas guarniciones y limón; no incorpora nixtamalización casera.",
+  ], "Cerdo completamente cocido y tierno; al recalentar todo el caldo debe llegar a 74 °C.", ["pozole", "temperatures"]),
+  66: recipe(6, "3 h", "25 min preparación · 2 h 35 min cocción", "Olla pesada en indirecto, hervor muy suave.", "800 g de res molida | 600 g de frijol negro cocido | 500 g de jitomate triturado | 1 cebolla | 3 dientes de ajo | 10 g de chile ancho molido | 3 g de comino | 20 ml de aceite | 500 ml de agua | 8 g de sal", [
+    "Dora la res en aceite por tandas y confirma 71 °C. Añade cebolla y ajo picados y sofríe 5 minutos.",
+    "Incorpora ancho y comino durante 30 segundos; agrega inmediatamente jitomate, agua y sal para que no se quemen.",
+    "Cocina en indirecto 90 minutos con tapa entreabierta. Agrega frijol y continúa 30–45 minutos, removiendo el fondo.",
+    "Ajusta espesor con agua caliente y sirve cuando esté uniforme y bien caliente. El frijol ya debe estar cocido al iniciar.",
+  ], "Carne molida: 71 °C; mezcla con frijol precocido recalentada a 74 °C."),
+  67: recipe(6, "2 h", "35 min preparación · 75 min vapor · 10 min reposo; rinde 12 tamales", "Vaporera estable sobre fuego medio, no directamente sobre brasas.", "600 g de granos de elote fresco | 150 g de harina de maíz nixtamalizada | 100 g de mantequilla suave | 70 g de azúcar | 5 g de polvo para hornear | 3 g de sal | 100 ml de leche pasteurizada | 12 hojas grandes de maíz secas | 2 l de agua para la vaporera", [
+    "Remoja las hojas en agua caliente 20 minutos. Muele el elote a textura gruesa; bate mantequilla y azúcar e incorpora elote, harina, polvo, sal y leche.",
+    "Busca una masa espesa que se pueda untar, no líquida. Si el elote soltó mucha agua, espera 5 minutos para que la harina hidrate antes de porcionar.",
+    "Reparte en 12 hojas, dobla los lados y la punta. Pon verticales sobre rejilla de vaporera sin tocar el agua y tapa.",
+    "Cocina al vapor 60–75 minutos, reponiendo agua hirviendo por un costado. Prueba uno: debe despegarse de la hoja tras 10 minutos de reposo; si está pastoso, cocina más.",
+  ], "Masa firme sin centro crudo. Abre la vaporera alejando la tapa del rostro; no debe hervir en seco.", ["tamales"]),
+  68: recipe(6, "2 h", "20 min preparación · 90 min cocción · 10 min reposo", "Indirecto a 150–165 °C con humo ligero.", "1 piña madura de 1.8 kg | 50 g de piloncillo | 60 ml de agua | 2 g de canela | 15 ml de jugo de limón", [
+    "Pela la piña, retira ojos y conserva entera. Pon sobre una charola o en rosticero compatible.",
+    "Cocina 60 minutos en indirecto, girando cada 20 minutos para dorado parejo.",
+    "Disuelve piloncillo y canela en el agua a hervor 5 minutos. Barniza la piña y cocina otros 20–30 minutos sin quemar el jarabe.",
+    "Reposa 10 minutos, corta, retira el centro fibroso y termina con limón.",
+  ], "Pulpa tierna al cuchillo y jarabe dorado, no negro.", ["grill", "vegetables"]),
+  69: recipe(4, "1 h 10 min", "15 min preparación · 45 min cocción · 10 min reposo", "Indirecto a 180–190 °C en paquetes, sin contacto con ceniza.", "4 manzanas firmes | 50 g de nuez picada | 30 g de miel | 20 g de mantequilla | 2 g de canela | 40 ml de agua", [
+    "Lava y descorazona las manzanas sin perforar la base. Haz un corte superficial alrededor de la piel para que no revienten.",
+    "Mezcla nuez, miel, mantequilla y canela y rellena las cavidades.",
+    "Envuelve cada una en aluminio con 10 ml de agua. Cocina 35–45 minutos en indirecto hasta tierna, pero sin colapsar.",
+    "Reposa 10 minutos y abre con cuidado del vapor. Sirve con el jugo del paquete.",
+  ], "Centro suave al pinchar; relleno y jugos estarán muy calientes.", ["vegetables", "grill"]),
+  70: recipe(4, "40 min", "10 min preparación · 25 min cocción · 5 min reposo", "Directo medio con zona indirecta.", "4 elotes tiernos sin hojas | 60 g de mayonesa comercial | 3 g de chile ancho molido | 60 g de queso añejo pasteurizado | 2 limones | 10 ml de aceite", [
+    "Lava elotes y retira barbas. Unta aceite y asa 20–25 minutos, girando cada 5 minutos.",
+    "Si el grano sigue duro mientras ya está muy dorado, termina en indirecto con tapa.",
+    "Mezcla mayonesa con chile y el jugo de un limón; conserva fría hasta usar.",
+    "Reposa elotes 5 minutos, unta la mayonesa y espolvorea queso. Sirve con el limón restante.",
+  ], "Granos tiernos y jugosos. Los elotes más maduros necesitarán precocción adicional en agua.", ["vegetables"]),
+  71: recipe(4, "35 min", "15 min preparación · 20 min cocción", "Directo medio-alto.", "4 nopales grandes limpios | 150 g de queso fresco pasteurizado | 300 g de jitomate | 1 serrano | 40 g de cebolla | 1 diente de ajo | 15 ml de aceite | 3 g de sal", [
+    "Lava y seca nopales. Unta aceite y haz cortes superficiales para reducir que se curven.",
+    "Asa jitomate, serrano, cebolla y ajo 10–12 minutos. Muele con sal para una salsa rústica.",
+    "Asa nopales 5–7 minutos por lado hasta flexibles y con marcas; no deben secarse por completo.",
+    "Sirve con queso desmoronado y salsa. Mantén el queso refrigerado hasta el momento de emplatar.",
+  ], "Nopales tiernos y calientes; retirar cualquier espina residual antes de cocinar.", ["vegetables"]),
+  72: recipe(6, "1 h 25 min", "15 min preparación · 60 min cocción · 10 min reposo", "Indirecto a 190 °C, charola cubierta al inicio.", "1.5 kg de calabaza de Castilla en gajos | 50 g de mantequilla | 40 g de pepita pelada | 4 g de chile ancho molido | 5 g de sal | 80 ml de agua", [
+    "Lava calabaza, retira semillas y corta gajos de 3 cm de grosor. Conserva la cáscara como soporte.",
+    "Mezcla mantequilla suave con chile y sal; unta la pulpa. Pon en charola con agua y tapa con aluminio.",
+    "Cocina 40 minutos y destapa 15–20 minutos más para dorar. Tuesta pepitas aparte en sartén seco 2 minutos, moviendo.",
+    "Reposa 10 minutos y sirve con pepitas. Come la pulpa y descarta la cáscara si sigue dura.",
+  ], "La pulpa debe ceder fácilmente hasta la zona próxima a la cáscara.", ["vegetables", "grill"]),
+  73: recipe(4, "1 h 40 min", "15 min preparación · 75 min cocción · 10 min reposo", "Indirecto a 190 °C, recipiente de horno.", "4 betabeles de 180 g | 1 kg de sal gruesa para costra, no para consumir | 120 ml de agua | 150 g de jocoque pasteurizado | 10 g de eneldo | 15 ml de jugo de limón", [
+    "Lava betabeles sin pelar ni cortar la raíz al ras. Mezcla sal con agua hasta textura de arena húmeda.",
+    "Pon una base de sal en el recipiente, acomoda betabeles y cubre con el resto, compactando.",
+    "Hornea en indirecto 60–75 minutos hasta que una brocheta atraviese la costra y entre al betabel sin resistencia fuerte.",
+    "Reposa 10 minutos, rompe y desecha la costra. Pela y corta; sirve con jocoque mezclado con limón y eneldo. No añadas la sal de la costra al plato.",
+  ], "Betabel tierno; manipula la costra caliente con guantes.", ["vegetables", "grill"]),
+  74: recipe(4, "40 min", "10 min preparación · 25 min cocción · 5 min reposo", "Dos zonas, directo medio e indirecto a 190 °C.", "700 g de zanahorias medianas | 20 ml de aceite | 25 g de miel | 2 g de comino | 4 g de sal | 10 g de perejil | 15 ml de jugo de limón", [
+    "Lava y pela zanahorias; parte a lo largo las que midan más de 2 cm de ancho. Unta aceite, sal y comino.",
+    "Marca 3–4 minutos por lado sobre directo. Pasa a indirecto 12–18 minutos hasta tiernas.",
+    "Mezcla miel y limón y barniza durante los últimos 2 minutos, evitando fuego alto.",
+    "Reposa 5 minutos y termina con perejil picado.",
+  ], "El centro debe ceder al tenedor; el exterior puede dorarse sin quedar carbonizado.", ["vegetables"]),
+  75: recipe(4, "20 min", "10 min preparación · 8 min cocción · 2 min reposo", "Directo medio-alto o canastilla.", "500 g de espárragos | 30 g de mantequilla | 2 g de limón negro molido culinario | 3 g de sal | 10 ml de aceite", [
+    "Lava espárragos y corta la base leñosa. Seca y unta aceite y sal.",
+    "Coloca atravesados sobre la rejilla o en canastilla para que no caigan.",
+    "Asa 6–8 minutos girando; reduce el tiempo para tallos delgados. Funde mantequilla aparte y mezcla con limón negro.",
+    "Retira cuando aún tengan ligera firmeza, reposa 2 minutos y baña con la mantequilla.",
+  ], "Tallitos tiernos pero no flácidos; el limón negro se agrega al final para no quemarlo.", ["vegetables"]),
+  26: recipe(4, "45 min", "20 min preparación · 20 min cocción · 5 min reposo", "Dos zonas, directo medio y plancha.", "4 tortillas grandes para tlayuda | 500 g de tasajo de res refrigerado | 300 g de frijoles refritos cocidos | 200 g de quesillo pasteurizado | 30 g de asiento de cerdo cocido | 150 g de col rebanada | 100 g de salsa preparada", [
+    "Calienta los frijoles en sartén hasta 74 °C si estaban refrigerados. Deshebra quesillo y lava y escurre la col.",
+    "Asa el tasajo 2–4 minutos por lado según grosor; verifica la temperatura y deja reposar al menos 3 minutos antes de cortar.",
+    "Unta las tortillas con asiento y frijol; agrega quesillo. Calienta en plancha o indirecto 4–6 minutos hasta base crujiente y queso fundido.",
+    "Reparte tasajo, col y salsa. Sirve abiertas o dobladas, sin sobrecargar para que no se rompan.",
+  ], "Tasajo crudo: 63 °C y 3 minutos de reposo; sigue además las indicaciones de su empaque."),
+  27: recipe(4, "55 min", "15 min preparación · 30 min cocción · 10 min reposo", "Dos zonas: directo alto e indirecto medio.", "800 g de picaña en bisteces de 2 cm | 2 cebollas blancas | 12 tortillas | 20 ml de aceite | 7 g de sal | 1 g de pimienta | 2 limones", [
+    "Corta cebollas en gajos manteniendo la raíz. Unta la mitad del aceite y asa 15–20 minutos girando hasta tiernas y doradas.",
+    "Seca la carne y unta aceite restante, sal y pimienta. Dora 3–4 minutos por lado y termina en indirecto si es necesario.",
+    "Reposa 10 minutos y rebana contra la fibra. Retira capas de cebolla totalmente quemadas; busca tostado, no ceniza.",
+    "Calienta las tortillas en rejilla limpia. Arma tacos con picaña, cebolla y jugo de limón.",
+  ], "Res: 63 °C y 3 minutos de reposo como mínimo."),
+  28: recipe(4, "1 h 30 min", "20 min preparación · 40 min cocción en agua · 20 min parrilla · 10 min reposo", "Olla a hervor suave y parrilla media-alta.", "800 g de mollejas de res limpias | 1.5 l de agua | 1 hoja de laurel | 20 ml de aceite | 6 g de sal | 2 limones", [
+    "Compra mollejas limpias de proveedor confiable. Retira membranas accesibles y cocina en agua con laurel a hervor suave 30–40 minutos.",
+    "Comprueba que estén cocidas y calientes al centro; escurre, deja entibiar solo lo necesario para manipular y retira membranas restantes.",
+    "Seca, corta piezas de 3 cm y unta aceite y sal. Dora en parrilla 12–20 minutos, girando para formar una costra.",
+    "Verifica el centro antes de retirar y reposa 10 minutos. Sirve con limón; no reutilices el agua de limpieza ni utensilios de producto crudo.",
+  ], "Esta propuesta utiliza 74 °C internos como criterio conservador para las vísceras."),
+  29: recipe(4, "45 min", "15 min preparación · 20 min cocción · 10 min reposo", "Dos zonas, directo medio-alto e indirecto suave.", "4 bisteces de venado de criadero de 180 g | 4 bayas de enebro culinario | 30 g de mantequilla | 6 hojas de salvia | 15 ml de aceite | 6 g de sal", [
+    "Machaca el enebro. Seca los bisteces y unta con aceite, sal y enebro; no uses bayas recolectadas sin identificación.",
+    "Dora 3 minutos por lado y termina en indirecto hasta alcanzar 71 °C en el centro.",
+    "Funde mantequilla en sartén y agrega salvia 1 minuto sin quemarla.",
+    "Reposa los bisteces 10 minutos y sirve rebanados con la mantequilla. Esta versión no propone centro crudo o rosado como criterio de cocción.",
+  ], "Venado: 71 °C internos según FoodSafety.gov."),
+  30: recipe(4, "50 min", "25 min preparación · 15 min cocción · 10 min reposo", "Directo medio-alto, brochetas metálicas.", "700 g de pierna de cordero en cubos de 3 cm | 1 cebolla | 1 pimiento rojo | 25 ml de aceite | 3 g de comino molido | 7 g de sal | 1 g de pimienta | 1 limón", [
+    "Mezcla aceite, comino, sal y pimienta. Corta cebolla y pimiento en piezas similares a la carne.",
+    "Unta los cubos y verduras; ensarta alternando sin comprimir en las brochetas.",
+    "Asa 10–15 minutos, girando cada 3 minutos. Lleva a indirecto si se dora el exterior antes de que el centro esté listo.",
+    "Comprueba varios cubos, reposa 10 minutos y sirve con limón. Usa una fuente limpia al retirar.",
+  ], "Cordero en cubos enteros: 63 °C y 3 minutos de reposo; no sustituir por carne molida sin llevarla a 71 °C."),
+  31: recipe(4, "55 min", "15 min preparación · 30 min cocción · 10 min reposo", "Sartén de hierro y calor indirecto a 180 °C.", "2 pechugas de pato de 350 g | 4 ciruelas firmes | 5 g de sal | 1 g de pimienta rosa | 15 g de miel | 15 ml de vinagre de vino", [
+    "Marca la piel en rombos sin cortar la carne y sazona con sal. Pon las pechugas con piel abajo en sartén inicialmente frío.",
+    "Calienta gradualmente 12–15 minutos, retirando exceso de grasa a recipiente resistente al calor. Voltea y cocina 3 minutos.",
+    "Termina en indirecto hasta 74 °C. En otro sartén, asa ciruelas partidas con una cucharada de la grasa, miel, vinagre y pimienta rosa 5–7 minutos.",
+    "Reposa el pato 10 minutos y rebana. Sirve con las ciruelas y su salsa.",
+  ], "Pato, como otras aves: 74 °C internos."),
+  32: recipe(4, "40 min", "15 min preparación · 20 min cocción · 5 min reposo; requiere lengua previamente cocida", "Plancha a fuego medio-alto.", "700 g de lengua de res cocida y pelada, refrigerada | 300 g de tomate verde | 1 serrano | 30 g de cebolla | 10 g de cilantro | 15 ml de aceite | 4 g de sal | 8 tortillas", [
+    "Lava los tomates verdes y licúa con serrano, cebolla, cilantro y sal para una salsa cruda. Refrigera hasta servir.",
+    "Corta la lengua cocida en rebanadas de 1 cm y seca. No uses lengua cruda en este procedimiento.",
+    "Dora con aceite 3–5 minutos por lado; continúa a fuego más bajo hasta que el centro recalentado llegue a 74 °C.",
+    "Reposa 5 minutos, calienta tortillas y sirve con la salsa recién preparada.",
+  ], "Lengua previamente cocida: recalentar a 74 °C."),
+  33: recipe(4, "35 min", "15 min preparación · 20 min cocción", "Sartén a calor medio y rejilla limpia para tostadas.", "500 g de marlín ahumado cocido refrigerado | 8 tostadas | 1 aguacate | 100 g de cebolla morada | 40 ml de vinagre | 40 ml de agua | 200 g de jitomate | 15 ml de aceite", [
+    "Rebana cebolla y mezcla con agua y vinagre; este encurtido rápido es para consumo inmediato, no conserva estable.",
+    "Pica jitomate y sofríe en aceite 5 minutos. Desmenuza el marlín, retirando espinas.",
+    "Agrega el pescado y calienta 8–12 minutos, moviendo hasta 74 °C. Si se seca, incorpora una cucharada de agua.",
+    "Sirve sobre tostadas con aguacate y cebolla escurrida. Evita añadir sal antes de probar el pescado ahumado.",
+  ], "Usa marlín etiquetado como cocido/listo para comer y recalienta a 74 °C; el ahumado por sí solo no significa cocción.", ["seafood", "temperatures"]),
+  34: recipe(4, "25 min", "15 min preparación · 10 min cocción por tandas", "Directo alto o plancha caliente.", "800 g de calamares limpios | 2 dientes de ajo picados | 25 ml de aceite | 2 g de chile quebrado | 15 g de perejil picado | 4 g de sal | 1 limón", [
+    "Abre los tubos, revisa que no quede pluma interna y seca muy bien. Haz marcas superficiales en rombos sin atravesar.",
+    "Mezcla ajo, aceite, chile y sal; unta los calamares justo antes de cocinar.",
+    "Asa por tandas 2–3 minutos por lado. No amontones; verifica temperatura en la parte más gruesa.",
+    "Retira, corta en tiras y termina con perejil y limón. Sirve de inmediato para evitar que se resequen.",
+  ], "Referencia de cocción de mariscos: 63 °C internos.", ["seafood", "grill"]),
+  35: recipe(4, "30 min", "15 min preparación · 15 min cocción", "Directo medio-alto; rejilla para pescado.", "12 sardinas limpias y evisceradas | 8 rebanadas de pan | 2 jitomates | 30 ml de aceite de oliva | 4 g de sal | 1 limón", [
+    "Compra sardinas evisceradas, seca y revisa escamas. Unta con la mitad del aceite y sal.",
+    "Ralla jitomates y mezcla con el aceite restante. Reserva sin contacto con pescado crudo.",
+    "Asa sardinas 3–5 minutos por lado hasta 63 °C. Tuesta el pan en una zona limpia durante 1 minuto por lado.",
+    "Unta el pan con jitomate y sirve junto al pescado y limón. Retira espinas al comer.",
+  ], "Sardina: 63 °C en la parte más gruesa.", ["seafood", "grill"]),
+  36: recipe(4, "1 h 30 min", "20 min preparación · 60 min cocción · 10 min reposo", "Dos zonas a 180–190 °C; charola con tapa.", "1.2 kg de conejo de criadero troceado | 40 g de mostaza | 100 ml de vino blanco | 100 ml de agua | 20 ml de aceite | 6 g de sal | 3 g de tomillo", [
+    "Seca el conejo y unta aceite y sal. Dora las piezas sobre directo medio 3 minutos por lado.",
+    "Pasa a charola y agrega vino, agua, mostaza y tomillo. Tapa y coloca en indirecto.",
+    "Cocina 40–55 minutos; verifica que quede líquido y mide varias piezas. Añade un poco de agua caliente si se evapora demasiado.",
+    "Cuando llegue a 71 °C y esté tierno, reposa 10 minutos. Hierve la salsa unos minutos y sirve sobre el conejo.",
+  ], "Conejo: 71 °C internos."),
+  37: recipe(4, "40 min", "20 min preparación · 15 min cocción · 5 min reposo", "Plancha a calor medio-alto, trabajando por tandas.", "600 g de sirloin en tiras de 1 cm | 300 g de portobello | 2 pimientos | 1 cebolla | 30 ml de aceite | 6 g de sal | 2 g de pimienta | 1 limón", [
+    "Limpia los hongos y corta verduras en tiras. Seca la carne por separado.",
+    "Saltea cebolla, pimientos y hongos con la mitad del aceite 8–10 minutos; retira a recipiente limpio.",
+    "Agrega aceite restante y dora la carne en una capa 4–6 minutos, moviendo. Comprueba varias tiras gruesas.",
+    "Incorpora verduras, sal y pimienta, calienta 1 minuto y reposa 5 minutos fuera del fuego. Termina con limón.",
+  ], "Res en tiras de músculo entero: 63 °C y al menos 3 minutos de reposo."),
+  38: recipe(4, "1 h 30 min", "15 min preparación · 60 min cocción · 15 min reposo", "Indirecto a 140–150 °C y directo alto al final.", "1 chuletón de res de 1.2 kg y 5 cm | 10 g de sal | 3 g de romero fresco | 2 g de pimienta | 15 ml de aceite", [
+    "Pica romero y mezcla con sal. Seca el chuletón, unta aceite, pimienta y la mitad de la sal herbal.",
+    "Cocina en indirecto 40–55 minutos. Empieza a medir desde los 30 minutos; el grosor manda más que el reloj.",
+    "Pasa a directo y dora 1–2 minutos por cara. Termina donde sea necesario hasta al menos 63 °C internos.",
+    "Reposa 15 minutos, separa el hueso y corta. Ajusta con parte de la sal restante según gusto, no necesariamente toda.",
+  ], "Res: 63 °C y mínimo 3 minutos de reposo; el sellado inverso no elimina ese requisito."),
+  39: recipe(10, "11–15 h", "30 min preparación · 10–14 h cocción · 30 min reposo", "Indirecto estable a 125–140 °C con encino para cocinar.", "4 kg de brisket con grasa recortada a 6 mm | 32 g de sal | 25 g de pimienta gruesa | 250 ml de agua", [
+    "Retira grasa dura y bordes muy delgados. Sazona con sal y pimienta. Coloca una bandeja para grasa bajo la rejilla.",
+    "Ahúma 5–7 horas hasta que la corteza esté firme. No prometas una hora exacta: temperatura exterior y grosor cambian la duración.",
+    "Envuelve en doble aluminio con agua y continúa 4–7 horas. Empieza a comprobar ternura desde 90 °C internos.",
+    "Retira cuando la sonda entre fácilmente, orientativamente 93–96 °C. Reposa 30 minutos y rebana contra la fibra; mantén las porciones calientes para servir.",
+  ], "La temperatura de ternura no es un mínimo sanitario: res requiere al menos 63 °C y 3 minutos de reposo; este corte necesita más cocción para ablandarse.", ["smoke", "temperatures"]),
+  40: recipe(8, "8–10 h", "25 min preparación · 7–9 h cocción · 35 min reposo", "Indirecto a 130–145 °C con manzano.", "2.5 kg de espaldilla de cerdo | 20 g de sal | 8 g de paprika | 5 g de pimienta | 2 manzanas | 100 ml de vinagre de manzana | 150 ml de agua | 400 g de col | 20 g de miel", [
+    "Sazona cerdo con sal, paprika y pimienta. Ahúma 4 horas lejos de la brasa directa.",
+    "Pon en charola con manzanas en gajos, agua y la mitad del vinagre. Tapa y cocina 3–5 horas hasta muy tierno.",
+    "Rebana la col limpia y mezcla con el vinagre restante y miel. Refrigera mientras termina la carne.",
+    "Reposa el cerdo 35 minutos, deshebra y mezcla con manzana y jugos desgrasados. Sirve con la col crujiente.",
+  ], "Busca 93–96 °C y poca resistencia para deshebrar; mínimo sanitario del cerdo: 63 °C y 3 minutos de reposo.", ["smoke", "temperatures"]),
+  41: recipe(6, "5–6 h", "30 min preparación · 4–5 h cocción · 30 min reposo", "Indirecto a 140–150 °C.", "2 kg de chamorro de cerdo en piezas | 5 guajillos sin semillas | 300 ml de agua caliente | 3 dientes de ajo | 40 ml de vinagre | 14 g de sal | 2 g de comino", [
+    "Remoja guajillos 15 minutos. Licúa con agua, ajo, vinagre, sal y comino; unta el chamorro.",
+    "Ahúma las piezas en charola abierta 90 minutos, lejos de las brasas.",
+    "Tapa la charola y cocina 2.5–3.5 horas más. Revisa líquido y agrega agua caliente si el fondo se seca.",
+    "Cuando el tejido ceda y se separe del hueso, reposa 30 minutos. Hierve los jugos y sirve como salsa.",
+  ], "Debe superar 63 °C y reposar 3 minutos; para textura suave se propone 90–96 °C y comprobar ternura.", ["smoke", "temperatures"]),
+  42: recipe(8, "5–7 h", "30 min preparación · 4–6 h cocción · 30 min reposo", "Caja de cocción diseñada para alimentos, calor indirecto a 150–165 °C; seguir su manual.", "3 kg de cabrito limpio en cuartos | 24 g de sal | 5 g de pimienta | 50 ml de aceite | 6 dientes de ajo | 250 ml de agua", [
+    "Usa un equipo con termómetro y charola para grasa, no una caja improvisada. Seca cabrito y unta sal, pimienta, aceite y ajo machacado.",
+    "Pon agua en la charola inferior sin mojar la carne. Acomoda los cuartos en rejilla dejando circulación de aire.",
+    "Cocina 4–6 horas siguiendo el manejo de combustible del equipo; gira las piezas si el calor es desigual y mide las más gruesas.",
+    "Retira cuando estén tiernas y con temperatura segura. Reposa 30 minutos y separa porciones, descartando huesos pequeños.",
+  ], "Cabrito: mínimo 63 °C y 3 minutos de reposo; el hombro puede necesitar cocción adicional para ablandarse.", ["grill", "temperatures"]),
+  43: recipe(8, "7–9 h", "45 min preparación · 6–8 h cocción · 15 min reposo", "Olla tapada en indirecto a 160 °C; adaptación doméstica, no horno subterráneo.", "2.5 kg de espaldilla de borrego | 2 pencas de maguey limpias para uso culinario | 20 g de sal | 4 dientes de ajo | 3 g de comino | 500 ml de agua | 1 cebolla", [
+    "Usa pencas preparadas por proveedor culinario, sin espinas. Ablándalas brevemente con calor para doblarlas sin romper.",
+    "Mezcla ajo machacado, comino y sal y unta el borrego. Coloca agua y cebolla en olla, una rejilla encima y el paquete de carne envuelto en penca.",
+    "Tapa y cocina 6–8 horas. Revisa cada hora que exista agua bajo la rejilla, añadiendo agua caliente sin descubrir de más.",
+    "Cuando la carne se deshebre, reposa 15 minutos. Abre con guantes por el vapor y sirve; hierve los jugos antes de usarlos como consomé.",
+  ], "Borrego: mínimo 63 °C y 3 minutos de reposo; para deshebrar se propone 93–96 °C y textura tierna."),
+  44: recipe(6, "6–8 h", "25 min preparación · 5–7 h cocción · 35 min reposo", "Indirecto a 135–145 °C.", "2.2 kg de costilla corta de res | 18 g de sal | 10 g de chile ancho molido | 6 g de pimienta | 4 g de ajo granulado | 200 ml de caldo sin sal", [
+    "Seca las costillas y mezcla sal, ancho, pimienta y ajo. Cubre la carne sin dejar montones de chile.",
+    "Ahúma 3 horas hasta fijar la costra. Mantén las piezas separadas y el asador estable.",
+    "Pasa a charola con caldo, tapa y continúa 2–4 horas hasta que la sonda entre sin resistencia marcada.",
+    "Reposa 35 minutos. Sirve por hueso con una cucharada de jugos desgrasados.",
+  ], "Objetivo orientativo de ternura: 93–96 °C. Mínimo sanitario de res: 63 °C y 3 minutos de reposo.", ["smoke", "temperatures"]),
+  45: recipe(6, "4–5 h", "20 min preparación · 3.5–4.5 h cocción · 10 min reposo", "Indirecto a 150 °C, acabado a 200 °C.", "1.5 kg de panceta de cerdo sin piel | 12 g de sal | 50 g de piloncillo | 100 ml de jugo de naranja | 2 g de chile ancho | 20 ml de vinagre", [
+    "Corta panceta en bloques de 5 cm y sazona con sal. Coloca en rejilla sobre charola para grasa.",
+    "Cocina en indirecto 3–4 horas hasta tierna. Verifica temperatura en los bloques más gruesos.",
+    "Hierve piloncillo, naranja, chile y vinagre 6–8 minutos hasta consistencia de jarabe ligero.",
+    "Barniza y cocina 8–12 minutos a 200 °C sin llama directa. Reposa 10 minutos y sirve porciones pequeñas.",
+  ], "Cerdo: mínimo 63 °C y 3 minutos de reposo; esta panceta se cocina más, hasta que la grasa y tejido cedan."),
+  46: recipe(8, "6–8 h", "30 min preparación · 1 h marinado · 4–6 h cocción · 30 min reposo", "Indirecto a 160 °C, charola tapada.", "2.5 kg de pierna de cerdo sin hueso en 3 piezas | 70 g de pasta de achiote | 200 ml de jugo de naranja | 60 ml de jugo de limón | 4 dientes de ajo | 18 g de sal | 2 hojas de plátano culinarias", [
+    "Licúa achiote, jugos, ajo y sal. Unta la carne y marina 1 hora en refrigeración.",
+    "Limpia y ablanda las hojas sobre calor suave. Forra una charola, coloca carne y marinada y cierra las hojas; tapa con aluminio.",
+    "Cocina 4–6 horas, revisando que conserve jugo. Agrega un poco de agua caliente si se seca el fondo.",
+    "Cuando se pueda deshebrar, reposa 30 minutos y abre con cuidado. Sirve con los jugos hervidos de la charola.",
+  ], "Mínimo 63 °C y 3 minutos de reposo; para deshebrar se busca además textura tierna, aproximadamente 93–96 °C."),
+  47: recipe(6, "5–6 h", "20 min preparación · 4.5–5.5 h cocción · 10 min reposo", "Indirecto a 130–145 °C.", "2 kg de costillar de cerdo | 16 g de sal | 6 g de café molido fino | 6 g de cacao sin azúcar | 8 g de chile ancho molido | 15 g de azúcar mascabado | 150 ml de agua", [
+    "Retira la membrana del lado de los huesos si la tiene. Mezcla sal, café, cacao, chile y azúcar y aplica una capa fina.",
+    "Ahúma 2.5 horas sin calor directo. Evita añadir más mezcla durante la cocción para no formar una capa amarga.",
+    "Envuelve con agua en doble aluminio y cocina 1.5–2.5 horas hasta tiernas. Abre y deja fijar la superficie 15–20 minutos.",
+    "Reposa 10 minutos y corta entre huesos. Los huesos deben soltarse con ligera resistencia, no quedar resecos.",
+  ], "Cerdo: mínimo 63 °C y 3 minutos de reposo; continúa hasta ternura, orientativamente 90–95 °C entre huesos.", ["smoke", "temperatures"]),
+  48: recipe(4, "2.5–3.5 h", "20 min preparación · 2–3 h cocción · 10 min reposo", "Indirecto a 140–150 °C; un trozo pequeño de mezquite apto para cocinar.", "1 pollo de 1.6 kg sin menudencias | 50 g de mantequilla suave | 12 g de sal | 4 g de paprika | 2 g de pimienta | 2 dientes de ajo", [
+    "Seca el pollo sin lavarlo. Mezcla mantequilla, sal, paprika, pimienta y ajo rallado.",
+    "Separa suavemente la piel de la pechuga y distribuye parte de la mantequilla debajo; unta el resto por fuera. Deja la cavidad vacía.",
+    "Ahúma en indirecto 2–3 horas. Mide desde los 90 minutos y continúa hasta que pechuga y muslos alcancen 74 °C.",
+    "Reposa 10 minutos. Porciona en tabla limpia y sirve; no prolongues el ahumado solo para cumplir un tiempo fijo.",
+  ], "Pollo: 74 °C en pechuga y parte interna del muslo.", ["smoke", "temperatures"]),
+  49: recipe(10, "4–6 h", "30 min preparación · 3–5 h cocción · 30 min reposo; descongelación aparte", "Indirecto estable a 145–150 °C, sin relleno.", "1 pavo completamente descongelado de 4 kg | 80 g de mantequilla | 28 g de sal | 150 ml de jugo de mandarina | ralladura de 2 mandarinas | 5 g de tomillo | 3 g de pimienta", [
+    "Retira menudencias y seca el pavo. Mezcla mantequilla, sal, ralladura, tomillo y pimienta; unta bajo la piel y por fuera.",
+    "Coloca en rejilla sobre charola, con cavidad vacía. Agrega el jugo a la charola, no como relleno.",
+    "Ahúma 3–5 horas, midiendo desde las 2.5 horas. Revisa pechuga, parte interna de muslos y alas; todas deben llegar a 74 °C.",
+    "Reposa 30 minutos antes de trinchar. Hierve los jugos recogidos si los vas a servir como salsa.",
+  ], "74 °C en todas las zonas indicadas. El tiempo no incluye descongelación, que puede tomar varios días en refrigeración.", ["smoke", "temperatures"]),
+  50: recipe(4, "3–4 h", "30 min preparación · 2–3 h cocción · 30 min reposo", "Indirecto a 145–150 °C con bandeja amplia para grasa.", "1 pato de 2 kg limpio | 14 g de sal | 2 chiles anchos sin semillas | 250 ml de agua caliente | 20 g de cacao sin azúcar | 20 g de piloncillo | 1 g de canela | 1 diente de ajo", [
+    "Seca el pato y pincha solo la piel grasa sin perforar carne. Sazona con sal y deja la cavidad vacía.",
+    "Ahúma en rejilla 2–3 horas, retirando grasa de la bandeja si hace falta. Comprueba pechuga y muslo hasta 74 °C.",
+    "Remoja chiles 15 minutos y licúa con agua, ajo, cacao, piloncillo y canela. Hierve 12 minutos, moviendo para que no se pegue.",
+    "Barniza el pato ya cocido con una parte del mole y calienta 5 minutos. Reposa 30 minutos y sirve con el resto del mole limpio.",
+  ], "Pato: 74 °C internos; la grasa puede generar llamaradas, por eso se cocina en indirecto.", ["smoke", "temperatures"]),
+  1: recipe(4, "40 min", "20 min preparación · 10 min cocción · 10 min reposo", "Dos zonas: directa alta e indirecta media.", "800 g de entraña limpia | 8 g de sal | 2 g de pimienta negra | 25 g de perejil picado | 5 g de orégano fresco | 2 dientes de ajo picados | 60 ml de aceite de oliva | 25 ml de vinagre de vino | 1 g de chile quebrado", [
+    "Mezcla perejil, orégano, ajo, vinagre, chile y 45 ml de aceite. Reserva el chimichurri en un recipiente que no toque carne cruda.",
+    "Seca la entraña, retira membranas duras y unta el resto del aceite, sal y pimienta. Precalienta y limpia la parrilla.",
+    "Asa 3–5 minutos por lado. Si se dora antes de alcanzar la temperatura interna indicada, pásala a la zona indirecta.",
+    "Reposa 10 minutos y corta en tiras delgadas contra la fibra. Sirve con el chimichurri; no viertas sobre él los jugos de la tabla usada para carne cruda.",
+  ], "Res: al menos 63 °C al centro y 3 minutos de reposo; esta receta propone 10 minutos."),
+  2: recipe(6, "8–10 h", "25 min preparación · 7–9 h cocción · 35 min reposo", "Indirecto, tapa cerrada, 125–140 °C; un trozo pequeño de encino apto para cocinar.", "2.5 kg de costilla de res en placa | 22 g de sal | 15 g de pimienta negra gruesa | 5 g de ajo granulado | 150 ml de agua", [
+    "Recorta grasa dura superficial sin separar los huesos. Seca y cubre con sal, pimienta y ajo.",
+    "Coloca los huesos hacia abajo lejos de las brasas y ahúma 4 horas. Controla la temperatura del asador con una sonda independiente.",
+    "Cuando la superficie esté firme y oscura, envuelve en doble aluminio con el agua. Cocina otras 3–5 horas, revisando ternura sin dejar que se seque.",
+    "Retira cuando la sonda entre con poca resistencia entre los huesos. Reposa 35 minutos, abre con cuidado por el vapor y corta por hueso.",
+  ], "La seguridad requiere 63 °C y 3 minutos de reposo; para ablandar este corte se propone aproximadamente 93–96 °C y comprobar resistencia con la sonda. Ocho horas no es garantía de término.", ["smoke", "temperatures"]),
+  3: recipe(4, "1 h 10 min", "15 min preparación · 50 min cocción · 5 min reposo", "Calor indirecto a 190–210 °C, junto a brasas; sin contacto del alimento con ceniza.", "1 coliflor de 900 g | 50 g de mantequilla | 5 g de chile ancho molido | 1 diente de ajo picado | 4 g de sal | 2 limones", [
+    "Retira hojas maltratadas, conserva las tiernas y corta la base para que la coliflor se sostenga. Lava y escurre.",
+    "Funde la mantequilla y mezcla con chile, ajo y sal. Unta la coliflor y envuelve en doble aluminio sin apretar.",
+    "Cocina 35–40 minutos a calor indirecto; abre el paquete y continúa 10–15 minutos hasta que el tallo ceda al cuchillo.",
+    "Marca los limones partidos 2 minutos del lado del corte. Deja reposar la coliflor 5 minutos y sirve en gajos con limón.",
+  ], "Tallo tierno al atravesarlo, superficie dorada sin ennegrecer el chile.", ["vegetables", "grill"]),
+  4: recipe(4, "1 h 35 min", "20 min preparación · 65 min cocción · 10 min reposo", "Dos zonas, 180–200 °C; sartén pesado de hierro como prensa, no ladrillo de construcción.", "1 pollo abierto de 1.5 kg | 12 g de sal | 2 g de pimienta | 4 dientes de ajo | 30 ml de aceite | 60 ml de jugo de naranja | 20 ml de jugo de limón", [
+    "Pide el pollo abierto sin espinazo. No lo laves. Seca la piel; machaca el ajo y mezcla con jugos, sal, pimienta y aceite. Unta el pollo.",
+    "Ponlo con piel hacia abajo sobre calor directo medio y apoya un sartén limpio y pesado encima. Dora 10–15 minutos, vigilando las llamaradas.",
+    "Retira el peso con guantes, voltea y mueve a calor indirecto. Tapa y cocina 40–50 minutos; empieza a medir antes si el ave es pequeña.",
+    "Mide pechuga y parte interna del muslo sin tocar hueso. Cuando ambas estén listas, reposa 10 minutos y porciona con utensilios limpios.",
+  ], "Pollo: 74 °C en pechuga y muslo; no dependas de que los jugos sean claros.", ["brick", "temperatures"]),
+  5: recipe(6, "6–8 h", "20 min preparación · 5–7 h cocción · 40 min reposo", "Indirecto a 135–145 °C; madera de manzano para ahumar, sin tratar.", "1.8 kg de espaldilla de cerdo sin hueso | 16 g de sal | 15 g de azúcar mascabado | 5 g de paprika | 4 g de pimienta | 3 g de comino | 150 ml de jugo de manzana", [
+    "Seca la espaldilla y cubre con sal, azúcar y especias. Pon una bandeja debajo de la rejilla para recoger grasa.",
+    "Ahúma a calor indirecto durante 3 horas, con la tapa cerrada y el asador estable.",
+    "Envuelve con el jugo en doble aluminio y cocina 2–4 horas más, hasta que la sonda entre con facilidad. No aumentes la llama para compensar el tiempo.",
+    "Reposa 40 minutos, abre lejos del rostro y deshebra. Retira grasa de los jugos y agrega solo lo necesario para humedecer.",
+  ], "Cerdo: mínimo 63 °C y 3 minutos de reposo; para deshebrar se busca además ternura, orientativamente 93–96 °C.", ["smoke", "temperatures"]),
+  6: recipe(4, "20 min", "10 min preparación · 8 min cocción · 2 min reposo", "Directo medio, 180–200 °C.", "4 duraznos firmes maduros | 20 ml de aceite neutro | 30 g de miel | 1 ramita de romero | 15 ml de jugo de limón", [
+    "Lava, parte los duraznos y quita el hueso. Pica las hojas del romero y mezcla con miel y limón.",
+    "Unta los cortes con aceite y colócalos sobre parrilla limpia, sin residuos de carne.",
+    "Asa 3–4 minutos por lado hasta que se marquen y cedan ligeramente. Evita fuego alto para no quemar los azúcares.",
+    "Retira, reposa 2 minutos y baña con la miel de romero. Sirve tibios.",
+  ], "La pulpa debe seguir sosteniendo su forma y estar caliente al centro.", ["grill", "vegetables"]),
+  7: recipe(4, "45 min", "20 min preparación · 15 min cocción · 10 min reposo", "Dos zonas, directa alta para dorar e indirecta para terminar.", "2 ribeyes de 400 g y 3 cm de grosor | 8 g de sal | 2 g de pimienta | 50 g de mantequilla suave | 1 chile morita seco | 100 ml de agua caliente | 1 diente de ajo | 10 ml de aceite", [
+    "Remoja el morita 10 minutos en el agua; escurre, quita semillas y pica. Mezcla con mantequilla y ajo rallado.",
+    "Seca los ribeyes y sazona con sal, pimienta y aceite. Mantén la mantequilla separada de la carne cruda.",
+    "Dora 3–4 minutos por lado y termina en indirecto hasta el punto interno de seguridad. Mide por el costado del corte.",
+    "Reposa 10 minutos y reparte la mantequilla de morita sobre la carne caliente. Rebana para compartir.",
+  ], "Res: 63 °C como mínimo y reposo de al menos 3 minutos."),
+  8: recipe(4, "45 min", "15 min preparación · 20 min cocción · 10 min reposo", "Dos zonas, directa media-alta.", "800 g de arrachera natural sin inyectar | 12 cebollas cambray | 25 ml de aceite | 8 g de sal | 2 g de pimienta | 2 limones", [
+    "Limpia las cebollas conservando parte del tallo. Seca la carne y reparte aceite, sal y pimienta entre ambos.",
+    "Asa las cebollas 12–18 minutos, girando y moviéndolas a indirecto si se oscurecen demasiado.",
+    "Dora la arrachera 3–5 minutos por lado según grosor; termina a calor indirecto si falta temperatura interna.",
+    "Reposa la carne 10 minutos, rebana contra la fibra y sirve con cebollas y gajos de limón.",
+  ], "Para arrachera intacta: 63 °C y 3 minutos de reposo. Si compras carne inyectada o ablandada mecánicamente, sigue también la etiqueta del fabricante."),
+  9: recipe(4, "1 h 15 min", "15 min preparación · 45 min cocción · 15 min reposo", "Indirecto a 180 °C, acabado directo breve.", "1 kg de picaña en pieza | 9 g de sal | 5 g de café molido fino | 4 g de chile ancho molido | 8 g de piloncillo rallado | 15 ml de aceite", [
+    "Recorta la capa de grasa a unos 5 mm sin llegar a la carne. Mezcla sal, café, ancho y piloncillo.",
+    "Unta aceite y una capa delgada de la mezcla. Cocina en indirecto 30–40 minutos, con la grasa hacia arriba.",
+    "Dora brevemente sobre directo, vigilando que café y azúcar no se quemen. Continúa en indirecto si aún no llega a la temperatura mínima.",
+    "Reposa 15 minutos y corta contra la fibra. Si hay zonas negras y amargas, retíralas antes de servir.",
+  ], "Res: al menos 63 °C y 3 minutos de reposo."),
+  10: recipe(4, "50 min", "20 min preparación · 20 min cocción · 10 min reposo", "Dos zonas: directa alta e indirecta media.", "800 g de aguja norteña en bisteces de 2 cm | 20 g de ajo negro pelado | 20 ml de salsa de soya | 15 ml de vinagre de manzana | 15 ml de aceite | 4 g de sal | 1 g de pimienta", [
+    "Machaca ajo negro con soya y vinagre hasta formar una pasta. Divide en dos recipientes: glaseado y salsa para servir.",
+    "Seca los bisteces, unta aceite y sazona con sal y pimienta.",
+    "Dora 3–4 minutos por lado; pasa a indirecto y barniza con el glaseado reservado para cocinar. Termina hasta alcanzar la temperatura interna.",
+    "Reposa 10 minutos. Rebana y sirve con la salsa limpia; desecha el glaseado que tocó carne cruda.",
+  ], "Res: 63 °C y al menos 3 minutos de reposo. La soya ya aporta sal."),
+  11: recipe(4, "45 min", "15 min preparación · 25 min cocción · 5 min reposo", "Indirecto a 200 °C; zona directa para los vegetales.", "4 huesos de tuétano cortados a lo largo (800 g en total) | 300 g de jitomate | 1 chile serrano | 50 g de cebolla | 1 diente de ajo | 4 g de sal | 8 tortillas de maíz | 1 limón", [
+    "Compra huesos cortados por el carnicero y retira fragmentos visibles. Sécalos y ponlos con la cavidad hacia arriba en una charola.",
+    "Asa jitomate, serrano, cebolla y ajo 8–12 minutos. Muele de forma rústica con la mitad de la sal.",
+    "Cocina los huesos en indirecto 20–25 minutos hasta que el tuétano esté burbujeante y bien caliente; mide en la parte más gruesa.",
+    "Reposa 5 minutos. Calienta tortillas y sirve el tuétano con salsa, sal restante y limón; advierte que los huesos queman.",
+  ], "Propuesta conservadora: llevar el tuétano a 74 °C antes de servir; no consumirlo frío o crudo."),
+  12: recipe(4, "40 min", "15 min preparación · 15 min cocción · 10 min reposo", "Dos zonas, directo medio-alto.", "8 chuletas de cordero de 100 g | 2 dientes de ajo | 3 g de romero fresco | 25 ml de aceite | 7 g de sal | 1 g de pimienta | 2 limones", [
+    "Pica ajo y romero. Mezcla con aceite, sal y pimienta y unta las chuletas.",
+    "Parte los limones y marca el corte 2 minutos sobre la parrilla. Reserva en plato limpio.",
+    "Asa las chuletas 3–5 minutos por lado; termina en indirecto si el centro aún no alcanza 63 °C.",
+    "Reposa 10 minutos y sirve con los limones asados, evitando tocar el hueso al medir.",
+  ], "Cordero: 63 °C y al menos 3 minutos de reposo."),
+  13: recipe(4, "45 min", "20 min preparación · 15 min cocción · 10 min reposo", "Directo medio-alto; brochetas metálicas.", "700 g de sirloin en cubos de 3 cm | 2 chiles poblanos sin semillas | 1 cebolla morada | 25 ml de aceite | 7 g de sal | 2 g de pimienta | 1 limón", [
+    "Corta poblano y cebolla en cuadros de 3 cm. Seca la carne y mezcla todo con aceite, sal y pimienta.",
+    "Ensarta sin comprimir, alternando carne y verduras; deja espacio para manipular cada brocheta.",
+    "Asa 10–15 minutos, dando cuartos de vuelta. Comprueba varios cubos e incrementa el tiempo en indirecto si hace falta.",
+    "Reposa 10 minutos y sirve con limón; retira los ingredientes de los metales calientes antes de ofrecerlos.",
+  ], "Cada cubo de res debe llegar a 63 °C y reposar al menos 3 minutos."),
+  14: recipe(4, "35 min", "15 min preparación · 20 min cocción por tandas", "Plancha de hierro a fuego medio-alto.", "600 g de res molida refrigerada | 120 g de queso Chihuahua rallado | 1 cebolla rebanada | 4 panes de hamburguesa | 15 ml de aceite | 6 g de sal | 1 g de pimienta", [
+    "Forma cuatro bolas de carne sin compactar. Mantén refrigeradas mientras doras la cebolla con la mitad del aceite durante 8 minutos.",
+    "Pon las bolas en la plancha aceitada y aplasta una sola vez con espátula. Sazona y cocina 3–4 minutos antes de voltear.",
+    "Cocina el segundo lado hasta 71 °C. Haz cuatro montones de queso al lado y deja que se fundan y doren por la base.",
+    "Levanta cada costra de queso sobre una hamburguesa. Tuesta los panes y arma con la cebolla; sirve de inmediato.",
+  ], "Carne molida: 71 °C en el centro, aunque la superficie ya esté dorada."),
+  15: recipe(4, "35 min", "10 min preparación · 25 min cocción", "Plancha o sartén, calor medio; indirecto para terminar el chorizo.", "600 g de chorizo fresco de cerdo | 4 nopales limpios | 8 cebollas cambray | 10 ml de aceite | 2 g de sal | 2 limones", [
+    "Seca los nopales y haz cortes poco profundos sin separarlos. Unta verduras con aceite y sal.",
+    "Cocina el chorizo 15–25 minutos a calor medio, girando; no lo pongas sobre llamas que quemen la tripa.",
+    "Asa nopales y cebollas 6–10 minutos por lado o hasta tiernos. Mantenlos separados del chorizo crudo.",
+    "Confirma temperatura en varios chorizos, corta y sirve con las verduras y limón.",
+  ], "Chorizo fresco de cerdo: 71 °C. Si contiene pollo, 74 °C."),
+  16: recipe(4, "45 min", "25 min preparación · 15 min cocción · 5 min reposo; parte de pulpo ya cocido", "Directo medio-alto, rejilla bien aceitada.", "800 g de tentáculos de pulpo cocido refrigerado | 3 chiles guajillos sin semillas | 150 ml de agua caliente | 30 g de mantequilla | 30 ml de jugo de naranja | 15 ml de jugo de limón | 1 diente de ajo | 4 g de sal", [
+    "Remoja los guajillos 15 minutos. Licúa con 60 ml del agua, ajo, jugos y sal; hierve el adobo 5 minutos en sartén.",
+    "Incorpora mantequilla y separa una parte limpia para servir. Seca los tentáculos y úntalos con el resto.",
+    "Asa 3–5 minutos por lado; mueve a indirecto para que el centro se caliente sin carbonizar el adobo.",
+    "Reposa 5 minutos y rebana. Sirve con el adobo reservado. No sustituyas por pulpo crudo sin cocinarlo previamente.",
+  ], "Al recalentar el pulpo previamente cocido, lleva el centro a 74 °C.", ["seafood", "temperatures", "grill"]),
+  17: recipe(4, "25 min", "15 min preparación · 10 min cocción", "Directo medio-alto; canastilla o brochetas metálicas.", "800 g de camarón grande crudo | 4 dientes de ajo picados | 30 ml de aceite | 4 g de sal | 2 limones | 10 g de perejil", [
+    "Pela y desvena los camarones, conservando la cola si deseas. Sécalos y mezcla con la mitad del aceite y sal.",
+    "En sartén pequeño, calienta el aceite restante y el ajo 1–2 minutos sin quemarlo. Retira del calor.",
+    "Asa los camarones 2–3 minutos por lado y los limones por el corte. No amontones para que se cocinen de forma uniforme.",
+    "Mezcla con aceite de ajo, perejil picado y jugo de limón asado. Sirve al terminar la cocción.",
+  ], "Camarón con carne firme, perlada y opaca; referencia térmica para mariscos: 63 °C.", ["seafood", "grill"]),
+  18: recipe(4, "1 h", "25 min preparación · 30 min cocción · 5 min reposo", "Dos zonas a 190–210 °C; rejilla para pescado.", "1 huachinango limpio y abierto de 1.2 kg | 3 guajillos sin semillas | 150 ml de agua caliente | 2 dientes de ajo | 30 ml de aceite | 25 ml de vinagre | 7 g de sal", [
+    "Pide el pescado abierto y desescamado. Revisa espinas y seca. Hidrata los chiles 15 minutos.",
+    "Licúa chiles con 60 ml del agua, ajo, aceite, vinagre y sal. Unta una capa delgada al pescado.",
+    "Coloca en rejilla engrasada. Dora por el lado de la piel 5–7 minutos y termina 15–25 minutos en indirecto con tapa.",
+    "Mide en la parte más gruesa sin tocar espinas. Reposa 5 minutos y sirve, advirtiendo que puede conservar espinas.",
+  ], "Pescado: 63 °C al centro.", ["seafood", "grill"]),
+  19: recipe(4, "40 min", "15 min preparación · 20 min cocción · 5 min reposo", "Dos zonas a 190–210 °C.", "4 truchas limpias de 250 g | 60 g de mantequilla | 6 hojas de epazote picadas | 2 limones | 6 g de sal | 1 g de pimienta | 10 ml de aceite", [
+    "Seca las truchas, revisa espinas y sazona por dentro y fuera con sal y pimienta.",
+    "Dora la mantequilla suavemente en sartén hasta aroma tostado; retira y agrega epazote y jugo de un limón.",
+    "Unta el pescado con aceite, marca 4 minutos por lado y termina en indirecto. Mide el centro de la zona más gruesa.",
+    "Reposa 5 minutos, baña con mantequilla y acompaña con el limón restante en gajos.",
+  ], "Trucha: 63 °C internos; no uses solo el color como indicador.", ["seafood", "grill"]),
+  20: recipe(4, "30 min", "15 min preparación · 12 min cocción · 3 min reposo", "Dos zonas, directo medio-alto e indirecto para terminar.", "4 lomos de atún de 180 g y 2.5 cm | 25 g de ajonjolí negro | 25 ml de aceite | 20 ml de jugo de limón | 1 serrano picado | 4 g de sal", [
+    "Mezcla limón, serrano y la mitad del aceite para una vinagreta. Reserva sin contacto con el pescado crudo.",
+    "Seca el atún, sazona con sal, unta el aceite restante y presiona el ajonjolí sobre ambas caras.",
+    "Dora 2 minutos por lado y termina en indirecto hasta 63 °C. La propuesta de esta ficha es cocida, no de centro crudo.",
+    "Reposa 3 minutos y sirve con la vinagreta. La imagen puede mostrar un punto distinto al recomendado aquí.",
+  ], "Atún: 63 °C. Un sellado superficial no vuelve seguro un centro crudo.", ["seafood", "grill"]),
+  21: recipe(4, "1 h 10 min", "15 min preparación · 50 min cocción · 5 min reposo", "Indirecto a 200 °C, acabado directo breve.", "1 kg de alitas separadas | 80 g de pulpa de tamarindo sin semillas | 30 g de miel | 2 chiles de árbol molidos | 60 ml de agua | 7 g de sal | 15 ml de aceite", [
+    "Seca las alitas y mezcla con aceite y sal. Acomoda en una capa sobre la zona indirecta.",
+    "Cocina 35–45 minutos con tapa, girando a mitad. Mientras, hierve tamarindo, miel, chile y agua 5 minutos para espesar.",
+    "Cuando las alitas alcancen 74 °C, barniza con salsa y dora 2–3 minutos, vigilando que no se queme la miel.",
+    "Reposa 5 minutos. Usa una porción de salsa que no haya tocado pollo crudo para servir.",
+  ], "Alitas: al menos 74 °C, midiendo sin tocar hueso."),
+  22: recipe(4, "2 h", "15 min preparación · 45 min marinado · 50 min cocción · 10 min reposo", "Indirecto a 190–200 °C; directo para dorar.", "8 muslos de pollo con hueso (1.2 kg) | 35 g de pasta de achiote | 80 ml de jugo de naranja | 20 ml de vinagre | 6 g de sal | 1 cebolla morada | 15 ml de aceite", [
+    "Disuelve el achiote en naranja y vinagre. Agrega sal, unta el pollo y marina tapado 45 minutos en refrigeración.",
+    "Corta cebolla en gajos y aceita. Retira el pollo de la marinada y desecha el líquido usado.",
+    "Cocina los muslos 40–50 minutos en indirecto con tapa. Asa la cebolla 10–15 minutos y dora la piel del pollo al final si hace falta.",
+    "Comprueba 74 °C en varios muslos. Reposa 10 minutos y sirve con la cebolla.",
+  ], "Pollo: 74 °C; la coloración del achiote impide juzgar cocción visualmente."),
+  23: recipe(4, "55 min", "20 min preparación · 25 min cocción · 10 min reposo", "Dos zonas a 190 °C.", "4 codornices limpias abiertas | 80 ml de jugo de naranja | 20 ml de aceite | 5 g de sal | 2 g de pimienta negra | 2 g de tomillo fresco", [
+    "Seca las aves y unta aceite, sal, pimienta y tomillo. Reserva el jugo para la cocción.",
+    "Dora las codornices 3 minutos por lado sobre directo medio, sin exponerlas a llamas.",
+    "Pasa a charola en indirecto, agrega naranja y tapa el asador. Cocina 15–20 minutos más, comprobando pechuga y muslo.",
+    "Al llegar a temperatura, reposa 10 minutos y sirve con los jugos de la charola, llevados antes a hervor.",
+  ], "Todas las aves, incluidas codornices: 74 °C."),
+  24: recipe(4, "20 min", "10 min preparación · 10 min cocción", "Plancha o sartén de hierro a calor medio.", "400 g de queso panela pasteurizado | 15 ml de aceite | 3 g de chile ancho molido | 1 g de orégano seco | 1 limón", [
+    "Corta el queso en cuatro rebanadas de 2 cm y seca con papel limpio.",
+    "Mezcla aceite, chile y orégano; unta una capa fina sobre el queso.",
+    "Dora en plancha 3–5 minutos por lado, moviendo solo cuando se desprenda; baja el fuego si el chile oscurece rápido.",
+    "Sirve inmediatamente con limón. No hace falta sal adicional sin probar antes el queso.",
+  ], "Exterior dorado y centro caliente; usa queso pasteurizado y mantenlo refrigerado hasta cocinar.", ["grill"]),
+  25: recipe(4, "30 min", "10 min preparación · 20 min cocción", "Sartén de hierro en indirecto a 200 °C.", "300 g de provolone pasteurizado | 300 g de jitomate cherry | 2 dientes de ajo rebanados | 15 ml de aceite | 1 g de orégano mexicano | 1 g de pimienta | 200 g de pan", [
+    "Parte jitomates por la mitad y mezcla con aceite, ajo, orégano y pimienta en sartén apto para asador.",
+    "Rostiza 12–15 minutos con tapa hasta que el jitomate suelte jugo.",
+    "Añade el provolone en rebanadas y calienta 5–7 minutos hasta que burbujee y empiece a dorar.",
+    "Tuesta el pan en una zona limpia de la parrilla y sirve al momento; coloca el sartén sobre una base térmica.",
+  ], "Queso fundido y burbujeante; no dejes enfriar y recalentar repetidamente.", ["grill", "vegetables"]),
+};
