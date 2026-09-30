@@ -122,6 +122,7 @@ export default function ClubPortal() {
   const [accountOpen, setAccountOpen] = useState(false);
   const [accountMode, setAccountMode] = useState<AccountMode>("sign-in");
   const [adminCatalogOpen, setAdminCatalogOpen] = useState(false);
+  const [catalogRevision, setCatalogRevision] = useState(0);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -244,6 +245,7 @@ export default function ClubPortal() {
     const eventResult = (await eventsResponse.json()) as { data: AvailableEvent[] };
     setProductCatalog(productResult.data);
     setEventCatalog(eventResult.data);
+    setCatalogRevision((current) => current + 1);
   }
 
   async function addToCart(product: Product) {
@@ -659,7 +661,7 @@ export default function ClubPortal() {
         ) : <p className="empty-state">No encontramos recetas con esos criterios. Prueba otra búsqueda.</p>}
       </section>
 
-      <IngredientLab account={account} />
+      <IngredientLab account={account} catalogRevision={catalogRevision} />
 
       <section className="shop-section" id="tienda">
         <div className="shop-heading"><p className="section-index">05 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />sazonadores.</h2><p>Cuatro mezclas para llevar al fuego. Conoce sus ingredientes y consulta sus fichas en nuestro laboratorio.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>

@@ -1390,7 +1390,8 @@
           } },
           "image": { "type": "string", "pattern": "^/editorial/[a-zA-Z0-9/_-]+\\.(jpeg|jpg|png|webp)$" },
           "imageAlt": { "type": "string", "minLength": 3, "maxLength": 200 },
-          "netContent": { "type": "string", "minLength": 1, "maxLength": 40 }
+          "netContent": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "publicationStatus": { "type": "string", "enum": ["draft", "published"], "description": "Drafts are private and always inactive. Published products may be archived but cannot return to draft. Omitted on legacy published declarations." }
         },
         "additionalProperties": false
       },

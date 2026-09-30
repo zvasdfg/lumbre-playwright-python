@@ -1,17 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-
-type AdministrativeProduct = {
-  id: number;
-  name: string;
-  category: "blends" | "ropa" | "herramientas" | "outdoor";
-  price: number;
-  stock: number;
-  badge: string | null;
-  active: boolean;
-  revision: number;
-};
+import AdminProductEditor, { type AdministrativeProduct } from "./admin-product-editor";
 
 type AdministrativeEvent = {
   id: number;
@@ -51,6 +41,7 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
   const [events, setEvents] = useState<AdministrativeEvent[]>([]);
   const [blends, setBlends] = useState<AdministrativeBlend[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<AdministrativeProduct | null>(null);
+  const [creatingProduct, setCreatingProduct] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<AdministrativeEvent | null>(null);
   const [selectedBlend, setSelectedBlend] = useState<AdministrativeBlend | null>(null);
   const [moderationNote, setModerationNote] = useState("");
@@ -126,6 +117,16 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
     setLoading(true);
     setMessage("");
     void loadCatalog();
+  }
+
+  async function productSaved(product: AdministrativeProduct) {
+    setProducts((current) => current.some((item) => item.id === product.id)
+      ? replaceRecord(current, product) : [...current, product]);
+    setCreatingProduct(false);
+    setSelectedProduct(product);
+    setMessage(product.details?.publicationStatus === "draft" ? "Borrador guardado. Solo lo ve administración." : "Producto actualizado.");
+    try { await onCatalogChanged(); }
+    catch { setMessage("Producto guardado. No pudimos refrescar la vista pública; recarga la página."); }
   }
 
   async function saveProduct(event: FormEvent<HTMLFormElement>) {
@@ -237,16 +238,17 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
           <div><p className="section-index">OPERACIÓN LUMBRE</p><h2 id="admin-catalog-title">Administración del catálogo.</h2></div>
           <button className="button button-quiet" type="button" onClick={reloadCatalog} disabled={loading || saving}>Recargar catálogo</button>
         </header>
-        <p className="admin-catalog-intro">Edita los registros existentes. Cada guardado verifica la revisión para evitar sobrescribir el trabajo de otra sesión.</p>
+        <p className="admin-catalog-intro">Crea sazonadores, revisa su ficha y publícalos desde un solo registro. Cada guardado protege los cambios de otras sesiones.</p>
         {message && <p className="admin-catalog-message" role="status">{message}</p>}
         {loading ? <p className="admin-catalog-loading" role="status">Cargando catálogo...</p> : (
           <div className="admin-catalog-workspace">
             <section aria-labelledby="admin-products-title">
               <h3 id="admin-products-title">Productos</h3>
+              <button className="button button-primary" type="button" onClick={() => { setCreatingProduct(true); setSelectedProduct(null); setSelectedEvent(null); setSelectedBlend(null); setMessage(""); }}>Nuevo sazonador</button>
               <div className="admin-record-list">
                 {products.map((product) => (
-                  <button key={product.id} type="button" data-testid={`admin-product-${product.id}`} aria-pressed={selectedProduct?.id === product.id} onClick={() => { setSelectedProduct({ ...product }); setSelectedEvent(null); setSelectedBlend(null); setMessage(""); }}>
-                    <span>{product.name}</span><small>{product.active ? "Activo" : "Inactivo"} · Rev. {product.revision}</small>
+                  <button key={product.id} type="button" data-testid={`admin-product-${product.id}`} aria-pressed={selectedProduct?.id === product.id} onClick={() => { setCreatingProduct(false); setSelectedProduct({ ...product }); setSelectedEvent(null); setSelectedBlend(null); setMessage(""); }}>
+                    <span>{product.name}</span><small>{product.details?.publicationStatus === "draft" ? "Borrador" : product.active ? "Activo" : "Archivado"} · Rev. {product.revision}</small>
                   </button>
                 ))}
               </div>
@@ -255,7 +257,7 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
               <h3 id="admin-events-title">Encuentros</h3>
               <div className="admin-record-list">
                 {events.map((catalogEvent) => (
-                  <button key={catalogEvent.id} type="button" data-testid={`admin-event-${catalogEvent.id}`} aria-pressed={selectedEvent?.id === catalogEvent.id} onClick={() => { setSelectedEvent({ ...catalogEvent }); setSelectedProduct(null); setSelectedBlend(null); setMessage(""); }}>
+                  <button key={catalogEvent.id} type="button" data-testid={`admin-event-${catalogEvent.id}`} aria-pressed={selectedEvent?.id === catalogEvent.id} onClick={() => { setCreatingProduct(false); setSelectedEvent({ ...catalogEvent }); setSelectedProduct(null); setSelectedBlend(null); setMessage(""); }}>
                     <span>{catalogEvent.title}</span><small>{catalogEvent.active ? "Activo" : "Inactivo"} · Rev. {catalogEvent.revision}</small>
                   </button>
                 ))}
@@ -266,15 +268,16 @@ export default function AdminCatalog({ onClose, onCatalogChanged }: AdminCatalog
               <div className="admin-record-list" data-testid="admin-blend-review-list">
                 {blends.length === 0 && <p>No hay blends pendientes.</p>}
                 {blends.map((blend) => (
-                  <button key={blend.id} type="button" data-testid={`admin-blend-${blend.id}`} aria-pressed={selectedBlend?.id === blend.id} onClick={() => { setSelectedBlend(blend); setSelectedProduct(null); setSelectedEvent(null); setModerationNote(""); setMessage(""); }}>
+                  <button key={blend.id} type="button" data-testid={`admin-blend-${blend.id}`} aria-pressed={selectedBlend?.id === blend.id} onClick={() => { setCreatingProduct(false); setSelectedBlend(blend); setSelectedProduct(null); setSelectedEvent(null); setModerationNote(""); setMessage(""); }}>
                     <span>{blend.title}</span><small>{blend.objective}</small>
                   </button>
                 ))}
               </div>
             </section>
             <section className="admin-editor" aria-label="Editor del catálogo">
-              {!selectedProduct && !selectedEvent && !selectedBlend && <p>Selecciona un producto, encuentro o blend para revisarlo.</p>}
-              {selectedProduct && (
+              {!creatingProduct && !selectedProduct && !selectedEvent && !selectedBlend && <p>Selecciona un producto, encuentro o blend para revisarlo.</p>}
+              {(creatingProduct || selectedProduct?.category === "blends") && <AdminProductEditor key={creatingProduct ? "new" : `${selectedProduct?.id}-${selectedProduct?.revision}`} product={selectedProduct} onSaved={productSaved} />}
+              {selectedProduct && selectedProduct.category !== "blends" && (
                 <form onSubmit={saveProduct} data-testid="admin-product-form">
                   <h3>Editar producto #{selectedProduct.id}</h3>
                   <label>Nombre del producto<input value={selectedProduct.name} minLength={3} maxLength={100} required onChange={(event) => setSelectedProduct((current) => current && ({ ...current, name: event.target.value }))} /></label>

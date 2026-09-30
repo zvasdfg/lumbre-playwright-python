@@ -1,6 +1,7 @@
 import type { ExperimentProtocol } from "./ingredients";
 
 export type ProductDetails = {
+  publicationStatus?: "draft" | "published";
   productCode: string;
   description: string;
   components: Array<{ id: string; nombre: string; familia: string }>;

@@ -10,9 +10,23 @@ class AdminCatalog:
         self.page = page
         self.root = page.get_by_role("dialog", name="Administración del catálogo.")
         self.reload_button = self.root.get_by_role("button", name="Recargar catálogo")
-        self.message = self.root.get_by_role("status")
+        self.message = self.root.get_by_role("status").or_(self.root.get_by_role("alert"))
+        self.new_product_button = self.root.get_by_role(
+            "button", name="Nuevo sazonador", exact=True
+        )
         self.product_form = self.root.get_by_test_id("admin-product-form")
         self.product_name_input = self.product_form.get_by_label("Nombre del producto")
+        self.product_code_input = self.product_form.get_by_label("Código del sazonador")
+        self.product_description_input = self.product_form.get_by_label("Descripción del sazonador")
+        self.product_image_alt_input = self.product_form.get_by_label("Descripción de la imagen")
+        self.save_draft_button = self.product_form.get_by_role("button", name="Guardar borrador")
+        self.preview_button = self.product_form.get_by_role(
+            "button", name="Vista previa", exact=True
+        )
+        self.publish_product_button = self.product_form.get_by_role(
+            "button", name="Publicar en tienda y laboratorio"
+        )
+        self.product_preview = self.root.get_by_test_id("admin-product-preview")
         self.product_category_select = self.product_form.get_by_label("Categoría")
         self.product_price_input = self.product_form.get_by_label("Precio en MXN")
         self.product_stock_input = self.product_form.get_by_label("Existencias disponibles")
@@ -47,6 +61,16 @@ class AdminCatalog:
 
     def product(self, product_id: int) -> Locator:
         return self.root.get_by_test_id(f"admin-product-{product_id}")
+
+    def create_draft(self, name: str, code: str, description: str, ingredients: list[str]) -> None:
+        self.new_product_button.click()
+        self.product_name_input.fill(name)
+        self.product_code_input.fill(code)
+        self.product_description_input.fill(description)
+        self.product_image_alt_input.fill("Frasco de muestra para pruebas locales")
+        for ingredient in ingredients:
+            self.product_form.get_by_role("checkbox", name=ingredient, exact=True).check()
+        self.save_draft_button.click()
 
     def event(self, event_id: int) -> Locator:
         return self.root.get_by_test_id(f"admin-event-{event_id}")

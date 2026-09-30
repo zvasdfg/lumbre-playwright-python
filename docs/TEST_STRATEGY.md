@@ -235,6 +235,8 @@ Priority definitions:
 | API-080 | A persisted blend supplies the store and laboratory; updates propagate without a build | P0 | API shared catalog + inventory + duplicate codes |
 | API-081 | An archived product leaves the store without breaking existing carts or removing its public sheet | P0 | API catalog lifecycle |
 | API-082 | Missing details, unknown ingredients and duplicate ingredients are rejected without catalog mutation | P0 | API catalog validation (three variants) |
+| API-083 | Private drafts remain hidden until explicitly published; archive preserves the public sheet | P0 | API catalog lifecycle |
+| UI-062 | Administrator creates, reloads, previews and publishes one seasoning to store and lab | P0 | UI admin authoring |
 | CONTRACT-001 | Published OpenAPI 3.1 description is structurally valid | P0 | Contract + smoke |
 | CONTRACT-002 | Every public read response satisfies its JSON Schema | P0 | Contract parameterized |
 | CONTRACT-003 | Mutation requests and successful responses satisfy one operation contract | P0 | Contract parameterized |

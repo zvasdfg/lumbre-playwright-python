@@ -108,7 +108,7 @@ export async function createProduct(actorUserId: string, input: CreateProductInp
   const id = await nextIdentifier("product");
   const [created] = await getDatabase()
     .insert(catalogProducts)
-    .values({ id, ...input, stock: input.stock ?? 0, badge: input.badge ?? null, active: input.active ?? true, createdAt: now, updatedAt: now })
+    .values({ id, ...input, stock: input.stock ?? 0, badge: input.badge ?? null, active: input.details?.publicationStatus === "draft" ? false : input.active ?? true, createdAt: now, updatedAt: now })
     .onConflictDoNothing()
     .returning();
   if (!created) throw new CatalogRevisionConflictError("Product identity already exists; reload the catalog");
@@ -129,6 +129,16 @@ export async function updateProduct(
     .get();
   if (!before) throw new CatalogResourceNotFoundError("Product not found");
   const { expectedRevision, ...changes } = input;
+  if (changes.details && changes.details.publicationStatus === undefined && before.details?.publicationStatus) {
+    changes.details.publicationStatus = before.details.publicationStatus;
+  }
+  // Existing declarations predate publicationStatus and are already public.
+  if (before.details && before.details.publicationStatus !== "draft" && changes.details?.publicationStatus === "draft") {
+    throw new CatalogValidationError("Published products can be archived, not returned to draft");
+  }
+  if ((changes.details ?? before.details)?.publicationStatus === "draft") {
+    changes.active = false;
+  }
   if (before.details && changes.details && changes.details.productCode !== before.details.productCode) {
     throw new CatalogValidationError("Published product codes cannot be changed");
   }

@@ -47,7 +47,7 @@ export async function listHypotheses(): Promise<ExperimentProtocol[]> {
   const persistedRecords = rows.map((row) => parseRecord(row.recordJson, row.duplicateCount));
   const products = await getDatabase().select().from(catalogProducts)
     .where(eq(catalogProducts.category, "blends"));
-  const productionRecords = products.flatMap((product) => product.details
+  const productionRecords = products.flatMap((product) => product.details && product.details.publicationStatus !== "draft"
     ? [productionArchiveRecord({ ...product, details: product.details })] : []);
   const productionIds = new Set(productionRecords.map((record) => record.id));
   return [

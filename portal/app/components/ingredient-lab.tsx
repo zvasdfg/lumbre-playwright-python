@@ -20,6 +20,7 @@ type HypothesisResponse = {
 
 type IngredientLabProps = {
   account: { id: string; name: string } | null;
+  catalogRevision?: number;
 };
 
 type SavedBlend = {
@@ -164,7 +165,7 @@ function formulaNameLabel(name: string) {
   return visibleText(name);
 }
 
-export default function IngredientLab({ account }: IngredientLabProps) {
+export default function IngredientLab({ account, catalogRevision = 0 }: IngredientLabProps) {
   const readOnlyProduction = isPublicProductionReadOnly();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [families, setFamilies] = useState<string[]>([]);
@@ -224,7 +225,7 @@ export default function IngredientLab({ account }: IngredientLabProps) {
         if (!response.ok) throw new Error("No fue posible consultar las fichas registradas.");
         return (await response.json()) as HypothesisResponse;
       })
-      .then((registry) => setHypotheses(registry.data))
+      .then((registry) => { setHypotheses(registry.data); setHypothesisError(""); })
       .catch((requestError: Error) => {
         if (requestError.name !== "AbortError") setHypothesisError(requestError.message);
       })
@@ -232,7 +233,7 @@ export default function IngredientLab({ account }: IngredientLabProps) {
         if (!controller.signal.aborted) setLoadingHypotheses(false);
       });
     return () => controller.abort();
-  }, []);
+  }, [catalogRevision]);
 
   const filteredIngredients = useMemo(() => {
     const normalizedSearch = search.trim().toLocaleLowerCase("es");

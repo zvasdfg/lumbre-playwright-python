@@ -5,6 +5,7 @@ import { ingredients } from "../../../app/lib/ingredients";
 export { parseJsonBody };
 
 const productDetails = z.object({
+  publicationStatus: z.enum(["draft", "published"]).optional(),
   productCode: z.string().regex(/^LMB-F-\d{3}$/),
   description: z.string().trim().min(3).max(1000),
   components: z.array(z.object({
