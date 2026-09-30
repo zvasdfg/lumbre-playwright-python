@@ -4,6 +4,11 @@
 
 # Playwright Python Automation Framework
 
+> Public portal direction: static-only. Account/cart/commerce features are excluded
+> from the public artifact. See [Static portal](docs/STATIC_PORTAL.md) for preview
+> commands and the production retirement checklist. The legacy backend remains a
+> local automation target; previous deployment instructions below are historical.
+
 [![Staging synthetic monitor](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml/badge.svg)](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml)
 [![Deploy Lumbre](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/deploy.yml/badge.svg)](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/deploy.yml)
 
