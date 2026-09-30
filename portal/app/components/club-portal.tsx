@@ -96,11 +96,12 @@ const currency = new Intl.NumberFormat("es-MX", {
 
 function productCategoryLabel(category: Product["category"]) {
   if (category === "outdoor") return "aire libre";
-  if (category === "blends") return "mezcla de protocolo";
+  if (category === "blends") return "sazonador Lumbre";
   return category;
 }
 
-function productImage(productId: number) {
+function productImage(product: Product) {
+  if (product.image) return product.image;
   const images: Record<number, string> = {
     101: "/editorial/products/pinzas-forja-45.jpg",
     102: "/editorial/products/mandil-lumbre-01.jpg",
@@ -110,7 +111,7 @@ function productImage(productId: number) {
     112: "/editorial/blend-pollo-ahumado.jpg",
     113: "/editorial/blend-umami.jpg",
   };
-  return images[productId];
+  return images[product.id];
 }
 
 function productInitials(name: string) {
@@ -686,10 +687,10 @@ export default function ClubPortal() {
             >
               <div className={`product-art product-${product.category}`}>
                 {product.badge && <span className="product-badge">{product.badge}</span>}
-                {productImage(product.id) ? (
+                {productImage(product) ? (
                   <Image
-                    src={productImage(product.id)}
-                    alt={`Fotografía de ${product.name}`}
+                    src={productImage(product)}
+                    alt={product.imageAlt ?? `Fotografía de ${product.name}`}
                     fill
                     sizes="(max-width: 520px) 100vw, 33vw"
                   />
@@ -699,8 +700,16 @@ export default function ClubPortal() {
                   </span>
                 )}
               </div>
-              <p>{productCategoryLabel(product.category)}</p><h3>{product.name}</h3>
-              <div><strong>{product.stock > 0 ? currency.format(product.price) : "Agotado"}</strong><button type="button" disabled={product.stock === 0} onClick={() => void addToCart(product)} aria-label={product.stock > 0 ? `Agregar ${product.name} a la canasta` : `${product.name} agotado`}>{product.stock > 0 ? "+" : "×"}</button></div>
+              <p>{product.productCode ? `${productCategoryLabel(product.category)} · ${product.productCode}` : productCategoryLabel(product.category)}</p>
+              <h3>{product.name}</h3>
+              {product.description && <p className="product-description">{product.description}</p>}
+              {product.ingredients && (
+                <p className="product-ingredients"><strong>Ingredientes:</strong> {product.ingredients.join(", ")}.</p>
+              )}
+              <div>
+                <strong>{product.purchaseEnabled === false ? `Contenido neto ${product.netContent} · Venta próximamente` : product.stock > 0 ? currency.format(product.price) : "Agotado"}</strong>
+                <button type="button" disabled={product.purchaseEnabled === false || product.stock === 0} onClick={() => void addToCart(product)} aria-label={product.purchaseEnabled === false ? `${product.name}: venta próximamente` : product.stock > 0 ? `Agregar ${product.name} a la canasta` : `${product.name} agotado`}>{product.purchaseEnabled === false ? "·" : product.stock > 0 ? "+" : "×"}</button>
+              </div>
             </article>
           ))}
         </div>

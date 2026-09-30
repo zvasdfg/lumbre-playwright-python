@@ -15,7 +15,7 @@ def test_store_products_have_unique_images(
     test_log: TestLogger,
 ) -> None:
     with test_log.step("Read product names and catalog image sources"):
-        expect(home.product_cards).to_have_count(7)
+        expect(home.product_cards).to_have_count(11)
         product_records = home.product_cards.evaluate_all(
             """
             cards => cards.map(card => ({
@@ -33,7 +33,7 @@ def test_store_products_have_unique_images(
         )
 
     with test_log.step("Validate distinct and descriptive product photography"):
-        assert len(product_records) == 7
-        assert len(set(sources)) == 7
+        assert len(product_records) == 11
+        assert len(set(sources)) == 11
         assert all(record["src"] for record in product_records)
         assert all(record["name"] in record["alt"] for record in product_records)

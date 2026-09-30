@@ -103,11 +103,19 @@ export type ExperimentProtocol = {
   objetivo: string;
   componentes: Array<{ id: string; nombre: string; familia: string }>;
   hipotesis: string;
-  formula: FormulaEvidence;
+  formula?: FormulaEvidence;
   perfil_esperado: ExpectedProfile[];
   metodo: string[];
-  estado: "borrador" | "recomendado_sin_validar";
-  tipo_registro?: "hipotesis_usuario" | "recomendacion_investigada";
+  estado: "borrador" | "recomendado_sin_validar" | "producto_en_produccion";
+  tipo_registro?: "hipotesis_usuario" | "recomendacion_investigada" | "producto_produccion";
+  producto?: {
+    id: string;
+    nombre: string;
+    descripcion: string;
+    imagen: string;
+    contenido_neto: string;
+    alcance_formula: "declaracion_de_ingredientes";
+  };
   recomendacion?: {
     id: string;
     nombre: string;

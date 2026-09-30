@@ -1364,9 +1364,16 @@
           "id": { "type": "integer", "minimum": 1 },
           "name": { "type": "string", "minLength": 1 },
           "category": { "type": "string", "enum": ["blends", "ropa", "herramientas", "outdoor"] },
-          "price": { "type": "number", "exclusiveMinimum": 0 },
+          "price": { "type": "number", "minimum": 0 },
           "stock": { "type": "integer", "minimum": 0 },
-          "badge": { "type": "string", "minLength": 1 }
+          "badge": { "type": "string", "minLength": 1 },
+          "productCode": { "type": "string", "pattern": "^LMB-F-[0-9]{3}$" },
+          "description": { "type": "string", "minLength": 1 },
+          "ingredients": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "image": { "type": "string", "pattern": "^/editorial/products/.+\\.(jpeg|jpg|png)$" },
+          "imageAlt": { "type": "string", "minLength": 1 },
+          "netContent": { "type": "string", "minLength": 1 },
+          "purchaseEnabled": { "type": "boolean" }
         },
         "additionalProperties": false
       },
@@ -2015,20 +2022,33 @@
       },
       "Hypothesis": {
         "type": "object",
-        "required": ["schema_version", "id", "firma", "objetivo", "componentes", "hipotesis", "formula", "perfil_esperado", "metodo", "estado", "contador_repeticiones", "creado_en"],
+        "required": ["schema_version", "id", "firma", "objetivo", "componentes", "hipotesis", "perfil_esperado", "metodo", "estado", "contador_repeticiones", "creado_en"],
         "properties": {
           "schema_version": { "const": 5 },
-          "id": { "type": "string", "pattern": "^LH[CBVP]-[0-9]{3}$" },
-          "firma": { "type": "string", "pattern": "^LH[CBVP]:" },
+          "id": { "type": "string", "pattern": "^(LH[CBVP]-[0-9]{3}|LMB-F-[0-9]{3})$" },
+          "firma": { "type": "string", "pattern": "^(LH[CBVP]:|PROD:LMB-F-)" },
           "objetivo": { "$ref": "#/components/schemas/HypothesisObjective" },
           "componentes": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "$ref": "#/components/schemas/HypothesisComponent" } },
           "hipotesis": { "type": "string", "minLength": 1 },
           "formula": { "$ref": "#/components/schemas/FormulaEvidence" },
           "perfil_esperado": { "type": "array", "items": { "$ref": "#/components/schemas/ExpectedProfile" } },
           "metodo": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-          "estado": { "type": "string", "enum": ["borrador", "recomendado_sin_validar"] },
-          "tipo_registro": { "type": "string", "enum": ["hipotesis_usuario", "recomendacion_investigada"] },
+          "estado": { "type": "string", "enum": ["borrador", "recomendado_sin_validar", "producto_en_produccion"] },
+          "tipo_registro": { "type": "string", "enum": ["hipotesis_usuario", "recomendacion_investigada", "producto_produccion"] },
           "recomendacion": { "$ref": "#/components/schemas/Recommendation" },
+          "producto": {
+            "type": "object",
+            "required": ["id", "nombre", "descripcion", "imagen", "contenido_neto", "alcance_formula"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^LMB-F-[0-9]{3}$" },
+              "nombre": { "type": "string", "minLength": 1 },
+              "descripcion": { "type": "string", "minLength": 1 },
+              "imagen": { "type": "string", "pattern": "^/editorial/products/.+\\.(jpeg|jpg|png)$" },
+              "contenido_neto": { "type": "string", "minLength": 1 },
+              "alcance_formula": { "const": "declaracion_de_ingredientes" }
+            },
+            "additionalProperties": false
+          },
           "contador_repeticiones": { "type": "integer", "minimum": 0 },
           "creado_en": { "type": "string", "format": "date-time" }
         },
@@ -2036,7 +2056,7 @@
       },
       "HypothesisObjective": {
         "type": "string",
-        "enum": ["Costra para res", "Bark para cocción lenta", "Vegetales a las brasas", "Pollo al fuego directo"]
+        "enum": ["Costra para res", "Bark para cocción lenta", "Vegetales a las brasas", "Pollo al fuego directo", "Producto de producción"]
       },
       "HypothesisComponent": {
         "type": "object",

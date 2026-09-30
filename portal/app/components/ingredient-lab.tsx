@@ -125,6 +125,7 @@ function familyLabel(family: string) {
 }
 
 function statusLabel(status: string) {
+  if (status === "producto_en_produccion") return "Producto en producción";
   if (status === "documentado_sin_validar") return "Documentado · por validar";
   if (status === "recomendado_sin_validar") return "Recomendación investigada · por validar";
   return status.replaceAll("_", " ");
@@ -652,6 +653,9 @@ export default function IngredientLab({ account }: IngredientLabProps) {
                 <span>{statusLabel(hypothesis.estado)}</span>
               </div>
               <p className="hypothesis-objective">{objectiveLabel(hypothesis.objetivo)}</p>
+              {hypothesis.producto && (
+                <p className="formula-badge formula-production">Archivo de producto · {hypothesis.producto.nombre}</p>
+              )}
               {hypothesis.recomendacion && (
                 <p className="formula-badge formula-referenced">
                   Recomendada · {visibleText(hypothesis.recomendacion.nombre)}
@@ -751,6 +755,23 @@ export default function IngredientLab({ account }: IngredientLabProps) {
             <p className="section-index">FICHA TÉCNICA · {statusLabel(inspectedHypothesis.estado)}</p>
             <h2 id="hypothesis-sheet-title">{inspectedHypothesis.id}</h2>
             <span className="hypothesis-sheet-objective">{objectiveLabel(inspectedHypothesis.objetivo)}</span>
+            {inspectedHypothesis.producto && (
+              <section className="production-record">
+                <Image
+                  src={inspectedHypothesis.producto.imagen}
+                  alt={`Fotografía de ${inspectedHypothesis.producto.nombre}`}
+                  width={320}
+                  height={320}
+                  unoptimized
+                />
+                <div>
+                  <span>PRODUCTO EN PRODUCCIÓN</span>
+                  <h3>{inspectedHypothesis.producto.nombre}</h3>
+                  <p>{inspectedHypothesis.producto.descripcion}</p>
+                  <small>Contenido neto: {inspectedHypothesis.producto.contenido_neto}</small>
+                </div>
+              </section>
+            )}
             {inspectedHypothesis.recomendacion && (
               <section className="formula-evidence formula-referenced">
                 <span>RECOMENDACIÓN INVESTIGADA · AÚN NO VALIDADA POR LUMBRE</span>
@@ -816,7 +837,7 @@ export default function IngredientLab({ account }: IngredientLabProps) {
                 </div>
               </section>
             )}
-            <h3>Componentes de la fórmula</h3>
+            <h3>{inspectedHypothesis.producto ? "Ingredientes declarados" : "Componentes de la fórmula"}</h3>
             <ol className="hypothesis-components">
               {inspectedHypothesis.componentes.map((component) => (
                 <li key={component.id}>
@@ -825,7 +846,7 @@ export default function IngredientLab({ account }: IngredientLabProps) {
                 </li>
               ))}
             </ol>
-            <h3>Método propuesto</h3>
+            <h3>{inspectedHypothesis.producto ? "Alcance del registro" : "Método propuesto"}</h3>
             <ol className="hypothesis-method">
               {inspectedHypothesis.metodo.map((step) => <li key={step}>{visibleText(step)}</li>)}
             </ol>

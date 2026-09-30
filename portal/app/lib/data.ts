@@ -1,3 +1,5 @@
+import { productionProducts } from "./production-products";
+
 export type Recipe = {
   id: number;
   title: string;
@@ -17,6 +19,13 @@ export type Product = {
   price: number;
   stock: number;
   badge?: string;
+  productCode?: string;
+  description?: string;
+  ingredients?: string[];
+  image?: string;
+  imageAlt?: string;
+  netContent?: string;
+  purchaseEnabled?: boolean;
 };
 
 export type FireEvent = {
@@ -194,6 +203,7 @@ export const recipes: Recipe[] = recipeSeeds.map((recipe) => ({
 }));
 
 export const products: Product[] = [
+  ...productionProducts.map((product) => ({ ...product, ingredients: [...product.ingredients] })),
   { id: 111, name: "Blend LHC-003 · SPG clásico", category: "blends", price: 260, stock: 40, badge: "Esencial" },
   { id: 112, name: "Blend LHP-007 · Pollo ahumado", category: "blends", price: 290, stock: 32, badge: "Sumac + orégano" },
   { id: 113, name: "Blend LHV-002 · Umami tostado", category: "blends", price: 310, stock: 28, badge: "Sésamo + shiitake" },
@@ -209,4 +219,4 @@ export const events: FireEvent[] = [
   { id: 203, day: "30", month: "AGO", city: "Querétaro, QRO", title: "Humo y fermentos", detail: "Clase de ahumado y salsas vivas", spots: 5 },
 ];
 
-export const seedVersion = "2026.07.03";
+export const seedVersion = "2026.09.30";

@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { type ExperimentProtocol } from "./ingredients";
 import { getDatabase } from "../../server/platform/database/client";
 import { hypotheses } from "../../server/platform/database/schema";
+import { productionArchiveRecords } from "./production-products";
 
 export const experimentObjectives = {
   "Costra para res": { prefix: "LHC", subject: "una costra equilibrada para res" },
@@ -43,9 +44,12 @@ export async function listHypotheses(): Promise<ExperimentProtocol[]> {
     })
     .from(hypotheses);
 
-  return rows
-    .map((row) => parseRecord(row.recordJson, row.duplicateCount))
-    .sort((left, right) => left.id.localeCompare(right.id));
+  const persistedRecords = rows.map((row) => parseRecord(row.recordJson, row.duplicateCount));
+  const persistedIds = new Set(persistedRecords.map((record) => record.id));
+  return [
+    ...productionArchiveRecords.filter((record) => !persistedIds.has(record.id)),
+    ...persistedRecords,
+  ].sort((left, right) => left.id.localeCompare(right.id));
 }
 
 export async function resetHypotheses(): Promise<void> {

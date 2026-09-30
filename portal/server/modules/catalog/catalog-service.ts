@@ -1,5 +1,6 @@
 import { and, asc, desc, eq, sql } from "drizzle-orm";
 import { events as eventSeeds, products as productSeeds } from "../../../app/lib/data";
+import { productionProductMetadata } from "../../../app/lib/production-products";
 import { getDatabase } from "../../platform/database/client";
 import {
   administrativeAuditEvents,
@@ -22,6 +23,7 @@ export type ProductRecord = typeof catalogProducts.$inferSelect;
 export type EventRecord = typeof catalogEvents.$inferSelect;
 
 function publicProduct(product: ProductRecord) {
+  const metadata = productionProductMetadata[product.id];
   return {
     id: product.id,
     name: product.name,
@@ -29,6 +31,7 @@ function publicProduct(product: ProductRecord) {
     price: product.price,
     stock: product.stock,
     ...(product.badge ? { badge: product.badge } : {}),
+    ...(metadata ?? {}),
   };
 }
 
@@ -67,7 +70,11 @@ export async function listPublicProducts() {
     .from(catalogProducts)
     .where(eq(catalogProducts.active, true))
     .orderBy(
-      sql`CASE WHEN ${catalogProducts.category} = 'blends' THEN 0 ELSE 1 END`,
+      sql`CASE
+        WHEN ${catalogProducts.id} BETWEEN 121 AND 124 THEN 0
+        WHEN ${catalogProducts.category} = 'blends' THEN 1
+        ELSE 2
+      END`,
       asc(catalogProducts.id),
     );
   return rows.map(publicProduct);
@@ -207,7 +214,14 @@ export async function resetCatalog(): Promise<void> {
   await database.delete(catalogProducts);
   await database.delete(catalogEvents);
   await database.insert(catalogProducts).values(
-    productSeeds.map((product) => ({ ...product, badge: product.badge ?? null })),
+    productSeeds.map(({ id, name, category, price, stock, badge }) => ({
+      id,
+      name,
+      category,
+      price,
+      stock,
+      badge: badge ?? null,
+    })),
   );
   await database.insert(catalogEvents).values(
     eventSeeds.map(({ spots, ...event }) => ({ ...event, capacity: spots })),

@@ -12,13 +12,14 @@ from projects.lumbre.pages.home_page import HomePage
 )
 def test_blends_lead_store_catalog(home: HomePage, test_log: TestLogger) -> None:
     expected_blends = [
-        "Blend LHC-003 · SPG clásico",
-        "Blend LHP-007 · Pollo ahumado",
-        "Blend LHV-002 · Umami tostado",
+        "Sazonador multiuso",
+        "Sazonador para carne de res",
+        "Sazonador para carne de cerdo",
+        "Sazonador para carne de pollo",
     ]
 
     with test_log.step("Read the leading products in the store catalog"):
-        leading_cards = home.product_cards.all()[:3]
+        leading_cards = home.product_cards.all()[:4]
         observed_names = [card.get_by_role("heading").inner_text() for card in leading_cards]
         observed_categories = [card.get_attribute("data-category") for card in leading_cards]
         test_log.values(
@@ -29,6 +30,6 @@ def test_blends_lead_store_catalog(home: HomePage, test_log: TestLogger) -> None
         )
 
     with test_log.step("Validate that blends appear before merchandise"):
-        expect(home.product_cards).to_have_count(7)
+        expect(home.product_cards).to_have_count(11)
         assert observed_names == expected_blends
-        assert observed_categories == ["blends", "blends", "blends"]
+        assert observed_categories == ["blends", "blends", "blends", "blends"]

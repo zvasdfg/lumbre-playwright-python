@@ -63,5 +63,9 @@ def test_account_saves_private_blend(
         test_log.values(
             observed_private_blend=private_blend.inner_text(),
             observed_public_sheet_count=lab.hypothesis_cards.count(),
+            expected_public_product_records=4,
         )
-        expect(lab.hypothesis_cards).to_have_count(0)
+        expect(lab.hypothesis_cards).to_have_count(4)
+        expect(
+            lab.hypothesis_card(payload["data"]["protocol"]["id"])
+        ).to_have_count(0)
