@@ -6,11 +6,13 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "vinext dev",
+    "dev": "vite --config static/vite.config.ts --host 127.0.0.1",
+    "dev:backend": "vinext dev",
     "dev:next": "next dev",
     "dev:cloudflare": "vinext dev",
     "build": "npm run build:static",
-    "start": "vinext start",
+    "start": "npm run preview:static",
+    "start:backend": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern worker-configuration.d.ts",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
@@ -39,6 +41,7 @@
     "release:accounts:preflight": "bash ./scripts/accounts-preflight.sh",
     "cf:typegen": "wrangler types",
     "build:static": "vite build --config static/vite.config.ts && node scripts/check-static.mjs",
+    "deploy:static": "npm run build:static && wrangler deploy --config wrangler.static.jsonc",
     "preview:static": "vite preview --config static/vite.config.ts",
     "build:backend": "vinext build"
   },

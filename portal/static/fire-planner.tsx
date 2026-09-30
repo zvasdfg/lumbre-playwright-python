@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { z } from "zod";
 
 type CookingStyle = "directo" | "dos_zonas" | "lento";
 type FuelType = "carbon" | "briquetas" | "lena";
@@ -36,6 +37,19 @@ type PlannerPreset = {
 };
 
 const STORAGE_KEY = "lumbre.fire-planner.presets.v1";
+const presetSchema = z.object({
+  id: z.string().min(1).max(200), name: z.string().trim().min(1).max(80),
+  configuration: z.object({
+    guests: z.string().regex(/^\d+$/).refine(value => Number(value) >= 1 && Number(value) <= 100),
+    cookingStyle: z.enum(["directo", "dos_zonas", "lento"]),
+    durationHours: z.enum(["2", "4", "6", "8", "12"]),
+    fuelType: z.enum(["carbon", "briquetas", "lena"]),
+    equipment: z.enum(["kettle", "abierta", "ahumador"]),
+    weather: z.enum(["templado", "viento", "frio"]),
+    servingTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+    includeVegetables: z.boolean(),
+  }),
+});
 
 const initialConfiguration: PlannerConfiguration = {
   guests: "6",
@@ -87,9 +101,11 @@ function readLocalPresets(): PlannerPreset[] {
     if (!storedPresets) return [];
     const parsedPresets = JSON.parse(storedPresets);
     if (!Array.isArray(parsedPresets)) throw new Error("Preset storage is not a collection");
-    return parsedPresets as PlannerPreset[];
+    return parsedPresets.slice(0, 50).flatMap(item => {
+      const result = presetSchema.safeParse(item);
+      return result.success ? [result.data] : [];
+    });
   } catch {
-    window.localStorage.removeItem(STORAGE_KEY);
     return [];
   }
 }
@@ -199,8 +215,14 @@ export default function FirePlanner() {
   }
 
   function persistLocalPresets(nextPresets: PlannerPreset[]) {
-    setPresets(nextPresets);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPresets));
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextPresets));
+      setPresets(nextPresets);
+      return true;
+    } catch {
+      setPresetMessage("No se pudo guardar el cambio. Revisa el espacio y los permisos de almacenamiento del navegador.");
+      return false;
+    }
   }
 
   async function savePreset() {
@@ -208,6 +230,10 @@ export default function FirePlanner() {
     if (!name) return;
 
     const existing = presets.find((preset) => preset.name.toLocaleLowerCase("es") === name.toLocaleLowerCase("es"));
+    if (name.length > 80 || (!existing && presets.length >= 50)) {
+      setPresetMessage("Usa un nombre de hasta 80 caracteres y un máximo de 50 presets.");
+      return;
+    }
     const preset: PlannerPreset = {
       id: existing?.id ?? `${Date.now()}-${name.toLocaleLowerCase("es").replaceAll(" ", "-")}`,
       name,
@@ -216,13 +242,17 @@ export default function FirePlanner() {
     const nextPresets = existing
       ? presets.map((item) => (item.id === existing.id ? preset : item))
       : [...presets, preset];
-    persistLocalPresets(nextPresets);
+    if (!presetSchema.safeParse(preset).success) {
+      setPresetMessage("Revisa las condiciones del plan antes de guardarlo.");
+      return;
+    }
+    if (!persistLocalPresets(nextPresets)) return;
     setPresetName("");
     setPresetMessage(`Preset ${name} guardado en este navegador.`);
   }
 
   async function deletePreset(preset: PlannerPreset) {
-    persistLocalPresets(presets.filter((item) => item.id !== preset.id));
+    if (!persistLocalPresets(presets.filter((item) => item.id !== preset.id))) return;
     setPresetMessage(`Preset ${preset.name} eliminado.`);
   }
 
