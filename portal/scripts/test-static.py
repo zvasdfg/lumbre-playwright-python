@@ -117,6 +117,17 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Almanaque", exact=False).click()
         page.get_by_role("button", name="Página siguiente", exact=True).click()
         expect(page.get_by_test_id("almanac-page-status")).to_contain_text("1")
+        almanac_index = page.get_by_label("Ir a una página del almanaque")
+        expect(almanac_index.locator("option")).to_have_count(25)
+        for number in range(16, 25):
+            almanac_index.select_option(str(number))
+            expect(page.get_by_test_id("almanac-page-status")).to_contain_text(f"DOC. {number:03d}")
+            image = page.get_by_test_id("almanac-page").locator("img")
+            expect(image).to_have_attribute("src", f"/editorial/almanac/page-{number:03d}.jpeg")
+            expect(image).to_have_js_property("naturalWidth", 1254)
+        expect(page.get_by_role("button", name="Página siguiente", exact=True)).to_be_disabled()
+        page.get_by_role("button", name="Página anterior", exact=True).click()
+        expect(page.get_by_test_id("almanac-page-status")).to_contain_text("DOC. 023")
         page.get_by_role("button", name="Cerrar almanaque", exact=True).click()
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "Horizontal overflow"
         assert not api_requests, api_requests
