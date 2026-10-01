@@ -1,0 +1,22 @@
+/* Static portal: keep the mobile reading order independent of desktop columns. */
+@media (max-width: 850px) {
+  #inicio.hero { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  #inicio .hero-copy { min-width: 0; min-height: 0; padding: 28px 24px 32px; }
+  #inicio .hero-copy::before { position: static; display: block; margin-bottom: 22px; font-size: 9px; line-height: 1.6; letter-spacing: .14em; }
+  #inicio .eyebrow { margin: 0; max-width: 32em; font-size: 10px; line-height: 1.7; letter-spacing: .12em; }
+  #inicio h1 { max-width: 100%; margin: 22px 0; font-size: clamp(44px, 11.5vw, 76px); line-height: .98; letter-spacing: -.045em; overflow-wrap: normal; }
+  #inicio .hero-description { max-width: 38em; margin: 0; font-size: 16px; line-height: 1.7; }
+  #inicio .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; margin-top: 26px; }
+  #inicio .hero-actions .button { min-width: 0; min-height: 48px; font-size: 10px; letter-spacing: .035em; line-height: 1.5; gap: 6px; }
+  #inicio .hero-actions .button-primary { grid-column: 1 / -1; justify-content: center; padding: 14px 16px; }
+  #inicio .hero-actions .button-quiet { justify-content: space-between; text-align: left; }
+  #inicio .hero-proof { width: 100%; max-width: 100%; margin-top: 28px; }
+  #inicio .hero-proof span { padding: 14px 6px 0 0; font-size: 8px; letter-spacing: .06em; }
+  #inicio .hero-proof strong { font-size: 24px; }
+  #inicio .hero-visual { min-height: 0; height: auto; aspect-ratio: 4 / 3; }
+  #inicio .hero-photo { object-position: 70% center; }
+  #inicio .hero-stamp { top: 20px; left: 24px; gap: 10px; font-size: 8px; }
+  #inicio .hero-stamp img { width: 42px; height: 42px; }
+  #inicio .visual-note { bottom: 20px; left: 24px; margin: 0; padding-left: 12px; font-size: 13px; }
+  #inicio .visual-note span { margin-bottom: 5px; font-size: 8px; }
+}

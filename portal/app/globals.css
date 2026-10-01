@@ -742,6 +742,7 @@ body { overflow-x: clip; }
   .hero { min-height: calc(100svh - var(--site-header-height)); }
   .hero-copy { min-height: 58svh; }
   .hero-visual { min-height: 42svh; }
+  #inicio.hero { grid-template-columns: minmax(0, 1fr); }
   .session-blend-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .shop-heading { position: static; }
 }
