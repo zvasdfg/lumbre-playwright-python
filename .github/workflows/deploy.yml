@@ -73,7 +73,7 @@ jobs:
     timeout-minutes: 10
     environment:
       name: production
-      url: https://lumbre-portal.lumbre-portal.workers.dev
+      url: https://metodolumbre.com
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -101,4 +101,4 @@ jobs:
           npx wrangler deploy --config wrangler.static.jsonc
       - name: Verify published static bundle
         working-directory: portal
-        run: node scripts/verify-static-deployment.mjs https://lumbre-portal.lumbre-portal.workers.dev
+        run: node scripts/verify-static-deployment.mjs https://metodolumbre.com

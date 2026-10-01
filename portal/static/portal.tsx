@@ -98,8 +98,8 @@ export default function StaticPortal() {
             <span><strong>4</strong> protocolos</span>
           </div>
         </div>
-        <div className="hero-visual" role="img" aria-label="Parrilla encendida frente a montañas al atardecer">
-          <Image className="hero-photo" src="/editorial/lumbre-hero-v2.jpg" alt="" fill priority sizes="(max-width: 850px) 100vw, 52vw" />
+        <div className="hero-visual">
+          <Image className="hero-photo" src="/editorial/lumbre-hero-v2.jpg" alt="Parrilla encendida frente a montañas al atardecer" fill priority sizes="(max-width: 850px) 100vw, 52vw" />
           <div className="hero-stamp" aria-hidden="true"><Image src="/brand/lumbre-mark-red.png" alt="" width={58} height={58} unoptimized /><span>HECHO PARA<br />VIVIR AFUERA</span></div>
           <p className="visual-note"><span>CUADERNO 01</span> Observar. Formular.<br />Encender. Registrar.</p>
         </div>
