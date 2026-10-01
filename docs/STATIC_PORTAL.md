@@ -132,3 +132,10 @@ the exact artifact from that run, deploys assets using `wrangler.static.jsonc`,
 then checks that production HTML and JavaScript SHA-256 match the artifact.
 Existing repository Cloudflare secrets are used only in the production deploy
 step. No backend, D1 migrations, staging deployment or cron is enabled.
+
+The first Actions run was blocked by high-severity undici advisories in legacy
+Cloudflare tooling. A temporary, read-only manual runner generated/audited the
+updated lockfile (run 36797036541); it was then incorporated into Git and the
+temporary workflow removed. Pins: vite-plugin 1.62.3, Wrangler 4.145.0,
+transitive undici 7.29.1. TLS validation was not disabled to work around local
+proxy certificate problems. Existing moderate legacy drizzle tooling debt remains.
