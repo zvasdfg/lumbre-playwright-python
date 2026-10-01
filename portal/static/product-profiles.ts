@@ -27,9 +27,9 @@ export const productProfiles: Record<string, ProductProfile> = {
     rationale: "La sal aporta el eje salado. El catálogo atribuye dulzor y umami secundarios al ajo, y un posible fondo amargo a ajo y pimienta. No se declara un ingrediente ácido protagonista.",
   },
   "LMB-F-002": {
-    style: "Sal y pimienta con shiitake · mezcla de perfil umami",
-    description: "Una mezcla corta orientada a la profundidad sabrosa del hongo seco, con sal de mar y pimienta negra. No contiene ajo ni azúcar en su declaración de ingredientes.",
-    expected: "Sazón salado con fondo de hongo, notas terrosas y sensación picante de pimienta. El shiitake seco aporta compuestos asociados al umami; el resultado exacto depende de cuánto hongo contenga la mezcla.",
+    style: "Sal, pimienta y ajo con shiitake · mezcla de perfil umami",
+    description: "Una mezcla de sal de mar, pimienta negra, ajo granulado y shiitake, según la composición corregida por Lumbre. La fotografía del empaque corresponde a la etiqueta anterior, que omitía el ajo.",
+    expected: "Sazón salado con fondo de hongo, notas de ajo y sensación picante de pimienta. El shiitake seco aporta compuestos asociados al umami; el resultado exacto depende de las proporciones de la mezcla.",
     pairings: [
       { food: "Res", reason: "El fondo sabroso del shiitake puede acompañar cortes y hamburguesas sin recurrir a un perfil dulce." },
       { food: "Cerdo y pollo", reason: "Una alternativa de carácter terroso para chuletas o muslos." },

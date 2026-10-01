@@ -1,4 +1,4 @@
-name: Validate static Lumbre
+name: Validate and deploy static Lumbre
 
 on:
   push:
@@ -9,6 +9,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: lumbre-static-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   static-build:
@@ -55,9 +59,46 @@ jobs:
           python portal/scripts/test-static.py
           python portal/scripts/check-static-print.py
           python portal/scripts/test-storage-recovery.py
+          python portal/scripts/test-recipe-blend-back.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: lumbre-static
           path: portal/dist-static/
           if-no-files-found: error
-# No credentials, D1 migrations or deployment until local acceptance and a new hosting decision.
+  deploy-production:
+    name: Deploy static production
+    needs: static-build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://lumbre-portal.lumbre-portal.workers.dev
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+      - run: npm ci
+        working-directory: portal
+      - name: Download the validated build from this run
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: lumbre-static
+          path: portal/dist-static
+      - name: Deploy assets only (no backend or D1)
+        working-directory: portal
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "::error::Missing CLOUDFLARE_ACCOUNT_ID"; exit 1; }
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::Missing CLOUDFLARE_API_TOKEN"; exit 1; }
+          npx wrangler deploy --config wrangler.static.jsonc
+      - name: Verify published static bundle
+        working-directory: portal
+        run: node scripts/verify-static-deployment.mjs https://lumbre-portal.lumbre-portal.workers.dev

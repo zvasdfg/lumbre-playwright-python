@@ -34,6 +34,8 @@ export default function StaticPortal() {
   const [search, setSearch] = useState("");
   const [recipePage, setRecipePage] = useState(1);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [productRecipeOrigin, setProductRecipeOrigin] = useState<Recipe | null>(null);
+  const [recipeScrollTop, setRecipeScrollTop] = useState(0);
   const filteredRecipes = useMemo(() => {
     const normalized = search.trim().toLocaleLowerCase("es");
     return recipes.filter((recipe) => {
@@ -221,7 +223,11 @@ export default function StaticPortal() {
         </div>
       </section>
 
-      {selectedProduct && <ProductSheet product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
+      {selectedProduct && <ProductSheet product={selectedProduct} onClose={() => {
+        setSelectedProduct(null); setProductRecipeOrigin(null); setRecipeScrollTop(0);
+      }} onBack={productRecipeOrigin ? () => {
+        setSelectedProduct(null); setSelectedRecipe(productRecipeOrigin); setProductRecipeOrigin(null);
+      } : undefined} />}
 
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
@@ -233,7 +239,10 @@ export default function StaticPortal() {
       <FireAlmanac />
 
 
-      {selectedRecipe && <RecipeSheet recipe={selectedRecipe} onClose={() => setSelectedRecipe(null)} />}
+      {selectedRecipe && <RecipeSheet recipe={selectedRecipe} initialScrollTop={recipeScrollTop} onClose={() => { setSelectedRecipe(null); setRecipeScrollTop(0); }} onOpenBlend={(code, scrollTop) => {
+        const product = productionProducts.find(item => item.details.productCode === code);
+        if (product) { setProductRecipeOrigin(selectedRecipe); setRecipeScrollTop(scrollTop); setSelectedRecipe(null); setSelectedProduct(product); }
+      }} />}
     </main>
   );
 }

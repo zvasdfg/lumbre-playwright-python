@@ -1,4 +1,4 @@
-/** Portal recipe catalog, revision 1. Original proposals; not kitchen-tested. */
+/** Portal recipes: preserved base plus explicit revision-3 blend adaptations. Not kitchen-tested. */
 export type RecipePreparation = {
   servings: number;
   total: string;
@@ -24,6 +24,10 @@ export const recipeSources = {
   brick: { title: "Weber · Pollo bajo peso", url: "https://www.weber.com/US/en/recipes/poultry/chicken-under-bricks/weber-2032.html", scope: "Referencia de técnica; no se reproduce la receta original." },
 } as const;
 export type RecipeSourceId = keyof typeof recipeSources;
+export { recipeBlendRecommendations, recipeBlendIngredient, recipeBlendUsage } from "./recipe-blends.ts";
+import { recipeBlendRecommendations, recipeBlendIngredient } from "./recipe-blends.ts";
+// Preserve revision-2 inputs; revision-3 adaptations are explicit below.
+const legacyBlendIngredient = "Sazonador multiuso LMB-F-001 al gusto, en lugar de sal, pimienta y ajo granulado por separado";
 export const recipeEditorialNote = "Propuesta culinaria Lumbre · revisión 1. Cantidades y tiempos orientativos desarrollados para este recetario; todavía no probada en cocina. Las fuentes respaldan técnicas y seguridad, no el resultado de esta receta. La imagen es ilustrativa.";
 export const recipeSafetyNote = "Usa el asador únicamente al aire libre. Lava los vegetales; separa alimentos crudos y listos para comer. Descongela y marina en refrigeración a 4 °C o menos. Usa un termómetro: el color y los minutos no sustituyen la temperatura interna. Refrigera sobrantes antes de 2 horas (1 hora si el ambiente supera 32 °C); recalienta a 74 °C. Usa lácteos pasteurizados y revisa las etiquetas por alérgenos.";
 
@@ -33,7 +37,7 @@ function recipe(servings: number, total: string, timing: string, fire: string, i
   return { servings, total, timing, fire, ingredients: ingredients.split(" | "), steps, doneness, sources: [...sources, "handling", "outdoor"] };
 }
 
-export const recipePreparations: Record<number, RecipePreparation> = {
+export const baseRecipePreparations: Record<number, RecipePreparation> = {
   76: recipe(4, "1 h", "20 min preparación · 35 min cocción · 5 min reposo; arroz ya cocido", "Indirecto a 190 °C, charola cubierta.", "4 pimientos grandes | 400 g de arroz cocido refrigerado | 150 g de queso Chihuahua pasteurizado | 100 g de jitomate | 10 g de perejil | 15 ml de aceite | 3 g de sal | 60 ml de agua", [
     "Corta una tapa a los pimientos y retira semillas. Pica jitomate y perejil y mezcla con arroz, sal y la mitad del queso.",
     "Aceita los pimientos y rellena sin compactar. Pon en charola con agua, coloca las tapas a un lado y cubre con aluminio.",
@@ -442,8 +446,8 @@ export const recipePreparations: Record<number, RecipePreparation> = {
     "Tapa y cocina 6–8 horas. Revisa cada hora que exista agua bajo la rejilla, añadiendo agua caliente sin descubrir de más.",
     "Cuando la carne se deshebre, reposa 15 minutos. Abre con guantes por el vapor y sirve; hierve los jugos antes de usarlos como consomé.",
   ], "Borrego: mínimo 63 °C y 3 minutos de reposo; para deshebrar se propone 93–96 °C y textura tierna."),
-  44: recipe(6, "6–8 h", "25 min preparación · 5–7 h cocción · 35 min reposo", "Indirecto a 135–145 °C.", "2.2 kg de costilla corta de res | 18 g de sal | 10 g de chile ancho molido | 6 g de pimienta | 4 g de ajo granulado | 200 ml de caldo sin sal", [
-    "Seca las costillas y mezcla sal, ancho, pimienta y ajo. Cubre la carne sin dejar montones de chile.",
+  44: recipe(6, "6–8 h", "25 min preparación · 5–7 h cocción · 35 min reposo", "Indirecto a 135–145 °C.", `2.2 kg de costilla corta de res | ${legacyBlendIngredient} | 10 g de chile ancho molido | 200 ml de caldo sin sal`, [
+    "Seca las costillas. Aplica una capa ligera de LMB-F-001 y distribuye el chile ancho sin dejar montones. No añadas sal, pimienta ni ajo por separado; consulta la nota del blend para ajustar la sazón.",
     "Ahúma 3 horas hasta fijar la costra. Mantén las piezas separadas y el asador estable.",
     "Pasa a charola con caldo, tapa y continúa 2–4 horas hasta que la sonda entre sin resistencia marcada.",
     "Reposa 35 minutos. Sirve por hueso con una cucharada de jugos desgrasados.",
@@ -490,8 +494,8 @@ export const recipePreparations: Record<number, RecipePreparation> = {
     "Asa 3–5 minutos por lado. Si se dora antes de alcanzar la temperatura interna indicada, pásala a la zona indirecta.",
     "Reposa 10 minutos y corta en tiras delgadas contra la fibra. Sirve con el chimichurri; no viertas sobre él los jugos de la tabla usada para carne cruda.",
   ], "Res: al menos 63 °C al centro y 3 minutos de reposo; esta receta propone 10 minutos."),
-  2: recipe(6, "8–10 h", "25 min preparación · 7–9 h cocción · 35 min reposo", "Indirecto, tapa cerrada, 125–140 °C; un trozo pequeño de encino apto para cocinar.", "2.5 kg de costilla de res en placa | 22 g de sal | 15 g de pimienta negra gruesa | 5 g de ajo granulado | 150 ml de agua", [
-    "Recorta grasa dura superficial sin separar los huesos. Seca y cubre con sal, pimienta y ajo.",
+  2: recipe(6, "8–10 h", "25 min preparación · 7–9 h cocción · 35 min reposo", "Indirecto, tapa cerrada, 125–140 °C; un trozo pequeño de encino apto para cocinar.", `2.5 kg de costilla de res en placa | ${legacyBlendIngredient} | 150 ml de agua`, [
+    "Recorta grasa dura superficial sin separar los huesos. Seca y aplica una capa ligera de LMB-F-001. No añadas sal, pimienta ni ajo por separado; consulta la nota del blend para ajustar la sazón.",
     "Coloca los huesos hacia abajo lejos de las brasas y ahúma 4 horas. Controla la temperatura del asador con una sonda independiente.",
     "Cuando la superficie esté firme y oscura, envuelve en doble aluminio con el agua. Cocina otras 3–5 horas, revisando ternura sin dejar que se seque.",
     "Retira cuando la sonda entre con poca resistencia entre los huesos. Reposa 35 minutos, abre con cuidado por el vapor y corta por hueso.",
@@ -635,3 +639,16 @@ export const recipePreparations: Record<number, RecipePreparation> = {
     "Tuesta el pan en una zona limpia de la parrilla y sirve al momento; coloca el sartén sobre una base térmica.",
   ], "Queso fundido y burbujeante; no dejes enfriar y recalentar repetidamente.", ["grill", "vegetables"]),
 };
+
+// Only explicitly reviewed records change; optional variants retain the base.
+export const recipePreparations: Record<number, RecipePreparation> = Object.fromEntries(
+  Object.entries(baseRecipePreparations).map(([id, base]) => {
+    const adaptation = recipeBlendRecommendations[Number(id)];
+    if (adaptation?.mode !== "integrated") return [id, base];
+    return [id, {
+      ...base,
+      ingredients: [...base.ingredients.filter(line => !adaptation.replaces.includes(line)), recipeBlendIngredient(adaptation.productCode)],
+      steps: base.steps.map((step, index) => adaptation.steps?.[index] ?? step),
+    }];
+  }),
+);

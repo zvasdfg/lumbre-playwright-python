@@ -21,14 +21,15 @@ const components = {
   sumac: { id: "sumac", nombre: "Sumac", familia: "Citrico" },
 };
 
-// Bootstrap/test data only. Runtime catalog and archive are read from D1.
+// Canonical catalog for the static portal and its public laboratory archive.
+// LMB-F-002 composition corrected by the owner on 2026-09-30: includes garlic.
 export const productionProducts = [
   { id: 121, productCode: "LMB-F-001", name: "Sazonador multiuso",
     description: "Mezcla multiuso de sal de mar, pimienta negra molida y ajo granulado para preparaciones a la parrilla.",
     components: [components.salt, components.pepper, components.garlic] },
   { id: 122, productCode: "LMB-F-002", name: "Sazonador para carne de res",
-    description: "Mezcla para carne de res elaborada con sal de mar, pimienta negra molida y hongo shiitake molido.",
-    components: [components.salt, components.pepper, components.mushroom] },
+    description: "Mezcla para carne de res elaborada con sal de mar, pimienta negra molida, ajo granulado y hongo shiitake molido.",
+    components: [components.salt, components.pepper, components.garlic, components.mushroom] },
   { id: 123, productCode: "LMB-F-003", name: "Sazonador para carne de cerdo",
     description: "Mezcla para carne de cerdo elaborada con sal de mar, azúcar mascabado, pimienta negra molida, ajo granulado y chile pasilla molido.",
     components: [components.salt, components.sugar, components.pepper, components.garlic, components.chile] },
@@ -52,9 +53,9 @@ export function productionArchiveRecord(product: {
   return {
     schema_version: 5, id: details.productCode, firma: `PROD:${details.productCode}`,
     objetivo: "Producto de producción", componentes: details.components,
-    hipotesis: `Registro público de ${details.productCode}.${product.active ? "" : " Producto archivado: no disponible en la tienda."} La lista reproduce los ingredientes declarados en la etiqueta; no documenta proporciones ni sustituye una fórmula de fabricación.`,
+    hipotesis: `Registro público de ${details.productCode}.${product.active ? "" : " Producto archivado: no disponible en la tienda."} La lista reproduce la composición declarada por Lumbre; no documenta proporciones ni sustituye una fórmula de fabricación.`,
     perfil_esperado: [],
-    metodo: ["Conservar la declaración de ingredientes como referencia pública del producto.",
+    metodo: ["Conservar la composición declarada por Lumbre como referencia pública del producto.",
       "Consultar la etiqueta física para lote, fecha y demás información aplicable.",
       "No inferir proporciones, dosificación ni validación sensorial a partir de este registro."],
     estado: "producto_en_produccion", tipo_registro: "producto_produccion",
