@@ -15,10 +15,10 @@ function radarPolygon(values: readonly number[]) {
     return `${point.x},${point.y}`;
   }).join(" ");
 }
-export default function ProductSheet({ product, onClose }: { product: Product; onClose: () => void }) {
+export default function ProductSheet({ product, onClose, onBack }: { product: Product; onClose: () => void; onBack?: () => void }) {
   const profile = productProfiles[product.details.productCode];
   return (
-    <PrintableSheet titleId="product-sheet-title" closeLabel="Cerrar ficha de producto" onClose={onClose}>
+    <PrintableSheet titleId="product-sheet-title" closeLabel="Cerrar ficha de producto" onClose={onClose} onBack={onBack}>
       <div className="product-sheet-intro">
         <Image src={product.details.image} alt={product.details.imageAlt} width={480} height={400} />
         <div>

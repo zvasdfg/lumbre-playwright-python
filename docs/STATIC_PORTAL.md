@@ -85,8 +85,8 @@ D1 data and previously stored secrets were not deleted. Their retention, backup
 and eventual cleanup are separate actions. Staging was subsequently replaced by
 an assets-only deployment with workers.dev and preview URLs disabled using
 `wrangler.staging-retired.jsonc`, version `940b3fc6-3d31-42db-ad7f-e15fc5136265`.
-A cache-busted GET to the staging session endpoint returned 404. Future pushes
-still validate only; static publication remains an explicit manual command.
+A cache-busted GET to the staging session endpoint returned 404. Pushes to main
+now validate and publish the static artifact through GitHub Actions (see below).
 The manual legacy staging monitor is not applicable while that environment is retired.
 
 ## Verification
@@ -107,3 +107,28 @@ Known legacy tooling debt: drizzle-kit includes deprecated esbuild-kit packages
 and esbuild 0.18.20 (GHSA-67mh-4wv8-2f99, development server only). These packages
 are not part of the static browser artifact. Full backend dependency isolation
 remains pending; do not force an incompatible transitive override to hide warnings.
+
+## Recipe/blend release — 2026-09-30
+
+Explicitly requested manual static deployment: version
+`f669de1d-9ced-4284-a2ae-41dd69b9cf92`, including 33 integrated recipe blends,
+40 optional variants, corrected garlic in LMB-F-002, simplified ingredient copy,
+and contextual return from a product sheet to its originating recipe/scroll.
+Built from the working tree; this release did not commit or push Git changes.
+Cloudflare confirmed upload and deployment. Production HTML references
+`index-PNFPp68F.js` and `index-C0tQbcDp.css`; the published JavaScript SHA-256
+matches the locally tested artifact:
+`f9b277afd9ce331f8b03d3816ec9168aa942207b109e68049ead72b6e391eb3d`.
+Production headless-browser navigation was blocked by ERR_ADDRESS_UNREACHABLE;
+HTTP verification succeeded. Interactive return behavior passed local desktop
+and mobile tests, not a production browser test.
+
+## GitHub-managed publication
+
+The owner subsequently requested commits/push and publication from GitHub.
+`deploy.yml` validates PRs without deployment. Pushes to `main` and manual runs
+on `main` deploy only after `static-build` succeeds. The production job downloads
+the exact artifact from that run, deploys assets using `wrangler.static.jsonc`,
+then checks that production HTML and JavaScript SHA-256 match the artifact.
+Existing repository Cloudflare secrets are used only in the production deploy
+step. No backend, D1 migrations, staging deployment or cron is enabled.

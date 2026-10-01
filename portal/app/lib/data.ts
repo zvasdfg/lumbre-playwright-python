@@ -85,7 +85,7 @@ const recipeSeeds: Omit<Recipe, "categoryLabel" | "tone" | "image" | "preparatio
     description: "Un postre simple que aprovecha las últimas brasas de la tarde.",
   },
   { id: 7, title: "Ribeye con mantequilla de chile morita", category: "directo", level: "Intermedio", description: "Marmoleo dorado, mantequilla ahumada y un picor profundo de chile morita." },
-  { id: 8, title: "Arrachera con cebollas tatemadas", category: "directo", level: "Inicial", description: "Carne jugosa servida con cebollas cambray, limón y sal de Colima." },
+  { id: 8, title: "Arrachera con cebollas tatemadas", category: "directo", level: "Inicial", description: "Arrachera con LMB-F-002, cebollas cambray tatemadas y limón." },
   { id: 9, title: "Picaña con costra de café", category: "directo", level: "Avanzado", description: "Grasa crujiente y una costra tostada de café, chile ancho y piloncillo." },
   { id: 10, title: "Aguja norteña con ajo negro", category: "directo", level: "Intermedio", description: "Corte de res a fuego vivo con glaseado salado y dulce de ajo negro." },
   { id: 11, title: "Tuétanos con salsa martajada", category: "directo", level: "Inicial", description: "Huesos abiertos sobre la parrilla, tortillas calientes y salsa roja tatemada." },
