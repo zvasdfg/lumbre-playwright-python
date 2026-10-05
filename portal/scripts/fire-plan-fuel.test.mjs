@@ -6,7 +6,7 @@ import ts from 'typescript';
 import {initialConfiguration as base, configurationSchema, issues} from '../static/fire-plan-model.ts';
 const source=readFileSync(new URL('../static/fire-plan-fuel.tsx',import.meta.url),'utf8').replaceAll('"./fire-plan-model"',JSON.stringify(new URL('../static/fire-plan-model.ts',import.meta.url).href));
 const js=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,jsx:ts.JsxEmit.React}}).outputText;
-const {estimateFuel,kettleFuelReference}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+const {estimateFuel,kettleFuelReference,fuelAvailability}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
 test('unknown consumption stays unknown; hours alone never invent a rate',()=>{
   assert.match(estimateFuel({...base,durationHours:'2'}).reason,/Sin referencia/);
   assert.match(estimateFuel({...base,fuelRate:'1'}).reason,/horas/);
@@ -49,4 +49,23 @@ test('kettle reference preserves source units and excludes unsupported smoking/s
     assert.equal(kettleFuelReference({...c,cookingStyle:'dos_zonas'}),null);
     assert.equal(kettleFuelReference({...c,fuelRate:'1'}),null);
   }
+});
+test('kettle shopping total includes separately identified reserve',()=>{
+  const c={...base,fuelType:'briquetas',cookingStyle:'indirecto',durationHours:'4'};
+  const r=kettleFuelReference(c);
+  assert.deepEqual([r.initial,r.additions,r.session,r.reserve,r.total],[30,24,54,14,68]);
+  assert.match(fuelAvailability(c).detail,/68 briquetas/);
+  for (const kettleDiameter of ['47','57','67']) for(const durationHours of ['0.5','1','2.5','4','48']) {
+    const e=kettleFuelReference({...c,kettleDiameter,durationHours});
+    assert.equal(e.total,e.initial+e.additions+e.reserve);
+    assert.equal(e.reserve,Math.ceil(e.session*.25));
+  }
+});
+test('preview distinguishes initial loads, missing hours, manual and unavailable budgets',()=>{
+  assert.match(fuelAvailability(base).title,/Sólo carga inicial/);
+  assert.match(fuelAvailability({...base,fuelType:'briquetas',cookingStyle:'indirecto'}).detail,/Introduce las horas/);
+  assert.match(fuelAvailability({...base,goal:'ahumar',cookingStyle:'indirecto'}).title,/Sin cálculo/);
+  assert.match(fuelAvailability({...base,fuelRate:'1'}).title,/tu consumo/);
+  assert.match(fuelAvailability({...base,equipment:'gas',fuelType:'gas_lp'}).title,/Sin cálculo/);
+  assert.match(fuelAvailability({...base,equipment:'gas',fuelType:'carbon'}).title,/Revisa/);
 });
