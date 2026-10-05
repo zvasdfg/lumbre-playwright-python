@@ -1,0 +1,190 @@
+{
+  "revision": 1,
+  "scope": "Importación local de 29 originales aportados por el usuario. No modifica imágenes ni acredita revisión científica completa o publicación.",
+  "missingDocument": "049",
+  "documentNumbersAre": "Rótulos del archivo, no CONTENT_ID del motor editorial",
+  "integrationChecks": {
+    "originalsByteIdentical": 29,
+    "totalPages": 53,
+    "viewports": [390, 1440],
+    "assetLoadingAndNavigation": "PASS",
+    "notes": "El lector conserva los originales y añade contexto externo sobre mapas de sabores y seguridad de cocción. No se realizó una auditoría científica completa del lote.",
+    "publication": "No se hizo push ni despliegue."
+  },
+  "entries": [
+    {
+      "document": "025",
+      "title": "Chiles mexicanos en sazonadores",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.02 AM.jpeg",
+      "sha256": "edae229a09c2bbaf5e282a9631699e53b294ae493e8a1096572bb8539b2d97e5"
+    },
+    {
+      "document": "026",
+      "title": "El ajo y cómo usarlo en sazonadores",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.02 AM (1).jpeg",
+      "sha256": "4517e70ab85a9a66abc7f133a4f7939b7a3aa4ff9f7c3df45b3dc15aa3e0bd7f"
+    },
+    {
+      "document": "027",
+      "title": "Uso de aromáticos en un sazonador",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.02 AM (2).jpeg",
+      "sha256": "b3c01f763edfcdc29c78bc71294cb1d3848bfabb594aede7f5758348a0ac4a3b"
+    },
+    {
+      "document": "028",
+      "title": "Tipos de asador",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.03 AM.jpeg",
+      "sha256": "6c941c292db675b02e9b65490bb70e9d7771e367cca8988efe9da47878e2b6cd"
+    },
+    {
+      "document": "029",
+      "title": "Tipos de ahumador",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.03 AM (1).jpeg",
+      "sha256": "ba232c7b4d7f16f34a6bedc1781b289a4c3b9f4542c77401476488168ddd00a3"
+    },
+    {
+      "document": "030",
+      "title": "Tipos de humo",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.03 AM (2).jpeg",
+      "sha256": "d28a017a1af418eb048374a1b86df3c22e30507811a87898f10eb6e7739e37c5"
+    },
+    {
+      "document": "031",
+      "title": "El dulce",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.03 AM (3).jpeg",
+      "sha256": "dd655dc8d6c9799fe9d94a0fe74f1eecf527ff703fbf06b4942d385e92045b91"
+    },
+    {
+      "document": "032",
+      "title": "El salado",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.03 AM (4).jpeg",
+      "sha256": "37254004bc1ee766ec8f1633c7dd11b985098a7db9a04725cc3c4530ee3e8abf"
+    },
+    {
+      "document": "033",
+      "title": "El ácido",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.03 AM (5).jpeg",
+      "sha256": "670f6afca83c90e72c851d6537755b13040635aa258239de0842bb19e4f3362f"
+    },
+    {
+      "document": "034",
+      "title": "El amargo",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.04 AM.jpeg",
+      "sha256": "7065fcb167d3181d8f301bd9cdbc5bf818482554c1552e96b07c81420d19d9b4"
+    },
+    {
+      "document": "035",
+      "title": "El umami",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.04 AM (1).jpeg",
+      "sha256": "79d0e082499a7251c8af669c878b590e81415d5aa105856b1fba50fdc6ae8d0a"
+    },
+    {
+      "document": "036",
+      "title": "Los 5 sabores",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.04 AM (2).jpeg",
+      "sha256": "aa81826846de652f8cb20d9cb728aa4bf3dffaf35b66c5dea107fcd61a9a06be"
+    },
+    {
+      "document": "037",
+      "title": "Anatomía de un corte de carne",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.04 AM (3).jpeg",
+      "sha256": "c3489fd60546f241aeb3e96b6f445e40620372a887a4f570952d15a0bc5ef885"
+    },
+    {
+      "document": "038",
+      "title": "Grasa intramuscular vs. grasa externa",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.04 AM (4).jpeg",
+      "sha256": "fc05e05715cccd544d599f06a24e4d87b54ded508ffffe3c8460d0644a28e13d"
+    },
+    {
+      "document": "039",
+      "title": "Marmoleo",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.05 AM.jpeg",
+      "sha256": "c230f4a5e8fed4197edffd98183ffba17c21b86c05622a3ab1301d120f09e128"
+    },
+    {
+      "document": "040",
+      "title": "Fibras musculares",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.05 AM (1).jpeg",
+      "sha256": "1ee3221b27c823ed45b755f5b88ebfb615f2a3e3bdbd4640020c5f4477e44296"
+    },
+    {
+      "document": "041",
+      "title": "Tejido conectivo",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.05 AM (2).jpeg",
+      "sha256": "568b88bba015cbc41c596146e84a76783885b5fb4ac8ea87456a34a5fc940317"
+    },
+    {
+      "document": "042",
+      "title": "Cortes gruesos vs. cortes delgados",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.05 AM (3).jpeg",
+      "sha256": "42f44d71fed5ae3f948d86650bc14f1559a3e7059a40f382ece6ac1b6cc31610"
+    },
+    {
+      "document": "043",
+      "title": "Cortes para fuego directo",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.05 AM (4).jpeg",
+      "sha256": "597c6546e8fb43f643cc293a05af82e9b6ef3edef531b9d1a56d5378436d2cb7"
+    },
+    {
+      "document": "044",
+      "title": "Cortes enteros para fuego indirecto",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.05 AM (5).jpeg",
+      "sha256": "f9ed39ddd0d3075ca59429cf71729b18e290d8027b5967481c04b6cbcdcf6ab0"
+    },
+    {
+      "document": "045",
+      "title": "Cortes para cocción prolongada",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.06 AM.jpeg",
+      "sha256": "d8dc7292992055ad42af3f34b0c59aee6785f8ec6ec64a6afe4537223ec03832"
+    },
+    {
+      "document": "046",
+      "title": "Cómo elegir un corte de res",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.06 AM (1).jpeg",
+      "sha256": "e460e24458e468e595e85c4e36581bface804efde61f8c047290a4608ed6d1aa"
+    },
+    {
+      "document": "047",
+      "title": "Res: cortes y aplicaciones",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.06 AM (2).jpeg",
+      "sha256": "13f669b2dbcc2765a59475c0311a5ea93a936ddd15beb33c340555e0f3df97a7"
+    },
+    {
+      "document": "048",
+      "title": "Cerdo: cortes y aplicaciones",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.06 AM (3).jpeg",
+      "sha256": "3d031a76f2664472bd2d018dd5ceab139ffa454569bc0b15a9adb24323a333e8"
+    },
+    {
+      "document": "050",
+      "title": "Cerdo: grasa, colágeno y temperatura",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.06 AM (4).jpeg",
+      "sha256": "b32e651c82b1722d025e7d7a3acfe1bdb0f6d6b3d9dd203f8d1d7c04b5e68698"
+    },
+    {
+      "document": "051",
+      "title": "Cordero: cortes y perfiles de sabor",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.07 AM.jpeg",
+      "sha256": "45b5009aac4a59d57e0a3b84e15dfc63d8adf44655d29aa0820eb241d71b70d2"
+    },
+    {
+      "document": "052",
+      "title": "Pescado en la parrilla",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.07 AM (1).jpeg",
+      "sha256": "01836970f91c18ee6809b9923cf0ff9aa71253541b61c7b6d13e72795e1e38b2"
+    },
+    {
+      "document": "053",
+      "title": "Proteínas vegetales a la parrilla",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.07 AM (3).jpeg",
+      "sha256": "d1211a622790a14c519f3480ae22b86b6286ea4ada1afd9fb8c7980f23fa28b3"
+    },
+    {
+      "document": "054",
+      "title": "Cómo elegir proteína según el método de cocción",
+      "source": "WhatsApp Image 2026-10-05 at 11.29.07 AM (2).jpeg",
+      "sha256": "10a8ac5c1b59fb8ab55d393edd3c5e0d3dc6b68c2bcd7e9c6deb8fa7f8fded39"
+    }
+  ]
+}
