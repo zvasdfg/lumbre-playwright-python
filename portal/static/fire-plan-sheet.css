@@ -1,0 +1,174 @@
+.planner-help { color: #ddd; font-size: 13px; line-height: 1.7; }
+.planner-controls input[type="checkbox"] { width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 8px; accent-color: #7b251b; }
+.fire-plan-guide { color: #111; font-family: ui-monospace, Menlo, Consolas, monospace; }
+.fire-plan-guide p, .fire-plan-guide small, .fire-plan-guide details { font-size: 13px; line-height: 1.6; }
+.fire-plan-guide h3 { font-size: 17px; line-height: 1.35; font-style: normal; }
+.fire-plan-layout { display: grid; grid-template-columns: minmax(100px, 180px) 1fr; gap: 20px; align-items: center; border-block: 1px solid #111; padding: 18px 0; }
+.fire-plan-layout svg { width: 100%; height: auto; }
+.fire-plan-steps { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+.fire-plan-steps li { border-bottom: 1px solid #ccc; }
+.fire-plan-caution, .fire-plan-safety { border-left: 3px solid #7b251b; padding-left: 12px; }
+.fire-plan-guide details a { text-decoration: underline; }
+.fire-plan-print { padding: 24px 32px; background: #fff; }
+.fire-plan-print header { display: flex; gap: 18px; align-items: center; border-bottom: 2px solid #111; }
+.fire-plan-print header img { object-fit: contain; }
+.fire-plan-print header p { font-size: 11px; letter-spacing: .1em; }
+.fire-plan-print h2 { overflow-wrap: anywhere; }
+.fire-plan-print footer { display: block; padding: 16px 0; border-top: 1px solid #111; background: white; color: #111; font-size: 11px; line-height: 2; overflow-wrap: anywhere; }
+.preset-list article > div { flex-wrap: wrap; }
+.planner-controls, .planner-output { scroll-margin-top: 110px; min-width: 0; }
+.planner-controls :is(input, select, textarea) { min-width: 0; max-width: 100%; font: inherit; }
+.planner-controls textarea { display: block; width: 100%; resize: vertical; background: #111; color: #fff; border: 1px solid #777; padding: 12px; }
+.planner-controls .planner-check { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 1.6; text-transform: none; letter-spacing: 0; margin: 18px 0; }
+.planner-controls .planner-check input { flex: 0 0 18px; margin-top: 3px; }
+.planner-customize { border-block: 1px solid #666; margin: 22px 0; padding: 16px 0; }
+.planner-customize summary { cursor: pointer; font-size: 15px; font-weight: 700; }
+.planner-customize[open] summary { margin-bottom: 22px; }
+.planner-customize > label { display: block; margin: 18px 0; }
+.planner-customize small { display: block; font-size: 11px; line-height: 1.5; text-transform: none; margin-top: 6px; }
+.planner-stage-editor { margin-block: 24px; }
+.planner-stage-editor h3 { color: inherit; font-size: 16px; }
+.planner-stage-editor fieldset { min-width: 0; border: 1px solid #888; padding: 16px; margin: 16px 0; }
+.planner-stage-editor fieldset label { display: block; margin-bottom: 14px; }
+.planner-stage-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.planner-stage-editor button, .preset-confirm button, .preset-undo button { padding: 12px; border: 1px solid currentColor; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.planner-stage-editor button:disabled { opacity: .45; cursor: not-allowed; }
+.planner-validation { border: 1px solid #edb8ae; padding: 18px; color: #fff; font-size: 14px; line-height: 1.6; margin-bottom: 18px; }
+.planner-validation ul { padding-left: 20px; }
+.planner-output:focus, .planner-validation:focus { outline: 2px solid #7b251b; outline-offset: 4px; }
+.quick-plans button small { display: block; font-size: 10px; line-height: 1.5; letter-spacing: 0; margin-top: 8px; }
+.fire-plan-facts { display: grid; grid-template-columns: 1fr 1fr; margin: 18px 0; border-top: 1px solid #111; }
+.fire-plan-facts > div { border-bottom: 1px solid #bbb; padding: 12px 8px 12px 0; min-width: 0; }
+.fire-plan-facts dt { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: #666; }
+.fire-plan-facts dd { margin: 5px 0 0; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.fire-diagram { margin: 0; }
+.fire-diagram text { font-family: inherit; font-size: 10px; }
+.fire-diagram figcaption { font-size: 10px; line-height: 1.6; margin-top: 8px; }
+.fire-plan-timeline ol { list-style: none; padding: 0; border-left: 3px solid #7b251b; }
+.fire-plan-timeline li { padding: 12px 16px; border-bottom: 1px solid #bbb; overflow-wrap: anywhere; }
+.fire-plan-timeline strong { font-size: 14px; }
+.fire-plan-pending { padding: 12px 18px; border: 1px dashed #7b251b; margin: 20px 0; }
+.fire-plan-pending li { font-size: 13px; line-height: 1.6; }
+.fire-plan-source, .fire-plan-notes, .fire-plan-guide { overflow-wrap: anywhere; }
+.fire-plan-source a { text-decoration: underline; }
+.fire-plan-source small { display: block; }
+.preserve-lines { white-space: pre-wrap; overflow-wrap: anywhere; }
+.preset-confirm, .preset-undo { grid-column: 1 / -1; padding: 20px; border: 1px solid #7b251b; margin-block: 16px; }
+.preset-confirm button, .preset-undo button { margin: 6px; }
+.fire-plan-print header img { flex-shrink: 0; }
+/* Screen hierarchy is shared by the editor, saved plans and printable preview.
+   Keep the physical print layout independent of these touch-target rules. */
+@media screen {
+  .fire-planner-section .planner-form-grid { align-items: start; }
+  .fire-planner-section .planner-form-grid > label { grid-template-rows: minmax(33px, auto) 48px auto; }
+  .fire-planner-section .planner-controls label,
+  .fire-planner-section .preset-create label { display: grid; gap: 8px; align-content: start; font-size: 11px; font-weight: 600; line-height: 1.5; letter-spacing: .04em; }
+  .fire-planner-section .planner-controls :is(input:not([type="checkbox"]), select),
+  .fire-planner-section .preset-create input { height: 48px; min-height: 48px; font-size: 14px; font-weight: 400; letter-spacing: 0; }
+  .fire-planner-section .planner-controls textarea { font-size: 14px; font-weight: 400; line-height: 1.6; letter-spacing: 0; }
+  .fire-planner-section .planner-controls :is(small, .planner-help) { font-size: 13px; font-weight: 400; line-height: 1.6; letter-spacing: 0; text-transform: none; }
+  .fire-planner-section .planner-controls .planner-check { display: flex; font-size: 13px; font-weight: 400; letter-spacing: 0; }
+  .fire-planner-section .planner-controls input[type="checkbox"] { height: 18px; min-height: 18px; padding: 0; margin: 2px 0 0; }
+  .fire-planner-section .planner-customize > label { display: grid; gap: 8px; }
+  .fire-planner-section .planner-customize .planner-form-grid > label:last-child { grid-column: 1 / -1; }
+  .fire-planner-section .planner-stage-editor fieldset label { display: grid; gap: 8px; }
+  .fire-planner-section .planner-stage-editor legend { font-size: 13px; font-weight: 600; padding-inline: 6px; }
+  .fire-planner-section .planner-stage-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .fire-planner-section .planner-stage-actions > small { grid-column: 1 / -1; }
+  .fire-planner-section :is(.planner-stage-editor, .preset-confirm, .preset-undo) button,
+  .fire-planner-section .preset-create button,
+  .fire-planner-section .preset-list article button { min-height: 44px; height: auto; padding: 12px; font-size: 12px; font-weight: 600; line-height: 1.5; letter-spacing: .02em; }
+  .fire-planner-section .quick-plans button { flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 0; font-size: 12px; text-align: left; }
+  .fire-planner-section .quick-plans button small { font-size: 12px; font-weight: 400; }
+  .fire-planner-section .preset-list article > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .fire-planner-section .preset-list article button { border: 1px solid #777; }
+  .fire-planner-section .preset-create button { min-height: 48px; }
+  .fire-planner-section .preset-list article > :is(span, p) { font-size: 12px; line-height: 1.6; letter-spacing: 0; }
+  .fire-planner-section .preset-list h4 { font-size: 16px; line-height: 1.45; letter-spacing: 0; overflow-wrap: anywhere; }
+  .fire-planner-section :is(.preset-confirm, .preset-undo) { font-size: 13px; line-height: 1.6; }
+  .fire-planner-section :is(.preset-confirm, .preset-undo) button { margin: 8px 8px 0 0; }
+  .fire-planner-section .planner-output .section-index { color: #555; }
+  .fire-planner-section .planner-empty { min-height: 320px; padding-block: 32px; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-guide :is(p, small, details, li) { font-size: 13px; font-weight: 400; line-height: 1.65; letter-spacing: 0; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-guide p { margin: 10px 0; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-guide h3 { margin: 24px 0 12px; font-size: 17px; font-weight: 700; line-height: 1.4; letter-spacing: -.02em; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-guide h4 { font-size: 14px; line-height: 1.5; letter-spacing: 0; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-guide details { margin-top: 24px; padding-top: 16px; border-top: 1px solid #bbb; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-guide summary { cursor: pointer; font-weight: 600; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-guide details ul { list-style: disc; padding-left: 20px; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-facts { column-gap: 20px; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-facts dt { font-size: 11px; line-height: 1.5; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-facts dd { font-weight: 400; }
+  .product-sheet:has(.fire-plan-print) .product-sheet-toolbar button { min-height: 44px; font-size: 12px; }
+}
+@media screen and (max-width: 600px) {
+  .fire-plan-print header { flex-direction: column; align-items: flex-start; padding-bottom: 18px; gap: 12px; }
+  .fire-plan-print header h2 { font-size: 24px; line-height: 1.3; }
+  :is(.planner-output, .fire-plan-print) .fire-plan-facts { grid-template-columns: minmax(0, 1fr); }
+  .fire-planner-section :is(.preset-confirm, .preset-undo) button { display: block; width: 100%; margin: 8px 0 0; }
+}
+@media (max-width: 600px) {
+  .fire-plan-layout { grid-template-columns: 1fr; }
+  .fire-plan-layout svg { max-width: 200px; margin: auto; }
+  .fire-plan-steps { grid-template-columns: 1fr; }
+  .fire-plan-print { padding: 18px; }
+}
+@media print {
+  .fire-plan-print { padding: 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .fire-plan-print * { font-family: inherit; font-style: normal; }
+  .fire-plan-print header { break-inside: avoid; }
+  .fire-plan-print header img { width: 12mm; height: 12mm; }
+  .fire-plan-print h2 { font-size: 18pt; margin: 2mm 0; }
+  .fire-plan-print h3 { font-size: 11pt; margin: 2mm 0; }
+  .fire-plan-print p, .fire-plan-print small { font-size: 9pt; line-height: 1.4; }
+  .fire-plan-layout { grid-template-columns: 42mm 1fr; gap: 5mm; padding: 3mm 0; break-inside: avoid; }
+  .fire-plan-steps { grid-template-columns: 1fr 1fr; gap: 3mm 6mm; margin: 3mm 0; }
+  .fire-plan-steps li, .fire-plan-caution, .fire-plan-safety { break-inside: avoid; }
+  .fire-plan-print footer { font-size: 8pt; padding: 3mm 0; break-inside: avoid; }
+  .fire-plan-facts > div { padding: 2mm; break-inside: avoid; }
+  .fire-plan-facts dt { font-size: 7pt; }
+  .fire-plan-facts dd { font-size: 9pt; }
+  .fire-plan-timeline li, .fire-plan-pending { break-inside: avoid; }
+  .fire-plan-timeline strong { font-size: 10pt; }
+  .fire-plan-print .fire-plan-guide details { display: none; }
+  .fire-plan-print header img { width: 1.2in; height: 1.2in; }
+}
+.fire-mount { display:flex; gap:1rem; align-items:center; border-top:1px solid #aaa; padding:1rem 0; }
+.fire-mount svg { flex:0 0 110px; width:110px; max-width:100%; }
+.fire-mount p { margin:.4rem 0; }
+.fire-mount small { display:block; }
+.fire-stage-layout { display:grid; grid-template-columns:minmax(0,150px) minmax(0,1fr); gap:1rem; margin:1rem 0; }
+.fire-stage-layout figure { margin:0; }
+.fire-stage-layout .fire-mount { align-items:flex-start; gap:.6rem; padding:.5rem 0; }
+.fire-stage-layout .fire-mount svg { flex:0 0 80px; width:80px; height:50px; }
+.fire-stage-layout .fire-mount small, .fire-stage-layout figcaption { display:none; }
+.fire-stage-layout .fire-diagram svg { width:100%; height:auto; }
+.fire-stage-layout h4 { margin:0 0 .5rem; }
+.fire-diagram-technical { border: 1px solid #bbb; padding: 18px; background: #fff; color: #111; }
+.fire-diagram-heading { display: grid; gap: 6px; border-bottom: 1px solid #bbb; padding-bottom: 12px; }
+.fire-diagram-heading span { font-size: 10px; letter-spacing: .08em; }
+.fire-diagram-heading strong { font-size: 17px; line-height: 1.4; }
+.fire-diagram-technical svg { display: block; width: 100%; max-width: none; height: auto; }
+.fire-diagram-technical svg text { font-size: 12px; }
+.fire-diagram-key { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.fire-diagram-key li { display: flex; gap: 10px; align-items: baseline; }
+.fire-diagram-key b { display: inline-grid; place-items: center; flex: 0 0 22px; height: 22px; border: 1px solid #111; border-radius: 50%; font-size: 11px; }
+.fire-diagram-technical figcaption { display: block; border-top: 1px solid #ccc; padding-top: 12px; margin-top: 16px; font-size: 11px; line-height: 1.65; }
+.fire-plan-layout:has(.fire-diagram-technical), .fire-stage-layout:has(.fire-diagram-technical) { grid-template-columns: minmax(0, 1fr); }
+.fire-stage-layout .fire-diagram-technical { max-width: none; }
+@media screen and (max-width: 600px) {
+  .fire-plan-layout .fire-diagram-technical svg { max-width: none; }
+  .fire-diagram-technical { padding: 12px; }
+  .fire-stage-layout .fire-diagram-technical { max-width: none; }
+}
+@media print {
+  .fire-diagram-technical { break-inside: avoid; padding: 3mm; }
+  .fire-diagram-technical svg { max-height: 65mm; }
+  .fire-diagram-heading strong { font-size: 11pt; }
+  .fire-diagram-heading span, .fire-diagram-technical figcaption { font-size: 8pt; }
+  .fire-diagram-key li { font-size: 9pt; line-height: 1.35; }
+  .fire-diagram-key { gap: 2mm; }
+  .fire-stage-layout .fire-diagram-technical figcaption { display: block; }
+}
+@media (max-width:600px) { .fire-stage-layout { grid-template-columns:1fr; } .fire-stage-layout figure { max-width:220px; } .fire-mount { align-items:flex-start; } }
+@media print { .fire-stage-layout { grid-template-columns:110px minmax(0,1fr); margin:2mm 0; } .fire-plan-timeline > ol > li { break-inside:avoid; } .fire-mount, .fire-stage-layout { break-inside:avoid; } }

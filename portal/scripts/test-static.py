@@ -83,14 +83,15 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Ir a página 2", exact=True).click()
         expect(page.get_by_test_id("recipe-page-status")).to_contain_text("7–12")
 
-        page.get_by_label("Personas", exact=True).fill("9")
+        page.locator('select[name="equipment"]').select_option("offset")
+        page.locator('select[name="cookingStyle"]').select_option("indirecto")
         page.get_by_role("button", name="Construir plan de fuego", exact=True).click()
-        expect(page.get_by_role("status", name="Recomendación de combustible")).to_be_visible()
-        page.get_by_label("Nombre del preset", exact=True).fill("Prueba local")
-        page.get_by_role("button", name="Guardar preset", exact=True).click()
+        expect(page.get_by_role("status", name="Plan de fuego listo")).to_be_visible()
+        page.get_by_label("Nombre del plan", exact=True).fill("Prueba local")
+        page.get_by_role("button", name="Guardar plan", exact=True).click()
         page.reload()
-        page.get_by_role("button", name="Cargar preset Prueba local", exact=True).click()
-        expect(page.get_by_label("Personas", exact=True)).to_have_value("9")
+        page.get_by_role("button", name="Editar plan Prueba local", exact=True).click()
+        expect(page.locator('select[name="equipment"]')).to_have_value("offset")
 
         for ingredient in ("ajo_granulado", "pimienta_negra", "sal_mar_gruesa"):
             card = page.get_by_test_id("ingredient-card").filter(
@@ -118,16 +119,16 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Página siguiente", exact=True).click()
         expect(page.get_by_test_id("almanac-page-status")).to_contain_text("1")
         almanac_index = page.get_by_label("Ir a una página del almanaque")
-        expect(almanac_index.locator("option")).to_have_count(25)
-        for number in range(16, 25):
-            almanac_index.select_option(str(number))
+        expect(almanac_index.locator("option")).to_have_count(54)
+        for number in [*range(16, 49), *range(50, 55)]:
+            almanac_index.select_option(str(number if number < 49 else number - 1))
             expect(page.get_by_test_id("almanac-page-status")).to_contain_text(f"DOC. {number:03d}")
             image = page.get_by_test_id("almanac-page").locator("img")
             expect(image).to_have_attribute("src", f"/editorial/almanac/page-{number:03d}.jpeg")
             expect(image).to_have_js_property("naturalWidth", 1254)
         expect(page.get_by_role("button", name="Página siguiente", exact=True)).to_be_disabled()
         page.get_by_role("button", name="Página anterior", exact=True).click()
-        expect(page.get_by_test_id("almanac-page-status")).to_contain_text("DOC. 023")
+        expect(page.get_by_test_id("almanac-page-status")).to_contain_text("DOC. 053")
         page.get_by_role("button", name="Cerrar almanaque", exact=True).click()
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "Horizontal overflow"
         assert not api_requests, api_requests
