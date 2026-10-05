@@ -139,3 +139,49 @@ updated lockfile (run 36797036541); it was then incorporated into Git and the
 temporary workflow removed. Pins: vite-plugin 1.62.3, Wrangler 4.145.0,
 transitive undici 7.29.1. TLS validation was not disabled to work around local
 proxy certificate problems. Existing moderate legacy drizzle tooling debt remains.
+
+## Isolated static release dependencies — 2026-10-05
+
+The production workflow now installs `portal/profiles/static/package.json` and
+its independent lockfile in a NEW directory outside `portal`. The preparation
+script copies an explicit list of static source/asset/config inputs; it does not
+copy credentials, backend routes, server configuration or `node_modules`.
+The original `portal/package.json` and lockfile are preserved for legacy work.
+Shared source data and the existing almanac component remain canonical in `app/`.
+
+`tsconfig.static.json` checks the static entry points and their imported shared
+modules, mapping `next/image` to the same browser-only adapter used by Vite.
+Production still requires `npm ci`, type checking, 100 recipe checks, planner
+model tests, the high-severity npm audit gate, a static-boundary build, browser
+acceptance, PDF checks and storage recovery. Deployment installs the SAME profile
+and downloads the validated artifact; it does not build a different artifact.
+
+To reproduce from the repository root (choose a destination that does not exist):
+
+```sh
+node --test portal/scripts/static-profile.test.mjs
+node portal/scripts/prepare-static-workspace.mjs /tmp/lumbre-release-check
+cd /tmp/lumbre-release-check
+npm ci
+npm run typecheck
+npm run check:recipes
+npm test
+npm audit --audit-level=high --registry=https://registry.npmjs.org
+npm run build:static
+npm run preview:static
+```
+
+Run the existing Python browser/PDF tests from the source repository against that
+preview on port 3001. No backend package installation is needed in the clean
+release workspace. Installing the full legacy toolchain in `portal` remains
+possible; it is not evidence for the isolated release dependency audit.
+
+This is dependency isolation, NOT a fix to third-party `braces` itself.
+[GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
+has no patched release at the time of this change. The legacy Next lint/vinext
+chains still contain it, and drizzle-kit retains the previously documented
+moderate esbuild advisory. `legacy-backend-checks.yml` retains full legacy type
+checking and a failing high-severity audit gate, available manually and on PRs
+touching its dependencies/backend. It has no deploy step and does not gate the
+separate static release. Legacy backend reactivation requires resolving those
+findings; no audit suppression or forced transitive downgrade was introduced.

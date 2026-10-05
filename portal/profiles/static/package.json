@@ -1,0 +1,30 @@
+{
+  "name": "lumbre-static-release",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.static.json --noEmit --incremental false",
+    "test": "node --experimental-strip-types --test scripts/fire-plan-model.test.mjs",
+    "check:recipes": "node --experimental-strip-types scripts/check-recipes.mjs",
+    "build:static": "vite build --config static/vite.config.ts && node scripts/check-static.mjs",
+    "preview:static": "vite preview --config static/vite.config.ts"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "22.19.19",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.3.1",
+    "wrangler": "4.145.0"
+  }
+}
