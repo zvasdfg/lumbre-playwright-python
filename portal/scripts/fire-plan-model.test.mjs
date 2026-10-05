@@ -1,11 +1,22 @@
 import test from 'node:test';
+test('temperature defaults cover every objective/method and preserve legacy values', () => {
+  for (const method of ['directo','indirecto','dos_zonas']) {
+    assert.equal(defaultTemperature('ahumar', method), '120');
+    assert.equal(defaultTemperature('hornear', method), '180');
+    assert.equal(defaultTemperature('asar', method), method === 'directo' ? '220' : '200');
+  }
+  assert.equal(defaultTemperature('ahumar','indirecto','F'), '248');
+  const old = configurationSchema.parse({equipment:'kettle',fuelType:'carbon',cookingStyle:'directo',temperature:'175'});
+  assert.equal(old.temperature,'175'); assert.equal(old.temperatureSuggested,false);
+});
 import assert from 'node:assert/strict';
 import { stageConfiguration, stageSchema, surfaceGuidance } from '../static/fire-plan-model.ts';
+import { defaultTemperature, capability, goalLabels, equipmentLabels, fuelLabels, hasSmoke, needsOvenCheck } from '../static/fire-plan-model.ts';
 import { initialConfiguration as base, configurationSchema, presetSchema, issues, guide, decodePresets, safeRecipeUrl, compatibleFuels, needsCapability } from '../static/fire-plan-model.ts';
 
-test('three choices create a base guide without inventing recipe data', () => {
+test('base guide has an explicitly suggested temperature, without inventing duration or recipe stages', () => {
   assert.deepEqual(issues(base), []);
-  assert.equal(base.temperature, ''); assert.equal(base.durationHours, '');
+  assert.equal(base.temperature, '220'); assert.equal(base.temperatureSuggested, true); assert.equal(base.durationHours, '');
   assert.equal(base.smoking, false); assert.deepEqual(base.stages, []);
 });
 test('optional supports migrate and retain per-stage overrides without changing method', () => {
@@ -80,4 +91,56 @@ test('duration does not invent consumption; every equipment has explicit layout'
   }
   assert.notEqual(guide({...base,equipment:'gas',cookingStyle:'indirecto'}).layout,guide({...base,equipment:'gas'}).layout);
   assert.equal(configurationSchema.parse({...base,temperature:'200',unit:'F'}).unit,'F');
+});
+
+test('all 378 objective/equipment/fuel/method combinations enforce hard constraints even with confirmations', () => {
+  let count = 0;
+  for (const goal of Object.keys(goalLabels)) for (const equipment of Object.keys(equipmentLabels).filter(e => e !== 'no_soportado')) {
+    for (const fuelType of Object.keys(fuelLabels)) for (const cookingStyle of ['directo','indirecto','dos_zonas']) {
+      const c = {...base, goal, equipment, fuelType, cookingStyle, capabilityVerified:true, smokeVerified:true, fuelVerified:true};
+      const invalid = !compatibleFuels[equipment].includes(fuelType) || capability(equipment,goal)==='no_compatible' || (goal !== 'asar' && cookingStyle !== 'indirecto') || (equipment === 'abierta' && cookingStyle === 'indirecto');
+      assert.equal(issues(c).length > 0, invalid, JSON.stringify(c)); count++;
+    }
+  }
+  assert.equal(count,378);
+});
+
+test('pellets use dedicated fuel, indirect default model and controller instructions', () => {
+  const c = configurationSchema.parse({...base, goal:'ahumar', equipment:'pellets', fuelType:'pellets', cookingStyle:'indirecto'});
+  assert.deepEqual(issues(c),[]);
+  assert.equal(hasSmoke(c),true);
+  assert.match(guide(c).control,/controlador/);
+  assert.doesNotMatch(guide(c).control,/entrada de aire/);
+  assert.ok(issues({...c, fuelType:'carbon', fuelVerified:true}).length);
+  assert.ok(issues({...c, goal:'asar', cookingStyle:'directo'}).length);
+  assert.deepEqual(issues({...c, goal:'asar', cookingStyle:'directo', capabilityVerified:true}),[]);
+});
+
+test('oven and smoking capabilities include stages but exclude pauses', () => {
+  const bake = {...base,goal:'hornear',equipment:'offset',fuelType:'lena',cookingStyle:'indirecto'};
+  assert.equal(needsOvenCheck(bake),true);
+  assert.ok(issues(bake).length);
+  assert.deepEqual(issues({...bake,capabilityVerified:true}),[]);
+  const gas = {...base,equipment:'gas',fuelType:'gas_lp',goal:'ahumar',cookingStyle:'indirecto',capabilityVerified:true};
+  assert.ok(issues(gas).length);
+  assert.deepEqual(issues({...gas,smokeVerified:true}),[]);
+  const c = {...base, goal:'ahumar', cookingStyle:'dos_zonas', stages:[stageSchema.parse({name:'Humo', goal:'ahumar',method:'indirecto'}),stageSchema.parse({name:'Dorar',goal:'asar',method:'directo'})]};
+  assert.deepEqual(issues(c),[]);
+  assert.equal(stageConfiguration(c,c.stages[1]).goal,'asar');
+  assert.equal(stageConfiguration(c,c.stages[1]).smoking,false);
+  assert.ok(issues({...c, stages:[{...c.stages[0],method:'directo'}]}).length);
+  assert.deepEqual(issues({...base, stages:[stageSchema.parse({name:'Reposo',goal:'hornear',method:'directo',kind:'pausa'})]}),[]);
+});
+
+test('old mixed smoke plans migrate in memory without losing data or explicit objectives', () => {
+  const legacy={id:'old-smoke',name:'Humo y dorado',configuration:{equipment:'kettle',fuelType:'carbon',cookingStyle:'indirecto',smoking:true,stages:[{name:'Dorar',method:'directo',notes:'original'}]}};
+  const raw=JSON.stringify([legacy]);
+  const c=decodePresets(raw)[0].configuration;
+  assert.equal(c.goal,'ahumar');assert.equal(c.stages[0].goal,'asar');assert.equal(c.stages[0].notes,'original');
+  assert.equal(JSON.stringify([legacy]),raw);
+  const roundtrip=decodePresets(JSON.stringify([{...legacy,configuration:{...c,cookingStyle:'dos_zonas'}}]))[0];
+  assert.equal(roundtrip.configuration.stages[0].goal,'asar');
+  const explicit = decodePresets(JSON.stringify([{...legacy, configuration:{...legacy.configuration, goal:'ahumar', cookingStyle:'dos_zonas'}}]))[0].configuration;
+  assert.equal(explicit.stages[0].goal,undefined);
+  assert.ok(issues(explicit).some(issue => issue.includes('requiere calor indirecto')));
 });

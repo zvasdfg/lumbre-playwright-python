@@ -1,0 +1,51 @@
+{
+  "revision": 1,
+  "date": "2026-10-05",
+  "scope": "Planificador: objetivo → equipo → combustible; pellets; etapas; conservación de planes; impresión",
+  "deployment": "LOCAL_ONLY_UNCOMMITTED",
+  "checks": {
+    "typecheck": "PASS",
+    "static_build": "PASS",
+    "static_profile_tests": 2,
+    "model_tests": 12,
+    "objective_equipment_fuel_method_combinations": 378,
+    "browser_scenarios": 27,
+    "extra_browser_checks": [
+      "equipo incompatible conservado y bloqueado",
+      "ahumar → asar con confirmación de calor directo en pellets"
+    ],
+    "diagram_regression_scenarios": 44,
+    "static_navigation_widths": [
+      390,
+      1440
+    ],
+    "pdf": {
+      "goals": [
+        "asar",
+        "ahumar",
+        "hornear"
+      ],
+      "pages_each": 2,
+      "visual_review": "PASS: seis páginas renderizadas, sin recortes; encabezado reducido y bloques redistribuidos"
+    },
+    "diff_whitespace": "PASS"
+  },
+  "evidence_directory": "/tmp/lumbre-planner-goals",
+  "limitations": [
+    "El botón flotante del Almanaque todavía puede solaparse con contenido móvil; pendiente separado.",
+    "El montaje directo/combinado de offset conserva su diagrama genérico y requiere manual; pendiente de ilustración específica.",
+    "No se incluyen equipos eléctricos, verticales de gas ni carbón automático.",
+    "Las capacidades dependen del modelo y accesorios. Ahumado en frío no cubierto.",
+    "La clasificación no valida recetas, temperaturas internas ni tiempos aportados por el usuario."
+  ],
+  "sources": [
+    "https://www.traeger.com/learn/how-it-works",
+    "https://www.traeger.com/grill-types/bbq-smokers",
+    "https://www.pitboss-grills.com/collections/active/products/1150-dx-wood-pellet-grill",
+    "https://www.weber.com/CA/en/blog/tips-techniques/baking-on-the-grill/weber-31131.html",
+    "https://www.weber.com/US/en/grill-skills/mastering-smoke/smoker-setup/smoking-on-a-gas-grill/weber-34484.html",
+    "https://biggreenegg.co.uk/p/conveggtor?sku=ACL400",
+    "https://www.oklahomajoes.com/products/longhorn-reverse-flow-offset-smoker-grill-17202053",
+    "https://www.masterbuilt.com/pages/faq/"
+  ]
+}

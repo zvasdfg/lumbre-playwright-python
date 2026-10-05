@@ -1,0 +1,27 @@
+from playwright.sync_api import sync_playwright, expect
+with sync_playwright() as p:
+    browser=p.chromium.launch()
+    for width in [390,1440]:
+        page=browser.new_page(viewport={'width':width,'height':1000})
+        page.goto('http://127.0.0.1:3001/#planificador',wait_until='networkidle')
+        page.get_by_label('Combustible principal',exact=True).select_option('briquetas')
+        page.get_by_label('Tipo de cocción',exact=True).select_option('indirecto')
+        page.get_by_label('Horas de cocción',exact=True).fill('2.5')
+        page.locator('.planner-reference-settings > summary').click()
+        for size,total in [('47','36'),('57','46'),('67','64')]:
+            page.get_by_label('Diámetro de la parrilla',exact=True).select_option(size)
+            page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
+            estimate=page.locator('.planner-result .fire-fuel-estimate')
+            expect(estimate).to_contain_text('Prepara '+total+' briquetas')
+            assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+        page.get_by_label('Combustible principal',exact=True).select_option('carbon')
+        page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
+        expect(page.locator('.planner-result .fire-fuel-estimate h3')).to_contain_text('0.84 kg de carbón de haya')
+        page.get_by_label('Nombre del plan',exact=True).fill('Kettle prueba')
+        page.get_by_role('button',name='Guardar plan',exact=True).click()
+        page.reload(wait_until='networkidle')
+        page.get_by_role('button',name='Editar plan Kettle prueba',exact=True).click()
+        expect(page.get_by_label('Diámetro de la parrilla',exact=True)).to_have_value('67')
+        print('PASS kettle sizes, charcoal scope and saved diameter',width,flush=True)
+        page.close()
+    browser.close()
