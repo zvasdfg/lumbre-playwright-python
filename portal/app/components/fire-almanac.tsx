@@ -37,6 +37,35 @@ const almanacPages: AlmanacPage[] = [
   { document: "022", title: "Café claro vs. medio vs. oscuro en carne", image: "/editorial/almanac/page-022.jpeg", alt: "Infografía comparativa de tres niveles de tostado de café para carne", width: 1254, height: 1254 },
   { document: "023", title: "¿Puede un ingrediente estar presente sin saber a él?", image: "/editorial/almanac/page-023.jpeg", alt: "Infografía sobre ingredientes que aportan sabor sin ser protagonistas", width: 1254, height: 1254 },
   { document: "024", title: "Cómo hacer una prueba A/B de un sazonador", image: "/editorial/almanac/page-024.jpeg", alt: "Infografía sobre comparación de muestras, control de variables y registro de resultados", width: 1254, height: 1254 },
+  { document: "025", title: "Chiles mexicanos en sazonadores", image: "/editorial/almanac/page-025.jpeg", alt: "Infografía: Chiles mexicanos en sazonadores", width: 1254, height: 1254 },
+  { document: "026", title: "El ajo y cómo usarlo en sazonadores", image: "/editorial/almanac/page-026.jpeg", alt: "Infografía: El ajo y cómo usarlo en sazonadores", width: 1254, height: 1254 },
+  { document: "027", title: "Uso de aromáticos en un sazonador", image: "/editorial/almanac/page-027.jpeg", alt: "Infografía: Uso de aromáticos en un sazonador", width: 1254, height: 1254 },
+  { document: "028", title: "Tipos de asador", image: "/editorial/almanac/page-028.jpeg", alt: "Infografía: Tipos de asador", width: 1254, height: 1254 },
+  { document: "029", title: "Tipos de ahumador", image: "/editorial/almanac/page-029.jpeg", alt: "Infografía: Tipos de ahumador", width: 1254, height: 1254 },
+  { document: "030", title: "Tipos de humo", image: "/editorial/almanac/page-030.jpeg", alt: "Infografía: Tipos de humo", width: 1254, height: 1254 },
+  { document: "031", title: "El dulce", image: "/editorial/almanac/page-031.jpeg", alt: "Infografía: El dulce", width: 1254, height: 1254 },
+  { document: "032", title: "El salado", image: "/editorial/almanac/page-032.jpeg", alt: "Infografía: El salado", width: 1254, height: 1254 },
+  { document: "033", title: "El ácido", image: "/editorial/almanac/page-033.jpeg", alt: "Infografía: El ácido", width: 1254, height: 1254 },
+  { document: "034", title: "El amargo", image: "/editorial/almanac/page-034.jpeg", alt: "Infografía: El amargo", width: 1254, height: 1254 },
+  { document: "035", title: "El umami", image: "/editorial/almanac/page-035.jpeg", alt: "Infografía: El umami", width: 1254, height: 1254 },
+  { document: "036", title: "Los 5 sabores", image: "/editorial/almanac/page-036.jpeg", alt: "Infografía: Los 5 sabores", width: 1254, height: 1254 },
+  { document: "037", title: "Anatomía de un corte de carne", image: "/editorial/almanac/page-037.jpeg", alt: "Infografía: Anatomía de un corte de carne", width: 1254, height: 1254 },
+  { document: "038", title: "Grasa intramuscular vs. grasa externa", image: "/editorial/almanac/page-038.jpeg", alt: "Infografía: Grasa intramuscular vs. grasa externa", width: 1254, height: 1254 },
+  { document: "039", title: "Marmoleo", image: "/editorial/almanac/page-039.jpeg", alt: "Infografía: Marmoleo", width: 1254, height: 1254 },
+  { document: "040", title: "Fibras musculares", image: "/editorial/almanac/page-040.jpeg", alt: "Infografía: Fibras musculares", width: 1254, height: 1254 },
+  { document: "041", title: "Tejido conectivo", image: "/editorial/almanac/page-041.jpeg", alt: "Infografía: Tejido conectivo", width: 1254, height: 1254 },
+  { document: "042", title: "Cortes gruesos vs. cortes delgados", image: "/editorial/almanac/page-042.jpeg", alt: "Infografía: Cortes gruesos vs. cortes delgados", width: 1254, height: 1254 },
+  { document: "043", title: "Cortes para fuego directo", image: "/editorial/almanac/page-043.jpeg", alt: "Infografía: Cortes para fuego directo", width: 1254, height: 1254 },
+  { document: "044", title: "Cortes enteros para fuego indirecto", image: "/editorial/almanac/page-044.jpeg", alt: "Infografía: Cortes enteros para fuego indirecto", width: 1254, height: 1254 },
+  { document: "045", title: "Cortes para cocción prolongada", image: "/editorial/almanac/page-045.jpeg", alt: "Infografía: Cortes para cocción prolongada", width: 1254, height: 1254 },
+  { document: "046", title: "Cómo elegir un corte de res", image: "/editorial/almanac/page-046.jpeg", alt: "Infografía: Cómo elegir un corte de res", width: 1254, height: 1254 },
+  { document: "047", title: "Res: cortes y aplicaciones", image: "/editorial/almanac/page-047.jpeg", alt: "Infografía: Res: cortes y aplicaciones", width: 1254, height: 1254 },
+  { document: "048", title: "Cerdo: cortes y aplicaciones", image: "/editorial/almanac/page-048.jpeg", alt: "Infografía: Cerdo: cortes y aplicaciones", width: 1254, height: 1254 },
+  { document: "050", title: "Cerdo: grasa, colágeno y temperatura", image: "/editorial/almanac/page-050.jpeg", alt: "Infografía: Cerdo: grasa, colágeno y temperatura", width: 1254, height: 1254 },
+  { document: "051", title: "Cordero: cortes y perfiles de sabor", image: "/editorial/almanac/page-051.jpeg", alt: "Infografía: Cordero: cortes y perfiles de sabor", width: 1254, height: 1254 },
+  { document: "052", title: "Pescado en la parrilla", image: "/editorial/almanac/page-052.jpeg", alt: "Infografía: Pescado en la parrilla", width: 1254, height: 1254 },
+  { document: "053", title: "Proteínas vegetales a la parrilla", image: "/editorial/almanac/page-053.jpeg", alt: "Infografía: Proteínas vegetales a la parrilla", width: 1254, height: 1254 },
+  { document: "054", title: "Cómo elegir proteína según el método de cocción", image: "/editorial/almanac/page-054.jpeg", alt: "Infografía: Cómo elegir proteína según el método de cocción", width: 1254, height: 1254 },
 ];
 
 export default function FireAlmanac() {
@@ -144,6 +173,16 @@ export default function FireAlmanac() {
               )}
               <button className="almanac-close" type="button" onClick={closeAlmanac} aria-label="Cerrar almanaque" autoFocus>×</button>
             </header>
+
+            <aside className="almanac-editorial-note" aria-label="Nota editorial">
+              {currentPage?.document === "050"
+                ? <>Seguridad: cocina cortes enteros de cerdo a 63 °C internos y deja reposar 3 minutos; cerdo molido, a 71 °C. Los rangos inferiores ilustrados no sustituyen esta recomendación. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noreferrer">Referencia: USDA.</a></>
+                : currentPage?.document === "052"
+                ? <>Seguridad: la referencia para pescado es 63 °C internos. Los rangos inferiores de esta lámina describen puntos culinarios, no una garantía de seguridad. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noreferrer">Referencia: USDA.</a></>
+                : currentPage && Number(currentPage.document) >= 31 && Number(currentPage.document) <= 36
+                ? <>Original de archivo: los sabores no corresponden a zonas exclusivas de la lengua. Los porcentajes de la lámina 036 no son una fórmula validada. <a href="https://www.nidcd.nih.gov/sites/default/files/Documents/order/taste-disorders.pdf" target="_blank" rel="noreferrer">Referencia: NIDCD.</a></>
+                : <>Láminas originales de archivo. Los tiempos y puntos de cocción ilustrados no sustituyen una guía de seguridad alimentaria ni el manual del equipo. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noreferrer">Consultar temperaturas seguras.</a></>}
+            </aside>
 
             <div className={`almanac-book${zoomed ? " is-zoomed" : ""}`} data-testid="almanac-book">
               <button
