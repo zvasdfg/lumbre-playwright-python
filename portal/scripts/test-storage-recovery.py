@@ -20,8 +20,9 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Comida directa", exact=False).click()
         expect(page.get_by_role("region", name="Plan de fuego", exact=True)).to_be_visible()
         if "setItem =" in scenario:
-            page.get_by_label("Nombre del preset", exact=True).fill("Prueba sin espacio")
-            page.get_by_role("button", name="Guardar preset", exact=True).click()
+            page.get_by_role("button", name="Construir plan de fuego", exact=True).click()
+            page.get_by_label("Nombre del plan", exact=True).fill("Prueba sin espacio")
+            page.get_by_role("button", name="Guardar plan", exact=True).click()
             expect(page.get_by_role("status").filter(has_text="No se pudo guardar")).to_be_visible()
             expect(page.get_by_test_id("fire-presets").locator("article")).to_have_count(0)
         assert not errors, errors
