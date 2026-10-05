@@ -64,6 +64,11 @@ jobs:
           python portal/scripts/test-static.py
           python portal/scripts/check-static-print.py
           python portal/scripts/test-storage-recovery.py
+          python portal/scripts/test-planner-goals.py
+          python portal/scripts/test-planner-simple.py
+          python portal/scripts/test-planner-fuel.py
+          python portal/scripts/test-planner-kettle-fuel.py
+          python portal/scripts/test-planner-weber-defaults.py
           python portal/scripts/test-recipe-blend-back.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:

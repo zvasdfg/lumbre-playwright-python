@@ -1,0 +1,19 @@
+{
+  "scope": "Static portal fuel budget v1",
+  "implementation": "PASS",
+  "automaticProfilesAllFuels": "BLOCKED",
+  "blockingData": "Model-specific consumption or measured calibration for charcoal, briquettes, firewood, LP and natural gas; currently manual rate required.",
+  "verification": {
+    "buildStatic": "PASS",
+    "typecheck": "PASS",
+    "existingModelTests": 13,
+    "fuelArithmeticTests": 7,
+    "browserScenarios": 12,
+    "additionalValidationScenarios": 3,
+    "kettleReference": "47/57/67 cm table; browser verification in test-planner-kettle-fuel.py",
+    "savedPlanAndPrint": "PASS for all six fuels at 390px and 1440px",
+    "pdfVisualReview": "Pellets, all three A4 pages, no clipping",
+    "empiricalConsumptionValidation": "NOT PERFORMED"
+  },
+  "deployment": "Not requested; no commit or push"
+}

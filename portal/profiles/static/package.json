@@ -6,7 +6,7 @@
   "engines": { "node": ">=22.13.0" },
   "scripts": {
     "typecheck": "tsc --project tsconfig.static.json --noEmit --incremental false",
-    "test": "node --experimental-strip-types --test scripts/fire-plan-model.test.mjs",
+    "test": "node --experimental-strip-types --test scripts/fire-plan-model.test.mjs scripts/fire-plan-fuel.test.mjs",
     "check:recipes": "node --experimental-strip-types scripts/check-recipes.mjs",
     "build:static": "vite build --config static/vite.config.ts && node scripts/check-static.mjs",
     "preview:static": "vite preview --config static/vite.config.ts"

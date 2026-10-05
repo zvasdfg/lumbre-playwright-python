@@ -1,0 +1,30 @@
+{
+  "revision": "r001",
+  "scope": "Planner illustration integration only; existing uncommitted work preserved",
+  "status": "PASS",
+  "checks": {
+    "typescript": "PASS",
+    "staticBuild": "PASS; existing >500kB bundle warning",
+    "modelTests": 13,
+    "diagramScenarios": 56,
+    "goalPersistenceScenarios": 27,
+    "constraintScenarios": 2,
+    "pdfDocuments": 6,
+    "pdfPagesEach": 2,
+    "visualReview": [
+      "mobile kamado and pellets",
+      "desktop gas",
+      "PDF kamado pages 1–2",
+      "PDF gas pages 1–2",
+      "PDF offset pages 1–2",
+      "PDF pellets page 1"
+    ]
+  },
+  "limitations": [
+    "Conceptual drawings, not manufacturer mounting instructions.",
+    "Seven equipment illustrations, not an image for every fuel/accessory combination.",
+    "Direct cooking on conditional equipment explicitly uses indirect reference with a manual-specific warning.",
+    "No fuel-consumption calculation change.",
+    "No commit, push or deployment."
+  ]
+}

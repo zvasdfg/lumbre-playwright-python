@@ -1,0 +1,10 @@
+{
+  "revision": 5,
+  "status": "PREVIEW_NOT_INTEGRATED",
+  "asset": "kettle-technical-r005.png",
+  "tool": "built-in image_gen",
+  "prompt": "Make a very small localized edit to the attached approved engineering notebook illustration.\nPreserve absolutely all composition, technical geometry, grills, foods, labels and Spanish spelling, fine construction guides, axes, section markers, plan views, existing red arrows, restrained black ink hatching and pure white background.\nONLY add a few playful freehand DARK BRICK RED ink/pencil accents (#7b251b) to the charcoal embers in the two main sectional drawings: short imperfect strokes, tiny loose scribbles and a little airy red hatching along a few charcoal cracks and edges. Like the meticulous engineer briefly picked up a red pencil for fun after finishing the technical drawing. Three or four subtly accented charcoal pieces in the left central coal pile, two or three pieces in each right-side basket. Let white paper and original black contours show clearly through the marks. Small, irregular, casual, human touches, not uniform digital coloring.\nKeep red charcoal marks confined to the existing charcoal shapes. Do NOT add new charcoal or change placement. No marks on the food, grill body, empty center drip pan, lettering, margins or construction guides. Leave both small plan views unchanged. No fire/flames, glow, halos, gradients, orange/yellow colors, photorealism, dense coloring, giant doodles or additional arrows. This is a subtle final accent, not a redesign. Preserve the restrained white-dominant technical drawing.",
+  "input": "kettle-technical-r004.png",
+  "direction_approval": "Usuario aprobó la dirección visual r004 y solicitó pequeños acentos rojos a mano alzada en las brasas; no implica aprobación automática de r005.",
+  "review": "Se observan acentos rojos ligeros dentro de algunas brasas. Guías y vistas en planta conservadas; sin nuevas llamas ni color en alimento. No integrada al portal."
+}

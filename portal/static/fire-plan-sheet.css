@@ -1,4 +1,5 @@
 .planner-help { color: #ddd; font-size: 13px; line-height: 1.7; }
+.planner-controls .planner-temperature-reset { justify-self: start; padding: 8px 0; min-height: 44px; background: transparent; color: inherit; border: 0; text-decoration: underline; font: inherit; cursor: pointer; }
 .planner-controls input[type="checkbox"] { width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 8px; accent-color: #7b251b; }
 .fire-plan-guide { color: #111; font-family: ui-monospace, Menlo, Consolas, monospace; }
 .fire-plan-guide p, .fire-plan-guide small, .fire-plan-guide details { font-size: 13px; line-height: 1.6; }
@@ -131,7 +132,7 @@
   .fire-plan-timeline li, .fire-plan-pending { break-inside: avoid; }
   .fire-plan-timeline strong { font-size: 10pt; }
   .fire-plan-print .fire-plan-guide details { display: none; }
-  .fire-plan-print header img { width: 1.2in; height: 1.2in; }
+  .fire-plan-print header img { width: 16mm; height: 16mm; }
 }
 .fire-mount { display:flex; gap:1rem; align-items:center; border-top:1px solid #aaa; padding:1rem 0; }
 .fire-mount svg { flex:0 0 110px; width:110px; max-width:100%; }
@@ -145,6 +146,17 @@
 .fire-stage-layout .fire-diagram svg { width:100%; height:auto; }
 .fire-stage-layout h4 { margin:0 0 .5rem; }
 .fire-diagram-technical { border: 1px solid #bbb; padding: 18px; background: #fff; color: #111; }
+.fire-diagram-illustrated .fire-diagram-image-link { display: block; margin: 12px 0; }
+.fire-diagram-illustrated img { display: block; width: 100%; height: auto; object-fit: contain; }
+.fire-diagram-illustrated .fire-diagram-enlarge { display: inline-block; min-height: 44px; padding: 12px 0; text-decoration: underline; font-size: 12px; }
+.fire-diagram-illustrated .fire-diagram-selection { border-left: 2px solid #7b251b; padding-left: 10px; }
+.fire-stage-layout:has(.fire-diagram-illustrated) { grid-template-columns: minmax(0, 1fr); }
+.fire-stage-layout .fire-diagram-illustrated { max-width: none; }
+@media print {
+  .fire-diagram-illustrated img { max-height: 76mm; }
+  .fire-diagram-illustrated .fire-diagram-enlarge { display: none; }
+  .fire-plan-timeline:has(.fire-diagram-illustrated) > ol > li { break-inside: auto; }
+}
 .fire-diagram-heading { display: grid; gap: 6px; border-bottom: 1px solid #bbb; padding-bottom: 12px; }
 .fire-diagram-heading span { font-size: 10px; letter-spacing: .08em; }
 .fire-diagram-heading strong { font-size: 17px; line-height: 1.4; }
@@ -162,8 +174,9 @@
   .fire-stage-layout .fire-diagram-technical { max-width: none; }
 }
 @media print {
+  .fire-plan-layout:has(.fire-diagram-technical) { break-inside: auto; }
   .fire-diagram-technical { break-inside: avoid; padding: 3mm; }
-  .fire-diagram-technical svg { max-height: 65mm; }
+  .fire-diagram-technical svg { max-height: 50mm; }
   .fire-diagram-heading strong { font-size: 11pt; }
   .fire-diagram-heading span, .fire-diagram-technical figcaption { font-size: 8pt; }
   .fire-diagram-key li { font-size: 9pt; line-height: 1.35; }
@@ -172,3 +185,8 @@
 }
 @media (max-width:600px) { .fire-stage-layout { grid-template-columns:1fr; } .fire-stage-layout figure { max-width:220px; } .fire-mount { align-items:flex-start; } }
 @media print { .fire-stage-layout { grid-template-columns:110px minmax(0,1fr); margin:2mm 0; } .fire-plan-timeline > ol > li { break-inside:avoid; } .fire-mount, .fire-stage-layout { break-inside:avoid; } }
+.fire-fuel-estimate { border: 1px solid #7b251b; border-left: 4px solid #7b251b; padding: 18px; margin: 20px 0; overflow-wrap: anywhere; break-inside: avoid; }
+.fire-fuel-estimate > span { font-size: 11px; letter-spacing: .06em; }
+.fire-fuel-estimate h3 { font-size: clamp(24px, 4vw, 36px); margin: 10px 0; color: #7b251b; }
+.fire-fuel-estimate small { display: block; line-height: 1.6; }
+.planner-fuel-inputs { min-width: 0; margin: 16px 0; }
