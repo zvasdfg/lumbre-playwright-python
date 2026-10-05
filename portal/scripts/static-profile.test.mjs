@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,8 +34,29 @@ test("release workspace contains static inputs, never inherits backend installat
     for (const path of ["static/main.tsx", "app/components/fire-almanac.tsx", "public/editorial", "scripts/check-recipes.mjs", "package-lock.json"]) {
       assert.ok(existsSync(resolve(target, path)), path);
     }
-    for (const path of ["node_modules", "server", "app/api", "next-env.d.ts", "wrangler.jsonc", ".env", ".dev.vars"]) {
+    for (const path of ["node_modules", "server", "app/api/auth", "app/api/cart", "next-env.d.ts", "wrangler.jsonc", ".env", ".dev.vars"]) {
       assert.equal(existsSync(resolve(target, path)), false, path);
+    }
+    const ingredients = readdirSync(resolve(target, "app/api/ingredientes"));
+    assert.ok(ingredients.length >= 60);
+    assert.ok(ingredients.every(name => name.endsWith(".json")));
+    assert.deepEqual(readdirSync(resolve(target, "app/api")), ["ingredientes"]);
+    const visited = new Set();
+    function checkRelativeImports(file) {
+      if (visited.has(file)) return;
+      visited.add(file);
+      if (!/\.(?:tsx?|m?js)$/.test(file)) return;
+      const source = readFileSync(file, "utf8");
+      for (const [, specifier] of source.matchAll(/(?:from\s*|import\s*)["'](\.[^"']+)["']/g)) {
+        const base = resolve(dirname(file), specifier);
+        const found = [base, ...[".ts", ".tsx", ".js", ".mjs", ".json", "/index.ts", "/index.tsx"].map(ext => base + ext)]
+          .find(candidate => existsSync(candidate) && statSync(candidate).isFile());
+        assert.ok(found, `Missing release input ${specifier} imported by ${file}`);
+        checkRelativeImports(found);
+      }
+    }
+    for (const entry of ["static/main.tsx", "static/vite.config.ts", "scripts/check-recipes.mjs", "scripts/fire-plan-model.test.mjs"]) {
+      checkRelativeImports(resolve(target, entry));
     }
     assert.equal(readFileSync(resolve(target, "package.json"), "utf8"), readFileSync(resolve(portal, "profiles/static/package.json"), "utf8"));
     assert.notEqual(prepare(target).status, 0);
