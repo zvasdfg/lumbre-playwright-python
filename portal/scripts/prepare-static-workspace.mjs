@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, realpathSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, realpathSync } from "node:fs";
 import { dirname, isAbsolute, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -19,6 +19,10 @@ const files = [
   "scripts/check-static.mjs", "scripts/check-recipes.mjs",
   "scripts/fire-plan-model.test.mjs", "scripts/verify-static-deployment.mjs",
 ];
+// Canonical ingredient DATA lives under app/api, but no route/server code is copied.
+for (const entry of readdirSync(resolve(portal, "app/api/ingredientes"), {withFileTypes: true})) {
+  if (entry.isFile() && entry.name.endsWith(".json")) files.push(`app/api/ingredientes/${entry.name}`);
+}
 for (const file of [...files, "profiles/static/package.json", "profiles/static/package-lock.json"]) {
   if (!existsSync(resolve(portal, file))) throw new Error(`Missing static release input: ${file}`);
 }

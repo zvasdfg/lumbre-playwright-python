@@ -148,6 +148,9 @@ script copies an explicit list of static source/asset/config inputs; it does not
 copy credentials, backend routes, server configuration or `node_modules`.
 The original `portal/package.json` and lockfile are preserved for legacy work.
 Shared source data and the existing almanac component remain canonical in `app/`.
+The ingredient JSON catalog under `app/api/ingredientes` is copied as data only
+(no route files); the preparation test checks the transitive relative imports
+of the static entry points so required source data cannot silently be omitted.
 
 `tsconfig.static.json` checks the static entry points and their imported shared
 modules, mapping `next/image` to the same browser-only adapter used by Vite.
