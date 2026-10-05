@@ -1,0 +1,91 @@
+{
+  "revision": "planner-editor-v2",
+  "date": "2026-10-05",
+  "scope": "Portal estático: usabilidad, compatibilidad declarada, edición y persistencia, impresión. No publicación ni certificación de recetas o equipos físicos.",
+  "status": "PASS",
+  "limitations": [
+    "19 casos con configuración térmica reproducible no equivalen a 19 recetas completas validadas.",
+    "72 casos parciales: se conservan requisitos y notas; no se modelan automáticamente todos los accesorios, alimentos o técnicas.",
+    "9 casos no soportados: pellets o alimentación automática; se bloquean sin sustituir el equipo.",
+    "Las confirmaciones de compatibilidad de modelo se simularon en pruebas; el usuario debe consultar su manual.",
+    "La impresión puede ocupar varias páginas según etapas y notas."
+  ],
+  "checks": [
+    {
+      "name": "Compilación estática Vite",
+      "result": "PASS"
+    },
+    {
+      "name": "TypeScript --noEmit --incremental false",
+      "result": "PASS"
+    },
+    {
+      "name": "Pruebas del modelo",
+      "result": "PASS",
+      "tests": 6,
+      "combinations": 90
+    },
+    {
+      "name": "Regresión UI del editor",
+      "result": "PASS",
+      "widths": [
+        390,
+        1440
+      ],
+      "combinationsPerWidth": 51,
+      "includes": [
+        "validación",
+        "guardado",
+        "edición",
+        "duplicado",
+        "reemplazo confirmado",
+        "eliminar y deshacer",
+        "migración",
+        "respaldo",
+        "conflicto entre pestañas",
+        "almacenamiento corrupto",
+        "impresión",
+        "menú móvil"
+      ]
+    },
+    {
+      "name": "Regresión general del portal scripts/test-static.py",
+      "result": "PASS",
+      "widths": [
+        390,
+        1440
+      ]
+    },
+    {
+      "name": "Corpus de 100 fuentes",
+      "result": "PASS",
+      "counts": {
+        "thermalConfiguration": 19,
+        "partial": 72,
+        "unsupported": 9
+      },
+      "javascriptErrors": 0
+    },
+    {
+      "name": "Inspección visual PDF A4",
+      "result": "PASS",
+      "pages": 2,
+      "observations": "Texto, datos, esquema, dos etapas, enlace y notas legibles; sin recortes en ambas páginas."
+    },
+    {
+      "name": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "reproduction": [
+    "npm run build:static",
+    "node --experimental-strip-types --test scripts/fire-plan-model.test.mjs",
+    "python3 scripts/check-planner-editor.py",
+    "python3 scripts/test-static.py",
+    "python3 scripts/replay-planner-100.py",
+    "npx tsc --noEmit --incremental false"
+  ],
+  "sourceFixture": "portal/scripts/fixtures/planner-100-cases.json",
+  "caseResults": "planner-editor-v2-100-results.json",
+  "published": false
+}

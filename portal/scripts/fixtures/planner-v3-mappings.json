@@ -1,0 +1,445 @@
+{
+  "revision": "v3",
+  "scope": "Requisitos térmicos extraídos, no recetas completas. represented sólo afirma representación de los requisitos del extracto, no validación culinaria ni física. Cambia la rúbrica de v2: no es una comparación pura de funcionalidad.",
+  "cases": {
+    "2": {
+      "accessory": "Deflector",
+      "represented": true,
+      "reason": "Separación indirecta y deflector representados; la v2 ya dibujaba este montaje."
+    },
+    "6": {
+      "surface": "bandeja",
+      "represented": false,
+      "reason": "Montaje parcial: faltan datos o fases en el extracto."
+    },
+    "7": {
+      "surface": "plancha",
+      "represented": true,
+      "reason": "Plancha representada como soporte distinto de la rejilla."
+    },
+    "9": {
+      "smoking": "Madera aromática; especie no especificada",
+      "represented": false,
+      "reason": "La fuente resumida no fija la madera; el braseado requiere mayor detalle de recipiente."
+    },
+    "11": {
+      "represented": false,
+      "reason": "La fuente fija 400 °F para asar pero no explicita separación directa/indirecta en esa fase; además usa una waflera externa. No se infiere un montaje."
+    },
+    "12": {
+      "surface": "bandeja",
+      "represented": false,
+      "reason": "Montaje parcial: faltan datos o fases en el extracto."
+    },
+    "14": {
+      "surface": "sarten",
+      "accessory": "Olla de hierro con tapa; deflector",
+      "represented": true,
+      "reason": "Olla en calor indirecto, sin confundir horneado con ahumado lento."
+    },
+    "17": {
+      "stages": [
+        {
+          "name": "Cocinar",
+          "method": "indirecto",
+          "temperature": "400"
+        },
+        {
+          "name": "Acabado",
+          "method": "directo",
+          "temperature": "400"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "23": {
+      "accessory": "Deflector",
+      "represented": true,
+      "reason": "Separación indirecta y deflector representados; la v2 ya dibujaba este montaje."
+    },
+    "26": {
+      "accessory": "Deflectores; estabilizar 10–15 min",
+      "represented": false,
+      "reason": "La estabilización previa aún no tiene una etapa sin alimento dedicada."
+    },
+    "29": {
+      "smoking": "Madera no especificada",
+      "accessory": "Rack",
+      "represented": false,
+      "reason": "Rack especial y madera no especificados."
+    },
+    "32": {
+      "surface": "sarten",
+      "accessory": "Sin deflector",
+      "represented": true,
+      "reason": "Sartén sobre calor directo."
+    },
+    "35": {
+      "accessory": "Deflectores",
+      "smoking": "Pecán",
+      "represented": true,
+      "reason": "Madera complementaria y deflectores explícitos; sin sustituir el carbón principal."
+    },
+    "38": {
+      "smoking": "Astillas sobre brasas, según el modelo",
+      "represented": true,
+      "reason": "Presentación y función complementaria de la madera registradas; especie no indicada por el extracto."
+    },
+    "44": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "250"
+        },
+        {
+          "name": "Brasear envuelto",
+          "method": "indirecto",
+          "temperature": "275",
+          "notes": "Mantener envuelto según receta."
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "51": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "275"
+        },
+        {
+          "name": "Continuar cubierto",
+          "method": "indirecto",
+          "temperature": "300"
+        },
+        {
+          "name": "Preparar papas",
+          "method": "indirecto",
+          "temperature": "350"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "53": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "225"
+        },
+        {
+          "name": "Pausa",
+          "method": "indirecto",
+          "temperature": "",
+          "kind": "pausa"
+        },
+        {
+          "name": "Regreso al ahumador",
+          "method": "indirecto",
+          "temperature": "250"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "55": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "200"
+        },
+        {
+          "name": "Pausa",
+          "method": "indirecto",
+          "temperature": "",
+          "kind": "pausa"
+        },
+        {
+          "name": "Regreso al ahumador",
+          "method": "indirecto",
+          "temperature": "200"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "56": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "200"
+        },
+        {
+          "name": "Pausa",
+          "method": "indirecto",
+          "temperature": "",
+          "kind": "pausa"
+        },
+        {
+          "name": "Regreso al ahumador",
+          "method": "indirecto",
+          "temperature": "200"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "57": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "250",
+          "duration": "2 h"
+        },
+        {
+          "name": "Continuar envuelto",
+          "method": "indirecto",
+          "temperature": "250",
+          "duration": "1 h",
+          "notes": "Envolver según receta."
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "63": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "250",
+          "duration": "2 h"
+        },
+        {
+          "name": "Continuar envuelto",
+          "method": "indirecto",
+          "temperature": "250",
+          "duration": "1 h",
+          "notes": "Envolver según receta."
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "64": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "250",
+          "duration": "5 h"
+        },
+        {
+          "name": "Continuar cubierto",
+          "method": "indirecto",
+          "temperature": "250",
+          "duration": "1 h"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "71": {
+      "surface": "bandeja",
+      "represented": false,
+      "reason": "Montaje parcial: faltan datos o fases en el extracto."
+    },
+    "75": {
+      "stages": [
+        {
+          "name": "Base y pastel",
+          "method": "indirecto",
+          "temperature": "275",
+          "surface": "bandeja"
+        },
+        {
+          "name": "Cobertura",
+          "method": "indirecto",
+          "temperature": "250",
+          "surface": "bandeja"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "76": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "225"
+        },
+        {
+          "name": "Pausa",
+          "method": "indirecto",
+          "temperature": "",
+          "kind": "pausa"
+        },
+        {
+          "name": "Regreso al ahumador",
+          "method": "indirecto",
+          "temperature": "225"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "77": {
+      "surface": "bandeja",
+      "represented": true,
+      "reason": "Bandeja representada como soporte."
+    },
+    "79": {
+      "stages": [
+        {
+          "name": "Dorar masa",
+          "method": "directo",
+          "temperature": "400–450"
+        },
+        {
+          "name": "Cocinar con cobertura",
+          "method": "directo",
+          "temperature": "350–400"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "81": {
+      "stages": [
+        {
+          "name": "Primera cocción",
+          "method": "indirecto",
+          "temperature": "350"
+        },
+        {
+          "name": "Hornear masa",
+          "method": "indirecto",
+          "temperature": "400"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "85": {
+      "represented": true,
+      "reason": "Indirecto a alta temperatura ya permitido en v2; no requiere modo lento."
+    },
+    "86": {
+      "stages": [
+        {
+          "name": "Sartén",
+          "method": "directo",
+          "temperature": "450–500",
+          "surface": "sarten"
+        },
+        {
+          "name": "Hornear",
+          "method": "indirecto",
+          "temperature": "350–400",
+          "surface": "sarten"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "88": {
+      "smoking": "Madera en caja de humo autorizada",
+      "represented": false,
+      "reason": "Gas es adaptación de prueba; no validación del montaje original."
+    },
+    "89": {
+      "surface": "sarten",
+      "represented": true,
+      "reason": "Sartén de hierro sobre calor indirecto."
+    },
+    "90": {
+      "smoking": "Madera no especificada",
+      "accessory": "Bandeja de agua",
+      "represented": false,
+      "reason": "No hay montaje específico para bandeja de agua."
+    },
+    "91": {
+      "surface": "bandeja",
+      "represented": true,
+      "reason": "Molde sobre calor indirecto, una alternativa explícita de la fuente."
+    },
+    "95": {
+      "stages": [
+        {
+          "name": "Primera etapa",
+          "method": "directo",
+          "temperature": "450–550"
+        },
+        {
+          "name": "Continuar con olla",
+          "method": "directo",
+          "temperature": "350–450",
+          "surface": "sarten"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "97": {
+      "smoking": "Astillas en caja autorizada",
+      "represented": false,
+      "reason": "LP es adaptación de prueba, no equipo inequívoco en el extracto."
+    },
+    "98": {
+      "stages": [
+        {
+          "name": "Primera tanda",
+          "method": "indirecto",
+          "temperature": "250–350"
+        },
+        {
+          "name": "Segunda tanda",
+          "method": "indirecto",
+          "temperature": "250–350"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "99": {
+      "stages": [
+        {
+          "name": "Pescado",
+          "method": "directo",
+          "temperature": "350–450"
+        },
+        {
+          "name": "Pan",
+          "method": "directo",
+          "temperature": "350–450"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    },
+    "100": {
+      "stages": [
+        {
+          "name": "Chile",
+          "method": "directo",
+          "temperature": "450–550"
+        },
+        {
+          "name": "Camarón",
+          "method": "directo",
+          "temperature": "450–550"
+        }
+      ],
+      "represented": true,
+      "reason": "Método, objetivo térmico, soporte y secuencia explícitos por etapa; no valida tiempos ni conservación."
+    }
+  }
+}

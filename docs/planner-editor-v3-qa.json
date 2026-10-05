@@ -1,0 +1,297 @@
+{
+  "revision": "planner-editor-v3",
+  "date": "2026-10-05",
+  "status": "PASS",
+  "scope": "Software del portal estático; no certificación de recetas, compatibilidad física ni publicación.",
+  "baseline": "planner-editor-v2-100-results.json",
+  "results": "planner-editor-v3-100-results.json",
+  "counts": {
+    "CONFIGURACIÓN TÉRMICA REPRODUCIBLE": 48,
+    "PARCIAL": 43,
+    "NO SOPORTADO": 9
+  },
+  "classificationNote": "La rúbrica v3 evalúa soporte, secuencia y campos estructurados. La v2 sólo clasificó como reproducible la limitación literal Temperatura sin confirmaciones. Las 29 reclasificaciones combinan mejoras del software, mejor captura y corrección de evaluación; no equivalen a 29 fallos corregidos ni a recetas completas validadas.",
+  "reclassifiedIds": [
+    "2",
+    "7",
+    "14",
+    "17",
+    "23",
+    "32",
+    "35",
+    "38",
+    "44",
+    "51",
+    "53",
+    "55",
+    "56",
+    "57",
+    "63",
+    "64",
+    "75",
+    "76",
+    "77",
+    "79",
+    "81",
+    "85",
+    "86",
+    "89",
+    "91",
+    "95",
+    "98",
+    "99",
+    "100"
+  ],
+  "baselineGroups": {
+    "overlapping": true,
+    "categories": [
+      {
+        "category": "Etapas y secuencias",
+        "count": 33,
+        "ids": [
+          "6",
+          "9",
+          "11",
+          "16",
+          "17",
+          "18",
+          "30",
+          "39",
+          "42",
+          "44",
+          "45",
+          "51",
+          "53",
+          "54",
+          "55",
+          "56",
+          "57",
+          "62",
+          "63",
+          "64",
+          "68",
+          "70",
+          "75",
+          "76",
+          "78",
+          "79",
+          "81",
+          "83",
+          "86",
+          "95",
+          "98",
+          "99",
+          "100"
+        ]
+      },
+      {
+        "category": "Soportes y accesorios",
+        "count": 27,
+        "ids": [
+          "2",
+          "5",
+          "6",
+          "7",
+          "12",
+          "14",
+          "21",
+          "23",
+          "25",
+          "26",
+          "28",
+          "29",
+          "32",
+          "35",
+          "60",
+          "62",
+          "65",
+          "71",
+          "74",
+          "75",
+          "77",
+          "84",
+          "86",
+          "89",
+          "90",
+          "91",
+          "95"
+        ]
+      },
+      {
+        "category": "Madera complementaria",
+        "count": 15,
+        "ids": [
+          "9",
+          "10",
+          "19",
+          "29",
+          "30",
+          "35",
+          "36",
+          "38",
+          "40",
+          "43",
+          "45",
+          "78",
+          "88",
+          "90",
+          "97"
+        ]
+      },
+      {
+        "category": "Información incompleta o ambigua",
+        "count": 16,
+        "ids": [
+          "12",
+          "16",
+          "19",
+          "25",
+          "28",
+          "37",
+          "41",
+          "43",
+          "45",
+          "48",
+          "65",
+          "71",
+          "72",
+          "73",
+          "74",
+          "84"
+        ]
+      },
+      {
+        "category": "Modelo, disposición o coordinación",
+        "count": 19,
+        "ids": [
+          "10",
+          "20",
+          "21",
+          "25",
+          "37",
+          "39",
+          "41",
+          "42",
+          "43",
+          "62",
+          "65",
+          "68",
+          "70",
+          "71",
+          "82",
+          "83",
+          "88",
+          "92",
+          "97"
+        ]
+      }
+    ]
+  },
+  "changes": [
+    "Soporte opcional global y por etapa: rejilla, plancha, sartén/olla, bandeja/molde.",
+    "Esquema de calor individual por etapa, señal para continuar y aviso de cambio de montaje.",
+    "Pausas fuera del fuego sin temperatura de asador ni diagrama de cocción.",
+    "Dos plantillas opcionales de secuencia, sin temperaturas ni duraciones inventadas.",
+    "Montajes antiguos en texto libre se conservan como por confirmar.",
+    "Impresión compactada tras revisión visual A4."
+  ],
+  "tests": [
+    {
+      "name": "build:static y frontera estática",
+      "status": "PASS"
+    },
+    {
+      "name": "TypeScript",
+      "status": "PASS"
+    },
+    {
+      "name": "Modelo",
+      "status": "PASS",
+      "tests": 8,
+      "compatibilityCombinations": 90
+    },
+    {
+      "name": "Regresión del editor",
+      "status": "PASS",
+      "widths": [
+        390,
+        1440
+      ],
+      "compatibilityCombinationsPerWidth": 51
+    },
+    {
+      "name": "Montajes, pausa, reload, impresión y legado",
+      "status": "PASS",
+      "widths": [
+        320,
+        390,
+        1440
+      ]
+    },
+    {
+      "name": "100 fuentes mediante UI",
+      "status": "PASS",
+      "javascriptErrors": 0
+    },
+    {
+      "name": "Regresión general portal",
+      "status": "PASS",
+      "widths": [
+        390,
+        1440
+      ]
+    },
+    {
+      "name": "Inspección visual PDF de tres etapas",
+      "status": "PASS",
+      "pages": 2,
+      "format": "A4",
+      "scope": "Dos etapas de cocción y una pausa; ambas páginas legibles y sin recortes."
+    },
+    {
+      "name": "ESLint",
+      "status": "PASS",
+      "errors": 0,
+      "warnings": 1,
+      "detail": "Advertencia existente de next/no-img-element en logo imprimible."
+    },
+    {
+      "name": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "remaining": [
+    "Fuentes sin temperatura, unidad o montaje explícitos.",
+    "Rotisserie, ganchos, bandeja de agua, niveles de rejilla y contacto directo con brasas.",
+    "Preparaciones simultáneas y segundo equipo.",
+    "Conversiones que requieren instrucciones del modelo físico.",
+    "Pellets y alimentación automática fuera del alcance actual."
+  ],
+  "safetyLimits": [
+    "No se deducen cantidades de combustible, tiempos de cocción ni temperaturas internas.",
+    "Confirmaciones de modelo simuladas durante QA; no autorizan un montaje real.",
+    "El caso 11 permanece parcial: asado inicial sin separación térmica explícita y waflera externa.",
+    "Los datos extraídos de una receta no constituyen validación culinaria."
+  ],
+  "reproduction": [
+    "npm run build:static",
+    "node --experimental-strip-types --test scripts/fire-plan-model.test.mjs",
+    "npx tsc --noEmit --incremental false",
+    "../test-framework/.venv/bin/python scripts/check-planner-editor.py",
+    "../test-framework/.venv/bin/python scripts/check-planner-mounts.py",
+    "../test-framework/.venv/bin/python scripts/replay-planner-100-v3.py",
+    "../test-framework/.venv/bin/python scripts/test-static.py"
+  ],
+  "hashes": {
+    "portal/static/fire-plan-editor.tsx": "840048a3e5e181bd15d2d9a6aece5dcf847942bd8fc7897cecb7fbca6a4a33b6",
+    "portal/static/fire-plan-model.ts": "06de654a8dafa8d53e3cb724202da42808d50f4b8f46652ae176d13d8092d141",
+    "portal/static/fire-plan-guide.tsx": "2f3a1259733fc30148b1d7a8ba0bdfd872f78bef21b12dfaf44fbe813957253b",
+    "portal/static/fire-plan-mount.tsx": "85aa9ac70f750c3900a77a427f5eb10191dff513c6944ce8b17708844a40b351",
+    "portal/static/fire-plan-sheet.css": "b51a4340d4daf888cfe347d1820b2271779e8d53a9e72d0d49ed36c770960192",
+    "portal/scripts/replay-planner-100-v3.py": "53a39255a0d712539c7f1dcc7f8543573d9af02c80a136fcfac26a17443b497f",
+    "portal/scripts/check-planner-mounts.py": "5e7aa6c8dba496bbd5c68245bd69da52a21db41b60b1e0df65f63946e6339131",
+    "portal/scripts/fixtures/planner-v3-mappings.json": "482d47b153d784d61f922ad7e1b79563898f7657f8c90f9fe6339f0c8f5038c0"
+  },
+  "push": false,
+  "deployed": false
+}
