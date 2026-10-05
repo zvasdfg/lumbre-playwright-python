@@ -70,7 +70,16 @@ export default function StaticPortal() {
           <a href="#laboratorio">Laboratorio</a>
           <a href="#tienda">Provisiones</a>
         </nav>
-        <details className="mobile-nav">
+        <details className="mobile-nav" onClick={(event) => {
+          const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+          if (!link) return;
+          event.currentTarget.open = false;
+          const target = document.getElementById(link.hash.slice(1));
+          if (target) {
+            target.tabIndex = -1;
+            window.requestAnimationFrame(() => target.focus({ preventScroll: true }));
+          }
+        }}>
           <summary>Menú</summary>
           <div>
             <a href="#metodo">Método</a>
