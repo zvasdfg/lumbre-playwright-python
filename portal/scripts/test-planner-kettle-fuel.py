@@ -8,7 +8,7 @@ with sync_playwright() as p:
         page.get_by_label('Tipo de cocción',exact=True).select_option('indirecto')
         page.get_by_label('Horas de cocción',exact=True).fill('2.5')
         page.locator('.planner-reference-settings > summary').click()
-        for size,total in [('47','36'),('57','46'),('67','64')]:
+        for size,total in [('47','45'),('57','58'),('67','80')]:
             page.get_by_label('Diámetro de la parrilla',exact=True).select_option(size)
             page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
             estimate=page.locator('.planner-result .fire-fuel-estimate')
@@ -16,7 +16,7 @@ with sync_playwright() as p:
             assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
         page.get_by_label('Combustible principal',exact=True).select_option('carbon')
         page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
-        expect(page.locator('.planner-result .fire-fuel-estimate h3')).to_contain_text('0.84 kg de carbón de haya')
+        expect(page.locator('.planner-result .fire-fuel-estimate h3')).to_contain_text('0.84 kg iniciales de carbón de haya')
         page.get_by_label('Nombre del plan',exact=True).fill('Kettle prueba')
         page.get_by_role('button',name='Guardar plan',exact=True).click()
         page.reload(wait_until='networkidle')

@@ -28,7 +28,7 @@ with sync_playwright() as p:
             if rate:page.get_by_label('Consumo por hora',exact=True).fill('0.5' if rate=='.5' else rate)
             page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
             estimate=page.locator('.planner-result .fire-fuel-estimate')
-            expect(estimate.locator('h3')).to_contain_text(total)
+            expect(estimate.locator('dl')).to_contain_text(total)
             assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
             page.get_by_label('Nombre del plan',exact=True).fill(fuel)
             page.get_by_role('button',name='Guardar plan',exact=True).click()
@@ -36,12 +36,12 @@ with sync_playwright() as p:
             page.get_by_role('button',name='Editar plan '+fuel,exact=True).click()
             expect(page.get_by_label('Consumo por hora',exact=True)).to_have_value('0.5' if rate=='.5' else rate)
             page.get_by_role('button',name='Imprimir plan '+fuel,exact=True).click()
-            expect(page.get_by_role('dialog').locator('.fire-fuel-estimate h3')).to_contain_text(total)
+            expect(page.get_by_role('dialog').locator('.fire-fuel-estimate dl')).to_contain_text(total)
             if width==1440:
                 path=OUT/(fuel+'.pdf')
                 page.pdf(path=str(path),format='A4',print_background=True)
                 text=' '.join(x.extract_text() for x in PdfReader(path).pages)
-                assert 'COMBUSTIBLE PARA PREVER' in text
+                assert 'presupuesto conservador' in text
             assert not errors,errors
             context.close()
             print('PASS',width,fuel,flush=True)
@@ -49,7 +49,7 @@ with sync_playwright() as p:
     page.goto('http://127.0.0.1:3001/#planificador',wait_until='networkidle')
     page.get_by_label('Horas de cocción',exact=True).fill('2')
     page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
-    expect(page.locator('.planner-result .fire-fuel-estimate')).to_contain_text('Se muestra la carga inicial')
+    expect(page.locator('.planner-result .fire-fuel-estimate')).to_contain_text('Sólo carga inicial, no el total')
     page.locator('.planner-reference-settings > summary').click()
     page.get_by_label('Consumo por hora',exact=True).fill('-1')
     page.get_by_role('button',name='Construir plan de fuego',exact=True).click()

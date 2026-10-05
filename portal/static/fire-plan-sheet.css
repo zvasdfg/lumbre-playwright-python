@@ -190,3 +190,12 @@
 .fire-fuel-estimate h3 { font-size: clamp(24px, 4vw, 36px); margin: 10px 0; color: #7b251b; }
 .fire-fuel-estimate small { display: block; line-height: 1.6; }
 .planner-fuel-inputs { min-width: 0; margin: 16px 0; }
+.planner-fuel-availability { border:1px solid #a85c4c; border-left:4px solid #a85c4c; padding:16px; margin:20px 0; }
+.planner-fuel-availability strong { display:block; font-size:15px; line-height:1.5; }
+.planner-fuel-availability p { margin:8px 0 0; font-size:13px; line-height:1.65; }
+.fire-fuel-estimate .fire-plan-facts { margin:16px 0; }
+.fuel-calculation-details { margin:12px 0; }
+.fuel-calculation-details summary { cursor:pointer; text-decoration:underline; min-height:44px; padding:12px 0; }
+.planner-form-grid > label { min-width:0; }
+@media screen and (min-width:901px) { .planner-controls .planner-form-grid > label:has(select[name="equipment"]), .planner-controls .planner-form-grid > label:has(select[name="cookingStyle"]) { grid-column:1 / -1; } }
+@media print { .fuel-calculation-details::details-content { content-visibility:visible; } .fuel-calculation-details > * { display:block; } }

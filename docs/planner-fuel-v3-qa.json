@@ -1,0 +1,26 @@
+{
+  "revision": "fuel-ux-v3",
+  "date": "2026-10-05",
+  "baseline_commit": "d5c4249",
+  "scope": "Fuel budget hierarchy, pre-build availability, source attribution and copy. No new consumption rates or compatibility changes.",
+  "verification": {
+    "model_tests": "PASS: 22 tests, including reserve arithmetic and availability states",
+    "static_typecheck": "PASS",
+    "static_build": "PASS; existing large-chunk warning remains",
+    "browser": [
+      "Default kettle charcoal: initial-load-only notice visible before build",
+      "Kettle 57 cm, briquettes, indirect, 4 hours: preview and result show total 68 = initial 30 + replenishment 24 + reserve 14",
+      "Kettle smoking: no automatic budget notice appears before generation; result explicitly says quantity unavailable",
+      "Pellets baking, 4 hours: headline range 2.3–9 kg; conservative budget 11.3 kg is secondary and separated from reserve",
+      "390px mobile kettle result: readable breakdown, no horizontal overflow",
+      "Browser error log empty during this verification"
+    ],
+    "not_rerun": ["Full Python browser suite", "PDF export and printing", "All 100 recipe fixtures"]
+  },
+  "preserved_limitations": [
+    "No automatic session consumption for charcoal, direct briquettes, kettle smoking, stages, gas, kamado, vertical or offset without a user-provided measured rate",
+    "Stage editor simplification and automatic duration aggregation are deferred",
+    "Weber quantities remain manufacturer-specific; Lumbre reserve is a planning margin, not a Weber guarantee"
+  ],
+  "deployment": "Local only; no push or deployment"
+}
