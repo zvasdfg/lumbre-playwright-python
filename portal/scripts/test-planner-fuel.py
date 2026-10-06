@@ -49,7 +49,7 @@ with sync_playwright() as p:
     page.goto('http://127.0.0.1:3001/#planificador',wait_until='networkidle')
     page.get_by_label('Horas de cocción',exact=True).fill('2')
     page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
-    expect(page.locator('.planner-result .fire-fuel-estimate')).to_contain_text('Sólo carga inicial, no el total')
+    expect(page.locator('.planner-result .fire-fuel-estimate')).to_contain_text('ESTIMACIÓN LUMBRE')
     page.locator('.planner-reference-settings > summary').click()
     page.get_by_label('Consumo por hora',exact=True).fill('-1')
     page.get_by_role('button',name='Construir plan de fuego',exact=True).click()

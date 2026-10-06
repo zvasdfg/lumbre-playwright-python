@@ -19,7 +19,7 @@ with sync_playwright() as p:
         page.get_by_label('Equipo',exact=True).select_option('offset')
         for checkbox in page.locator('[name="capabilityVerified"]').all(): checkbox.check()
         page.get_by_role('button',name='Construir plan de fuego',exact=True).click()
-        expect(page.locator('.planner-result .fire-fuel-estimate')).to_contain_text('Sin referencia automática de Weber')
+        expect(page.locator('.planner-result .fire-fuel-estimate')).to_contain_text('ESTIMACIÓN LUMBRE')
         expect(page.get_by_label('Consumo por hora',exact=True)).not_to_be_visible()
         page.close()
         print('PASS Weber defaults and optional controls',width,flush=True)
