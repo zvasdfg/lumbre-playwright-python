@@ -40,8 +40,10 @@ with sync_playwright() as p:
             if width==1440:
                 path=OUT/(fuel+'.pdf')
                 page.pdf(path=str(path),format='A4',print_background=True)
-                text=' '.join(x.extract_text() for x in PdfReader(path).pages)
-                assert 'presupuesto conservador' in text
+                # Print CSS uppercases labels; PDF layout can also split whitespace.
+                text=' '.join(' '.join(x.extract_text() or '' for x in PdfReader(path).pages).casefold().split())
+                assert 'presupuesto conservador' in text, (fuel, 'Missing fuel budget label in PDF')
+                assert total.casefold() in text, (fuel, 'Missing expected fuel total in PDF', total)
             assert not errors,errors
             context.close()
             print('PASS',width,fuel,flush=True)
