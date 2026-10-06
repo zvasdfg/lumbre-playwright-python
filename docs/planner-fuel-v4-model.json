@@ -1,0 +1,30 @@
+{
+  "revision": "lumbre-fuel-v4",
+  "date": "2026-10-05",
+  "authorization": "User requested approximate extrapolation from Weber data for simple configurations, without more input fields.",
+  "status": "Experimental planning model; not empirically calibrated",
+  "sources": {
+    "solid": {"url": "https://www.weber.com/GB/en/weber-briquettes/weber-49393.html", "anchor": "Approximately 2 kg briquettes for 57 cm kettle; heat up to 3 hours. Dividing these figures into a rate is a Lumbre modeling assumption, not a published consumption test."},
+    "gas": {"url": "https://contact-emea.weber.com/hc/pt/articles/32729720804381-Resumo-do-Consumo-das-Churrasqueiras-Weber-Spirit", "anchor": "Spirit 2–3 burner published nominal figures: 0.494–0.623 kg/h LP, 7–8.7 kW."},
+    "pellets": {"url": "https://contact-emea.weber.com/hc/en-us/articles/360048814014-Pellet-Consumption-SmokeFire", "anchor": "Published approximate bands 0.5–1 kg/h at 95–150 C and 1.5–2 kg/h at 230–315 C."}
+  },
+  "lumbre_assumptions_not_weber_claims": {
+    "solid_base_kg_h": "2/3",
+    "equipment_multipliers": {"kettle": 1, "kamado": 0.75, "vertical": 1.2, "offset": 2, "open": 1.5},
+    "fuel_multipliers": {"briquettes": 1, "lump_charcoal": 1.15, "dry_wood": 2.5},
+    "temperature_multiplier": "(C-20)/180 clamped to 0.45–2.2",
+    "size_multiplier": "kettle (diameter/57)^2; other equipment assumes domestic scale comparable to 57 cm",
+    "solid_range": "base × equipment × fuel × size × temperature × [0.7,1.4]",
+    "minimum_provision_kg": "charcoal 0.98, briquettes 2, wood 3, multiplied by size and equipment factor capped at 1.5; a shopping floor, not an ignition load",
+    "gas_duty": "lower max(.25,min(.85,heat*.45)); upper max(.5,min(1,heat*.85))",
+    "natural_gas": "7–8.7 kW divided by assumed 10 kWh/m³, then duty factors; no LP mass-to-NG-volume conversion",
+    "pellets_intermediate": "linear interpolation of band endpoints from 150 to 230 C",
+    "pellets_outside_bands": "trend extension clamped to interpolation fractions -0.25–1.75; low floor .25 kg/h, high floor .75 kg/h",
+    "stages": "envelope across active stage temperatures for total general hours; blank stage temperatures use method suggestions only within estimate; no parsing free-text duration",
+    "reserve": "25% of max(high consumption, shopping floor); round consumption/provision/reserve upward to 0.1",
+    "conditions": "Dry fuel, domestic equipment, little wind, normal openings. Especially uncertain for wood and offset. Not for commercial equipment. Aromatic wood is not included or deducted from primary fuel."
+  },
+  "preserved": ["Existing kettle briquette indirect table remains the primary piece-count result", "Manual measured rates override automatic models", "Compatibility and manufacturer-confirmation requirements still apply", "Missing duration and invalid configurations cannot produce budgets"],
+  "verification": {"unit_tests": "24 PASS; automatic-budget coverage for 81 valid simple configurations", "typecheck": "PASS", "build": "PASS with existing chunk-size warning", "browser_cases": ["kettle charcoal direct 2h: range 1.5–3kg, provision 3.8kg", "kettle briquettes smoke 6h: range 1.7–3.4kg, provision 4.3kg", "offset dry wood smoke 8h: range 11.1–22.1kg, provision 27.7kg", "gas LP direct 2h: range 0.7–1.5kg, provision 1.9kg"], "limitations": "No physical burn tests, full 100-recipe replay or PDF export run for this revision."},
+  "deployment": "Local preview only; no push requested"
+}
