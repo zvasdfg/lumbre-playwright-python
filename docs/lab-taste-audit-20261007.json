@@ -1,0 +1,784 @@
+{
+  "revision": "taste-audit-v1",
+  "date": "2026-10-07",
+  "scope": "Portal laboratory five-taste radar; data inventory and model regression, not sensory-panel validation",
+  "rollback_snapshot": "968179181f434ed162963e2cc1fd6aeb80a9f1b4",
+  "sources": [
+    {
+      "url": "https://www.nidcd.nih.gov/health/taste-disorders",
+      "supports": "Five tastes, glutamate-associated umami, distinction from aromas and chemesthesis; does not validate numeric ingredient scores"
+    }
+  ],
+  "decision": "Retain five independent gram-weighted catalog taste axes and normalize to the maximum. No automatic aroma-to-taste conversion. Values remain heuristic, not validated intensity measurements.",
+  "corrections": [
+    {
+      "ids": [
+        "flor_sal",
+        "sal_colima",
+        "sal_kosher",
+        "sal_mar_gruesa"
+      ],
+      "axis": "umami",
+      "previous": 1,
+      "current": 0,
+      "reason": "Model correction for plain NaCl salts: do not credit flavor enhancement as intrinsic glutamate taste. Zero is a modeling convention, not a measured sensory threshold."
+    }
+  ],
+  "unresolved": [
+    {
+      "ids": [
+        "anis_estrella",
+        "canela_cassia",
+        "clavo_olor",
+        "albahaca_seca"
+      ],
+      "issue": "Sweet-smelling descriptions do not establish quantitative gustatory sweetness. Preserve existing heuristic scores pending controlled sensory calibration; do not invent replacements."
+    },
+    {
+      "ids": [
+        "cascara_limon",
+        "cascara_mandarina",
+        "cascara_naranja"
+      ],
+      "issue": "Citrus aroma is not acidity. Existing acid/bitter scores need calibration by ingredient and preparation; no addition of the citrus aroma score."
+    },
+    {
+      "ids": [
+        "semilla_apio"
+      ],
+      "issue": "Seed is not celery salt; existing salty score requires validation."
+    },
+    {
+      "ids": [
+        "flor_sal",
+        "sal_colima",
+        "sal_kosher",
+        "sal_mar_gruesa"
+      ],
+      "issue": "Earthy/aroma ratings remain outside the five-taste radar and were not corrected in this scope."
+    }
+  ],
+  "validation": "All numeric catalog profiles remain unvalidated; structural checks and tests cannot substitute for tasting.",
+  "ingredients": [
+    {
+      "id": "achiote",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "ajo_granulado",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 3
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "ajo_negro",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 4,
+        "acido": 3,
+        "amargo": 1,
+        "umami": 4
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "ajonjoli_blanco",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 3
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "ajonjoli_negro",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 3
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "albahaca_seca",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "anis_estrella",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 5,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "azucar_morena",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 5,
+        "acido": 0,
+        "amargo": 0,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cacao_puro",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 2,
+        "amargo": 5,
+        "umami": 2
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cafe_molido",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 3,
+        "amargo": 5,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "canela_cassia",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 5,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cardamomo",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cascara_limon",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 3,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cascara_mandarina",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 4,
+        "acido": 2,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cascara_naranja",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 2,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cebolla_granulada",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 3
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "cebolla_tostada",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 4,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 4
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "chile_ancho",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "chile_arbol",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "chile_guajillo",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 2,
+        "amargo": 2,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "chile_morita",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 2
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "chile_pasilla",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 2
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "chipotle_seco",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 2
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "clavo_olor",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 4,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "comino",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "curcuma",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "eneldo_seco",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "flor_sal",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 5,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 0,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "granos_paraiso",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "hinojo",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 4,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "jengibre_molido",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 1,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "laurel",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "levadura_nutricional",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 5
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "limon_negro",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 5,
+        "amargo": 3,
+        "umami": 2
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "macis",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "mejorana",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "mostaza_polvo",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 2,
+        "amargo": 3,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "nuez_moscada",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "oregano_mexicano",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "paprika_ahumada",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "paprika_dulce",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "perejil_seco",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "pimienta_blanca",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "pimienta_gorda",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "pimienta_larga",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "pimienta_negra",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "pimienta_rosa",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 3,
+        "acido": 1,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "pimienta_verde",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 1,
+        "amargo": 1,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "porcini_seco",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 5
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "romero",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "sal_colima",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 5,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 0,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "sal_kosher",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 5,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 0,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "sal_mar_gruesa",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 5,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 0,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "salvia_seca",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "semilla_apio",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 2,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 4,
+        "umami": 2
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "semilla_cilantro",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 1,
+        "amargo": 1,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "semilla_mostaza",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 1,
+        "amargo": 2,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "shiitake_seco",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 1,
+        "acido": 0,
+        "amargo": 2,
+        "umami": 5
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "sumac",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 2,
+        "acido": 5,
+        "amargo": 3,
+        "umami": 1
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    },
+    {
+      "id": "tomillo",
+      "catalog_state": "documentado_sin_validar",
+      "tastes": {
+        "salado": 0,
+        "dulce": 0,
+        "acido": 0,
+        "amargo": 3,
+        "umami": 0
+      },
+      "review": "NUMERIC_SENSORY_CALIBRATION_PENDING"
+    }
+  ]
+}
