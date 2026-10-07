@@ -19,6 +19,7 @@ const files = [
   "scripts/check-static.mjs", "scripts/check-recipes.mjs",
   "scripts/fire-plan-model.test.mjs", "scripts/fire-plan-fuel.test.mjs", "scripts/verify-static-deployment.mjs",
   "scripts/ingredient-families.test.mjs",
+  "scripts/lab-formula.test.mjs",
 ];
 // Canonical ingredient DATA lives under app/api, but no route/server code is copied.
 for (const entry of readdirSync(resolve(portal, "app/api/ingredientes"), {withFileTypes: true})) {
