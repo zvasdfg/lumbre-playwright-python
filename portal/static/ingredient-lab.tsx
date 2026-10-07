@@ -348,8 +348,8 @@ export default function IngredientLab() {
       <div className="lab-formula-start">
         <p className="section-index">01 · DEFINE TU COCCIÓN</p>
         <div className="lab-toolbar">
-          <label><span>Primero, el fuego</span>
-            <select value={heat} onChange={event => { setHeat(event.target.value as "directo" | "indirecto"); setProtocol(null); setProtocolCreated(null); }}>
+          <label><span id="lab-heat-label">Primero, el fuego</span>
+            <select aria-labelledby="lab-heat-label" value={heat} onChange={event => { setHeat(event.target.value as "directo" | "indirecto"); setProtocol(null); setProtocolCreated(null); }}>
               <option value="directo">Fuego directo · cocción corta</option><option value="indirecto">Fuego indirecto · cocción prolongada</option>
             </select>
           </label>
