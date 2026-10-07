@@ -4,10 +4,13 @@ import Image from "./image";
 import { createPortal } from "react-dom";
 import ProductSheet from "./product-sheet";
 import { useEffect, useMemo, useState } from "react";
-import { ingredients, ingredientFamilies as families } from "../app/lib/ingredients";
+import { ingredients, ingredientFamilies } from "../app/lib/ingredients";
+import { familyLabel, orderIngredientFamilies } from "./ingredient-family-presentation";
 import { productionProducts, productionArchiveRecord } from "../app/lib/production-products";
 import { buildExpectedProfile, buildFormulaEvidence } from "../app/lib/flavor-formulas";
 import type { ExperimentProtocol, Ingredient } from "../app/lib/ingredients";
+
+const families = orderIngredientFamilies(ingredientFamilies);
 
 type SessionBlend = {
   id: string;
@@ -97,21 +100,6 @@ function buildSessionProtocol(
     contador_repeticiones: 0,
     creado_en: new Date().toISOString(),
   };
-}
-
-function familyLabel(family: string) {
-  const labels: Record<string, string> = {
-    Allium: "Ajo y cebolla",
-    Citrico: "Cítricos",
-    Endulzante: "Endulzantes",
-    Especia_calida: "Especias cálidas",
-    Hierba: "Hierbas",
-    Pimienta: "Pimientas",
-    Sal: "Sales",
-    Semilla_aromatica: "Semillas aromáticas",
-    Tostado: "Ingredientes tostados",
-  };
-  return labels[family] ?? family.replaceAll("_", " ");
 }
 
 function statusLabel(status: string) {
