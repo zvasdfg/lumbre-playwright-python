@@ -9,6 +9,15 @@ import { spawnSync } from "node:child_process";
 const portal = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => JSON.parse(readFileSync(resolve(portal, file), "utf8"));
 
+test("CI pins the verified npm version and preflights the real deploy installation", () => {
+  const workflow = readFileSync(resolve(portal, "../.github/workflows/deploy.yml"), "utf8");
+  assert.match(workflow, /NPM_VERSION: "11\.17\.0"/);
+  assert.equal(workflow.match(/npm install --global "npm@\$NPM_VERSION"/g)?.length, 2);
+  const build = workflow.split("  static-build:")[1].split("  browser-tests:")[0];
+  assert.match(build, /prepare-deploy-workspace\.mjs/);
+  assert.match(build, /cd "\$RUNNER_TEMP\/lumbre-deploy-preflight"\s+npm ci\s+npm ls sharp\s+npm audit/);
+});
+
 test("browser CI uses a matching prebuilt image and gates deployment on all browser checks", () => {
   const workflow = readFileSync(resolve(portal, "../.github/workflows/deploy.yml"), "utf8");
   const requirements = readFileSync(resolve(portal, "profiles/browser/requirements.txt"), "utf8");

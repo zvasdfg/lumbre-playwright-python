@@ -10,6 +10,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # npm 11 was used to resolve the security override in the deploy lockfile.
+  # Do not rely on the npm major bundled with setup-node's Node 22.
+  NPM_VERSION: "11.17.0"
+
 concurrency:
   group: lumbre-static-${{ github.ref }}
   cancel-in-progress: false
@@ -27,6 +32,8 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: portal/profiles/static/package-lock.json
+      - name: Use the verified npm version
+        run: npm install --global "npm@$NPM_VERSION" --registry=https://registry.npmjs.org
       - name: Prepare isolated static workspace
         run: |
           node --test portal/scripts/static-profile.test.mjs
@@ -42,6 +49,13 @@ jobs:
       - name: Audit dependencies
         run: npm audit --audit-level=high --registry=https://registry.npmjs.org
         working-directory: ${{ runner.temp }}/lumbre-static
+      - name: Validate deploy installation before browser tests
+        run: |
+          node portal/scripts/prepare-deploy-workspace.mjs "$RUNNER_TEMP/lumbre-deploy-preflight"
+          cd "$RUNNER_TEMP/lumbre-deploy-preflight"
+          npm ci
+          npm ls sharp
+          npm audit --audit-level=high --registry=https://registry.npmjs.org
       - run: npm run build:static
         working-directory: ${{ runner.temp }}/lumbre-static
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -118,6 +132,8 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: portal/profiles/deploy/package-lock.json
+      - name: Use the verified npm version
+        run: npm install --global "npm@$NPM_VERSION" --registry=https://registry.npmjs.org
       - name: Prepare isolated deploy workspace
         run: node portal/scripts/prepare-deploy-workspace.mjs "$RUNNER_TEMP/lumbre-deploy"
       - run: npm ci
