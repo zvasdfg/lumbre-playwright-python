@@ -92,18 +92,21 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: portal/profiles/static/package-lock.json
-      - name: Prepare isolated static workspace
-        run: node portal/scripts/prepare-static-workspace.mjs "$RUNNER_TEMP/lumbre-static"
+          cache-dependency-path: portal/profiles/deploy/package-lock.json
+      - name: Prepare isolated deploy workspace
+        run: node portal/scripts/prepare-deploy-workspace.mjs "$RUNNER_TEMP/lumbre-deploy"
       - run: npm ci
-        working-directory: ${{ runner.temp }}/lumbre-static
+        working-directory: ${{ runner.temp }}/lumbre-deploy
+      - name: Audit deploy dependencies
+        run: npm audit --audit-level=high --registry=https://registry.npmjs.org
+        working-directory: ${{ runner.temp }}/lumbre-deploy
       - name: Download the validated build from this run
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           name: lumbre-static
-          path: ${{ runner.temp }}/lumbre-static/dist-static
+          path: ${{ runner.temp }}/lumbre-deploy/dist-static
       - name: Deploy assets only (no backend or D1)
-        working-directory: ${{ runner.temp }}/lumbre-static
+        working-directory: ${{ runner.temp }}/lumbre-deploy
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -112,5 +115,5 @@ jobs:
           test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::Missing CLOUDFLARE_API_TOKEN"; exit 1; }
           npx wrangler deploy --config wrangler.static.jsonc
       - name: Verify published static bundle
-        working-directory: ${{ runner.temp }}/lumbre-static
+        working-directory: ${{ runner.temp }}/lumbre-deploy
         run: node scripts/verify-static-deployment.mjs https://metodolumbre.com

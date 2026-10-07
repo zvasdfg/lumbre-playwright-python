@@ -15,7 +15,7 @@ if (canonicalTarget === portal || canonicalTarget.startsWith(portal + sep)) {
 const files = [
   "static", "app/globals.css", "app/lib", "app/components/fire-almanac.tsx",
   "public/brand", "public/editorial", "postcss.config.mjs", "tsconfig.static.json",
-  "wrangler.static.jsonc", ".npmrc",
+  ".npmrc",
   "scripts/check-static.mjs", "scripts/check-recipes.mjs",
   "scripts/fire-plan-model.test.mjs", "scripts/fire-plan-fuel.test.mjs", "scripts/verify-static-deployment.mjs",
 ];

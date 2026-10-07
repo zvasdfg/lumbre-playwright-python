@@ -1,0 +1,18 @@
+{
+  "scope": "Separate active static build dependencies from deployment-only tooling; preserve legacy backend and app behavior",
+  "lockfilePackageEntries": { "previousBuild": 184, "build": 97, "deploy": 91 },
+  "security": { "source-map-js": "1.2.2", "wrangler": "4.148.0", "miniflareSharpOverride": "0.35.5" },
+  "localChecks": {
+    "cleanInstallsBothProfiles": "PASS",
+    "corporateMirrorAudits": "PASS: zero vulnerabilities in both profiles",
+    "staticTypecheck": "PASS",
+    "recipes": "PASS: 100",
+    "plannerTests": "PASS: 24",
+    "profileTests": "PASS: 4",
+    "staticBuildAndBoundary": "PASS",
+    "sharpSvgRasterization": "PASS",
+    "wranglerDeployDryRun": "PASS: no deployment performed"
+  },
+  "registry": "Resolved via preconfigured corporate mirror with TLS validation; committed lockfile URLs use public npm with unchanged integrity hashes",
+  "pendingAtRecording": ["GitHub public npm audit", "CI browser/PDF checks", "Production deployment verification"]
+}
