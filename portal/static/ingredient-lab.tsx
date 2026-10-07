@@ -9,6 +9,11 @@ import { familyLabel, orderIngredientFamilies } from "./ingredient-family-presen
 import { productionProducts, productionArchiveRecord } from "../app/lib/production-products";
 import { buildExpectedProfile, buildFormulaEvidence } from "../app/lib/flavor-formulas";
 import type { ExperimentProtocol, Ingredient } from "../app/lib/ingredients";
+import { labBases, styles, toggleLabSelection, familyGuidance, validAmounts, formulaSignature, type LabDraft } from "./lab-formula";
+import LabRadar from "./lab-radar";
+import { referenceFormula } from "./lab-user-references";
+import { productionMatches } from "./lab-product-matches";
+import "./lab-formula.css";
 
 const families = orderIngredientFamilies(ingredientFamilies);
 
@@ -16,6 +21,7 @@ type SessionBlend = {
   id: string;
   title: string;
   protocol: ExperimentProtocol;
+  draft?: LabDraft;
 };
 
 const SESSION_BLEND_STORAGE_KEY = "lumbre.ingredient-lab.session-blends.v1";
@@ -26,6 +32,12 @@ const objectives = [
   "Bark para cocción lenta",
   "Vegetales a las brasas",
   "Pollo al fuego directo",
+  "Fuego directo · Salado simple",
+  "Fuego indirecto · Salado simple",
+  "Fuego indirecto · BBQ dulce",
+  "Fuego indirecto · Bark para res",
+  "Fuego directo · Fórmula propia",
+  "Fuego indirecto · Fórmula propia",
 ];
 
 function readSessionBlends(): SessionBlend[] {
@@ -47,11 +59,13 @@ function readSessionBlends(): SessionBlend[] {
         !objectives.includes(stored.protocol.objetivo) || !Array.isArray(stored.protocol.componentes)) return [];
       const ids = stored.protocol.componentes.map(component => component?.id);
       const components = ingredients.filter(component => ids.includes(component.id));
-      if (components.length < 2 || components.length > 6 || components.length !== ids.length) return [];
-      const signature = `SESSION:${stored.protocol.objetivo}:${[...ids].sort().join("+")}`;
-      const rebuilt = buildSessionProtocol(stored.id, signature, components, stored.protocol.objetivo);
+      if (components.length < 2 || components.length > 12 || components.length !== ids.length) return [];
+      const draft = stored.draft;
+      if (draft && (!labBases.some(base => base.id === draft.baseId) || !validAmounts(ids, draft.amounts, draft.unit) || (draft.unit !== undefined && draft.unit !== "g") || (draft.unit === "g" && !styles.find(style => style.id === draft.baseId)?.heats.includes(draft.heat ?? "")))) return [];
+      const signature = draft ? formulaSignature(stored.protocol.objetivo, draft) : `SESSION:${stored.protocol.objetivo}:${[...ids].sort().join("+")}`;
+      const rebuilt = buildSessionProtocol(stored.id, signature, components, stored.protocol.objetivo, draft);
       if (typeof stored.protocol.creado_en !== "string" || !Number.isFinite(Date.parse(stored.protocol.creado_en))) return [];
-      return [{ id: stored.id, title: stored.title, protocol: { ...rebuilt, creado_en: stored.protocol.creado_en } }];
+      return [{ id: stored.id, title: stored.title, draft, protocol: { ...rebuilt, creado_en: stored.protocol.creado_en } }];
     });
   } catch {
     return [];
@@ -71,6 +85,7 @@ function buildSessionProtocol(
   signature: string,
   selectedIngredients: Ingredient[],
   objective: string,
+  draft?: LabDraft,
 ): ExperimentProtocol {
   const formula = buildFormulaEvidence(selectedIngredients, objective);
   return {
@@ -83,15 +98,15 @@ function buildSessionProtocol(
       nombre,
       familia,
     })),
-    hipotesis: formula.conclusion,
-    formula,
-    perfil_esperado: buildExpectedProfile(selectedIngredients),
+    hipotesis: draft ? "Variación de usuario pendiente de probar. Las cantidades registradas no certifican el balance ni la dosis de aplicación." : formula.conclusion,
+    formula: draft ? undefined : formula,
+    perfil_esperado: draft ? [] : buildExpectedProfile(selectedIngredients),
     metodo: [
       "Preparar una muestra control sin sazonador.",
-      formula.level === "referenced"
+      draft ? "Preparar una muestra con la mezcla registrada y compararla con el control." : formula.level === "referenced"
         ? `Preparar una segunda muestra con la estructura de referencia ${formula.formula_name}.`
         : "Preparar una segunda muestra con la fórmula de referencia más cercana cuando exista.",
-      "Moler y pesar cada componente por separado; registrar la proporción exacta.",
+      draft?.unit === "g" ? "Pesar cada ingrediente según los gramos registrados. El lote no es la dosis de aplicación al alimento." : draft ? "Medir las cantidades registradas con cucharaditas rasas de 5 ml." : "Moler y pesar cada componente por separado; registrar la proporción exacta.",
       "Aplicar cada mezcla en muestras equivalentes y registrar temperatura y tiempo.",
       "Comparar aroma, color, costra, balance y los perfiles esperados contra el control y la referencia.",
     ],
@@ -151,12 +166,24 @@ export default function IngredientLab() {
   const [search, setSearch] = useState("");
   const [family, setFamily] = useState("todas");
   const [openFamilies, setOpenFamilies] = useState<string[]>([]);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [objective, setObjective] = useState(objectives[0]);
-  const [blendTitle, setBlendTitle] = useState("");
+  const [selection, setSelection] = useState<{ ids: string[]; amounts: Record<string, number> }>({ ids: [], amounts: {} });
+  const { ids: selectedIds, amounts } = selection;
+  function setAmounts(value: Record<string, number> | ((current: Record<string, number>) => Record<string, number>)) {
+    setSelection(current => ({ ...current, amounts: typeof value === "function" ? value(current.amounts) : value }));
+  }
+  const [heat, setHeat] = useState<"directo" | "indirecto">("directo");
+  const [baseId, setBaseId] = useState("manual");
+  const objective = `Fuego ${heat} · ${styles.find(style => style.id === baseId)!.name}`;
+  const [blendTitle, setBlendTitle] = useState("Mi primera mezcla");
   const [sessionBlends, setSessionBlends] = useState<SessionBlend[]>([]);
   const [inspectedIngredient, setInspectedIngredient] = useState<Ingredient | null>(null);
   const [inspectedHypothesis, setInspectedHypothesis] = useState<ExperimentProtocol | null>(null);
+  const sheetBlend = sessionBlends.find(blend => blend.id === inspectedHypothesis?.id);
+  const sheetDraft = sheetBlend?.draft;
+  const sheetTotal = sheetDraft ? Object.values(sheetDraft.amounts).reduce((sum, amount) => sum + amount, 0) : 0;
+  const [recommendedProduct, setRecommendedProduct] = useState<typeof productionProducts[number] | null>(null);
+  const matchingProducts = inspectedHypothesis?.tipo_registro === "hipotesis_usuario"
+    ? productionMatches(inspectedHypothesis.componentes.map(item => item.id)) : [];
   const [protocol, setProtocol] = useState<ExperimentProtocol | null>(null);
   const [protocolCreated, setProtocolCreated] = useState<boolean | null>(null);
   const [creating, setCreating] = useState(false);
@@ -215,13 +242,18 @@ export default function IngredientLab() {
     .map((id) => ingredients.find((ingredient) => ingredient.id === id))
     .filter((ingredient) => ingredient !== undefined);
 
+  const currentAmounts = Object.fromEntries(selectedIds.map(id => [id, amounts[id]]));
+  const proposedFormula = referenceFormula(selectedIngredients);
+  const quantitiesValid = validAmounts(selectedIds, currentAmounts, "g") && styles.find(style => style.id === baseId)!.heats.includes(heat);
+
   function toggleIngredient(id: string) {
     setProtocol(null);
     setProtocolCreated(null);
-    setSelectedIds((current) => {
-      if (current.includes(id)) return current.filter((selectedId) => selectedId !== id);
-      if (current.length === 6) return current;
-      return [...current, id];
+    setSelection(current => {
+      const next = toggleLabSelection(current, id, ingredients, "manual");
+      if (next === current) return current;
+      const proposal = referenceFormula(ingredients.filter(item => next.ids.includes(item.id)));
+      return proposal ? {ids: next.ids, amounts: proposal.amounts} : next;
     });
   }
 
@@ -235,7 +267,9 @@ export default function IngredientLab() {
       }
 
       {
-        const signature = `SESSION:${objective}:${[...selectedIds].sort().join("+")}`;
+        if (!quantitiesValid) throw new Error("Revisa las cantidades: entre 2 y 12 ingredientes, todos mayores que cero y un máximo total de 150 g.");
+        const draft: LabDraft = { baseId, amounts: currentAmounts, unit: "g", heat, referencePolicy: "user-v1" };
+        const signature = formulaSignature(objective, draft);
         const existing = sessionBlends.find((blend) => blend.protocol.firma === signature);
         if (existing) {
           setProtocol(existing.protocol);
@@ -253,8 +287,9 @@ export default function IngredientLab() {
           signature,
           selectedIngredients,
           objective,
+          draft,
         );
-        const createdBlend = { id, title, protocol: createdProtocol };
+        const createdBlend = { id, title, protocol: createdProtocol, draft };
         const nextBlends = [...sessionBlends, createdBlend];
         window.sessionStorage.setItem(SESSION_BLEND_STORAGE_KEY, JSON.stringify(nextBlends));
         setSessionBlends(nextBlends);
@@ -310,8 +345,20 @@ export default function IngredientLab() {
         </div>
       </div>
 
+      <div className="lab-formula-start">
+        <p className="section-index">01 · DEFINE TU COCCIÓN</p>
+        <div className="lab-toolbar">
+          <label><span>Primero, el fuego</span>
+            <select value={heat} onChange={event => { setHeat(event.target.value as "directo" | "indirecto"); setProtocol(null); setProtocolCreated(null); }}>
+              <option value="directo">Fuego directo · cocción corta</option><option value="indirecto">Fuego indirecto · cocción prolongada</option>
+            </select>
+          </label>
+        </div>
+        <p>El cálculo usa las fórmulas por peso aportadas por el usuario. Primero busca una coincidencia de ingredientes; para variantes, reserva la sal de la referencia más cercana y adapta sólo el resto. No reduce la sal por el simple hecho de añadir más ingredientes.</p>
+      </div>
       <div className="lab-workspace">
         <div className="lab-catalog">
+          <p className="section-index">02 · EXPLORA Y VARÍA · NINGUNA FAMILIA ES OBLIGATORIA</p>
           <div className="lab-toolbar">
             <label className="lab-search">
               <span>Buscar componente</span>
@@ -349,8 +396,9 @@ export default function IngredientLab() {
               >
                 <summary className="family-group-heading">
                   <h3 id={`family-${group.family}`}>{familyLabel(group.family)}</h3>
-                  <span>{group.ingredients.length} componentes</span>
+                  <span>{ingredients.filter(item => item.familia === group.family).length} componentes, {selectedIngredients.filter(item => item.familia === group.family).length} seleccionados</span>
                 </summary>
+                <p className="lab-family-guidance">{familyGuidance[group.family]} {selectedIngredients.filter(item => item.familia === group.family).map(item => item.nombre).join(" · ")}</p>
                 <div className="ingredient-grid">
                   {group.ingredients.map((ingredient, index) => {
                     const isSelected = selectedIds.includes(ingredient.id);
@@ -382,7 +430,7 @@ export default function IngredientLab() {
                             type="button"
                             className={isSelected ? "selected" : ""}
                             aria-pressed={isSelected}
-                            disabled={!isSelected && selectedIds.length === 6}
+                            disabled={!isSelected && selectedIds.length === 12}
                             onClick={() => toggleIngredient(ingredient.id)}
                           >
                             {isSelected ? "Retirar" : "Agregar"}
@@ -401,17 +449,24 @@ export default function IngredientLab() {
         </div>
 
         <aside className="experiment-bench" aria-labelledby="bench-title">
-          <p className="section-index">MESA DE PRUEBA</p>
+          <p className="section-index">03 · TU MEZCLA · REVISA Y GUARDA</p>
           <h3 id="bench-title">Fórmula experimental</h3>
           <p>
-            {"Selecciona entre 2 y 6 componentes. El blend se guarda sólo durante esta sesión y nunca se publica ni se agrega a una cuenta."}
+            Agregar o retirar un ingrediente recalcula un lote de 150 g cuando hay una referencia aplicable y reemplaza los ajustes manuales previos. Puedes editar después los gramos; el total no debe superar 150 g.
           </p>
+          <p aria-live="polite">Fórmula propia · pendiente de probar · {selectedIds.length} ingredientes</p>
+          {proposedFormula ? <div className="lab-model-notes" aria-live="polite">
+            <strong>Cantidades iniciales calculadas para 150 g</strong>
+            <p>Puedes ajustar los gramos antes de guardar tu mezcla.</p>
+          </div> : <p>Sin referencia aplicable: estas fórmulas necesitan sal y pimienta negra. Puedes completar los gramos manualmente; no inventamos un reparto para esta selección.</p>}
 
           <ol className="selected-ingredients" aria-label="Componentes seleccionados">
             {selectedIngredients.map((ingredient, index) => (
               <li key={ingredient.id}>
                 <span>{index + 1}</span>
-                <div><strong>{ingredient.nombre}</strong><small>{familyLabel(ingredient.familia)}</small></div>
+                <div><strong>{ingredient.nombre}</strong><small>{familyLabel(ingredient.familia)}</small>
+                  <label className="lab-quantity"><input type="number" min="0.01" max="150" step="0.01" value={Number.isFinite(amounts[ingredient.id]) ? amounts[ingredient.id] : ""} aria-label={`Gramos de ${ingredient.nombre}`} onChange={event => { setAmounts(current => ({ ...current, [ingredient.id]: event.target.value === "" ? NaN : Number(event.target.value) })); setProtocol(null); setProtocolCreated(null); }} /> g</label>
+                </div>
                 <button type="button" onClick={() => toggleIngredient(ingredient.id)} aria-label={`Retirar ${ingredient.nombre}`}>×</button>
               </li>
             ))}
@@ -420,12 +475,10 @@ export default function IngredientLab() {
             ))}
           </ol>
 
-          <label className="experiment-objective">
-            <span>Objetivo de la prueba</span>
-            <select value={objective} onChange={(event) => { setObjective(event.target.value); setProtocol(null); setProtocolCreated(null); }}>
-              {objectives.map((item) => <option key={item} value={item}>{objectiveLabel(item)}</option>)}
-            </select>
-          </label>
+          <p aria-live="polite">{quantitiesValid ? `Lote: ${Object.values(currentAmounts).reduce((sum, value) => sum + value, 0).toLocaleString("es-MX", { maximumFractionDigits: 2 })} / 150 g. No es la dosis para una porción.` : "Indica una cantidad mayor que cero para cada ingrediente, selecciona al menos dos y no superes 150 g en total."}</p>
+          {heat === "directo" && selectedIngredients.some(item => item.familia === "Endulzante") && <p>La mezcla contiene endulzante: vigila el dorado durante la cocción directa.</p>}
+          <LabRadar items={selectedIngredients} amounts={quantitiesValid ? currentAmounts : {}} />
+          {!selectedIngredients.some(item => item.familia === "Sal") && <p>Mezcla sin sal añadida: registra por separado si salas el alimento.</p>}
           <label className="experiment-objective">
             <span>Nombre de tu blend</span>
             <input
@@ -440,7 +493,7 @@ export default function IngredientLab() {
           <button
             className="button button-primary create-protocol"
             type="button"
-            disabled={!hydrated || selectedIds.length < 2 || creating || blendTitle.trim().length < 3}
+            disabled={!hydrated || !quantitiesValid || creating || blendTitle.trim().length < 3}
             onClick={createProtocol}
           >
             {creating
@@ -452,7 +505,7 @@ export default function IngredientLab() {
               Se conserva al recargar esta pestaña y se elimina al cerrar la sesión del navegador.
             </small>
           )}
-          {selectedIds.length === 6 && <small className="bench-limit">La mesa admite un máximo de 6 componentes.</small>}
+          {selectedIds.length === 12 && <small className="bench-limit">La mesa admite un máximo de 12 componentes.</small>}
 
           {protocol && (
             <div className="protocol-result" role="region" aria-live="polite" aria-labelledby="protocol-title">
@@ -490,10 +543,11 @@ export default function IngredientLab() {
                   <p>{objectiveLabel(blend.protocol.objetivo)}</p>
                   <ul>
                     {blend.protocol.componentes.map((component) => (
-                      <li key={component.id}>{component.nombre}</li>
+                      <li key={component.id}>{component.nombre}{blend.draft ? ` · ${blend.draft.amounts[component.id]} ${blend.draft.unit ?? "cdta."}` : " · cantidad no registrada"}</li>
                     ))}
                   </ul>
                   <div>
+                    {blend.draft?.unit === "g" && <button type="button" onClick={() => { setBaseId("manual"); setHeat(blend.draft!.heat!); setSelection({ ids: Object.keys(blend.draft!.amounts), amounts: { ...blend.draft!.amounts } }); setBlendTitle(`${blend.title.slice(0, 69)} · variante`); setProtocol(null); setProtocolCreated(null); setError(blend.draft!.baseId !== "manual" ? "Importaste cantidades de un preset retirado. Revísalas antes de guardar; no se consideran recomendadas." : ""); document.getElementById("lab-title")?.scrollIntoView({ behavior: "smooth" }); }}>Crear variante</button>}
                     <button type="button" onClick={() => setInspectedHypothesis(blend.protocol)}>
                       Abrir ficha
                     </button>
@@ -529,7 +583,7 @@ export default function IngredientLab() {
         {!loadingHypotheses && !hypothesisError && hypotheses.length === 0 && (
           <div className="registry-empty">
             <strong>Todavía no hay hipótesis registradas.</strong>
-            <p>Crea una fórmula de 2 a 6 componentes para generar la primera ficha técnica.</p>
+            <p>Modifica la base y guarda tu fórmula para generar una ficha técnica.</p>
           </div>
         )}
         <div className="hypothesis-grid" data-testid="hypothesis-registry">
@@ -587,7 +641,7 @@ export default function IngredientLab() {
               <div><dt>Experimentos</dt><dd>{inspectedIngredient.experimentos.length}</dd></div>
             </dl>
             <p className="pending-note">Próximo paso: ejecutar una prueba controlada y documentar dosificación, temperatura, aroma, color y costra.</p>
-            <button className="button button-primary" type="button" onClick={() => { toggleIngredient(inspectedIngredient.id); setInspectedIngredient(null); }} disabled={!selectedIds.includes(inspectedIngredient.id) && selectedIds.length === 6}>
+            <button className="button button-primary" type="button" onClick={() => { toggleIngredient(inspectedIngredient.id); setInspectedIngredient(null); }} disabled={!selectedIds.includes(inspectedIngredient.id) && selectedIds.length === 12}>
               {selectedIds.includes(inspectedIngredient.id) ? "Retirar de la fórmula" : "Agregar a la fórmula"}
             </button>
           </section>
@@ -597,7 +651,8 @@ export default function IngredientLab() {
       {inspectedHypothesis && productionProducts.some(product => product.details.productCode === inspectedHypothesis.id) && (
         <ProductSheet product={productionProducts.find(product => product.details.productCode === inspectedHypothesis.id)!} onClose={() => setInspectedHypothesis(null)} />
       )}
-      {inspectedHypothesis && !productionProducts.some(product => product.details.productCode === inspectedHypothesis.id) && createPortal(
+      {recommendedProduct && <ProductSheet product={recommendedProduct} onClose={() => setRecommendedProduct(null)} onBack={() => setRecommendedProduct(null)} />}
+      {inspectedHypothesis && !recommendedProduct && !productionProducts.some(product => product.details.productCode === inspectedHypothesis.id) && createPortal(
         <div
           className="modal-backdrop hypothesis-print-backdrop"
           role="presentation"
@@ -639,12 +694,39 @@ export default function IngredientLab() {
               </div>
               <dl>
                 <div><dt>Documento</dt><dd>{inspectedHypothesis.id}</dd></div>
+                {sheetBlend && <div><dt>Alias</dt><dd>{sheetBlend.title}</dd></div>}
                 <div><dt>Estado</dt><dd>{statusLabel(inspectedHypothesis.estado)}</dd></div>
               </dl>
             </header>
             <p className="section-index">FICHA TÉCNICA · {statusLabel(inspectedHypothesis.estado)}</p>
-            <h2 id="hypothesis-sheet-title">{inspectedHypothesis.id}</h2>
+            <h2 id="hypothesis-sheet-title">{sheetBlend?.title ?? inspectedHypothesis.id}</h2>
             <span className="hypothesis-sheet-objective">{objectiveLabel(inspectedHypothesis.objetivo)}</span>
+            {sheetDraft?.unit === "g" && <section className="lab-sheet-quantities" aria-labelledby="sheet-quantities-title">
+              <h3 id="sheet-quantities-title">Cantidades para preparar tu mezcla</h3>
+              <p>Fórmula guardada: reproduce las cantidades registradas, no una recomendación validada.</p>
+              <table>
+                <thead><tr><th scope="col">Ingrediente</th><th scope="col">Cantidad</th></tr></thead>
+                <tbody>{inspectedHypothesis.componentes.map(component => <tr key={component.id}>
+                  <th scope="row">{component.nombre}</th>
+                  <td>{sheetDraft.amounts[component.id].toLocaleString("es-MX", { maximumFractionDigits: 2 })} g</td>
+                </tr>)}</tbody>
+                <tfoot><tr><th scope="row">Total del lote</th><td>{sheetTotal.toLocaleString("es-MX", { maximumFractionDigits: 2 })} g</td></tr></tfoot>
+              </table>
+              <small>Máximo 150 g por lote. Estas cantidades son para preparar el sazonador, no la dosis que debes aplicar a una porción de alimento.</small>
+            </section>}
+            {matchingProducts.length > 0 && <section className="lab-product-recommendations" aria-labelledby="lab-matches-title">
+              <h3 id="lab-matches-title">Tu mezcla se acerca a estos blends Lumbre</h3>
+              <p>Te recomendamos conocer estos rubs de producción: comparten al menos el 80% de los ingredientes de la comparación.</p>
+              {matchingProducts.map(match => <article key={match.product.id}>
+                <h4>{match.product.name}</h4>
+                <p><strong>{Math.round(match.score * 100)}% de similitud por ingredientes</strong> · {match.product.details.productCode} · {match.product.details.netContent}</p>
+                <p>En común: {match.product.details.components.filter(item => match.shared.includes(item.id)).map(item => item.nombre).join(", ")}.</p>
+                {match.missing.length > 0 && <p>El producto también incluye: {match.product.details.components.filter(item => match.missing.includes(item.id)).map(item => item.nombre).join(", ")}.</p>}
+                {match.extra.length > 0 && <p>Tu mezcla añade: {inspectedHypothesis.componentes.filter(item => match.extra.includes(item.id)).map(item => item.nombre).join(", ")}.</p>}
+                <button className="lab-product-link" type="button" onClick={() => setRecommendedProduct(match.product)}>Ver ficha de {match.product.details.productCode}</button>
+              </article>)}
+              <small>Comparamos ingredientes idénticos del catálogo: coincidencias divididas entre todos los ingredientes distintos de ambas mezclas. Los ingredientes añadidos y los faltantes reducen la similitud. No conocemos las proporciones de producción: este porcentaje no equivale a sabor, dosificación ni fórmula iguales; distintas sales o chiles no se consideran idénticos.</small>
+            </section>}
             {inspectedHypothesis.producto && (
               <section className="production-record">
                 <Image
@@ -662,29 +744,13 @@ export default function IngredientLab() {
                 </div>
               </section>
             )}
-            {inspectedHypothesis.recomendacion && (
-              <section className="formula-evidence formula-referenced">
-                <span>RECOMENDACIÓN INVESTIGADA · AÚN NO VALIDADA POR LUMBRE</span>
-                <h3>{visibleText(inspectedHypothesis.recomendacion.nombre)}</h3>
-                <p>{visibleText(inspectedHypothesis.recomendacion.fundamento)}</p>
-                <h4>Proporción inicial</h4>
-                <ul>
-                  {inspectedHypothesis.recomendacion.proporciones.map((proportion) => {
-                    const component = inspectedHypothesis.componentes.find(
-                      (item) => item.id === proportion.ingrediente_id,
-                    );
-                    return (
-                      <li key={proportion.ingrediente_id}>
-                        {component?.nombre ?? proportion.ingrediente_id}: {proportion.partes} {proportion.partes === 1 ? "parte" : "partes"}
-                      </li>
-                    );
-                  })}
-                </ul>
-                <h4>Adaptación de Lumbre</h4>
-                <p>{visibleText(inspectedHypothesis.recomendacion.adaptacion)}</p>
-              </section>
-            )}
+            {sheetDraft && sheetDraft.unit !== "g" && <section className="lab-sheet-quantities">
+              <h3>Cantidades guardadas</h3>
+              <p>Registro anterior en cucharaditas rasas de 5 ml; no convertido a gramos.</p>
+              <ul>{inspectedHypothesis.componentes.map(component => <li key={component.id}>{component.nombre}: {sheetDraft.amounts[component.id]} cdta.</li>)}</ul>
+            </section>}
             <p>{visibleText(inspectedHypothesis.hipotesis)}</p>
+            {sessionBlends.find(blend => blend.id === inspectedHypothesis.id)?.draft?.unit === "g" && <LabRadar items={ingredients.filter(item => inspectedHypothesis.componentes.some(component => component.id === item.id))} amounts={sessionBlends.find(blend => blend.id === inspectedHypothesis.id)!.draft!.amounts} />}
             {inspectedHypothesis.formula && !inspectedHypothesis.recomendacion && (
               <section className={`formula-evidence formula-${inspectedHypothesis.formula.level}`}>
                 <span>{evidenceLabel(inspectedHypothesis.formula.level)}</span>
@@ -747,18 +813,6 @@ export default function IngredientLab() {
                   {inspectedHypothesis.formula.sources.map((source, index) => (
                     <li key={source.url}>
                       <a href={source.url} target="_blank" rel="noreferrer">Referencia externa {index + 1}</a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-            {inspectedHypothesis.recomendacion && inspectedHypothesis.recomendacion.fuentes.length > 0 && (
-              <section className="formula-sources">
-                <h3>Fuentes de la recomendación</h3>
-                <ul>
-                  {inspectedHypothesis.recomendacion.fuentes.map((source, index) => (
-                    <li key={source.url}>
-                      <a href={source.url} target="_blank" rel="noreferrer">Fuente de investigación {index + 1}</a>
                     </li>
                   ))}
                 </ul>

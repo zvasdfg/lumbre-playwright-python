@@ -1,0 +1,41 @@
+{
+  "status": "LOCAL_EXPERIMENT_AWAITING_USER_REVIEW",
+  "snapshot_commit": "968179181f434ed162963e2cc1fd6aeb80a9f1b4",
+  "snapshot_includes": "Previous approved family ordering and labels; no guided formula changes",
+  "deployment": "Not pushed or deployed",
+  "scope": "One existing laboratory explorer with source-linked starting formulas, optional families, editable volume quantities and saved variants",
+  "sources": [
+    "https://www.weber.com/US/en/recipes/red-meat/reverse-seared-rib-eye-steaks/weber-1634805.html",
+    "https://www.weber.com/CA/en/blog/tips-techniques/making-your-own-bbq-rub/weber-30952.html"
+  ],
+  "limitations": [
+    "Preserves source volume units; no unverified conversion to grams",
+    "BBQ base is explicitly an adaptation, not the original recipe",
+    "New ingredient quantity is an editable UI starting value, not a validated culinary dose",
+    "No sensory validation; no quantitative flavor scores for new blends",
+    "Browser/print visual QA remains pending: local access through tool proxy returned a gateway connection error",
+    "No production release requested"
+  ],
+  "verification": {
+    "isolated_static_typecheck": "PASS",
+    "automated_model_tests": "30 PASS",
+    "isolated_static_build": "PASS",
+    "local_project_static_build": "PASS",
+    "browser_regression_test_updated": "portal/scripts/test-static.py; NOT RUN",
+    "diff_whitespace": "PASS"
+  },
+  "rollback_scope": {
+    "restore_from_snapshot_only_after_user_request": [
+      "portal/static/ingredient-lab.tsx",
+      "portal/profiles/static/package.json",
+      "portal/scripts/prepare-static-workspace.mjs",
+      "portal/scripts/test-static.py"
+    ],
+    "new_experiment_files_to_archive_on_rollback": [
+      "portal/static/lab-formula.ts",
+      "portal/static/lab-formula.css",
+      "portal/scripts/lab-formula.test.mjs"
+    ],
+    "preserve": "Unrelated later edits and existing ingredient catalog data. Do not use a repository-wide hard reset."
+  }
+}

@@ -1,0 +1,41 @@
+.lab-formula-start { margin: 0 0 30px; padding: 24px; border: 1px solid var(--subtle-on-dark); }
+.lab-formula-start .lab-toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lab-formula-start p:not(.section-index), .lab-family-guidance { color: var(--muted-on-dark); font-size: 13px; line-height: 1.6; }
+.lab-formula-start a { text-decoration: underline; color: var(--text-on-dark); }
+.lab-formula-start select { text-transform: none; letter-spacing: normal; }
+.lab-base-confirm { border-left: 3px solid var(--ember); padding: 0 12px; }
+.lab-base-confirm button { margin: 4px 8px 4px 0; padding: 12px; font: inherit; cursor: pointer; }
+.lab-family-guidance { margin: 0 0 18px; }
+.ingredient-lab .lab-quantity { display: flex; align-items: center; gap: 6px; margin: 8px 0; font-size: 11px; }
+.ingredient-lab .lab-quantity input { width: 85px; min-height: 40px; padding: 6px; border: 1px solid #827e75; background: #fffdf7; color: #20221e; font: inherit; }
+.ingredient-lab .experiment-bench { max-height: calc(100dvh - 40px); overflow-y: auto; }
+.ingredient-lab .selected-ingredients li { grid-template-columns: 18px minmax(0, 1fr) 32px; }
+.ingredient-lab .selected-ingredients button { min-height: 44px; }
+.lab-radar { margin: 20px 0; break-inside: avoid; }
+.lab-radar svg { display: block; width: 100%; max-width: 400px; margin: auto; }
+.lab-radar p, .lab-radar small { font-size: 11px; line-height: 1.6; }
+.lab-radar h4 { margin-bottom: 0; }
+.lab-model-notes { margin-top: 16px; font-size: 12px; line-height: 1.6; }
+.lab-model-notes summary { cursor: pointer; }
+.lab-sheet-quantities { margin: 24px 0; }
+.hypothesis-sheet #hypothesis-sheet-title, .hypothesis-sheet .hypothesis-print-header dd { overflow-wrap: anywhere; min-width: 0; }
+.lab-sheet-quantities table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 16px 0; }
+.lab-sheet-quantities th, .lab-sheet-quantities td { padding: 10px 6px; border-bottom: 1px solid #bdb9af; text-align: left; }
+.lab-sheet-quantities td { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.lab-sheet-quantities thead, .lab-sheet-quantities tfoot { font-weight: 700; border-block: 2px solid #34342d; }
+.lab-sheet-quantities small { display: block; line-height: 1.5; }
+@media print { .lab-sheet-quantities tr { break-inside: avoid; } .lab-sheet-quantities thead { display: table-header-group; } }
+.lab-product-recommendations { margin: 24px 0; border-top: 2px solid var(--ember); padding-top: 16px; }
+.lab-product-recommendations article { padding: 12px 0; border-bottom: 1px solid #bdb9af; break-inside: avoid; }
+.lab-product-link { padding: 12px; margin: 8px 0; font: inherit; cursor: pointer; }
+.lab-product-recommendations small { display: block; margin-top: 12px; line-height: 1.5; }
+@media print { .lab-product-link { display: none; } }
+.ingredient-lab .family-group-heading { flex-wrap: wrap; gap: 10px; }
+@media (max-width: 1080px) {
+  .ingredient-lab .experiment-bench { max-height: none; }
+}
+@media (max-width: 640px) {
+  .lab-formula-start { padding: 16px; }
+  .lab-formula-start .lab-toolbar { grid-template-columns: 1fr; }
+  .ingredient-lab .experiment-bench { grid-row: 1; }
+}

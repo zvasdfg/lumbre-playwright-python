@@ -95,7 +95,8 @@ with sync_playwright() as playwright:
 
         # The laboratory is downloaded when visited, not at initial page load.
         page.get_by_role("link", name="Entrar al laboratorio", exact=True).click()
-        for ingredient in ("ajo_granulado", "pimienta_negra", "sal_mar_gruesa"):
+        expect(page.get_by_label("Fórmula de partida", exact=True)).to_have_count(0)
+        for ingredient in ("sal_kosher", "pimienta_negra", "ajo_granulado", "cebolla_granulada"):
             card = page.get_by_test_id("ingredient-card").filter(
                 has=page.locator(f'[data-ingredient-id="{ingredient}"]')
             )
@@ -103,10 +104,33 @@ with sync_playwright() as playwright:
             if group.get_attribute("open") is None:
                 group.locator("summary").click()
             card.get_by_role("button", name="Agregar", exact=True).click()
+        expect(page.get_by_label("Gramos de sal kosher", exact=True)).to_have_value("67.5")
+        expect(page.get_by_label("Gramos de pimienta negra", exact=True)).to_have_value("60")
+        expect(page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_value("11.25")
+        page.get_by_role("button", name="Retirar cebolla granulada", exact=True).click()
+        expect(page.get_by_label("Gramos de sal kosher", exact=True)).to_have_value("67.5")
+        expect(page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_value("22.5")
+        card.get_by_role("button", name="Agregar", exact=True).click()
+        expect(page.get_by_label("Gramos de cebolla granulada", exact=True)).to_have_value("11.25")
+        page.get_by_label("Gramos de ajo granulado", exact=True).fill("0.5")
+        page.get_by_label("Primero, el fuego", exact=True).select_option("indirecto")
+        expect(page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_value("0.5")
         page.get_by_label("Nombre de tu blend", exact=True).fill("SPG local")
         page.get_by_role("button", name="Guardar en esta sesión", exact=True).click()
         expect(page.get_by_test_id("hypothesis-print-preview")).to_be_visible()
         experiment = page.get_by_test_id("hypothesis-print-preview")
+        expect(experiment.locator("#hypothesis-sheet-title")).to_have_text("SPG local")
+        expect(experiment.locator(".hypothesis-print-header dl div").filter(has_text="Alias")).to_contain_text("SPG local")
+        expect(experiment.locator(".hypothesis-print-header dl div").filter(has_text="Documento")).to_contain_text("SES-")
+        expect(experiment).not_to_contain_text("Captura aportada")
+        expect(experiment).not_to_contain_text("Sal reservada")
+        expect(experiment).not_to_contain_text("codex-clipboard")
+        expect(experiment.get_by_role("heading", name="Cantidades para preparar tu mezcla")).to_be_visible()
+        expect(experiment.locator(".lab-sheet-quantities tbody tr")).to_have_count(4)
+        expect(experiment.locator(".lab-sheet-quantities thead th")).to_have_count(2)
+        expect(experiment.locator(".lab-sheet-quantities")).not_to_contain_text("%")
+        expect(experiment.locator(".lab-sheet-quantities tbody tr").filter(has_text="ajo granulado")).to_contain_text("0.5 g")
+        expect(experiment.locator(".lab-sheet-quantities tfoot")).to_contain_text("139.25 g")
         check_print_action(page, experiment)
         experiment.evaluate("e => e.scrollTop = e.scrollHeight")
         check_print_action(page, experiment)
@@ -115,6 +139,7 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Cerrar ficha técnica", exact=True).click()
         page.reload()
         expect(page.get_by_test_id("session-blends")).to_contain_text("SPG local")
+        expect(page.get_by_test_id("session-blends")).to_contain_text("0.5 g")
         expect(page.get_by_test_id("hypothesis-registry").locator(".hypothesis-card")).to_have_count(4)
 
         page.get_by_role("button", name="Almanaque", exact=False).click()

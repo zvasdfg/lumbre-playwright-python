@@ -1,0 +1,25 @@
+{
+  "revision": "local-radar-150g-v1",
+  "status": "LOCAL_EXPERIMENT_AWAITING_VISUAL_AND_USER_REVIEW",
+  "rollback_snapshot": "968179181f434ed162963e2cc1fd6aeb80a9f1b4",
+  "supersedes_behavior_not_evidence": "lab-guided-experiment-20261007.json",
+  "changes": ["Direct/indirect selection before style", "Family selection counts", "Automatic 150 g allocation", "Dynamic mass-weighted radar", "Explicit saved units and cooking method"],
+  "model_authority": "Initial Lumbre modeling assumptions, not source recipe weights, sensory validation or universal culinary proportions",
+  "family_starting_weights": {
+    "salt-pepper": {"Sal":40,"Pimienta":35,"Allium":25,"Endulzante":2,"Chile":10},
+    "sweet-bbq": {"Sal":18,"Pimienta":8,"Allium":18,"Endulzante":38,"Chile":18},
+    "beef-bark": {"Sal":15,"Pimienta":45,"Allium":25,"Chile":20,"Semilla_aromatica":10,"Endulzante":3},
+    "other_selected_families": 2
+  },
+  "allocation": "Shares split within selected families; model caps limit accents. Capped proportional redistribution fills 15000 hundredths of grams. Return no allocation if selected ingredients cannot fill the batch under these assumptions. Manual edits allow smaller batches but saving rejects totals above 150 g.",
+  "radar": "Five catalog sensory attributes, weighted by ingredient mass over total mass. Missing values remain unknown; incomplete axes do not form a polygon. Ordinal weighted averages are a visualization heuristic, not a validated sensory prediction.",
+  "constraints": "Sweet BBQ and beef bark presets offered only under indirect heat as a product-flow choice, not a claim that all sugar is forbidden under direct heat. Manual ingredient variations remain possible with contextual guidance.",
+  "legacy": "Prior session entries remain in original volume units; no automatic volume-to-mass conversion. Creating new variants is available for gram-based records.",
+  "checks": {"typecheck":"PASS", "model_tests":"33 PASS", "build_static":"PASS", "browser_visual_and_print":"NOT RUN"},
+  "sources": [
+    "https://www.weber.com/US/en/recipes/red-meat/reverse-seared-rib-eye-steaks/weber-1634805.html",
+    "https://www.weber.com/CA/en/blog/tips-techniques/making-your-own-bbq-rub/weber-30952.html",
+    "https://amazingribs.com/tested-recipes/spice-rubs-and-pastes/big-bad-beef-rub-recipe/"
+  ],
+  "deployment": "No push or deployment"
+}
