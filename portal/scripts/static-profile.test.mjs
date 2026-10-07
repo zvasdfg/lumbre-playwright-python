@@ -9,6 +9,25 @@ import { spawnSync } from "node:child_process";
 const portal = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => JSON.parse(readFileSync(resolve(portal, file), "utf8"));
 
+test("browser CI uses a matching prebuilt image and gates deployment on all browser checks", () => {
+  const workflow = readFileSync(resolve(portal, "../.github/workflows/deploy.yml"), "utf8");
+  const requirements = readFileSync(resolve(portal, "profiles/browser/requirements.txt"), "utf8");
+  const version = /^playwright==([\d.]+)$/m.exec(requirements)?.[1];
+  assert.ok(version);
+  assert.ok(workflow.includes(`image: mcr.microsoft.com/playwright/python:v${version}-noble`));
+  assert.match(workflow, /needs: \[static-build, browser-tests\]/);
+  assert.doesNotMatch(workflow, /playwright install|pip install -e|apt-get/);
+  const browserJob = workflow.split("  browser-tests:")[1].split("  deploy-production:")[0];
+  assert.match(browserJob, /needs: static-build/);
+  assert.match(browserJob, /actions\/download-artifact@/);
+  assert.match(browserJob, /name: lumbre-static/);
+  assert.match(browserJob, /python -m http.server 3001/);
+  assert.match(browserJob, /if: always\(\)/);
+  for (const script of ["test-static", "check-static-print", "test-storage-recovery", "test-planner-goals", "test-planner-simple", "test-planner-fuel", "test-planner-kettle-fuel", "test-planner-weber-defaults", "test-recipe-blend-back"]) {
+    assert.ok(browserJob.includes(`python portal/scripts/${script}.py`), script);
+  }
+});
+
 test("static lock matches its manifest and excludes legacy dependency chains", () => {
   const manifest = read("profiles/static/package.json");
   const lock = read("profiles/static/package-lock.json");
