@@ -17,10 +17,50 @@ test("static lock matches its manifest and excludes legacy dependency chains", (
     assert.deepEqual(lock.packages[""][key], manifest[key], key);
   }
   for (const path of Object.keys(lock.packages)) {
-    assert.doesNotMatch(path, /(?:^|\/)node_modules\/(?:braces|micromatch|fast-glob|vinext|next|eslint-config-next|drizzle-kit|drizzle-orm|better-auth|@esbuild-kit\/[^/]+)$/);
+    assert.doesNotMatch(path, /(?:^|\/)node_modules\/(?:wrangler|miniflare|sharp|workerd|braces|micromatch|fast-glob|vinext|next|eslint-config-next|drizzle-kit|drizzle-orm|better-auth|@esbuild-kit\/[^/]+)$/);
   }
   for (const [name, version] of Object.entries({...manifest.dependencies, ...manifest.devDependencies})) {
     assert.equal(lock.packages[`node_modules/${name}`].version, version, name);
+  }
+  assert.equal(lock.packages["node_modules/source-map-js"].version, "1.2.2");
+});
+
+test("deploy profile is separate, patched and portable to the public CI registry", () => {
+  for (const profile of ["static", "deploy"]) {
+    const manifest = read(`profiles/${profile}/package.json`);
+    const lock = read(`profiles/${profile}/package-lock.json`);
+    for (const key of ["name", "version", "dependencies", "devDependencies", "engines"]) {
+      assert.deepEqual(lock.packages[""][key], manifest[key], `${profile}: ${key}`);
+    }
+    for (const entry of Object.values(lock.packages)) {
+      if (entry.resolved) assert.equal(new URL(entry.resolved).origin, "https://registry.npmjs.org");
+    }
+  }
+  const deploy = read("profiles/deploy/package.json");
+  const lock = read("profiles/deploy/package-lock.json");
+  assert.deepEqual(Object.keys(deploy.devDependencies), ["wrangler"]);
+  assert.equal(lock.packages["node_modules/wrangler"].version, deploy.devDependencies.wrangler);
+  assert.equal(lock.packages["node_modules/sharp"].version, "0.35.5");
+  assert.equal(deploy.overrides.miniflare.sharp, "0.35.5");
+  for (const name of ["react", "react-dom", "vite", "tailwindcss", "next", "better-auth", "drizzle-orm"]) {
+    assert.equal(lock.packages[`node_modules/${name}`], undefined, name);
+  }
+});
+
+test("deployment workspace contains tooling config only, not app sources or secrets", () => {
+  const parent = mkdtempSync(resolve(tmpdir(), "lumbre-deploy-test-"));
+  const target = resolve(parent, "deploy");
+  const prepare = (destination) => spawnSync(process.execPath, [resolve(portal, "scripts/prepare-deploy-workspace.mjs"), destination], {encoding: "utf8"});
+  try {
+    const result = prepare(target);
+    assert.equal(result.status, 0, result.stderr);
+    assert.deepEqual(readdirSync(target).sort(), [".npmrc", "package-lock.json", "package.json", "scripts", "wrangler.static.jsonc"]);
+    assert.deepEqual(readdirSync(resolve(target, "scripts")), ["verify-static-deployment.mjs"]);
+    assert.equal(readFileSync(resolve(target, "package.json"), "utf8"), readFileSync(resolve(portal, "profiles/deploy/package.json"), "utf8"));
+    assert.notEqual(prepare(target).status, 0);
+    assert.notEqual(prepare(resolve(portal, "disallowed-deploy-workspace")).status, 0);
+  } finally {
+    rmSync(parent, {recursive: true, force: true});
   }
 });
 

@@ -156,8 +156,41 @@ of the static entry points so required source data cannot silently be omitted.
 modules, mapping `next/image` to the same browser-only adapter used by Vite.
 Production still requires `npm ci`, type checking, 100 recipe checks, planner
 model tests, the high-severity npm audit gate, a static-boundary build, browser
-acceptance, PDF checks and storage recovery. Deployment installs the SAME profile
-and downloads the validated artifact; it does not build a different artifact.
+acceptance, PDF checks and storage recovery. Deployment downloads the validated
+artifact; it does not build a different artifact.
+
+## Build/deploy dependency separation — 2026-10-07
+
+The static build profile now excludes Wrangler, Miniflare, Sharp and workerd.
+It retains React/React DOM/Zod and the actively used Vite/TypeScript/Tailwind
+toolchain. Tailwind supplies global CSS/preflight and must not be deleted as
+though it were unused. The legacy `portal/package.json` remains isolated and
+unchanged: its backend packages still have consumers in the preserved backend.
+
+Publication installs only `profiles/deploy/package.json` in a separate workspace
+prepared by `scripts/prepare-deploy-workspace.mjs`. That workspace contains the
+deployment config and artifact verification script, not app/backend source,
+credentials, or an inherited node_modules. Both build and deployment retain
+high-severity audit gates. Lockfile entries drop from 184 to 97 for build; the
+deploy profile contains 91 entries (including platform-specific optional ones).
+The two CI jobs previously each installed the same 184-entry dependency graph.
+
+Security patches: source-map-js 1.2.2 in build; Wrangler 4.148.0 in deployment,
+with a narrow `miniflare > sharp` override to 0.35.5 because this Wrangler's
+Miniflare still pins 0.35.4. Remove the override once upstream includes the fix,
+after audit and compatibility checks. References:
+https://github.com/advisories/GHSA-68fv-2mgg-jv7q and
+https://github.com/advisories/GHSA-wq5f-xc86-pv6w.
+
+Local resolution/installation/audit used the workstation's existing corporate
+npm mirror and a temporary cache, without changing global registry settings or
+disabling TLS. Lockfile tarball URLs were normalized to the public npm registry
+while preserving integrity hashes; a test enforces portability to GitHub CI.
+Local audits returned zero vulnerabilities for both profiles. Clean installs,
+typecheck, 100 recipe checks, 24 planner tests, four profile tests, static build,
+Sharp SVG rasterization and Wrangler deploy dry-run passed. Browser/PDF checks
+and public-registry audits remain mandatory in CI; these local checks do not
+claim a completed production deployment.
 
 To reproduce from the repository root (choose a destination that does not exist):
 
