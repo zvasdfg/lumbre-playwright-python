@@ -1,12 +1,15 @@
-import { useMemo, useState } from "react";
+import { Suspense, lazy, useMemo, useState } from "react";
 import Image from "./image";
-import { recipes, type Recipe } from "../app/lib/data";
-import RecipeSheet from "./recipe-sheet";
+import AsyncBoundary from "./async-boundary";
+import recipes from "virtual:lumbre-recipe-index";
+import type { Recipe as FullRecipe } from "../app/lib/data";
+type Recipe = Omit<FullRecipe, "preparation">;
+const RecipeSheet = lazy(() => import("./recipe-sheet"));
 import { productionProducts } from "../app/lib/production-products";
 import FirePlanner from "./fire-planner";
-import IngredientLab from "./ingredient-lab";
-import FireAlmanac from "../app/components/fire-almanac";
-import ProductSheet from "./product-sheet";
+import IngredientLab from "./deferred-lab";
+import FireAlmanac from "./deferred-almanac";
+const ProductSheet = lazy(() => import("./product-sheet"));
 type RecipeFilter = "todos" | "directo" | "lento" | "vegetales";
 const recipesPerPage = 6;
 const currency = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
@@ -232,11 +235,11 @@ export default function StaticPortal() {
         </div>
       </section>
 
-      {selectedProduct && <ProductSheet product={selectedProduct} onClose={() => {
+      <AsyncBoundary><Suspense fallback={<p role="status">Cargando ficha…</p>}>{selectedProduct && <ProductSheet product={selectedProduct} onClose={() => {
         setSelectedProduct(null); setProductRecipeOrigin(null); setRecipeScrollTop(0);
       }} onBack={productRecipeOrigin ? () => {
         setSelectedProduct(null); setSelectedRecipe(productRecipeOrigin); setProductRecipeOrigin(null);
-      } : undefined} />}
+      } : undefined} />}</Suspense></AsyncBoundary>
 
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
@@ -248,10 +251,10 @@ export default function StaticPortal() {
       <FireAlmanac />
 
 
-      {selectedRecipe && <RecipeSheet recipe={selectedRecipe} initialScrollTop={recipeScrollTop} onClose={() => { setSelectedRecipe(null); setRecipeScrollTop(0); }} onOpenBlend={(code, scrollTop) => {
+      <AsyncBoundary><Suspense fallback={<p role="status">Cargando receta…</p>}>{selectedRecipe && <RecipeSheet recipe={selectedRecipe} initialScrollTop={recipeScrollTop} onClose={() => { setSelectedRecipe(null); setRecipeScrollTop(0); }} onOpenBlend={(code, scrollTop) => {
         const product = productionProducts.find(item => item.details.productCode === code);
         if (product) { setProductRecipeOrigin(selectedRecipe); setRecipeScrollTop(scrollTop); setSelectedRecipe(null); setSelectedProduct(product); }
-      }} />}
+      }} />}</Suspense></AsyncBoundary>
     </main>
   );
 }

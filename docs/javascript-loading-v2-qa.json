@@ -1,0 +1,23 @@
+{
+  "revision": 2,
+  "scope": "Defer full recipe preparations until the first recipe sheet opens; preserve canonical card metadata in the initial bundle.",
+  "previousEvidence": "javascript-loading-v1-qa.json",
+  "initialJavaScriptKB": { "baseline": 703.00, "previousRevision": 506.28, "current": 409.92 },
+  "initialJavaScriptGzipKB": { "baseline": 187.72, "previousRevision": 149.95, "current": 122.77 },
+  "recipeSheetChunkKB": 109.57,
+  "loadingGranularity": "All recipe details download together on the first recipe opening, not once per recipe.",
+  "contentSource": "Build-time index derived from app/lib/data.ts; preparations remain canonical in app/lib/recipe-preparations.ts.",
+  "checks": {
+    "staticTypecheck": "PASS",
+    "staticBuild": "PASS",
+    "chunkSizeWarning": "Absent; warning threshold unchanged",
+    "recipeValidation": "PASS: 100 recipes",
+    "plannerTests": "PASS: 24 tests",
+    "staticProfileTests": "PASS: 2 tests",
+    "bundleGraph": "PASS: preparations excluded from initial static import closure and retained in a deferred chunk",
+    "diffWhitespace": "PASS",
+    "currentRevisionBrowserQA": "BLOCKED: browser URL policy denied automatic access; previous revision browser evidence does not cover this change"
+  },
+  "pending": ["Visual verification of recipe opening, recipe-to-product return, and recipe printing for revision 2"],
+  "deployment": "Not committed, pushed, or deployed"
+}

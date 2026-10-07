@@ -93,6 +93,8 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Editar plan Prueba local", exact=True).click()
         expect(page.locator('select[name="equipment"]')).to_have_value("offset")
 
+        # The laboratory is downloaded when visited, not at initial page load.
+        page.get_by_role("link", name="Entrar al laboratorio", exact=True).click()
         for ingredient in ("ajo_granulado", "pimienta_negra", "sal_mar_gruesa"):
             card = page.get_by_test_id("ingredient-card").filter(
                 has=page.locator(f'[data-ingredient-id="{ingredient}"]')

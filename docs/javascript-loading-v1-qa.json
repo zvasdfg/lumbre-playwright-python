@@ -1,0 +1,28 @@
+{
+  "baseline_commit": "c7dd695",
+  "scope": "Local initial JavaScript loading optimization; not deployed",
+  "measurement": "Vite production build, same local dependencies; decimal kB; gzip estimates, not measured network latency",
+  "before": { "initial_js_kb": 703.00, "initial_js_gzip_kb": 187.72 },
+  "after": { "initial_js_kb": 506.28, "initial_js_gzip_kb": 149.95 },
+  "deferred_js_kb": { "laboratory": 173.52, "almanac": 15.20, "product_sheet": 9.23, "recipe_sheet": 3.95 },
+  "behavior": [
+    "Laboratory loads within 400px of viewport or on laboratorio/hipotesis hash navigation; remains mounted afterwards",
+    "Almanac loads on first click; sheet components load when selected",
+    "Planner controls, calculation, canonical data and content remain unchanged",
+    "Total JavaScript is not reduced: splitting adds small loader overhead; savings are in initial transfer"
+  ],
+  "verified": [
+    "Static build and boundary check",
+    "Static TypeScript check",
+    "24 planner unit tests",
+    "Browser: laboratory navigation, direct hipotesis link, recipe sheet, product sheet, almanac opening and closing",
+    "390px viewport: laboratory and almanac; no horizontal document overflow",
+    "No console errors observed during browser checks"
+  ],
+  "limitations": [
+    "500kB chunk warning remains; limit unchanged",
+    "CI browser scripts updated for explicit laboratory navigation but not executed locally",
+    "No timing benchmarks, slow-network simulation or PDF export in this pass",
+    "Recipe preparation data remains in the entry bundle"
+  ]
+}

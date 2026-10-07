@@ -68,8 +68,8 @@ const almanacPages: AlmanacPage[] = [
   { document: "054", title: "Cómo elegir proteína según el método de cocción", image: "/editorial/almanac/page-054.jpeg", alt: "Infografía: Cómo elegir proteína según el método de cocción", width: 1254, height: 1254 },
 ];
 
-export default function FireAlmanac() {
-  const [open, setOpen] = useState(false);
+export default function FireAlmanac({ initiallyOpen = false }: { initiallyOpen?: boolean } = {}) {
+  const [open, setOpen] = useState(initiallyOpen);
   const [pageIndex, setPageIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [zoomed, setZoomed] = useState(false);

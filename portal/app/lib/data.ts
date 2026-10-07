@@ -1,5 +1,5 @@
-import { productionProducts } from "./production-products";
-import { recipePreparations, type RecipePreparation } from "./recipe-preparations";
+import { productionProducts } from "./production-products.ts";
+import { recipePreparations, type RecipePreparation } from "./recipe-preparations.ts";
 
 export type Recipe = {
   id: number;
