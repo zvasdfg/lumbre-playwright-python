@@ -1,4 +1,4 @@
-import type { ExperimentProtocol } from "./ingredients";
+import type { ExperimentProtocol } from "./ingredients.ts";
 
 export type ProductDetails = {
   publicationStatus?: "draft" | "published";

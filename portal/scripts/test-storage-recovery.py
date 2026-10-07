@@ -25,6 +25,9 @@ with sync_playwright() as playwright:
             page.get_by_role("button", name="Guardar plan", exact=True).click()
             expect(page.get_by_role("status").filter(has_text="No se pudo guardar")).to_be_visible()
             expect(page.get_by_test_id("fire-presets").locator("article")).to_have_count(0)
+        # Exercise storage recovery after the deferred laboratory mounts too.
+        page.get_by_role("link", name="Entrar al laboratorio", exact=True).click()
+        expect(page.get_by_role("searchbox", name="Buscar componente", exact=True)).to_be_visible()
         assert not errors, errors
         context.close()
     browser.close()

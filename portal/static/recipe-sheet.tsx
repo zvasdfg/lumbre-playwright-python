@@ -1,11 +1,11 @@
 import type { Recipe } from "../app/lib/data";
 import Image from "./image";
 import PrintableSheet from "./printable-sheet";
-import { recipeBlendRecommendations, recipeBlendUsage, recipeEditorialNote, recipeSafetyNote, recipeSources } from "../app/lib/recipe-preparations";
+import { recipePreparations, recipeBlendRecommendations, recipeBlendUsage, recipeEditorialNote, recipeSafetyNote, recipeSources } from "../app/lib/recipe-preparations";
 import { productionProducts } from "../app/lib/production-products";
 
-export default function RecipeSheet({ recipe, onClose, onOpenBlend, initialScrollTop = 0 }: { recipe: Recipe; onClose: () => void; onOpenBlend: (code: string, scrollTop: number) => void; initialScrollTop?: number }) {
-  const preparation = recipe.preparation;
+export default function RecipeSheet({ recipe, onClose, onOpenBlend, initialScrollTop = 0 }: { recipe: Omit<Recipe, "preparation">; onClose: () => void; onOpenBlend: (code: string, scrollTop: number) => void; initialScrollTop?: number }) {
+  const preparation = recipePreparations[recipe.id];
   const recommendation = recipeBlendRecommendations[recipe.id];
   const blend = productionProducts.find(product => product.details.productCode === recommendation?.productCode);
   return <PrintableSheet titleId="recipe-sheet-title" closeLabel="Cerrar ficha de receta" onClose={onClose} initialScrollTop={initialScrollTop}>
