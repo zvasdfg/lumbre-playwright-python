@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   static-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -44,16 +44,36 @@ jobs:
         working-directory: ${{ runner.temp }}/lumbre-static
       - run: npm run build:static
         working-directory: ${{ runner.temp }}/lumbre-static
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          python-version: "3.13"
+          name: lumbre-static
+          path: ${{ runner.temp }}/lumbre-static/dist-static/
+          if-no-files-found: error
+  browser-tests:
+    name: Browser and print validation
+    needs: static-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.63.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
+        with:
+          name: lumbre-static
+          path: ${{ runner.temp }}/lumbre-static/dist-static
       - name: Install browser test tools
+        timeout-minutes: 3
         run: |
-          python -m pip install -e ./test-framework 'pypdf>=6,<7'
-          python -m playwright install --with-deps chromium
+          python -m pip install --disable-pip-version-check --timeout 30 --retries 2 -r portal/profiles/browser/requirements.txt
+          python -c "from playwright.sync_api import sync_playwright; p = sync_playwright().start(); b = p.chromium.launch(); b.close(); p.stop()"
       - name: Test static portal and storage recovery
+        shell: bash
         run: |
-          npm run preview:static --prefix "$RUNNER_TEMP/lumbre-static" > /tmp/lumbre-preview.log 2>&1 &
+          python -m http.server 3001 --bind 127.0.0.1 --directory "$RUNNER_TEMP/lumbre-static/dist-static" > /tmp/lumbre-preview.log 2>&1 &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID"' EXIT
           for attempt in $(seq 1 30); do
@@ -71,13 +91,18 @@ jobs:
           python portal/scripts/test-planner-weber-defaults.py
           python portal/scripts/test-recipe-blend-back.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
         with:
-          name: lumbre-static
-          path: ${{ runner.temp }}/lumbre-static/dist-static/
-          if-no-files-found: error
+          name: lumbre-browser-diagnostics
+          path: |
+            /tmp/lumbre-preview.log
+            /tmp/lumbre-*.pdf
+            /tmp/lumbre-*.png
+          if-no-files-found: warn
+          retention-days: 7
   deploy-production:
     name: Deploy static production
-    needs: static-build
+    needs: [static-build, browser-tests]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
