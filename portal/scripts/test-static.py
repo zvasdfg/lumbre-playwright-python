@@ -24,16 +24,33 @@ with sync_playwright() as playwright:
                 if response.status >= 400 else None)
         page.goto(BASE_URL)
         expect(page.locator('[data-app-ready="true"]')).to_be_visible()
+        # First navigation must survive the lazy lab replacing its short placeholder.
+        if width < 700:
+            page.locator(".mobile-nav summary").click()
+            page.locator('.mobile-nav a[href="#tienda"]').click()
+        else:
+            page.get_by_role("navigation", name="Navegación principal").get_by_role("link", name="Provisiones", exact=True).click()
+        page.wait_for_function("""() => {
+            const target = document.getElementById('tienda');
+            const lab = document.getElementById('laboratorio');
+            return lab && !lab.hasAttribute('aria-busy') &&
+              Math.abs(target.getBoundingClientRect().top - parseFloat(getComputedStyle(target).scrollMarginTop)) < 4;
+        }""")
         expect(page.get_by_test_id("account-button")).to_have_count(0)
         expect(page.get_by_role("button", name="Crear cuenta", exact=True)).to_have_count(0)
         expect(page.get_by_role("button", name="Entrar", exact=True)).to_have_count(0)
         expect(page.locator(".cart-button, .cart-drawer")).to_have_count(0)
         expect(page.get_by_test_id("product-card")).to_have_count(4)
         for index, name in enumerate(("Sazonador multiuso", "Sazonador para carne de res", "Sazonador para carne de cerdo", "Sazonador para carne de pollo")):
+            store_link = page.get_by_role("link", name=f"Comprar {name} en la tienda", exact=True)
+            expected_store_url = store_link.get_attribute("href")
+            assert expected_store_url.startswith(f"https://lumbre16.mitiendanube.com/productos/lmb-f-{index + 1:03d}-")
+            expect(store_link).to_be_visible()
             trigger = page.get_by_role("button", name=f"Ver ficha de {name}", exact=True)
             trigger.click()
             sheet = page.get_by_role("dialog", name=name, exact=True)
             expect(sheet).to_be_visible()
+            expect(sheet.get_by_role("link", name="Comprar en la tienda ↗", exact=True)).to_have_attribute("href", expected_store_url)
             expect(sheet.get_by_role("heading", name="¿Con qué combinarlo?", exact=True)).to_be_visible()
             expect(sheet.locator(".taste-chart li")).to_have_count(5)
             expect(sheet.locator("svg.taste-radar")).to_be_visible()
