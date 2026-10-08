@@ -2,6 +2,7 @@ import PrintableSheet from "./printable-sheet";
 import { productionProducts } from "../app/lib/production-products";
 import { contributionLabels, productProfiles, tasteNames } from "./product-profiles";
 import Image from "./image";
+import { productStoreUrl } from "./store-links";
 import "./product-sheet.css";
 
 type Product = typeof productionProducts[number];
@@ -27,7 +28,8 @@ export default function ProductSheet({ product, onClose, onBack }: { product: Pr
           <p className="product-sheet-style">{profile.style}</p>
           <p>{profile.description}</p>
           <p><strong>Ingredientes:</strong> {product.details.components.map(component => component.nombre).join(", ")}.</p>
-          <strong>{new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(product.price)} MXN · Catálogo informativo</strong>
+          <strong>{new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(product.price)} MXN</strong>
+          <p className="product-store-action"><a className="button button-primary" href={productStoreUrl(product.details.productCode)}>Comprar en la tienda ↗</a><small>Consulta precio y disponibilidad actualizados en nuestra tienda.</small></p>
         </div>
       </div>
       <div className="product-sheet-body">

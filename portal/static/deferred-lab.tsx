@@ -2,6 +2,8 @@ import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode 
 
 const IngredientLab = lazy(() => import("./ingredient-lab"));
 const labHashes = new Set(["#laboratorio", "#hipotesis"]);
+// Provisiones is below the lazy lab: its final position depends on the lab's height.
+const layoutDependentHashes = new Set([...labHashes, "#tienda"]);
 
 function Placeholder() {
   return <section id="laboratorio" className="lab-section" style={{ minHeight: 800 }} aria-busy="true">
@@ -27,8 +29,9 @@ class LoadBoundary extends Component<{ children: ReactNode }, { failed: boolean 
 
 function LoadedLab() {
   useEffect(() => {
-    // Restore deep links once the asynchronous section has committed its anchors.
-    if (labHashes.has(window.location.hash)) {
+    // Re-align the current destination after replacing the shorter placeholder.
+    // Read the current hash so a newer navigation is never sent back to the lab/shop.
+    if (layoutDependentHashes.has(window.location.hash)) {
       document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
     }
   }, []);
@@ -37,10 +40,10 @@ function LoadedLab() {
 
 export default function DeferredLab() {
   const host = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(() => labHashes.has(window.location.hash));
+  const [active, setActive] = useState(() => layoutDependentHashes.has(window.location.hash));
   useEffect(() => {
     if (active) return;
-    const onHash = () => { if (labHashes.has(window.location.hash)) setActive(true); };
+    const onHash = () => { if (layoutDependentHashes.has(window.location.hash)) setActive(true); };
     window.addEventListener("hashchange", onHash);
     const observer = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(entries => {
       if (entries.some(entry => entry.isIntersecting)) setActive(true);

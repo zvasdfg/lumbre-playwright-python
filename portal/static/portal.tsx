@@ -1,5 +1,7 @@
 import { Suspense, lazy, useMemo, useState } from "react";
 import Image from "./image";
+import { productStoreUrl } from "./store-links";
+import "./store-links.css";
 import AsyncBoundary from "./async-boundary";
 import recipes from "virtual:lumbre-recipe-index";
 import type { Recipe as FullRecipe } from "../app/lib/data";
@@ -227,9 +229,10 @@ export default function StaticPortal() {
                 <p className="product-ingredients"><strong>Ingredientes:</strong> {product.ingredients.join(", ")}.</p>
               )}
               <div>
-                <strong>{currency.format(product.price)}{product.netContent ? ` · ${product.netContent}` : ""}</strong><span>Catálogo informativo · venta en línea no disponible</span>
+                <strong>{currency.format(product.price)}{product.netContent ? ` · ${product.netContent}` : ""}</strong><span>Precio y disponibilidad actualizados en la tienda</span>
               </div>
               <button className="product-card-open" type="button" aria-label={`Ver ficha de ${product.name}`} onClick={() => setSelectedProduct(product)}><span>Ver ficha del sazonador ↗</span></button>
+              <a className="button button-primary product-store-link" href={productStoreUrl(product.productCode)} aria-label={`Comprar ${product.name} en la tienda`}>Comprar en la tienda ↗</a>
             </article>
           ))}
         </div>
@@ -244,7 +247,7 @@ export default function StaticPortal() {
       <footer>
         <div className="footer-brand"><Image src="/brand/lumbre-logo-inverse.png" alt="Lumbre" width={88} height={93} unoptimized /><h2>Que nunca falte<br />fuego en la mesa.</h2></div>
         <div><p>Explora</p><a href="#recetas">Recetas</a><a href="#laboratorio">Laboratorio</a><a href="#tienda">Sazonadores</a></div>
-        <div><p>Tu privacidad</p><span>Sin cuentas ni compras en línea. Tus mezclas y presets se guardan únicamente en tu navegador.</span></div>
+        <div><p>Tu privacidad</p><span>Tus mezclas y presets se guardan únicamente en este navegador. Las compras se realizan en nuestra tienda Tiendanube.</span></div>
         <small>© 2026 Lumbre · Diseñado alrededor del fuego en México.</small>
       </footer>
 
