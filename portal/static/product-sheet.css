@@ -30,7 +30,7 @@
 .product-sheet small { font-size: 12px; line-height: 1.6; color: #484b42; }
 .product-pairings { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .product-sheet summary { cursor: pointer; font-weight: 700; }
-.product-sheet a { color: #742719; text-decoration: underline; }
+.product-sheet a:not(.button) { color: #742719; text-decoration: underline; }
 .product-sheet-toolbar { position: sticky; top: 0; z-index: 4; padding: 10px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--cream); border-bottom: 1px solid #c6beb0; }
 .product-sheet-toolbar .product-sheet-close { position: static; float: none; margin: 0; flex-shrink: 0; }
 .product-sheet-toolbar:has(.product-sheet-back) { flex-wrap: wrap; }
