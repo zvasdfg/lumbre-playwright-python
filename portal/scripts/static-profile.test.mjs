@@ -33,6 +33,8 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   const compatibilityJob = workflow.split("  browser-compatibility:")[1];
   assert.match(compatibilityJob, /browser: \[firefox, webkit\]/);
   assert.match(compatibilityJob, /test_resilience_accessibility\.py/);
+  assert.match(compatibilityJob, /- shell: bash\s+env:\s+(?:#[^\n]*\n\s*)*HOME: \/root\s+run:/,
+    "Firefox in the root Actions container requires a root-owned HOME at launch");
   assert.doesNotMatch(workflow, /playwright install|apt-get/);
   const browserJob = workflow.split("  browser-tests:")[1].split("  deploy-production:")[0];
   assert.match(browserJob, /needs: static-build/);

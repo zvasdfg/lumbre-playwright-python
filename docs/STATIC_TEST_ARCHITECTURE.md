@@ -216,3 +216,16 @@ External collection is now 31 cases (seven public portal + 24 store), bringing
 the catalog to 316 including local, focused cross-browser and Node contracts.
 Only the 24 store cases were rerun in this store verification, not the entire
 316-case portfolio. Commit, push and deployment remain unperformed.
+
+### GitHub publication preflight
+
+Published commits `c66b401` (lazy recovery) and `03483ef` (suite/CI) after a fresh
+typecheck/build, 51 Node contracts, 14 framework and eight Chromium recovery/
+keyboard cases passed. The initial Actions run `37868318184` passed static build
+and WebKit but Firefox failed before any test could launch: Actions assigned
+`HOME=/github/home` owned by `pwuser` to a root container process. The compatibility
+launch step now explicitly uses root-owned `HOME=/root`; its source contract
+guards that configuration. No browser gate is removed or sandbox disabled.
+Linux verification of this correction is performed by the next Actions run,
+not inferred from macOS results. Store verification remains a separate manual
+read-only workflow; its first GitHub execution is `37868466000`.
