@@ -1,6 +1,23 @@
 import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode } from "react";
 
-const IngredientLab = lazy(() => import("./ingredient-lab"));
+const IngredientLab = lazy(async () => {
+  try { return await import("./ingredient-lab"); }
+  catch (error) {
+    // WebKit can retain a failed module URL across reloads. Only after an
+    // explicit recovery action, retry that same local build asset under a fresh URL.
+    const retry = new URL(window.location.href).searchParams.get("lab_retry");
+    if (retry && /^\d+$/.test(retry)) {
+      for (const link of document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"]')) {
+        const url = new URL(link.href);
+        if (url.origin === window.location.origin && /^\/assets\/ingredient-lab-[\w-]+\.js$/.test(url.pathname)) {
+          url.searchParams.set("retry", retry);
+          return await import(/* @vite-ignore */ url.href);
+        }
+      }
+    }
+    throw error;
+  }
+});
 const labHashes = new Set(["#laboratorio", "#hipotesis"]);
 // Provisiones is below the lazy lab: its final position depends on the lab's height.
 const layoutDependentHashes = new Set([...labHashes, "#tienda"]);
@@ -21,7 +38,11 @@ class LoadBoundary extends Component<{ children: ReactNode }, { failed: boolean 
     if (this.state.failed) return <section id="laboratorio" className="lab-section">
       <h2>Laboratorio de sabor</h2>
       <p role="alert">No se pudo cargar el laboratorio. Revisa tu conexión y recarga la página.</p>
-      <button type="button" onClick={() => window.location.reload()}>Recargar página</button>
+      <button type="button" onClick={() => {
+        const url = new URL(window.location.href);
+        url.searchParams.set("lab_retry", String(Date.now()));
+        window.location.replace(url.href);
+      }}>Recargar página</button>
     </section>;
     return this.props.children;
   }
