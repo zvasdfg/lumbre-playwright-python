@@ -2,6 +2,11 @@ name: Staging synthetic monitor
 
 on:
   workflow_dispatch:
+    inputs:
+      base_url:
+        description: HTTPS URL of a deployed STATIC preview (not the legacy backend)
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -11,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  STAGING_BASE_URL: https://lumbre-portal-staging.lumbre-portal.workers.dev
+  STAGING_BASE_URL: ${{ inputs.base_url }}
   HEADLESS: "true"
   PYTHON_VERSION: "3.13"
 

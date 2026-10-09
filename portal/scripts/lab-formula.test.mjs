@@ -6,6 +6,29 @@ import { ingredientSimilarity, productionMatches } from "../static/lab-product-m
 import { productionProducts } from "../app/lib/production-products.ts";
 import { userBlendReferences, referenceFormula } from "../static/lab-user-references.ts";
 
+test('MATRIX-002 every ingredient pair: weighted tastes, order independence and normalization', () => {
+  const catalog = readdirSync(new URL('../app/api/ingredientes/', import.meta.url))
+    .filter(file=>file.endsWith('.json')).map(file=>ingredient(file.slice(0,-5)));
+  let checked=0;
+  for(let a=0;a<catalog.length;a++) for(let b=a+1;b<catalog.length;b++) {
+    const items=[catalog[a],catalog[b]], amounts={[items[0].id]:50,[items[1].id]:100};
+    const rows=weightedProfile(items,amounts);
+    assert.deepEqual(rows,weightedProfile([...items].reverse(),amounts));
+    for(const row of rows) {
+      const values=items.map(item=>item.perfil_sensorial[row.axis]);
+      if(values.every(v=>typeof v==='number')) {
+        assert.ok(Math.abs(row.value-(values[0]+2*values[1])/3)<1e-10,`${items.map(i=>i.id)} ${row.axis}`);
+      } else assert.equal(row.value,null);
+    }
+    const relative=relativeProfile(rows).filter(row=>row.value!==null).map(row=>row.value);
+    assert.ok(relative.every(v=>v>=0&&v<=1));
+    if(relative.some(v=>v>0)) assert.equal(Math.max(...relative),1);
+    checked++;
+  }
+  assert.equal(checked,catalog.length*(catalog.length-1)/2);
+  console.log(`MATRIX-002: ${catalog.length} ingredients; ${checked} pairs; five axes each`);
+});
+
 test("user SPG and SP references preserve approved mass percentages and 150 g yields", () => {
   assert.deepEqual(userBlendReferences.slice(0, 2).map(reference => reference.ingredients.map(item => item.percent)), [[45, 40, 15], [50, 50]]);
   for (const reference of userBlendReferences) {

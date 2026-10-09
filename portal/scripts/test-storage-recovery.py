@@ -1,5 +1,8 @@
 """Isolated contexts: corrupt/denied storage must never crash the public portal."""
 from playwright.sync_api import sync_playwright, expect
+import os
+
+BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:3001").rstrip("/")
 
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch()
@@ -16,7 +19,7 @@ with sync_playwright() as playwright:
         page = context.new_page()
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
-        page.goto("http://127.0.0.1:3001/")
+        page.goto(BASE_URL + "/")
         page.get_by_role("button", name="Comida directa", exact=False).click()
         expect(page.get_by_role("region", name="Plan de fuego", exact=True)).to_be_visible()
         if "setItem =" in scenario:

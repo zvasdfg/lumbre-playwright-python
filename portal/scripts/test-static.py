@@ -1,8 +1,9 @@
 """Acceptance checks against the standalone static preview (no backend fixtures)."""
 from pathlib import Path
+import os
 from playwright.sync_api import expect, sync_playwright
 
-BASE_URL = "http://127.0.0.1:3001"
+BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:3001").rstrip("/")
 
 def check_print_action(page, sheet):
     page.evaluate("() => { window.__printCalls = 0; window.print = () => { window.__printCalls += 1; }; }")

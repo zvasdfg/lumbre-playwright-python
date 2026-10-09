@@ -67,7 +67,7 @@ jobs:
     name: Browser and print validation
     needs: static-build
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     container:
       image: mcr.microsoft.com/playwright/python:v1.63.0-noble
       options: --ipc=host
@@ -83,6 +83,7 @@ jobs:
         timeout-minutes: 3
         run: |
           python -m pip install --disable-pip-version-check --timeout 30 --retries 2 -r portal/profiles/browser/requirements.txt
+          python -m pip install --disable-pip-version-check --timeout 30 --retries 2 -e ./test-framework -c portal/profiles/browser/requirements.txt
           python -c "from playwright.sync_api import sync_playwright; p = sync_playwright().start(); b = p.chromium.launch(); b.close(); p.stop()"
       - name: Test static portal and storage recovery
         shell: bash
@@ -95,15 +96,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:3001/ > /dev/null
-          python portal/scripts/test-static.py
-          python portal/scripts/check-static-print.py
-          python portal/scripts/test-storage-recovery.py
-          python portal/scripts/test-planner-goals.py
-          python portal/scripts/test-planner-simple.py
-          python portal/scripts/test-planner-fuel.py
-          python portal/scripts/test-planner-kettle-fuel.py
-          python portal/scripts/test-planner-weber-defaults.py
-          python portal/scripts/test-recipe-blend-back.py
+          BASE_URL=http://127.0.0.1:3001 python -m pytest -c test-framework/pyproject.toml test-framework/tests/framework test-framework/projects/lumbre_static/tests -m 'not matrix' --junitxml=/tmp/lumbre-static-ui.xml --html=/tmp/lumbre-static-ui.html --self-contained-html --output=/tmp/lumbre-ui-artifacts
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
@@ -112,11 +105,14 @@ jobs:
             /tmp/lumbre-preview.log
             /tmp/lumbre-*.pdf
             /tmp/lumbre-*.png
+            /tmp/lumbre-static-ui.xml
+            /tmp/lumbre-static-ui.html
+            /tmp/lumbre-ui-artifacts/
           if-no-files-found: warn
           retention-days: 7
   deploy-production:
     name: Deploy static production
-    needs: [static-build, browser-tests]
+    needs: [static-build, browser-tests, component-matrix, browser-compatibility]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -158,3 +154,118 @@ jobs:
       - name: Verify published static bundle
         working-directory: ${{ runner.temp }}/lumbre-deploy
         run: node scripts/verify-static-deployment.mjs https://metodolumbre.com
+  production-ui-smoke:
+    name: Verify published portal UI (read only)
+    needs: deploy-production
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.63.0-noble
+      options: --ipc=host
+    env:
+      BASE_URL: https://metodolumbre.com
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - run: python -m pip install -e ./test-framework -c portal/profiles/browser/requirements.txt
+      - run: python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre_static/remote_smoke --output=/tmp/lumbre-published-artifacts --junitxml=/tmp/lumbre-published.xml --html=/tmp/lumbre-published.html --self-contained-html
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: published-ui-evidence
+          path: |
+            /tmp/lumbre-published-artifacts/
+            /tmp/lumbre-published.xml
+            /tmp/lumbre-published.html
+          retention-days: 7
+  component-matrix:
+    name: Component configuration matrix
+    needs: static-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        component: [test_planner_matrix, test_each_ingredient, test_all_recipe_sheets]
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.63.0-noble
+      options: --ipc=host
+    env:
+      BASE_URL: http://127.0.0.1:3001
+      COMPONENT_FILTER: ${{ matrix.component }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
+        with:
+          name: lumbre-static
+          path: /tmp/lumbre-matrix-build
+      - run: python -m pip install -e ./test-framework -c portal/profiles/browser/requirements.txt
+      - shell: bash
+        run: |
+          python -m http.server 3001 --bind 127.0.0.1 --directory /tmp/lumbre-matrix-build >/tmp/lumbre-matrix-server.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3001/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3001/ >/dev/null
+          python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre_static/tests -m matrix -k "$COMPONENT_FILTER" --output=/tmp/lumbre-matrix-artifacts --junitxml=/tmp/lumbre-matrix.xml --html=/tmp/lumbre-matrix.html --self-contained-html
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: component-matrix-evidence-${{ matrix.component }}
+          path: |
+            /tmp/lumbre-matrix-artifacts/
+            /tmp/lumbre-matrix.xml
+            /tmp/lumbre-matrix.html
+            /tmp/lumbre-matrix-server.log
+          retention-days: 7
+  browser-compatibility:
+    name: Keyboard and recovery (${{ matrix.browser }})
+    needs: static-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.63.0-noble
+      options: --ipc=host
+    env:
+      BASE_URL: http://127.0.0.1:3001
+      TEST_BROWSER: ${{ matrix.browser }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
+        with:
+          name: lumbre-static
+          path: /tmp/lumbre-compat-build
+      - run: python -m pip install -e ./test-framework -c portal/profiles/browser/requirements.txt
+      - shell: bash
+        run: |
+          python -m http.server 3001 --bind 127.0.0.1 --directory /tmp/lumbre-compat-build >/tmp/lumbre-compat-server.log 2>&1 &
+          COMPAT_SERVER_PID=$!
+          trap 'kill "$COMPAT_SERVER_PID"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3001/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3001/ >/dev/null
+          python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre_static/tests/test_resilience_accessibility.py --browser "$TEST_BROWSER" --output=/tmp/lumbre-compat-artifacts --junitxml=/tmp/lumbre-compat.xml --html=/tmp/lumbre-compat.html --self-contained-html
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: browser-compatibility-evidence-${{ matrix.browser }}
+          path: |
+            /tmp/lumbre-compat-artifacts/
+            /tmp/lumbre-compat.xml
+            /tmp/lumbre-compat.html
+            /tmp/lumbre-compat-server.log
+          retention-days: 7

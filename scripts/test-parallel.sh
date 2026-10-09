@@ -176,6 +176,7 @@ if env \
   BASE_URL="${WORKER_URLS[0]}" \
   AUTOMATION_WORKER_BASE_URLS="$worker_base_urls" \
   .venv/bin/pytest \
+    -o 'testpaths=tests/framework projects/lumbre/tests' \
     -n "$WORKERS" \
     --dist worksteal \
     "${REPORT_ARGS[@]}" \

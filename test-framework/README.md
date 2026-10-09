@@ -1,5 +1,33 @@
 # Playwright Python Automation Framework
 
+## Current scope (2026-10-08)
+
+The backend examples below are legacy local tests, not public portal acceptance.
+Retired remote tests for D1, account creation and commerce API writes were removed.
+Their replacement lives in `projects/lumbre_static/remote_smoke`, outside the
+legacy reset fixture. It only reads public pages and routes. Production defaults
+to `https://metodolumbre.com`; staging requires an explicit static preview URL.
+Bare Pytest runs framework units; local/parallel scripts opt into backend tests.
+See [current coverage plan](../docs/UI_COVERAGE_PLAN.md) for gaps and rollout.
+
+### Current static UI commands
+
+Start the static preview on port 3001, then from the repository root:
+
+```bash
+bash scripts/test-static-ui.sh -q
+bash scripts/test-static-cross-browser.sh -q # resilience/keyboard contracts in three engines
+bash scripts/test-store-ui.sh -q  # public read-only external integration
+# Watch only the 28 state-transition cases in a visible browser:
+bash scripts/test-static-ui.sh --headed --slowmo=350 -k 'lab_transitions or planner_transitions'
+```
+
+These runners create a unique temporary evidence directory and print the HTML/XML
+report location through Pytest. `BASE_URL` can override the target. The static UI
+suite runs in deploy CI alongside retained specialized regressions. The external
+store suite has a separate manual workflow and cannot block a portal release.
+No checkout submission, inventory mutation or payment is performed.
+
 Reusable Python automation core with a Lumbre reference project. It combines
 Pytest, Playwright Sync API, project-owned Page and Component Objects, direct API
 testing, executable OpenAPI/JSON Schema contracts, structured evidence, traces,

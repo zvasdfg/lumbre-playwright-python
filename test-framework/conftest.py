@@ -17,7 +17,10 @@ def pytest_sessionstart(session: pytest.Session) -> None:
         return
 
     selected_paths = tuple(str(argument).replace("\\", "/") for argument in config.args)
-    includes_lumbre = any("projects/lumbre" in path for path in selected_paths)
+    includes_lumbre = any(
+        path.rstrip("/").endswith("projects/lumbre") or "projects/lumbre/" in path
+        for path in selected_paths
+    )
     if not includes_lumbre:
         return
 

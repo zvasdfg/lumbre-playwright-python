@@ -24,16 +24,28 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   const version = /^playwright==([\d.]+)$/m.exec(requirements)?.[1];
   assert.ok(version);
   assert.ok(workflow.includes(`image: mcr.microsoft.com/playwright/python:v${version}-noble`));
-  assert.match(workflow, /needs: \[static-build, browser-tests\]/);
-  assert.doesNotMatch(workflow, /playwright install|pip install -e|apt-get/);
+  const deployJob = workflow.split("  deploy-production:")[1].split("  production-ui-smoke:")[0];
+  const gates = /needs: \[([^\]]+)\]/.exec(deployJob)?.[1].split(",").map(value => value.trim());
+  for (const gate of ["static-build", "browser-tests", "component-matrix", "browser-compatibility"]) {
+    assert.ok(gates?.includes(gate), `Missing release gate: ${gate}`);
+    assert.ok(workflow.includes(`  ${gate}:`), `Missing job: ${gate}`);
+  }
+  const compatibilityJob = workflow.split("  browser-compatibility:")[1];
+  assert.match(compatibilityJob, /browser: \[firefox, webkit\]/);
+  assert.match(compatibilityJob, /test_resilience_accessibility\.py/);
+  assert.doesNotMatch(workflow, /playwright install|apt-get/);
   const browserJob = workflow.split("  browser-tests:")[1].split("  deploy-production:")[0];
   assert.match(browserJob, /needs: static-build/);
   assert.match(browserJob, /actions\/download-artifact@/);
   assert.match(browserJob, /name: lumbre-static/);
   assert.match(browserJob, /python -m http.server 3001/);
   assert.match(browserJob, /if: always\(\)/);
+  assert.match(browserJob, /python -m pytest/);
+  assert.match(browserJob, /projects\/lumbre_static\/tests/);
+  assert.match(browserJob, /not matrix/);
+  const wrapper = readFileSync(resolve(portal, "../test-framework/projects/lumbre_static/tests/test_specialized_regressions.py"), "utf8");
   for (const script of ["test-static", "check-static-print", "test-storage-recovery", "test-planner-goals", "test-planner-simple", "test-planner-fuel", "test-planner-kettle-fuel", "test-planner-weber-defaults", "test-recipe-blend-back"]) {
-    assert.ok(browserJob.includes(`python portal/scripts/${script}.py`), script);
+    assert.ok(wrapper.includes(`${script}.py`), script);
   }
 });
 
