@@ -4,6 +4,12 @@
 
 # Playwright Python Automation Framework
 
+Current test scope and delivery plan: [Portal and store coverage](docs/UI_COVERAGE_PLAN.md).
+Bare `pytest` runs framework unit tests only. Static production smoke uses
+`scripts/test-production.sh`; the local/parallel runners explicitly select the
+preserved legacy backend suite. Historical counts below do not measure coverage
+of the current static portal or Tiendanube.
+
 > Public portal direction: static-only. Account/cart/commerce features are excluded
 > from the public artifact. See [Static portal](docs/STATIC_PORTAL.md) for preview
 > commands and the production retirement checklist. The legacy backend remains a

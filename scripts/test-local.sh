@@ -88,7 +88,7 @@ if [[ "$HTML_REPORT_REQUESTED" == false ]]; then
   )
 fi
 
-if BASE_URL="$BASE_URL" .venv/bin/pytest "${REPORT_ARGS[@]}" "$@"; then
+if BASE_URL="$BASE_URL" .venv/bin/pytest -o 'testpaths=tests/framework projects/lumbre/tests' "${REPORT_ARGS[@]}" "$@"; then
   TEST_STATUS=0
 else
   TEST_STATUS=$?

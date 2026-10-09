@@ -10,6 +10,27 @@ test('temperature defaults cover every objective/method and preserve legacy valu
   assert.equal(old.temperature,'175'); assert.equal(old.temperatureSuggested,false);
 });
 import assert from 'node:assert/strict';
+// Independent compatibility oracle: do not derive expectations from issues().
+test('MATRIX-001 exhaustive goal/equipment/fuel/method/smoke/surface/unit contract', () => {
+  const fuels = {abierta:['carbon','briquetas','lena'], kettle:['carbon','briquetas','lena'],
+    kamado:['carbon','briquetas','lena'], ahumador:['carbon','briquetas','lena'],
+    offset:['carbon','briquetas','lena'], gas:['gas_lp','gas_natural'], pellets:['pellets'], no_soportado:[]};
+  let checked=0, accepted=0;
+  for (const equipment of Object.keys(fuels)) for (const fuelType of ['carbon','briquetas','lena','gas_lp','gas_natural','pellets'])
+  for (const goal of ['asar','ahumar','hornear']) for (const cookingStyle of ['directo','indirecto','dos_zonas'])
+  for (const smoking of [false,true]) for (const surface of ['rejilla','plancha','sarten','bandeja','sin_definir'])
+  for (const unit of ['C','F']) {
+    const c={...base,equipment,fuelType,goal,cookingStyle,smoking,surface,unit,
+      temperature:unit==='C'?'180':'356',durationHours:'2',fuelVerified:true,capabilityVerified:true,smokeVerified:true};
+    const invalid=!fuels[equipment].includes(fuelType) ||
+      (goal!=='asar' && cookingStyle!=='indirecto') ||
+      (equipment==='abierta' && (goal!=='asar'||cookingStyle==='indirecto'||smoking));
+    assert.equal(issues(c).length>0,invalid,JSON.stringify(c));
+    checked++; if(!invalid) accepted++;
+  }
+  assert.equal(checked,8640);
+  console.log(`MATRIX-001: ${checked} combinations; ${accepted} accepted; ${checked-accepted} rejected`);
+});
 import { stageConfiguration, stageSchema, surfaceGuidance } from '../static/fire-plan-model.ts';
 import { defaultTemperature, capability, goalLabels, equipmentLabels, fuelLabels, hasSmoke, needsOvenCheck } from '../static/fire-plan-model.ts';
 import { initialConfiguration as base, configurationSchema, presetSchema, issues, guide, decodePresets, safeRecipeUrl, compatibleFuels, needsCapability } from '../static/fire-plan-model.ts';

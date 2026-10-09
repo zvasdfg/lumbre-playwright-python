@@ -1,0 +1,29 @@
+name: Public store integration (read only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  store:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.63.0-noble
+      options: --ipc=host
+    env:
+      BASE_URL: https://metodolumbre.com
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - run: python -m pip install -e ./test-framework -c portal/profiles/browser/requirements.txt
+      - run: python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre_static/store --output=/tmp/lumbre-store-artifacts --junitxml=/tmp/lumbre-store.xml --html=/tmp/lumbre-store.html --self-contained-html
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: store-ui-evidence
+          path: |
+            /tmp/lumbre-store-artifacts/
+            /tmp/lumbre-store.xml
+            /tmp/lumbre-store.html
+          retention-days: 7
