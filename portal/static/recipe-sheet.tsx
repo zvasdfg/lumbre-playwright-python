@@ -1,8 +1,8 @@
-import type { Recipe } from "../app/lib/data";
+import type { Recipe } from "../data/data";
 import Image from "./image";
 import PrintableSheet from "./printable-sheet";
-import { recipePreparations, recipeBlendRecommendations, recipeBlendUsage, recipeEditorialNote, recipeSafetyNote, recipeSources } from "../app/lib/recipe-preparations";
-import { productionProducts } from "../app/lib/production-products";
+import { recipePreparations, recipeBlendRecommendations, recipeBlendUsage, recipeEditorialNote, recipeSafetyNote, recipeSources } from "../data/recipe-preparations";
+import { productionProducts } from "../data/production-products";
 
 export default function RecipeSheet({ recipe, onClose, onOpenBlend, initialScrollTop = 0 }: { recipe: Omit<Recipe, "preparation">; onClose: () => void; onOpenBlend: (code: string, scrollTop: number) => void; initialScrollTop?: number }) {
   const preparation = recipePreparations[recipe.id];

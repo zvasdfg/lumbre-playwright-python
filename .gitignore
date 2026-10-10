@@ -38,6 +38,6 @@ render.yaml
 
 test-framework/.venv/
 test-framework/.env
-test-framework/**/__pycache__/
+**/__pycache__/
 test-framework/.pytest_cache/
 test-framework/test-results/

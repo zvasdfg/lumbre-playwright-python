@@ -1,5 +1,9 @@
 # Lumbre Production Architecture Migration Plan
 
+> Archived architecture history. The custom backend source is retired as of
+> 2026-10-09; do not execute commands below. Current operation is described by
+> [the static portal architecture](STATIC_PORTAL.md).
+
 ## Current direction: static public portal (2026-09-30)
 
 The user has paused the custom commerce/account backend and its administrator UI.

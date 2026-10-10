@@ -22,13 +22,12 @@ test-framework/
     ├── support/             Serialized PDF/regression transport
     ├── conftest.py          Browser isolation and target guards
     └── tests/
-        ├── api/system/      Numbered public GET contracts
         └── ui/              Numbered home/recipes/lab/planner/commerce cases
 ```
 
-One behavior per `test_ui_NNN_*.py` or `test_api_NNN_*.py`. Input variants retain
+One behavior per `test_ui_NNN_*.py`. Input variants retain
 their ID. Feature folders describe ownership; strict Pytest markers select
-local, matrix, cross-browser, published-portal and store execution categories.
+local, matrix, cross-browser and optional store execution categories.
 
 ## Install and run
 
@@ -36,7 +35,7 @@ local, matrix, cross-browser, published-portal and store execution categories.
 cd test-framework
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -e '.[dev]'
+pip install -e '.[dev,lumbre]'
 playwright install chromium firefox webkit
 cd ../portal
 npm ci
@@ -56,7 +55,6 @@ bash scripts/test-local.sh --headed --slowmo=350 -m 'portal and smoke'
 bash scripts/test-static-ui.sh
 bash scripts/test-static-cross-browser.sh
 # Explicit public read-only validation:
-bash scripts/test-production.sh
 bash scripts/test-store-ui.sh
 ```
 
@@ -67,32 +65,26 @@ CI runs independent matrix lanes against the same prebuilt static artifact.
 
 ## Current coverage and results
 
-The active project contains 67 numbered UI/API modules and four architecture
-contracts. Collection has 457 parameterized executions: 426 local/framework and
-31 explicit public portal/store cases. The UI-092–UI-104 extension adds 13
+The active project contains 64 numbered UI behaviors and four architecture
+contracts. Collection has 450 parameterized executions: 426 local/framework and
+24 optional read-only Tiendanube checks. The UI-092–UI-104 extension adds 13
 behaviors / 177 executions, including all 53 published almanac documents at two
 widths, large blends, multi-stage plans, keyboard, network recovery and A4 PDFs.
-Existing matrices still traverse 48 planner configurations, 60 ingredients and
-100 recipe sheets; this does not mean every possible ingredient subset/duration.
+Other matrices traverse 48 planner configurations, 60 ingredients and 100 recipes.
+This is finite coverage, not every possible ingredient subset or stage sequence.
 
-Latest full local run: 416 passed / 10 failed in 27 min 19 s. Four initial
-test-development failures passed after scoped-alert / uppercase-PDF corrections;
-the six remaining Chromium failures expose real focus defects in custom dialogs.
-Focused final three-engine run: 28 passed / 20 failed (18 focus variants and two
-WebKit product-chunk recovery failures). Final PDF run: five passed; all 12 pages
-were rendered and inspected. Model/profile contracts: 53 passed. Raw results are
-retained, not rewritten into an all-green report. See the
-[execution record](docs/TEST_MIGRATION_2026-10-09.md#coverage-extension-ui-092ui-104)
-and [full report](test-framework/reports/runs/lumbre-local-2026-10-09_16-13-38-15565/report.html).
+Cleanup validation: 420 passed / 6 failed in local Chromium/framework execution.
+The six failures are existing custom-dialog keyboard-focus defects; assertions
+were not weakened. The prior headed run had 419 passed / 7 failed, including a
+recipe-return failure that did not reproduce headless. This is not an all-green
+or full three-engine claim.
+See [current cleanup evidence](docs/STATIC_RETIREMENT_2026-10-09.md) and
+[migration history](docs/TEST_MIGRATION_2026-10-09.md).
 
-The 31 external cases were deselected in this extension, not validated or marked
-as passing; their previous network limitation remains unresolved. Store tests do
-not create carts, orders, payments or inventory changes.
-
-GitHub deploy gates preserve build/model, general UI, component matrices and
-browser compatibility before publication. Published smoke runs afterwards;
-external store checks are a separate manual workflow. This cleanup is local and
-does not itself commit or deploy.
+Actions tests the built artifact before publishing. After publication only a
+short HTML/JavaScript hash check remains, not another browser suite. Optional
+store checks use a separate manual workflow and perform no cart, payment, order
+or inventory write. There is no active application backend or database runtime.
 
 ## Documentation
 

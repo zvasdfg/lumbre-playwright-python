@@ -9,7 +9,7 @@ const target = resolve(destination);
 if (existsSync(target)) throw new Error("Destination already exists; refusing to overwrite it.");
 const canonicalTarget = resolve(realpathSync(dirname(target)), target.split(sep).at(-1));
 if (canonicalTarget === portal || canonicalTarget.startsWith(portal + sep)) {
-  throw new Error("Workspace must be outside portal to prevent fallback to legacy node_modules.");
+  throw new Error("Workspace must be outside portal to prevent inheriting the development installation.");
 }
 // Only deployment inputs. The validated artifact is downloaded separately by CI.
 const files = {

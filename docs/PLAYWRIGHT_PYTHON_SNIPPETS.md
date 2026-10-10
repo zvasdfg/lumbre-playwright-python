@@ -1,5 +1,10 @@
 # Playwright Python Snippets
 
+> Historical learning/reference examples. Some examples describe former Lumbre
+> backend widgets, not current executable coverage. For current interfaces,
+> commands and numbered cases, use [the active project guide](../test-framework/projects/lumbre/README.md).
+> The reusable testing principles still apply; retired examples are not runbooks.
+
 Practical reference for the Lumbre framework. Examples use Playwright Sync API,
 Pytest, Page Objects, Component Objects, structured test steps, and web-first
 assertions.

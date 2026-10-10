@@ -34,7 +34,6 @@ addopts = "-m 'framework_unit or portal' -ra --strict-markers --import-mode=impo
 testpaths = ["tests/framework", "projects/lumbre/tests"]
 markers = [
   "portal: current portal against an explicitly started local static preview",
-  "production: read-only acceptance of the published static portal",
   "store: read-only external Tiendanube integration; explicitly selected",
   "planner: fire planner feature",
   "laboratory: ingredient laboratory feature",
@@ -58,7 +57,7 @@ markers = [
   "framework_unit: isolated validation of reusable framework behavior",
   "regression: extended functional coverage",
   "cross_browser: explicit compatibility coverage across Playwright browser engines",
-  "remote_smoke: read-only and rejection checks safe for an explicitly selected deployed target",
+  "remote_smoke: optional read-only external store integration",
 ]
 log_cli = true
 log_cli_level = "INFO"

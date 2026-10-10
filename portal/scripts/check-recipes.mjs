@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { recipePreparations, baseRecipePreparations, recipeSources, recipeBlendRecommendations, recipeBlendIngredient } from "../app/lib/recipe-preparations.ts";
-import { productionProducts } from "../app/lib/production-products.ts";
+import { recipePreparations, baseRecipePreparations, recipeSources, recipeBlendRecommendations, recipeBlendIngredient } from "../data/recipe-preparations.ts";
+import { productionProducts } from "../data/production-products.ts";
 
-const catalog = readFileSync(new URL("../app/lib/data.ts", import.meta.url), "utf8");
+const catalog = readFileSync(new URL("../data/data.ts", import.meta.url), "utf8");
 const ids = [...catalog.slice(0, catalog.indexOf("const categoryLabels")).matchAll(/\bid: (\d+)/g)].map((match) => Number(match[1]));
 assert.equal(ids.length, 100);
 assert.equal(new Set(ids).size, 100);

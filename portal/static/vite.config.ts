@@ -3,7 +3,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { recipes } from "../app/lib/data.ts";
+import { recipes } from "../data/data.ts";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const portal = resolve(root, "..");
@@ -13,7 +13,6 @@ export default defineConfig({
   root,
   publicDir: false,
   appType: "mpa",
-  resolve: { alias: { "next/image": resolve(root, "image.tsx") } },
   plugins: [react(), {
     name: "recipe-card-index",
     resolveId(id) {

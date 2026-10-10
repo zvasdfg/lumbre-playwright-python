@@ -1,4 +1,4 @@
-import { productionProducts, type ProductDetails } from "../app/lib/production-products.ts";
+import { productionProducts, type ProductDetails } from "../data/production-products.ts";
 
 // Jaccard similarity: shared ingredient IDs / all distinct IDs in either blend.
 // Missing and extra ingredients both reduce the score. No recipe weights are known.

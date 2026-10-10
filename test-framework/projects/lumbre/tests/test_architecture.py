@@ -1,6 +1,7 @@
 """Canonical case IDs, module boundaries and remote-selection safety."""
 
 import ast
+import importlib.util
 import re
 import tomllib
 from pathlib import Path
@@ -48,73 +49,59 @@ def test_numbered_case_structure():
 
 
 @pytest.mark.case(
-    "ARCH-002", "Current fixtures and POMs never depend on the retired backend project"
+    "ARCH-002", "Project imports resolve and generic automation has no product dependency"
 )
-def test_current_project_has_no_legacy_imports():
+def test_current_project_import_boundaries():
     for path in ROOT.rglob("*.py"):
         for node in ast.walk(ast.parse(path.read_text())):
+            names = []
+            if isinstance(node, ast.ImportFrom) and not node.level:
+                names = [node.module or ""]
+            elif isinstance(node, ast.Import):
+                names = [alias.name for alias in node.names]
+            for name in names:
+                if name.startswith("projects."):
+                    assert importlib.util.find_spec(name) is not None, (path, name)
+    for path in (FRAME / "automation").rglob("*.py"):
+        for node in ast.walk(ast.parse(path.read_text())):
             if isinstance(node, ast.ImportFrom):
-                assert not (node.module or "").startswith("projects.lumbre_legacy"), path
-            if isinstance(node, ast.Import):
-                assert not any(
-                    alias.name.startswith("projects.lumbre_legacy") for alias in node.names
-                ), path
-    source = (ROOT / "conftest.py").read_text()
-    assert "reset_demo_data" not in source
-    assert "LumbreApi" not in source
+                assert not (node.module or "").startswith("projects."), path
+            elif isinstance(node, ast.Import):
+                assert not any(alias.name.startswith("projects.") for alias in node.names), path
     for path in (FRAME / "templates").glob("*.py.txt"):
-        template = path.read_text()
-        assert "projects.lumbre.api.lumbre_api" not in template
-        ast.parse(template)
-    snippet = FRAME.parent / ".vscode/playwright-python.code-snippets"
-    assert "projects.lumbre.api.lumbre_api" not in snippet.read_text()
+        ast.parse(path.read_text())
 
 
 @pytest.mark.case(
-    "ARCH-003",
-    "One active project; default selection excludes store and production",
+    "ARCH-003", "Default selection is local; external store cases are explicitly marked"
 )
 def test_default_selection_is_local():
+    from projects.lumbre.data.cases import INGREDIENTS, PLANNER_CASES
+
     config = tomllib.loads((FRAME / "pyproject.toml").read_text())["tool"]["pytest"]["ini_options"]
     assert config["testpaths"] == ["tests/framework", "projects/lumbre/tests"]
-    assert not (FRAME / "projects/lumbre_legacy").exists()
-    assert not (FRAME / "projects/lumbre_static").exists()
-    assert not (FRAME.parent / "scripts/test-parallel.sh").exists()
-    assert not (FRAME.parent / ".github/workflows/legacy-backend-checks.yml").exists()
     runner = (FRAME.parent / "scripts/test-local.sh").read_text()
     assert "npm run build:static" in runner and "http.server 3001" in runner
     assert "framework_unit or portal" in runner
-    for retired in ("wrangler", "dev:backend", "LUMBRE_D1_STATE_DIR", "STRIPE_WEBHOOK_SECRET"):
-        assert retired not in runner
-    for retired in (
-        "check-planner-diagrams.py",
-        "check-planner-editor.py",
-        "check-planner-fuels.py",
-        "check-planner-mounts.py",
-        "check-planner-visual.py",
-        "replay-planner-100.py",
-        "replay-planner-100-v3.py",
-    ):
-        assert not (FRAME.parent / "portal/scripts" / retired).exists()
     assert "framework_unit or portal" in config["addopts"]
+    # A relocated source catalog must never silently produce an empty matrix.
+    assert len(INGREDIENTS) == 60
+    assert len(PLANNER_CASES) == 48
     for path in (ROOT / "tests").rglob("test_*.py"):
         if path.name == "test_architecture.py":
             continue
         tree = ast.parse(path.read_text())
         assignments = [
-            node
-            for node in tree.body
+            node for node in tree.body
             if isinstance(node, ast.Assign)
-            and any(
-                isinstance(target, ast.Name) and target.id == "pytestmark"
-                for target in node.targets
-            )
+            and any(isinstance(target, ast.Name) and target.id == "pytestmark"
+                    for target in node.targets)
         ]
         assert len(assignments) == 1, path
         markers = {
             node.attr for node in ast.walk(assignments[0].value) if isinstance(node, ast.Attribute)
         }
-        assert len(markers & {"portal", "store", "production"}) == 1, path
+        assert len(markers & {"portal", "store"}) == 1, path
 
 
 @pytest.mark.case(
