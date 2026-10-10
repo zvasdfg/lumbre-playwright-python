@@ -12,11 +12,10 @@ Revision 2026-10-09. Canonical active project: `test-framework/projects/lumbre`.
 | Components | `projects/lumbre/components/` | Planner/laboratory/almanac actions; no business assertions or scenario dependencies |
 | Inputs | `projects/lumbre/data/` | Independent configuration and ingredient catalog inputs |
 | UI cases | `projects/lumbre/tests/ui/<feature>/` | One numbered `test_ui_NNN` behavior per file, assertions in the test |
-| Public HTTP contracts | `projects/lumbre/tests/api/system/` | Numbered read-only `test_api_NNN` cases |
 | Technical support | `projects/lumbre/support/` | Subprocess transport for serialized specialized scripts |
 | Pure model contracts | `portal/scripts/*.test.mjs` | Finite arithmetic/rule matrices without browsers |
 
-Directories represent features, not execution categories. `matrix`, `production`,
+Directories represent features, not execution categories. `matrix`,
 `store`, `smoke`, `regression` and `cross_browser` are strict Pytest markers.
 See [actual tree and commands](../test-framework/projects/lumbre/README.md).
 
@@ -30,11 +29,11 @@ All current lanes select the same canonical test tree, with no duplicate suite:
    `ingredients_matrix`, `recipes_matrix`, or `almanac_matrix`, against the same downloaded artifact.
 4. Firefox/WebKit focused compatibility: `portal and cross_browser`.
 5. Deploy only after every pre-release lane passes.
-6. Public acceptance: `production and smoke`, after publication.
-7. External Tiendanube: `store`, separate manual read-only workflow.
+6. Verify published HTML/JavaScript hashes against the validated artifact.
+7. Optional external Tiendanube: `store`, separate manual read-only workflow.
 
 Default discovery includes framework plus current project; default marker selection
-is `framework_unit or portal`. It does not run store/production by accident.
+is `framework_unit or portal`. It does not run store checks by accident.
 The active target guard rejects public URLs for local regressions. Public tests
 require explicitly selected HTTPS. The retired backend suite and reset fixtures
 are removed; the main local runner builds and serves only the static artifact.

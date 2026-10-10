@@ -222,8 +222,8 @@ from the DOM is itself the contract.
 
 ### Checkpoint 11: run the new case in isolation
 
-Use the managed runner when a test depends on Lumbre's test-only reset route or
-isolated mutable registry:
+Use the managed runner to build the current portal and own an isolated static
+preview. Each case gets a fresh browser context; no server reset is involved:
 
 ```bash
 ./scripts/test-local.sh -q \
@@ -233,7 +233,7 @@ isolated mutable registry:
 
 Headed mode and slow motion support observation; they are not stability
 mechanisms. Against an already-running environment, first confirm that its
-server mode exposes every fixture dependency.
+preview serves the same built artifact and expected port.
 
 Classify failures before editing code:
 

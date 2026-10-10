@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 INGREDIENTS = [
-    json.loads(p.read_text()) for p in sorted((ROOT / "portal/app/api/ingredientes").glob("*.json"))
+    json.loads(p.read_text()) for p in sorted((ROOT / "portal/data/ingredientes").glob("*.json"))
 ]
 FUELS = {
     "abierta": ("carbon", "briquetas", "lena"),

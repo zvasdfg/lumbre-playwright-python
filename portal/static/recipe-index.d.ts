@@ -1,4 +1,4 @@
 declare module "virtual:lumbre-recipe-index" {
-  const cards: Omit<import("../app/lib/data").Recipe, "preparation">[];
+  const cards: Omit<import("../data/data").Recipe, "preparation">[];
   export default cards;
 }

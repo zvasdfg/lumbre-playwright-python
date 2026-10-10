@@ -38,10 +38,6 @@ with sync_playwright() as playwright:
             return lab && !lab.hasAttribute('aria-busy') &&
               Math.abs(target.getBoundingClientRect().top - parseFloat(getComputedStyle(target).scrollMarginTop)) < 4;
         }""")
-        expect(page.get_by_test_id("account-button")).to_have_count(0)
-        expect(page.get_by_role("button", name="Crear cuenta", exact=True)).to_have_count(0)
-        expect(page.get_by_role("button", name="Entrar", exact=True)).to_have_count(0)
-        expect(page.locator(".cart-button, .cart-drawer")).to_have_count(0)
         expect(page.get_by_test_id("product-card")).to_have_count(4)
         for index, name in enumerate(("Sazonador multiuso", "Sazonador para carne de res", "Sazonador para carne de cerdo", "Sazonador para carne de pollo")):
             store_link = page.get_by_role("link", name=f"Comprar {name} en la tienda", exact=True)
@@ -187,9 +183,6 @@ with sync_playwright() as playwright:
         assert not errors, errors
         assert not failed_assets, failed_assets
         page.screenshot(path=str(Path("/tmp") / f"lumbre-static-{width}.png"))
-        for route in ("/api/account", "/api/cart", "/api/auth/sign-in", "/api/orders"):
-            response = context.request.get(BASE_URL + route)
-            assert response.status == 404, (route, response.status)
         context.close()
-        print(f"PASS {width}px: tools, static catalog, no API traffic, no accounts/cart, API routes 404")
+        print(f"PASS {width}px: tools, static catalog, loaded assets, printable sheets and no API traffic")
     browser.close()

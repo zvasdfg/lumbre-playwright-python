@@ -3,20 +3,16 @@ from playwright.sync_api import APIRequestContext
 
 from automation.core.reporting import TestLogger
 
-pytestmark = [pytest.mark.api, pytest.mark.production, pytest.mark.remote_smoke]
+pytestmark = [pytest.mark.api, pytest.mark.contract]
 
 
-@pytest.mark.skip(reason="Pending exercise: review the target and replace API-000")
-@pytest.mark.case("API-000", "Describe the observable public HTTP contract")
+@pytest.mark.skip(reason="Template: define a current project HTTP contract before enabling")
+@pytest.mark.case("API-000", "Describe the current project HTTP contract")
 def test_descriptive_api_behavior(
     api_request_context: APIRequestContext,
     test_log: TestLogger,
 ) -> None:
-    with test_log.step("Read a retired API route without performing a mutation"):
-        response = api_request_context.get("/api/account")
-
-    with test_log.step("Record and validate the public contract"):
-        observed_value = response.status
-        expected_value = 404
-        test_log.values(observed_value=observed_value, expected_value=expected_value)
-        assert observed_value == expected_value
+    with test_log.step("Read the documented resource"):
+        response = api_request_context.get("/replace-with-current-resource")
+    with test_log.step("Validate the documented response"):
+        assert response.status == 200

@@ -67,7 +67,6 @@ body, body *, body *::before, body *::after, body *::placeholder {
   .almanac-trigger { background: #fff; border: 1px solid #111; box-shadow: none; }
   .product-sheet, .printable-sheet { background: #fff; border-top-width: 2px; }
   .product-sheet-intro { border-bottom-color: #111; }
-  .event-row:hover { background: #f4f4f4; }
   :is(a, button, input, select, summary):focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
 }
 @media screen and (max-width: 850px) {

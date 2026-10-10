@@ -1,5 +1,5 @@
 // Editorial inference from declared ingredients, not measured formulation data.
-// Sources: app/api/ingredientes/{ingredient ID}.json and production-products.ts.
+// Sources: data/ingredientes/{ingredient ID}.json and production-products.ts.
 export const tasteNames = ["Dulce", "Salado", "Ácido", "Amargo", "Umami"] as const;
 export const contributionLabels = ["Sin protagonismo previsto", "Aporte secundario", "Aporte destacado"] as const;
 type Contribution = 0 | 1 | 2;

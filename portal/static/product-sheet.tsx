@@ -1,5 +1,5 @@
 import PrintableSheet from "./printable-sheet";
-import { productionProducts } from "../app/lib/production-products";
+import { productionProducts } from "../data/production-products";
 import { contributionLabels, productProfiles, tasteNames } from "./product-profiles";
 import Image from "./image";
 import { productStoreUrl } from "./store-links";

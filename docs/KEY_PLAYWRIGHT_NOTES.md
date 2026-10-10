@@ -1,5 +1,10 @@
 # Key Playwright Notes
 
+> Historical learning/reference examples. Some examples describe former Lumbre
+> backend widgets, not current executable coverage. For current interfaces,
+> commands and numbered cases, use [the active project guide](../test-framework/projects/lumbre/README.md).
+> The reusable testing principles still apply; retired examples are not runbooks.
+
 Daily reference for writing and reviewing tests in the Lumbre learning
 framework.
 

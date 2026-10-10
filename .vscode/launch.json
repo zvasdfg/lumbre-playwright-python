@@ -13,7 +13,7 @@
         "-s"
       ],
       "env": {
-        "BASE_URL": "http://localhost:3000"
+        "BASE_URL": "http://127.0.0.1:3001"
       },
       "console": "integratedTerminal",
       "justMyCode": false
@@ -33,7 +33,7 @@
         "300"
       ],
       "env": {
-        "BASE_URL": "http://localhost:3000"
+        "BASE_URL": "http://127.0.0.1:3001"
       },
       "console": "integratedTerminal",
       "justMyCode": false
@@ -51,7 +51,7 @@
         "--headed"
       ],
       "env": {
-        "BASE_URL": "http://localhost:3000",
+        "BASE_URL": "http://127.0.0.1:3001",
         "PWDEBUG": "1"
       },
       "console": "integratedTerminal",

@@ -3,11 +3,11 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { labBases, styles, balance150, toggleLabSelection, weightedProfile, relativeProfile, validAmounts, formulaSignature } from "../static/lab-formula.ts";
 import { ingredientSimilarity, productionMatches } from "../static/lab-product-matches.ts";
-import { productionProducts } from "../app/lib/production-products.ts";
+import { productionProducts } from "../data/production-products.ts";
 import { userBlendReferences, referenceFormula } from "../static/lab-user-references.ts";
 
 test('MATRIX-002 every ingredient pair: weighted tastes, order independence and normalization', () => {
-  const catalog = readdirSync(new URL('../app/api/ingredientes/', import.meta.url))
+  const catalog = readdirSync(new URL('../data/ingredientes/', import.meta.url))
     .filter(file=>file.endsWith('.json')).map(file=>ingredient(file.slice(0,-5)));
   let checked=0;
   for(let a=0;a<catalog.length;a++) for(let b=a+1;b<catalog.length;b++) {
@@ -61,7 +61,7 @@ test("all canonical blends match themselves first, with no invented ingredient e
   assert.ok(!productionMatches(["sal_kosher", "pimienta_negra", "ajo_granulado"]).some(match => match.product.id === 121));
 });
 
-const ingredient = id => JSON.parse(readFileSync(new URL(`../app/api/ingredientes/${id}.json`, import.meta.url)));
+const ingredient = id => JSON.parse(readFileSync(new URL(`../data/ingredientes/${id}.json`, import.meta.url)));
 
 test("user references reproduce all supplied formulas by mass, not generic family weights", () => {
   const cases = [
@@ -112,7 +112,7 @@ test("relative radar puts dominant tastes at the edge and preserves ratios, ties
 });
 
 test("every catalog ingredient recalculates amounts and radar on addition and removal in all styles", () => {
-  const catalog = readdirSync(new URL("../app/api/ingredientes/", import.meta.url)).filter(file => file.endsWith(".json")).map(file => ingredient(file.slice(0, -5)));
+  const catalog = readdirSync(new URL("../data/ingredientes/", import.meta.url)).filter(file => file.endsWith(".json")).map(file => ingredient(file.slice(0, -5)));
   for (const style of styles.filter(style => style.id !== "manual")) {
     const base = { ids: [...style.ids], amounts: balance150(catalog.filter(item => style.ids.includes(item.id)), style.id) };
     for (const item of catalog) {
@@ -138,7 +138,7 @@ test("all starting styles use catalog ingredients and valid gram quantities", ()
     assert.ok(validAmounts(style.ids, balance150(style.ids.map(ingredient), style.id), "g"));
     assert.ok(base.source.startsWith("https://"));
     for (const id of style.ids) {
-      const file = new URL(`../app/api/ingredientes/${id}.json`, import.meta.url);
+      const file = new URL(`../data/ingredientes/${id}.json`, import.meta.url);
       assert.ok(existsSync(file));
       assert.equal(JSON.parse(readFileSync(file)).id, id);
     }

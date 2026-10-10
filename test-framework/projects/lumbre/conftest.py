@@ -14,17 +14,17 @@ from projects.lumbre.pages.home_page import HomePage
 @pytest.fixture(autouse=True)
 def target_scope(request, app_url):
     target = urlparse(app_url)
-    remote = any(request.node.get_closest_marker(tag) for tag in ("production", "store"))
+    remote = request.node.get_closest_marker("store") is not None
     if remote:
         if target.scheme != "https" or target.hostname in {"localhost", "127.0.0.1", "::1"}:
             raise pytest.UsageError(
-                "Store/production cases require an explicitly selected public HTTPS target"
+                "Store integration cases require an explicitly selected public HTTPS target"
             )
     elif request.node.get_closest_marker("portal"):
         if target.hostname not in {"localhost", "127.0.0.1", "::1"}:
             raise pytest.UsageError(
                 "Portal regressions require a local preview; "
-                "use -m production or -m store for public targets"
+                "use -m store for public targets"
             )
 
 

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element -- Static hosting has no Next image server. */
 import type { ImgHTMLAttributes } from "react";
 
 type ImageProps = ImgHTMLAttributes<HTMLImageElement> & {

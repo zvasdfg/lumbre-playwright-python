@@ -14,7 +14,6 @@ test-framework/
 │   │   ├── support/
 │   │   ├── conftest.py
 │   │   └── tests/
-│   │       ├── api/system/test_api_NNN_*.py
 │   │       └── ui/
 │   │           ├── almanac/test_ui_NNN_*.py
 │   │           ├── home/test_ui_NNN_*.py
@@ -31,7 +30,7 @@ Start here: [active project guide](projects/lumbre/README.md),
 [architecture](../docs/STATIC_TEST_ARCHITECTURE.md).
 
 The active project follows the original numbered, feature-separated design.
-Matrices, production acceptance and store integration are selected with Pytest
+Matrices and optional store integration are selected with Pytest
 markers under the same tree. The reusable `automation` core has no project imports.
 
 ## Installation
@@ -59,16 +58,15 @@ With an existing static preview on port 3001:
 bash scripts/test-static-ui.sh
 bash scripts/test-static-ui.sh -m 'portal and laboratory'
 bash scripts/test-static-cross-browser.sh
-bash scripts/test-production.sh
 bash scripts/test-store-ui.sh
 ```
 
 From `test-framework/`, `BASE_URL=http://127.0.0.1:3001 .venv/bin/pytest` runs
 framework and local portal cases. `pytest -m framework_unit` needs no app server.
-Public tests require explicit `-m production` or `-m store` and a HTTPS target.
+Optional store tests require explicit `-m store` and an HTTPS target.
 
 HTML/JUnit reports and browser failure evidence are retained per invocation.
-Each UI/API file owns one case ID; parameter variants retain that ID.
+Each UI file owns one case ID; parameter variants retain that ID.
 Neither collection counts nor parameter counts imply exhaustive product coverage.
 Store tests are read-only; checkout/payment still require an authorized sandbox.
 

@@ -24,7 +24,7 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   const version = /^playwright==([\d.]+)$/m.exec(requirements)?.[1];
   assert.ok(version);
   assert.ok(workflow.includes(`image: mcr.microsoft.com/playwright/python:v${version}-noble`));
-  const deployJob = workflow.split("  deploy-production:")[1].split("  production-ui-smoke:")[0];
+  const deployJob = workflow.split("  deploy-production:")[1].split("  component-matrix:")[0];
   const gates = /needs: \[([^\]]+)\]/.exec(deployJob)?.[1].split(",").map(value => value.trim());
   for (const gate of ["static-build", "browser-tests", "component-matrix", "browser-compatibility"]) {
     assert.ok(gates?.includes(gate), `Missing release gate: ${gate}`);
@@ -56,6 +56,22 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   for (const script of ["test-static", "check-static-print", "test-storage-recovery", "test-planner-goals", "test-planner-simple", "test-planner-fuel", "test-planner-kettle-fuel", "test-planner-weber-defaults", "test-recipe-blend-back"]) {
     assert.ok(wrapper.includes(`${script}.py`), script);
   }
+});
+
+test("development and release installations share the same static dependency graph", () => {
+  const manifest = read("package.json");
+  const lock = read("package-lock.json");
+  const release = read("profiles/static/package.json");
+  const releaseLock = read("profiles/static/package-lock.json");
+  for (const key of ["name", "version", "dependencies", "devDependencies", "engines"]) {
+    assert.deepEqual(lock.packages[""][key], manifest[key], key);
+  }
+  for (const key of ["dependencies", "devDependencies", "engines"]) {
+    assert.deepEqual(manifest[key], release[key], key);
+  }
+  const dependencies = ({packages}) => Object.fromEntries(
+    Object.entries(packages).filter(([path]) => path !== ""));
+  assert.deepEqual(dependencies(lock), dependencies(releaseLock));
 });
 
 test("static lock matches its manifest and excludes legacy dependency chains", () => {
@@ -120,16 +136,16 @@ test("release workspace contains static inputs, never inherits backend installat
   try {
     const result = prepare(target);
     assert.equal(result.status, 0, result.stderr);
-    for (const path of ["static/main.tsx", "app/components/fire-almanac.tsx", "public/editorial", "scripts/check-recipes.mjs", "package-lock.json"]) {
+    for (const path of ["static/main.tsx", "static/fire-almanac.tsx", "public/editorial", "scripts/check-recipes.mjs", "package-lock.json"]) {
       assert.ok(existsSync(resolve(target, path)), path);
     }
-    for (const path of ["node_modules", "server", "app/api/auth", "app/api/cart", "next-env.d.ts", "wrangler.jsonc", ".env", ".dev.vars"]) {
+    for (const path of ["node_modules", "app", "server", "next-env.d.ts", "wrangler.jsonc", ".env", ".dev.vars"]) {
       assert.equal(existsSync(resolve(target, path)), false, path);
     }
-    const ingredients = readdirSync(resolve(target, "app/api/ingredientes"));
-    assert.ok(ingredients.length >= 60);
-    assert.ok(ingredients.every(name => name.endsWith(".json")));
-    assert.deepEqual(readdirSync(resolve(target, "app/api")), ["ingredientes"]);
+    const ingredients = readdirSync(resolve(target, "data/ingredientes"));
+    assert.equal(ingredients.filter(name => name.endsWith(".json")).length, 60);
+    assert.ok(ingredients.every(name => name.endsWith(".json") || name === "METHODOLOGY.md"));
+    assert.equal(existsSync(resolve(target, "app")), false);
     const visited = new Set();
     function checkRelativeImports(file) {
       if (visited.has(file)) return;
@@ -144,7 +160,7 @@ test("release workspace contains static inputs, never inherits backend installat
         checkRelativeImports(found);
       }
     }
-    for (const entry of ["static/main.tsx", "static/vite.config.ts", "scripts/check-recipes.mjs", "scripts/fire-plan-model.test.mjs"]) {
+    for (const entry of ["static/main.tsx", "static/vite.config.ts", "scripts/check-recipes.mjs", "scripts/fire-plan-model.test.mjs", "scripts/store-links.test.mjs"]) {
       checkRelativeImports(resolve(target, entry));
     }
     assert.equal(readFileSync(resolve(target, "package.json"), "utf8"), readFileSync(resolve(portal, "profiles/static/package.json"), "utf8"));

@@ -2,7 +2,7 @@
 
 Canonical active project, revision 2026-10-09. The organization follows the
 original framework: reusable core, project-owned POMs, test data and numbered
-API/UI modules grouped by functional ownership. There is no second active
+UI modules grouped by functional ownership. There is no second active
 `lumbre_static` suite.
 
 ```text
@@ -17,9 +17,6 @@ projects/lumbre/
 ├── conftest.py                 Fresh contexts, viewport fixtures, target guards
 └── tests/
     ├── test_architecture.py    Numbering, ownership and safe-selection contracts
-    ├── api/system/
-    │   ├── test_api_090_static_document_security_headers.py
-    │   └── test_api_091_retired_backend_routes_are_absent.py
     └── ui/
         ├── almanac/           UI-055 boundaries; UI-092 every document; UI-093 zoom…
         ├── home/              UI-001 purpose; UI-028 mobile; UI-063 navigation…
@@ -37,14 +34,13 @@ produce multiple executions of that same behavior ID, not new case IDs.
 Applicable original IDs are retained. UI-063 onward identifies new behaviors;
 retired IDs are not reused for unrelated features. API uses a separate sequence.
 
-API/UI and feature directories describe responsibility. Execution categories
+Feature directories describe responsibility. Execution categories
 are Pytest markers, not additional suite directories:
 
 | Marker | Selection |
 | --- | --- |
 | `portal` | Local current-portal cases |
 | `store` | Public Tiendanube integration, read only |
-| `production` | Public static-portal acceptance, read only |
 | `matrix` | Extended ingredient/equipment/recipe/almanac traversal |
 | `planner`, `laboratory`, `recipes`, `navigation`, `commerce`, `almanac` | Feature |
 | `cross_browser` | Focused keyboard/recovery/transition compatibility |
@@ -68,7 +64,6 @@ bash scripts/test-static-ui.sh -m 'portal and planner' # planner only
 bash scripts/test-static-ui.sh -m 'portal and matrix'  # extended traversal
 bash scripts/test-static-ui.sh --headed --slowmo=350   projects/lumbre/tests/ui/home/test_ui_001_home_communicates_club_purpose.py
 bash scripts/test-static-cross-browser.sh              # three engines, focused
-bash scripts/test-production.sh                        # explicit public acceptance
 bash scripts/test-store-ui.sh                          # explicit public store
 ```
 
@@ -81,7 +76,7 @@ BASE_URL=http://127.0.0.1:3001 .venv/bin/pytest -m 'portal and not matrix'
 .venv/bin/pytest -m framework_unit                       # no portal required
 ```
 
-Default selection is framework units plus local portal; store and production
+Default selection is framework units plus local portal; optional store cases
 are collected but not selected without an explicit marker override. Local
 regressions reject a public target. Remote cases require explicit HTTPS.
 The active project has no automatic API reset, D1 seed or authentication.
@@ -132,8 +127,14 @@ still require separate authorized environments/manual checks.
 
 ## Latest execution
 
-Full local/framework: 416 passed / 10 failed; four test-development
-failures verified passing in final reruns, leaving six Chromium focus defects.
+Static-only cleanup validation: 420 passed / 6 failed (426 local/framework).
+The remaining six failures are existing UI-101 keyboard-focus variants. All
+eight specialized groups passed headless. Optional store and fresh Firefox/WebKit
+checks were not executed. See [cleanup evidence](../../../docs/STATIC_RETIREMENT_2026-10-09.md).
+
+Last complete headed local/framework run before source retirement: 419 passed /
+7 failed (six custom-dialog focus variants plus one recipe return regression).
+This is historical evidence, not a new validation of the cleaned source.
 Focused three-engine run: 28 passed / 20 failed (18 focus variants and two WebKit
 product-chunk recovery failures). PDF rerun: five passed; 12 rendered pages
 inspected. No all-green or exhaustive-combination claim.

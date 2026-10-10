@@ -4,7 +4,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { familyLabel, orderIngredientFamilies } from "../static/ingredient-family-presentation.ts";
 
 test("laboratory families follow cooking order without dropping catalog families", () => {
-  const catalog = new URL("../app/api/ingredientes/", import.meta.url);
+  const catalog = new URL("../data/ingredientes/", import.meta.url);
   const families = [...new Set(readdirSync(catalog).filter(file => file.endsWith(".json"))
     .map(file => JSON.parse(readFileSync(new URL(file, catalog), "utf8")).familia))];
   const original = [...families];
