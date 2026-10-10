@@ -1,4 +1,5 @@
 """Acceptance checks against the standalone static preview (no backend fixtures)."""
+from browser_test_options import browser_launch_options
 from pathlib import Path
 import os
 from playwright.sync_api import expect, sync_playwright
@@ -13,7 +14,7 @@ def check_print_action(page, sheet):
     assert page.evaluate("window.__printCalls") == 1, "Print button did not call window.print"
 
 with sync_playwright() as playwright:
-    browser = playwright.chromium.launch()
+    browser = playwright.chromium.launch(**browser_launch_options())
     for width in (1440, 390):
         context = browser.new_context(viewport={"width": width, "height": 900})
         page = context.new_page()

@@ -1,47 +1,23 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.regression, pytest.mark.laboratory]
 
 
-@pytest.mark.ui
 @pytest.mark.case(
     "UI-021",
-    "Removing a selected ingredient updates the experiment bench",
+    "Removing an ingredient restores its add control and recalculates the remaining amounts",
 )
-def test_selected_ingredient_can_be_removed(
-    home: HomePage,
-    test_log: TestLogger,
-) -> None:
-    lab = home.ingredient_lab
-    selected_names = ["sal kosher", "pimienta negra"]
-
-    with test_log.step("Add two ingredients to the experiment bench"):
-        for ingredient_name in selected_names:
-            lab.add_ingredient(ingredient_name)
-        blend_title = "Blend temporal de prueba"
-        lab.blend_title_input.fill(blend_title)
-        expect(lab.selected_items).to_have_count(2)
-        expect(lab.create_protocol_button).to_be_enabled()
-        test_log.values(
-            blend_title=blend_title,
-            selected_ingredients=selected_names,
-            observed_selected_count=lab.selected_items.count(),
-        )
-
-    with test_log.step("Remove one selected ingredient"):
-        removed_ingredient = "pimienta negra"
-        lab.remove_selected_ingredient(removed_ingredient)
-        test_log.values(removed_ingredient=removed_ingredient)
-
-    with test_log.step("Validate the updated bench state"):
-        expect(lab.selected_items).to_have_count(1)
-        expect(lab.selected_ingredient(removed_ingredient)).to_have_count(0)
-        expect(lab.selected_ingredient("sal kosher")).to_be_visible()
-        expect(lab.create_protocol_button).to_be_disabled()
-        test_log.values(
-            observed_selected_count=lab.selected_items.count(),
-            expected_selected_count=1,
-            observed_create_disabled=lab.create_protocol_button.is_disabled(),
-        )
+def test_selected_ingredient_can_be_removed(lab, test_log):
+    with test_log.step("Create the three-component salt-pepper-garlic blend"):
+        for ingredient in ("sal_kosher", "pimienta_negra", "ajo_granulado"):
+            lab.add(ingredient)
+        expect(lab.page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_value("22.5")
+    with test_log.step("Remove garlic and restore the two-component 50/50 calculation"):
+        lab.page.get_by_role("button", name="Retirar ajo granulado", exact=True).click()
+        expect(lab.page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_count(0)
+        expect(lab.page.get_by_label("Gramos de sal kosher", exact=True)).to_have_value("75")
+        expect(lab.page.get_by_label("Gramos de pimienta negra", exact=True)).to_have_value("75")
+        expect(
+            lab.card("ajo_granulado").get_by_role("button", name="Agregar", exact=True)
+        ).to_have_attribute("aria-pressed", "false")

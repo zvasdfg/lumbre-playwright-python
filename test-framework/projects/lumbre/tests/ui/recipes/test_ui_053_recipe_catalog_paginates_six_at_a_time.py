@@ -1,41 +1,24 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.regression, pytest.mark.recipes, pytest.mark.portal]
 
 
-@pytest.mark.ui
-@pytest.mark.case(
-    "UI-053",
-    "The recipe catalog shows at most six recipes and advances without duplicates",
-)
-def test_recipe_catalog_paginates_six_at_a_time(
-    home: HomePage,
-    test_log: TestLogger,
-) -> None:
-    with test_log.step("Read the first recipe page"):
-        expect(home.recipe_cards).to_have_count(6)
-        expect(home.recipe_page_status).to_have_text("Mostrando 1–6 de 100 recetas")
-        first_page_titles = home.recipe_cards.get_by_role("heading").all_inner_texts()
-        test_log.values(
-            observed_page_status=home.recipe_page_status.inner_text(),
-            observed_titles=first_page_titles,
-            observed_card_count=home.recipe_cards.count(),
-        )
-
-    with test_log.step("Advance to the second recipe page"):
-        home.go_to_recipe_page(2)
-        expect(home.recipe_cards).to_have_count(6)
-        expect(home.recipe_page_status).to_have_text("Mostrando 7–12 de 100 recetas")
-        second_page_titles = home.recipe_cards.get_by_role("heading").all_inner_texts()
-        test_log.values(
-            observed_page_status=home.recipe_page_status.inner_text(),
-            observed_titles=second_page_titles,
-            observed_card_count=home.recipe_cards.count(),
-        )
-
-    with test_log.step("Validate the page boundary and distinct content"):
-        assert len(first_page_titles) == 6
-        assert len(second_page_titles) == 6
-        assert set(first_page_titles).isdisjoint(second_page_titles)
+@pytest.mark.case("UI-053", "Recipe pagination and blend return preserve context")
+def test_recipe_pagination_and_modal_return(portal):
+    page = portal
+    first = page.get_by_test_id("recipe-card").first.locator("h3").inner_text()
+    page.get_by_role("button", name="Ir a página 2", exact=True).click()
+    expect(page.get_by_test_id("recipe-page-status")).to_contain_text("7–12")
+    page.get_by_role("button", name="Ir a página 1", exact=True).click()
+    expect(page.get_by_test_id("recipe-card").first.locator("h3")).to_have_text(first)
+    card = page.get_by_test_id("recipe-card").first
+    card.get_by_role("button").click()
+    recipe = page.get_by_role("dialog", name=first, exact=True)
+    recipe.locator(".recipe-blend-link").click()
+    expect(page.get_by_role("dialog")).to_have_count(1)
+    page.get_by_role("button", name="Volver a la receta", exact=False).click()
+    expect(recipe).to_be_visible()
+    expect(recipe.locator(".recipe-blend-link")).to_be_focused()
+    page.keyboard.press("Escape")
+    expect(page.get_by_role("dialog")).to_have_count(0)

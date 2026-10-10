@@ -1,39 +1,20 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.regression, pytest.mark.commerce]
 
 
-@pytest.mark.ui
-@pytest.mark.case(
-    "UI-032",
-    "Every store product has a distinct catalog photograph",
-)
-def test_store_products_have_unique_images(
-    home: HomePage,
-    test_log: TestLogger,
-) -> None:
-    with test_log.step("Read product names and catalog image sources"):
-        expect(home.product_cards).to_have_count(4)
-        product_records = home.product_cards.evaluate_all(
-            """
-            cards => cards.map(card => ({
-                name: card.querySelector('h3')?.textContent?.trim() ?? '',
-                src: card.querySelector('.product-art img')?.getAttribute('src') ?? '',
-                alt: card.querySelector('.product-art img')?.getAttribute('alt') ?? ''
-            }))
-            """
-        )
-        sources = [record["src"] for record in product_records]
-        test_log.values(
-            observed_product_count=len(product_records),
-            observed_unique_sources=len(set(sources)),
-            product_records=product_records,
-        )
-
-    with test_log.step("Validate distinct and descriptive product photography"):
-        assert len(product_records) == 4
+@pytest.mark.case("UI-032", "Each production product has a distinct loaded photograph")
+def test_store_products_have_unique_images(portal, test_log):
+    images = portal.get_by_test_id("product-card").locator("img")
+    with test_log.step("Inspect the four product photographs"):
+        expect(images).to_have_count(4)
+        sources = images.evaluate_all("es => es.map(e => e.getAttribute('src'))")
         assert len(set(sources)) == 4
-        assert all(record["src"] for record in product_records)
-        assert all(record["name"] in record["alt"] for record in product_records)
+    with test_log.step("Check that every image actually loads"):
+        for image in images.all():
+            image.scroll_into_view_if_needed()
+            portal.wait_for_function(
+                "e => e.complete && e.naturalWidth > 0", arg=image.element_handle()
+            )
+        test_log.values(unique_product_images=len(set(sources)))

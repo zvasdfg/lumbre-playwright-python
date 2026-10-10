@@ -1,32 +1,17 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.regression, pytest.mark.recipes]
 
 
-@pytest.mark.ui
-@pytest.mark.case(
-    "UI-026",
-    "The recipe action identifies the selected recipe in its feedback",
-)
-def test_recipe_action_identifies_selection(
-    home: HomePage,
-    test_log: TestLogger,
-) -> None:
-    with test_log.step("Choose a recipe from the catalog"):
-        recipe_name = "Coliflor al rescoldo"
-        recipe_card = home.recipe_named(recipe_name)
-        expect(recipe_card).to_be_visible()
-        test_log.values(selected_recipe=recipe_name)
-
+@pytest.mark.case("UI-026", "Opening a recipe presents the selected recipe in its own dialog")
+def test_recipe_action_identifies_selection(portal, test_log):
+    card = portal.get_by_test_id("recipe-card").first
+    title = card.locator("h3").inner_text()
     with test_log.step("Open the selected recipe"):
-        home.view_recipe(recipe_name)
-
-    with test_log.step("Validate recipe-specific feedback"):
-        expected_message = f"Abriendo {recipe_name}."
-        expect(home.toast.root).to_contain_text(expected_message)
-        test_log.values(
-            observed_message=home.toast.root.inner_text(),
-            expected_message=expected_message,
-        )
+        card.get_by_role("button").click()
+    with test_log.step("Check the selected title and preparation rather than the retired toast"):
+        dialog = portal.get_by_role("dialog", name=title, exact=True)
+        expect(dialog).to_be_visible()
+        expect(dialog).to_contain_text("Preparación paso a paso")
+        test_log.values(selected_recipe=title)

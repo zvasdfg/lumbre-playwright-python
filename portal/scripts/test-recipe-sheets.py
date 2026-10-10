@@ -1,4 +1,5 @@
 """Exercise every static recipe at desktop/mobile and export print QA samples."""
+from browser_test_options import browser_launch_options
 from pathlib import Path
 import re
 from playwright.sync_api import expect, sync_playwright
@@ -6,7 +7,7 @@ from playwright.sync_api import expect, sync_playwright
 OUTPUT = Path("/tmp/lumbre-recipe-qa")
 OUTPUT.mkdir(exist_ok=True)
 with sync_playwright() as playwright:
-    browser = playwright.chromium.launch()
+    browser = playwright.chromium.launch(**browser_launch_options())
     for width in (1440, 390):
         context = browser.new_context(viewport={"width": width, "height": 900})
         page = context.new_page()

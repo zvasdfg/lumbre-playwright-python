@@ -1,11 +1,12 @@
 """Isolated contexts: corrupt/denied storage must never crash the public portal."""
+from browser_test_options import browser_launch_options
 from playwright.sync_api import sync_playwright, expect
 import os
 
 BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:3001").rstrip("/")
 
 with sync_playwright() as playwright:
-    browser = playwright.chromium.launch()
+    browser = playwright.chromium.launch(**browser_launch_options())
     scenarios = [
         "localStorage.setItem('lumbre.fire-planner.presets.v1', '[{}]')",
         "sessionStorage.setItem('lumbre.ingredient-lab.session-blends.v1', '[{\"id\":\"SES-001\",\"title\":\"test\",\"protocol\":{\"firma\":\"test\"}}]')",

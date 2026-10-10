@@ -1,29 +1,25 @@
-from __future__ import annotations
-
-from playwright.sync_api import Page
+"""Reader interactions. Catalog expectations and assertions belong to the tests."""
 
 
 class FireAlmanac:
-    def __init__(self, page: Page) -> None:
+    def __init__(self, page):
         self.page = page
-        self.trigger = page.get_by_role("button", name="Almanaque 15 notas de campo")
-        self.dialog = page.get_by_role("dialog", name="Almanaque de fuego")
-        self.page_selector = self.dialog.get_by_label("Ir a una página del almanaque")
-        self.page_surface = self.dialog.get_by_test_id("almanac-page")
-        self.page_status = self.dialog.get_by_test_id("almanac-page-status")
-        self.previous_page = self.dialog.get_by_role("button", name="Página anterior")
-        self.next_page = self.dialog.get_by_role("button", name="Página siguiente")
-        self.zoom = self.dialog.get_by_role("button", name="Ampliar para leer")
-        self.close_button = self.dialog.get_by_role("button", name="Cerrar almanaque")
+        self.dialog = page.get_by_role("dialog", name="Almanaque de fuego", exact=True)
+        self.index = page.get_by_label("Ir a una página del almanaque", exact=True)
+        self.image = page.get_by_test_id("almanac-page").locator("img")
+        self.status = page.get_by_test_id("almanac-page-status")
 
-    def open(self) -> None:
-        self.trigger.click()
+    def open(self):
+        self.page.get_by_role("button", name="Almanaque", exact=False).click()
 
-    def open_first_page(self) -> None:
-        self.dialog.get_by_role("button", name="Abrir el almanaque").click()
+    def select(self, document):
+        # Select by displayed document ID, not its potentially different ordinal.
+        self.index.wait_for(state="visible")
+        for option in self.index.locator("option").all():
+            if option.inner_text().startswith(f"{document:03d} ·"):
+                self.index.select_option(option.get_attribute("value"))
+                return
+        raise ValueError(f"Almanac document {document:03d} is unavailable")
 
-    def go_to_document(self, document: str, title: str) -> None:
-        self.page_selector.select_option(label=f"{document} · {title}")
-
-    def close_with_keyboard(self) -> None:
-        self.page.keyboard.press("Escape")
+    def close(self):
+        self.page.get_by_role("button", name="Cerrar almanaque", exact=True).click()

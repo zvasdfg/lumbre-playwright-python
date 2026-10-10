@@ -1,25 +1,17 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.regression, pytest.mark.recipes]
 
 
-@pytest.mark.ui
-@pytest.mark.case("UI-003", "A search without matches displays a useful empty state")
-def test_recipe_search_has_an_empty_state(home: HomePage, test_log: TestLogger) -> None:
-    with test_log.step("Search for a term without matches"):
-        query = "helado de vainilla"
-        home.search_recipes(query)
-        test_log.values(search_query=query)
-
-    with test_log.step("Validate the empty-state message"):
-        expected_message = "No encontramos recetas con esos criterios."
-        empty_state = home.page.get_by_text(expected_message)
-        expect(empty_state).to_be_visible()
-        test_log.values(
-            observed_message=empty_state.inner_text(),
-            expected_message=expected_message,
-            observed_card_count=home.recipe_cards.count(),
-            expected_card_count=0,
-        )
+@pytest.mark.case(
+    "UI-003", "An unmatched recipe query shows an empty state and clearing restores the catalog"
+)
+def test_recipe_search_empty_state(portal, test_log):
+    search = portal.get_by_placeholder("Buscar receta...", exact=True)
+    with test_log.step("Search for a recipe that does not exist"):
+        search.fill("zz-no-recipe-zz")
+        expect(portal.get_by_test_id("recipe-card")).to_have_count(0)
+    with test_log.step("Clear the query and recover the first page"):
+        search.fill("")
+        expect(portal.get_by_test_id("recipe-card")).to_have_count(6)

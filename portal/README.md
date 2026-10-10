@@ -1,5 +1,18 @@
 # Lumbre Portal
 
+## Current public target
+
+The production portal is static-only. Use `npm run dev` for static development or
+`npm run build:static` / `npm run preview:static` for the deploy artifact.
+The repository's `scripts/test-local.sh` now builds and serves this static target
+and runs current numbered tests without D1, authentication or backend reset.
+See [static profile](../docs/STATIC_PORTAL.md) and
+[current test tree](../test-framework/projects/lumbre/README.md).
+
+The full-stack API/Workers description below is historical source documentation.
+Its backend test suite and lifecycle runners have been removed; its old runner
+commands and coverage claims no longer describe the current test setup.
+
 Next.js web application and API used as the system under test. Lumbre runs on
 the vinext/Cloudflare Workers runtime and uses Cloudflare D1 for mutable local
 data. It is a Mexican outdoor-fire cooking community with recipes, products,

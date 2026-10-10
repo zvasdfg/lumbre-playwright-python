@@ -1,76 +1,29 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.regression, pytest.mark.planner, pytest.mark.portal]
 
 
-@pytest.mark.ui
 @pytest.mark.parametrize(
-    ("guests", "cooking_style", "duration_hours", "expected_fuel", "expected_label"),
-    [
-        pytest.param(
-            8,
-            "directo",
-            2,
-            "4 kg",
-            None,
-            id="direct-fire",
-            marks=pytest.mark.case(
-                "UI-012",
-                "The fire planner recommends fuel for a direct-fire gathering",
-            ),
-        ),
-        pytest.param(
-            6,
-            "lento",
-            2,
-            "5 kg",
-            "lento y ahumado",
-            id="slow-cooking",
-            marks=pytest.mark.case(
-                "UI-023",
-                "The fire planner applies the slow-cooking fuel rate",
-            ),
-        ),
-    ],
+    "goal,temperature", [("asar", "220"), ("ahumar", "120"), ("hornear", "180")]
 )
-def test_fire_planner_cooking_style(
-    home: HomePage,
-    test_log: TestLogger,
-    guests: int,
-    cooking_style: str,
-    duration_hours: int,
-    expected_fuel: str,
-    expected_label: str | None,
-) -> None:
-    with test_log.step("Open and configure the fire planner"):
-        home.open_fire_planner()
-        expect(home.fire_planner.root).to_be_visible()
-        home.fire_planner.configure(
-            guests=guests,
-            cooking_style=cooking_style,
-            duration_hours=duration_hours,
-            include_vegetables=False,
-        )
-        test_log.values(
-            guests=guests,
-            cooking_style=cooking_style,
-            duration_hours=duration_hours,
-            include_vegetables=False,
-        )
-
-    with test_log.step("Calculate the required fuel"):
-        home.fire_planner.calculate()
-        expect(home.fire_planner.recommendation_status).to_be_visible()
-
-    with test_log.step("Validate the cooking-style recommendation"):
-        observed_recommendation = home.fire_planner.recommendation_status.inner_text()
-        test_log.values(
-            observed_recommendation=observed_recommendation,
-            expected_fuel=expected_fuel,
-            expected_label=expected_label,
-        )
-        expect(home.fire_planner.recommendation_status).to_contain_text(expected_fuel)
-        if expected_label is not None:
-            expect(home.fire_planner.recommendation_status).to_contain_text(expected_label)
+@pytest.mark.case("UI-012", "FirePlanner defaults, persistence and stale print invalidation")
+def test_planner_defaults_and_saved_round_trip(portal, goal, temperature):
+    page = portal
+    page.get_by_label("Objetivo de cocción", exact=True).select_option(goal)
+    expect(page.get_by_label("Temperatura de trabajo", exact=True)).to_have_value(temperature)
+    page.get_by_label("Horas de cocción", exact=True).fill("2.5")
+    page.get_by_role("button", name="Construir plan de fuego", exact=True).click()
+    expect(page.locator(".planner-result")).to_contain_text("2.5 h")
+    page.get_by_label("Nombre del plan", exact=True).fill("Round trip")
+    page.get_by_role("button", name="Guardar plan", exact=True).click()
+    page.reload()
+    page.get_by_role("button", name="Editar plan Round trip", exact=True).click()
+    expect(page.get_by_label("Objetivo de cocción", exact=True)).to_have_value(goal)
+    expect(page.get_by_label("Horas de cocción", exact=True)).to_have_value("2.5")
+    page.get_by_role("button", name="Construir plan de fuego", exact=True).click()
+    page.get_by_role("button", name="Imprimir / PDF", exact=True).click()
+    expect(page.get_by_role("dialog")).to_contain_text("2.5 h")
+    page.get_by_role("button", name="Cerrar plan imprimible", exact=True).click()
+    page.get_by_label("Horas de cocción", exact=True).fill("3")
+    expect(page.get_by_role("button", name="Imprimir / PDF", exact=True)).to_have_count(0)

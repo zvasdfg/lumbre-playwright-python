@@ -1,71 +1,34 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.regression, pytest.mark.planner, pytest.mark.portal]
 
 
-@pytest.mark.ui
 @pytest.mark.case(
-    "UI-033",
-    "A saved fire-planner preset can be restored after a page reload",
+    "UI-033", "Delete/undo survives reload and duplicate cancellation preserves original"
 )
-def test_fire_planner_presets_persist(
-    home: HomePage,
-    test_log: TestLogger,
-) -> None:
-    planner = home.fire_planner
-    preset_name = "Asado de prueba"
-
-    with test_log.step("Configure and save a named fire plan"):
-        home.open_fire_planner()
-        planner.configure(
-            guests=10,
-            cooking_style="dos_zonas",
-            duration_hours=4,
-            include_vegetables=True,
-            fuel="briquetas",
-            equipment="kettle",
-            weather="viento",
-            serving_time="16:30",
-        )
-        planner.save_preset(preset_name)
-        expect(planner.preset(preset_name)).to_be_visible()
-        test_log.values(
-            saved_preset=preset_name,
-            guests=10,
-            cooking_style="dos_zonas",
-            fuel="briquetas",
-            weather="viento",
-        )
-
-    with test_log.step("Change the planner and restore the saved preset"):
-        planner.configure(
-            guests=2,
-            cooking_style="directo",
-            duration_hours=2,
-        )
-        planner.load_preset(preset_name)
-        expect(planner.guests_input).to_have_value("10")
-        expect(planner.cooking_style_select).to_have_value("dos_zonas")
-        expect(planner.duration_select).to_have_value("4")
-        expect(planner.fuel_select).to_have_value("briquetas")
-        expect(planner.weather_select).to_have_value("viento")
-        expect(planner.serving_time_input).to_have_value("16:30")
-        expect(planner.vegetable_reserve_checkbox).to_be_checked()
-        expect(planner.recommendation_status).to_be_visible()
-        expect(planner.preset_message).to_have_text(
-            f"Preset {preset_name} cargado y calculado."
-        )
-        test_log.values(
-            observed_message=planner.preset_message.inner_text(),
-            observed_recommendation=planner.recommendation_status.inner_text(),
-        )
-
-    with test_log.step("Reload and validate browser-local persistence"):
-        home.page.reload(wait_until="domcontentloaded")
-        expect(planner.preset(preset_name)).to_be_visible()
-        test_log.values(
-            persisted_preset=preset_name,
-            storage_scope="current browser",
-        )
+@pytest.mark.parametrize("width", [390, 1440])
+def test_library_transitions(page, app_url, width):
+    page.set_viewport_size({"width": width, "height": 900})
+    page.goto(app_url)
+    page.get_by_label("Horas de cocción", exact=True).fill("2")
+    page.get_by_role("button", name="Construir plan de fuego", exact=True).click()
+    name = page.get_by_label("Nombre del plan", exact=True)
+    name.fill("Domingo")
+    page.get_by_role("button", name="Guardar plan", exact=True).click()
+    cards = page.get_by_test_id("fire-presets").locator("article")
+    expect(cards).to_have_count(1)
+    page.get_by_role("button", name="Eliminar plan Domingo", exact=True).click()
+    expect(cards).to_have_count(0)
+    page.get_by_role("button", name="Deshacer eliminación", exact=True).click()
+    expect(cards).to_have_count(1)
+    page.reload()
+    expect(cards).to_have_count(1)
+    page.get_by_role("button", name="Duplicar plan Domingo", exact=True).click()
+    name.fill("Domingo")
+    page.get_by_role("button", name="Guardar plan", exact=True).click()
+    confirmation = page.get_by_role("group", name="Confirmar reemplazo", exact=True)
+    expect(confirmation).to_be_visible()
+    confirmation.get_by_role("button", name="Cancelar", exact=True).click()
+    expect(cards).to_have_count(1)
+    expect(confirmation).to_have_count(0)

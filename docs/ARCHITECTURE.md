@@ -3,6 +3,20 @@
 > Scope: reusable automation core, project adapters, the Lumbre reference SUT,
 > local orchestration, and evidence generation.
 
+## Current project boundary — 2026-10-09
+
+The active numbered project is `projects/lumbre/tests/ui/<feature>` plus public
+read-only `tests/api/system` contracts. It has no automatic reset, authentication,
+internal cart or D1 fixture. Local/production/store/matrix lanes are Pytest markers.
+See [current architecture](STATIC_TEST_ARCHITECTURE.md) and
+[active tree](../test-framework/projects/lumbre/README.md).
+
+The full-stack diagrams and backend-specific examples below are historical:
+their API clients, reset fixtures, backend pages and parallel runner were
+removed after migration. Recover original sources from Git at `aeaf9f4`.
+The generic core and dependency direction still apply; commands below are
+historical examples, not an executable backend runbook.
+
 ## 1. Architectural goals
 
 The system is designed to demonstrate a maintainable automation boundary, not
@@ -66,8 +80,8 @@ without starting Lumbre or any other SUT.
 | Lumbre functional tests | `test-framework/projects/lumbre/tests/` | Arrange Lumbre data, execute behavior, and assert outcomes |
 | Lumbre Page Objects | `test-framework/projects/lumbre/pages/` | Own product navigation, composition, and entry points |
 | Lumbre Component Objects | `test-framework/projects/lumbre/components/` | Own locators and actions inside product widgets |
-| Lumbre API client | `test-framework/projects/lumbre/api/lumbre_api.py` | Express product routes through `APIRequestContext` |
-| Lumbre fixtures | `test-framework/projects/lumbre/conftest.py` | Own product lifecycle, reset, contract, and POM composition |
+| Historical API client (removed) | Git `aeaf9f4` | Previous backend route interaction, not current coverage |
+| Lumbre fixtures | `test-framework/projects/lumbre/conftest.py` | Own current static target safety, isolated browser contexts and POM composition; no backend reset |
 | Local orchestration | `scripts/` | Start services, isolate data, invoke Pytest, archive reports |
 
 Tests are organized first by execution layer and then by functional ownership:

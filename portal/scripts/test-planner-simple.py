@@ -1,8 +1,9 @@
 """Primary controls and editable temperature suggestions, without advanced setup."""
+from browser_test_options import browser_launch_options
 from playwright.sync_api import sync_playwright, expect
 
 with sync_playwright() as pw:
-    browser = pw.chromium.launch()
+    browser = pw.chromium.launch(**browser_launch_options())
     for width in (390, 1440):
         page = browser.new_page(viewport={'width': width, 'height': 1000})
         page.goto('http://127.0.0.1:3001/#planificador', wait_until='domcontentloaded')

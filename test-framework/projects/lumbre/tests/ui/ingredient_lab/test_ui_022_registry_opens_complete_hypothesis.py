@@ -1,64 +1,27 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.api.lumbre_api import LumbreApi
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.regression, pytest.mark.laboratory]
 
 
-@pytest.mark.ui
 @pytest.mark.case(
     "UI-022",
-    "The hypothesis registry opens the selected complete technical sheet",
+    "The session library opens a complete sheet with document ID, alias and gram quantities",
 )
-def test_registry_opens_complete_hypothesis(
-    home: HomePage,
-    api: LumbreApi,
-    test_log: TestLogger,
-) -> None:
-    hypothesis_id = "LHC-001"
-
-    with test_log.step("Register a formula and reload its user-created archive"):
-        response = api.create_hypothesis(
-            {
-                "ingredient_ids": ["sal_kosher", "pimienta_negra", "ajo_granulado"],
-                "objective": "Costra para res",
-            }
-        )
-        assert response.status == 201
-        home.open()
-        lab = home.ingredient_lab
-        test_log.values(
-            observed_status=response.status,
-            observed_hypothesis_id=response.json()["data"]["id"],
-        )
-
-    with test_log.step("Find a known hypothesis in the registry"):
-        card = lab.hypothesis_card(hypothesis_id)
-        expect(card).to_be_visible()
-        expect(card).to_contain_text("Costra para res")
-        test_log.values(
-            selected_hypothesis_id=hypothesis_id,
-            observed_card_text=card.inner_text(),
-        )
-
-    with test_log.step("Open the selected technical sheet"):
-        lab.open_hypothesis(hypothesis_id)
-        dialog = lab.hypothesis_dialog(hypothesis_id)
-        expect(dialog).to_be_visible()
-
-    with test_log.step("Validate the complete sheet content"):
-        expected_sections = [
-            "Componentes de la fórmula",
-            "Método propuesto",
-            "Perfil sensorial esperado",
-        ]
-        for section in expected_sections:
-            expect(dialog).to_contain_text(section)
-        for ingredient_name in ["ajo granulado", "pimienta negra", "sal kosher"]:
-            expect(dialog).to_contain_text(ingredient_name)
-        test_log.values(
-            observed_dialog_heading=hypothesis_id,
-            expected_sections=expected_sections,
-            expected_ingredients=["ajo granulado", "pimienta negra", "sal kosher"],
-        )
+def test_registry_opens_complete_hypothesis(lab, test_log):
+    with test_log.step("Create a named blend without using the retired server registry"):
+        for ingredient in ("sal_kosher", "pimienta_negra", "ajo_granulado"):
+            lab.add(ingredient)
+        lab.save("BIRRIA de prueba")
+        lab.close_sheet()
+    with test_log.step("Reopen the saved session sheet"):
+        library = lab.page.get_by_test_id("session-blends")
+        library.get_by_role("button", name="Abrir ficha", exact=True).click()
+        sheet = lab.page.get_by_test_id("hypothesis-print-preview")
+        expect(sheet.locator("#hypothesis-sheet-title")).to_have_text("BIRRIA de prueba")
+        expect(sheet).to_contain_text("Documento")
+        expect(sheet).to_contain_text("SES-001")
+        expect(sheet).to_contain_text("Alias")
+        expect(sheet.locator(".lab-sheet-quantities tbody tr")).to_have_count(3)
+        expect(sheet.locator(".lab-sheet-quantities")).not_to_contain_text("%")
+        expect(sheet.locator(".lab-radar svg")).to_be_visible()

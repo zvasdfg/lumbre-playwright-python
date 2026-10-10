@@ -4,248 +4,33 @@
 
 # Playwright Python Automation Framework
 
-Current test scope and delivery plan: [Portal and store coverage](docs/UI_COVERAGE_PLAN.md).
-Bare `pytest` runs framework unit tests only. Static production smoke uses
-`scripts/test-production.sh`; the local/parallel runners explicitly select the
-preserved legacy backend suite. Historical counts below do not measure coverage
-of the current static portal or Tiendanube.
+Reusable Python/Pytest/Playwright infrastructure with one numbered Lumbre project.
+The current system under test is the static Método Lumbre portal and its public
+Tiendanube purchase destinations. Product copy is Spanish; engineering code and
+documentation are English. The retired backend is not current test coverage.
 
-> Public portal direction: static-only. Account/cart/commerce features are excluded
-> from the public artifact. See [Static portal](docs/STATIC_PORTAL.md) for preview
-> commands and the production retirement checklist. The legacy backend remains a
-> local automation target; previous deployment instructions below are historical.
-
-[![Staging synthetic monitor](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml/badge.svg)](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/staging-monitor.yml)
-[![Deploy Lumbre](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/deploy.yml/badge.svg)](https://github.com/zvasdfg/lumbre-playwright-python/actions/workflows/deploy.yml)
-
-Reusable quality-engineering portfolio framework built with **Python, Pytest,
-and Playwright**. Lumbre, a Next.js portal and API for Mexican outdoor-fire
-cooking, is the reference system under test and demonstrates how a product
-project consumes the independent automation core.
-
-The framework demonstrates project isolation, Page Object Model, Component
-Objects, API contracts, browser-network control, deterministic test data,
-worker-isolated parallel execution, cross-browser validation, diagnostic
-reporting, and risk-based test strategy.
-
-> The product experience is written in Mexican Spanish as part of the Lumbre
-> identity. Framework code and engineering documentation are written in English.
-
-## Validated engineering baseline
-
-| Signal | Current result |
-| --- | ---: |
-| Committed functional risks | 144 |
-| Automated functional risks | 144 |
-| Pytest executions | 185 |
-| Test files | 143 |
-| API cases / executions | 83 / 108 |
-| Browser cases / executions | 61 / 65 |
-| Framework unit cases / executions | 3 / 12 |
-| Supported browser engines | Chromium, Firefox, WebKit |
-| API route-operation coverage | 100% (48/48) |
-| Latest full-suite result | 185 passed in 59.36 s with 4 isolated workers |
-
-**100% refers to the repository's 144-item committed functional-risk catalog.**
-It is not a source-code line-coverage claim. Parameterized variants do not
-inflate the risk-coverage calculation.
-
-## Why this project exists
-
-The project was designed to make a transition from Selenium + TypeScript to
-Playwright + Python observable through reusable engineering. It provides:
-
-- an automation core that does not import Lumbre product code;
-- a reference project with realistic UI workflows and API contracts;
-- explicit test steps, observed values, screenshots, traces, and HTML reports;
-- examples of Playwright-specific capabilities such as web-first assertions,
-  locators, request/response observation, routing, and multi-engine execution;
-- written strategy that connects every automated case to a product risk.
-
-## System under test
-
-Lumbre is a cooking-at-the-fire portal with:
-
-- 100 unique fire-cooking recipes with recipe-specific editorial photography;
-- a floating, page-by-page fire almanac with 15 readable technical sheets;
-- products, events, membership, cart, and fire planning;
-- a researched ingredient catalog grouped by flavor family;
-- an experiment bench supporting formulas of up to six components;
-- an initially empty registry for user-created beef crust, bark, chicken, and
-  vegetable hypotheses;
-- duplicate-formula detection and persisted repetition counters;
-- JSON APIs used directly by API tests and indirectly by UI workflows;
-- D1-backed hypotheses, anonymous carts, passwordless local accounts, and
-  deterministic anonymous-to-account cart migration;
-- authenticated checkout with immutable order snapshots, fake payment outcomes,
-  retry-safe idempotency, and persisted order history;
-- provider-hosted checkout sessions, signed Stripe-compatible webhooks, and
-  deduplicated provider events without transporting card data through Lumbre;
-- server-owned product inventory, atomic stock reservation, release on hosted
-  checkout expiration, idempotent sale finalization, and sold-out feedback;
-- owner-scoped order cancellation, provider-session expiration, one-time stock
-  restoration, and administrator-audited fulfillment transitions;
-- authenticated event reservations with server-owned capacity, atomic
-  oversell protection, duplicate prevention, and persisted account history;
-  the public Agenda surface is temporarily hidden while the event APIs and
-  administration module remain available;
-- account-owned fire-planner presets synchronized across browser contexts,
-  with deterministic import of anonymous browser-local plans;
-- account-owned cooking preferences with explicit newsletter consent history;
-- account-owned private blends with duplicate prevention, submission status,
-  administrator moderation, and publication into the shared technical registry;
-- protected `customer` and `admin` roles plus a production-ready,
-  single-recipient passwordless preview that keeps public registration closed.
-
-## Architecture at a glance
-
-```mermaid
-flowchart LR
-    Runner[Local test runner] --> Pytest[Pytest orchestration]
-
-    subgraph Core[Reusable automation core]
-        Pytest --> Fixtures[Playwright adapter fixtures]
-        Pytest --> Contracts[OpenAPI contracts]
-        Pytest --> Reporting[Steps, values and evidence]
-    end
-
-    subgraph Project[Lumbre reference project]
-        Pytest --> Pages[Page Objects]
-        Pages --> Components[Component Objects]
-        Pytest --> ApiClient[Lumbre API client]
-    end
-
-    Components --> Browser[Playwright browser]
-    Browser --> Portal[Lumbre Next.js portal on Workers]
-    ApiClient --> Routes[Lumbre API routes]
-    Portal --> Routes
-    Routes --> D1[(Isolated Cloudflare D1)]
-    Reporting --> Html[Timestamped HTML report]
-```
-
-The core owns configuration, contracts, reporting, diagnostics, and generic
-Playwright fixtures. Lumbre owns every selector, route, Page Object, Component
-Object, lifecycle fixture, and functional test. The dependency points from the
-project toward the core; the core never imports the project.
-
-See [Architecture and design decisions](docs/ARCHITECTURE.md) for component
-ownership, execution flows, isolation, and trade-offs.
-
-## Repository layout
+## Organization
 
 ```text
-lumbre-playwright-python/
-├── portal/                 Next.js UI, API routes, D1 schema, and seed data
-├── test-framework/
-│   ├── automation/         Reusable core and Playwright adapter
-│   ├── projects/lumbre/    Product models, fixtures, and functional tests
-│   └── tests/framework/    Isolated unit tests for reusable behavior
-├── docs/                   Strategy, architecture, notes, and exercises
-├── scripts/                Local orchestration and report generation
-└── .vscode/                Playwright/Python learning snippets
+test-framework/
+├── automation/              Generic configuration, adapters and evidence
+├── tests/framework/         Generic infrastructure tests
+└── projects/lumbre/
+    ├── pages/               Page composition/navigation
+    ├── components/          Reusable planner/laboratory interactions
+    ├── data/                Independent scenario inputs
+    ├── support/             Serialized PDF/regression transport
+    ├── conftest.py          Browser isolation and target guards
+    └── tests/
+        ├── api/system/      Numbered public GET contracts
+        └── ui/              Numbered home/recipes/lab/planner/commerce cases
 ```
 
-## Quality-engineering highlights
+One behavior per `test_ui_NNN_*.py` or `test_api_NNN_*.py`. Input variants retain
+their ID. Feature folders describe ownership; strict Pytest markers select
+local, matrix, cross-browser, published-portal and store execution categories.
 
-### Maintainable UI automation
-
-- Accessible locators such as `get_by_role()` and `get_by_label()`.
-- Playwright web-first assertions instead of arbitrary sleeps.
-- Page Objects for page responsibilities and Component Objects for widgets.
-- One behavior or closely related parameterized contract family per file.
-- No application selectors duplicated across test bodies.
-
-### API and integration coverage
-
-- Positive and negative contracts through `APIRequestContext`.
-- A remotely discovered OpenAPI 3.1 contract validated before use.
-- Reusable JSON Schema 2020-12 request/response validation with exact JSON-path diagnostics.
-- Filtering, malformed payloads, resource creation, and `404` contracts.
-- Hypothesis validation, canonical signatures, deduplication, and persistence.
-- Opaque anonymous sessions, server-priced carts, and reload/context isolation.
-- Passwordless account sessions, role authorization, deterministic cart merge,
-  and reusable Playwright `storage_state` fixtures.
-- Server-priced order snapshots, deterministic payment rejection/approval, and
-  independent idempotency keys for order and payment submissions.
-- A provider boundary for hosted checkout, timestamped HMAC webhook validation,
-  event deduplication, amount/currency checks, and retry-safe order transitions.
-- Event availability derived from persisted reservations, with database-backed
-  ownership and one-statement conditional creation at the capacity boundary.
-- Role-protected product and event administration with optimistic revisions,
-  public projections, capacity invariants, and append-only audit evidence.
-- Private account blend storage and an explicit draft → submitted →
-  published/rejected moderation lifecycle with an audited administrator action.
-- An administrator-only browser workspace with public-catalog refresh,
-  explicit deactivation feedback, and recoverable stale-revision conflicts.
-- Server-owned inventory with atomic reservation, idempotent finalization,
-  expired-checkout release, oversell protection, and sold-out presentation.
-- Customer cancellation with owner isolation and administrator-only fulfillment
-  that advances through an explicit, append-only-audited state machine.
-- Browser-to-API payload validation with `page.expect_request()`.
-- Response observation with `page.expect_response()`.
-- Controlled HTTP failures with `page.route()` and `route.fulfill()`.
-
-### Diagnostics and evidence
-
-- Human-readable test case ID and behavior metadata.
-- Step-by-step console logs with obtained and expected values.
-- A viewport screenshot after every completed UI step.
-- Full-page screenshot and Playwright trace on UI failure.
-- Self-contained HTML reports archived with a timestamp after every run.
-
-## Featured engineering stories
-
-### The contract suite is portable across environments
-
-The framework fetches the OpenAPI document from the active `BASE_URL`, validates
-the description itself, and then checks live payloads by operation and status.
-It never depends on a repository-relative contract path, so the same checks can
-run locally, in CI, or against a remote environment.
-
-### Checkout is protected at the cheapest effective layers
-
-API cases protect authentication, server-owned pricing, order/payment
-idempotency, rejected-payment retention, successful cart clearing, hosted
-session reuse, signed webhooks, provider-event deduplication, stock reservation,
-release, and oversell prevention. UI-025 checks anonymous guidance, UI-039
-proves the local account-to-history journey, UI-040 verifies that the browser
-follows the hosted URL returned by the API, and UI-050 protects the visible
-sold-out contract.
-
-### Network behavior is tested at the correct boundary
-
-`UI-014` observes the membership request before validating the frontend result.
-`ERR-001` replaces the server response with HTTP 500 and proves that the form
-remains recoverable. These tests validate transport behavior without coupling
-the Page Object to network implementation details.
-
-### Persistent duplicate behavior remains deterministic
-
-Hypothesis tests verify canonical ingredient signatures, formula reuse, and
-counter persistence. Version-controlled JSON is the editorial seed source;
-the local runner migrates a fresh temporary D1 database for every run, so test
-execution never mutates repository data or the developer database.
-
-Read the complete design decisions and outcomes in
-[Engineering case studies](docs/ENGINEERING_CASE_STUDIES.md).
-
-## Prerequisites
-
-- Node.js `>=22.13.0`
-- Python `>=3.11`
-- macOS or Linux supported by Playwright
-
-## One-time setup
-
-Install the portal:
-
-```bash
-cd portal
-npm ci
-cd ..
-```
-
-Install the automation framework:
+## Install and run
 
 ```bash
 cd test-framework
@@ -253,149 +38,71 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
 playwright install chromium firefox webkit
-cp .env.example .env
+cd ../portal
+npm ci
 cd ..
+bash scripts/test-local.sh
 ```
 
-## Run the project
-
-Run the full isolated suite. The script creates and migrates a temporary D1
-database, starts the portal on port `3100`, runs Pytest, archives the report,
-and removes both the temporary server and database state.
+The main runner builds a static artifact, owns a temporary preview on port 3001,
+runs framework plus local portal cases and archives HTML/JUnit/trace evidence.
+It never starts the old backend, initializes D1 or resets remote data. An occupied
+preview port is an error; the runner will not stop a process owned by the user.
 
 ```bash
-./scripts/test-local.sh -q
+bash scripts/test-local.sh -m 'portal and laboratory'
+bash scripts/test-local.sh --headed --slowmo=350 -m 'portal and smoke'
+# The following local runners require an existing static preview on port 3001:
+bash scripts/test-static-ui.sh
+bash scripts/test-static-cross-browser.sh
+# Explicit public read-only validation:
+bash scripts/test-production.sh
+bash scripts/test-store-ui.sh
 ```
 
-Run the same suite in parallel. This runner creates one portal process and one
-temporary D1 database per worker; tests never share mutable server state.
+Bare Pytest from `test-framework/` selects framework/local portal, requiring a
+preview unless selecting `-m framework_unit`. Local cases reject public targets.
+The full local runner is sequential because specialized PDF scripts share paths;
+CI runs independent matrix lanes against the same prebuilt static artifact.
 
-```bash
-WORKERS=4 ./scripts/test-parallel.sh -q
-```
+## Current coverage and results
 
-The equivalent regression benchmark is:
+The active project contains 67 numbered UI/API modules and four architecture
+contracts. Collection has 457 parameterized executions: 426 local/framework and
+31 explicit public portal/store cases. The UI-092–UI-104 extension adds 13
+behaviors / 177 executions, including all 53 published almanac documents at two
+widths, large blends, multi-stage plans, keyboard, network recovery and A4 PDFs.
+Existing matrices still traverse 48 planner configurations, 60 ingredients and
+100 recipe sheets; this does not mean every possible ingredient subset/duration.
 
-| Mode | Workers | Result | Pytest duration |
-| --- | ---: | ---: | ---: |
-| Pre-hardening sequential baseline | 1 | 168 passed | 135.12 s |
-| Pre-hardening isolated parallel baseline | 4 | 168 passed | 71.75 s |
-| Phase 7A isolated parallel validation | 4 | 171 passed | 103.94 s |
-| Phase 7B privacy and governance validation | 4 | 172 passed | 65.90 s |
-| Production release-candidate validation | 4 | 172 passed | 72.33 s |
+Latest full local run: 416 passed / 10 failed in 27 min 19 s. Four initial
+test-development failures passed after scoped-alert / uppercase-PDF corrections;
+the six remaining Chromium failures expose real focus defects in custom dialogs.
+Focused final three-engine run: 28 passed / 20 failed (18 focus variants and two
+WebKit product-chunk recovery failures). Final PDF run: five passed; all 12 pages
+were rendered and inspected. Model/profile contracts: 53 passed. Raw results are
+retained, not rewritten into an all-green report. See the
+[execution record](docs/TEST_MIGRATION_2026-10-09.md#coverage-extension-ui-092ui-104)
+and [full report](test-framework/reports/runs/lumbre-local-2026-10-09_16-13-38-15565/report.html).
 
-The comparable pre-hardening runs measured a 46.9% reduction in Pytest
-execution time, or approximately 1.88x speedup. Target startup and D1 migration
-time is outside the Pytest duration. The release-candidate row is the current
-baseline; it is not used as a performance comparison because the case count
-and machine load differ from the earlier benchmark.
-Passing `-n` to `test-local.sh` is rejected because multiple workers must not
-reset the same database.
+The 31 external cases were deselected in this extension, not validated or marked
+as passing; their previous network limitation remains unresolved. Store tests do
+not create carts, orders, payments or inventory changes.
 
-Useful focused commands:
+GitHub deploy gates preserve build/model, general UI, component matrices and
+browser compatibility before publication. Published smoke runs afterwards;
+external store checks are a separate manual workflow. This cleanup is local and
+does not itself commit or deploy.
 
-```bash
-# API suite
-./scripts/test-local.sh -q -m api
+## Documentation
 
-# UI suite with a visible browser
-./scripts/test-local.sh -q -m ui --headed --slowmo 500
+- [Active tree, case numbering and commands](test-framework/projects/lumbre/README.md)
+- [Current architecture and execution lanes](docs/STATIC_TEST_ARCHITECTURE.md)
+- [Migration, original IDs and cleanup](docs/TEST_MIGRATION_2026-10-09.md)
+- [Coverage plan](docs/UI_COVERAGE_PLAN.md)
+- [Adding a project](docs/ADDING_A_PROJECT.md)
+- [Static portal](docs/STATIC_PORTAL.md)
 
-# One case file
-./scripts/test-local.sh -q \
-  projects/lumbre/tests/ui/ingredient_lab/test_ui_018_existing_formula_reuses_hypothesis.py
-```
-
-Run static quality checks:
-
-```bash
-cd test-framework
-.venv/bin/ruff format --check .
-.venv/bin/ruff check .
-.venv/bin/mypy automation projects tests
-```
-
-## Reports and failure analysis
-
-### Portfolio report preview
-
-![Playwright framework report showing 79 passing executions](docs/assets/lumbre-test-report-summary.png)
-
-The versioned preview shows the full-suite summary, environment, case metadata,
-behavior, and structured logs. It provides portfolio evidence without adding a
-large generated HTML artifact to Git.
-
-Every normal run produces:
-
-```text
-test-framework/reports/runs/lumbre-report-YYYY-MM-DD_HH-MM-SS.html
-```
-
-The most recent execution is also copied to:
-
-```text
-test-framework/reports/lumbre-report.html
-```
-
-Open it on macOS with:
-
-```bash
-open test-framework/reports/lumbre-report.html
-```
-
-Generated reports are intentionally ignored by Git because a full
-self-contained report includes embedded screenshots and can exceed 20 MB. The
-PNG preview is the committed portfolio artifact; timestamped interactive HTML
-reports remain local, while the deployment and monitor workflows publish their
-focused remote-smoke evidence as short-lived CI artifacts.
-
-## Test strategy and traceability
-
-The suite is organized around product risk rather than test count. Each test
-uses a stable marker such as `API-012`, `UI-018`, `BROWSER-001`, or `ERR-001`.
-The risk catalog records priority, layer, intended behavior, and automation
-status.
-
-- [Test strategy and complete catalog](docs/TEST_STRATEGY.md)
-- [Engineering case studies](docs/ENGINEERING_CASE_STUDIES.md)
-- [Architecture and design decisions](docs/ARCHITECTURE.md)
-- [Production architecture migration plan](docs/PRODUCTION_MIGRATION_PLAN.md)
-- [Data governance and incident response](docs/DATA_GOVERNANCE_AND_INCIDENT_RESPONSE.md)
-- [Responsive UI audit](docs/UI_AUDIT.md)
-- [Secrets and release gates](docs/SECRETS_AND_RELEASE_GATES.md)
-- [Adding another automation project](docs/ADDING_A_PROJECT.md)
-- [Guided UI test creation protocol](docs/GUIDED_UI_TEST_PROTOCOL.md)
-- [Key Playwright notes](docs/KEY_PLAYWRIGHT_NOTES.md)
-- [Playwright Python snippets](docs/PLAYWRIGHT_PYTHON_SNIPPETS.md)
-- [Framework reference](test-framework/README.md)
-- [Portal reference](portal/README.md)
-
-## Current scope
-
-The repository supports deterministic local execution plus an explicit remote
-acceptance boundary. Production and staging D1 resources are provisioned and
-migrated, and an isolated staging Worker is live at
-`https://lumbre-portal-staging.lumbre-portal.workers.dev`. Its four-case remote
-smoke gate passes. A least-privilege GitHub Actions synthetic monitor schedules
-that gate every six hours and retains its HTML and JUnit evidence for 14 days;
-the deployment workflow validates every pull request and, for every push to
-`main`, deploys staging, runs the Playwright smoke gate, promotes the same
-commit to production, and runs the production smoke gate. Local and test modes
-exercise passwordless accounts, role authorization, reusable authenticated
-browser state, and account-owned carts. Production provides Resend-backed
-access for one allowlisted operator; public registration and commerce remain
-disabled, the reset route stays hidden, and the membership UI collects no
-personal data.
-
-The D1 operational gate now includes timestamped, checksummed SQL exports, a
-guarded staging-only recovery rehearsal, and a verified Time Travel rollback.
-The post-recovery remote Playwright smoke suite passed `4/4`. The controlled
-account preview has an explicit readiness profile, email adapter, abuse limit,
-and commerce isolation. Provider secrets and staging acceptance are still
-required before promotion. Broader public accounts stay blocked by separate
-privacy, deletion, ownership, and verified-domain gates.
-
-## Author
-
-Built by [Isaac Arellano](https://github.com/zvasdfg) as a practical quality
-engineering and Playwright portfolio project.
+Retired account/cart/admin/backend tests and their runners were removed after
+integration. They remain recoverable in Git at `aeaf9f4`. Historical design and
+execution records are documentation only, not extra runnable suites.

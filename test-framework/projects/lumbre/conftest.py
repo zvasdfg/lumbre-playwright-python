@@ -1,103 +1,105 @@
-from __future__ import annotations
+"""Current portal fixtures: isolated browsers, no backend reset or authentication."""
 
-from typing import Any, cast
+from urllib.parse import urlparse
 
 import pytest
-from playwright.sync_api import APIRequestContext, Page, StorageState
+from playwright.sync_api import expect
 
-from automation.core.contracts import OpenApiContract
-from projects.lumbre.api.lumbre_api import LumbreApi
+from projects.lumbre.components.fire_almanac import FireAlmanac
+from projects.lumbre.components.fire_planner import FirePlanner
+from projects.lumbre.components.ingredient_lab import IngredientLab
 from projects.lumbre.pages.home_page import HomePage
 
 
-@pytest.fixture
-def api(api_request_context: APIRequestContext) -> LumbreApi:
-    return LumbreApi(api_request_context)
-
-
-@pytest.fixture(scope="session")
-def openapi_contract(api_request_context: APIRequestContext) -> OpenApiContract:
-    api_client = LumbreApi(api_request_context)
-    return OpenApiContract(api_client.openapi_document())
-
-
-@pytest.fixture
-def home(page: Page, app_url: str) -> HomePage:
-    home_page = HomePage(page, app_url)
-    home_page.open()
-    return home_page
-
-
-@pytest.fixture
-def authenticated_storage_state(api: LumbreApi) -> StorageState:
-    """Build reusable browser authentication without repeating the UI login flow."""
-    email = "fixture.customer@example.test"
-    response = api.request_magic_link({"name": "Cliente Fixture", "email": email})
-    assert response.status == 200
-    delivery = api.latest_local_magic_link(email)
-    assert delivery.status == 200
-    verification = api.follow_magic_link(delivery.json()["data"]["url"])
-    assert verification.status == 200
-    return api.storage_state()
-
-
-@pytest.fixture
-def authenticated_api(api: LumbreApi) -> LumbreApi:
-    """Return the domain client with a deterministic customer session."""
-    email = "fixture.customer@example.test"
-    assert api.request_magic_link({"name": "Cliente Fixture", "email": email}).status == 200
-    delivery = api.latest_local_magic_link(email)
-    assert delivery.status == 200
-    assert api.follow_magic_link(delivery.json()["data"]["url"]).status == 200
-    return api
-
-
-@pytest.fixture
-def administrator_api(api: LumbreApi) -> LumbreApi:
-    """Return the domain client authenticated as the deterministic test administrator."""
-    email = "admin@lumbre.example.test"
-    assert api.request_magic_link({"name": "Administración Lumbre", "email": email}).status == 200
-    delivery = api.latest_local_magic_link(email)
-    assert delivery.status == 200
-    assert api.follow_magic_link(delivery.json()["data"]["url"]).status == 200
-    assert api.account()["data"]["role"] == "admin"
-    return api
-
-
-@pytest.fixture
-def administrator_storage_state(administrator_api: LumbreApi) -> StorageState:
-    """Build reusable browser authentication for the deterministic administrator."""
-    return administrator_api.storage_state()
-
-
-@pytest.fixture
-def authenticated_home(
-    page: Page,
-    app_url: str,
-    authenticated_storage_state: StorageState,
-) -> HomePage:
-    cookies = cast(Any, authenticated_storage_state["cookies"])
-    page.context.add_cookies(cookies)
-    home_page = HomePage(page, app_url)
-    home_page.open()
-    return home_page
-
-
-@pytest.fixture
-def administrator_home(
-    page: Page,
-    app_url: str,
-    administrator_storage_state: StorageState,
-) -> HomePage:
-    cookies = cast(Any, administrator_storage_state["cookies"])
-    page.context.add_cookies(cookies)
-    home_page = HomePage(page, app_url)
-    home_page.open()
-    return home_page
+@pytest.fixture(autouse=True)
+def target_scope(request, app_url):
+    target = urlparse(app_url)
+    remote = any(request.node.get_closest_marker(tag) for tag in ("production", "store"))
+    if remote:
+        if target.scheme != "https" or target.hostname in {"localhost", "127.0.0.1", "::1"}:
+            raise pytest.UsageError(
+                "Store/production cases require an explicitly selected public HTTPS target"
+            )
+    elif request.node.get_closest_marker("portal"):
+        if target.hostname not in {"localhost", "127.0.0.1", "::1"}:
+            raise pytest.UsageError(
+                "Portal regressions require a local preview; "
+                "use -m production or -m store for public targets"
+            )
 
 
 @pytest.fixture(autouse=True)
-def reset_scenario(request: pytest.FixtureRequest, api: LumbreApi) -> None:
-    if request.node.get_closest_marker("remote_smoke") is not None:
-        return
-    api.reset_demo_data()
+def numbered_evidence(request, target_scope, test_log):
+    case = request.node.get_closest_marker("case")
+    test_log.arrange(f"Case {case.args[0]} | {request.node.nodeid}")
+    yield
+
+
+@pytest.fixture(params=[390, 1440], ids=["mobile", "desktop"])
+def portal(page, app_url, request):
+    page.set_viewport_size({"width": request.param, "height": 900})
+    errors = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.goto(app_url)
+    expect(page.locator('[data-app-ready="true"]')).to_be_visible()
+    yield page
+    assert not errors, errors
+    assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+
+
+@pytest.fixture
+def screen(page, app_url):
+    page.set_viewport_size({"width": 390, "height": 900})
+    errors = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.goto(app_url)
+    expect(page.locator('[data-app-ready="true"]')).to_be_visible()
+    yield page
+    assert not errors, errors
+
+
+@pytest.fixture(params=[390, 1440], ids=["mobile", "desktop"])
+def lab(page, app_url, request):
+    page.set_viewport_size({"width": request.param, "height": 900})
+    page.goto(app_url)
+    component = IngredientLab(page)
+    component.open()
+    yield component
+    assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+
+
+@pytest.fixture(params=[390, 1440], ids=["mobile", "desktop"])
+def planner(page, app_url, request):
+    page.set_viewport_size({"width": request.param, "height": 900})
+    page.goto(app_url)
+    component = FirePlanner(page)
+    component.configure("asar", "kettle", "carbon")
+    component.build()
+    yield component
+    assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+
+
+@pytest.fixture
+def home(page, app_url):
+    home = HomePage(page, app_url)
+    home.open()
+    return home
+
+
+@pytest.fixture
+def local_specialized_preview(app_url, request, monkeypatch):
+    # Child scripts own their browsers; explicitly forward the same CLI launch mode.
+    monkeypatch.setenv("LUMBRE_TEST_HEADED", "1" if request.config.getoption("headed") else "0")
+    monkeypatch.setenv("LUMBRE_TEST_SLOWMO", str(request.config.getoption("slowmo")))
+    target = urlparse(app_url)
+    assert target.hostname in {"localhost", "127.0.0.1"} and target.port == 3001, (
+        "Specialized scripts require an explicit local preview on port 3001"
+    )
+    assert not hasattr(request.config, "workerinput"), "Shared PDF artifacts prohibit xdist"
+
+
+@pytest.fixture
+def almanac(portal):
+    component = FireAlmanac(portal)
+    component.open()
+    return component

@@ -5,7 +5,9 @@ from projects.lumbre.pages.home_page import HomePage
 from automation.core.reporting import TestLogger
 
 
-@pytest.mark.ui
+pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.regression]
+
+
 @pytest.mark.skip(reason="Pending exercise: complete the TODOs and remove this marker")
 @pytest.mark.case(
     "UI-000",
