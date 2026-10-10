@@ -1,55 +1,32 @@
 import pytest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.regression, pytest.mark.laboratory, pytest.mark.portal]
 
 
-@pytest.mark.ui
-@pytest.mark.case(
-    "UI-018",
-    "An anonymous duplicate formula reuses its session blend",
-)
-def test_anonymous_duplicate_formula_reuses_session_blend(
-    page: Page,
-    home: HomePage,
-    test_log: TestLogger,
-) -> None:
-    lab = home.ingredient_lab
-    ingredient_names = ["ajo granulado", "sal kosher", "pimienta negra"]
-    mutation_requests: list[str] = []
-    page.on(
-        "request",
-        lambda request: mutation_requests.append(request.url)
-        if request.method == "POST" and (
-            request.url.endswith("/api/hipotesis")
-            or request.url.endswith("/api/account/blends")
-        )
-        else None,
-    )
-
-    with test_log.step("Build and save SPG in the anonymous browser session"):
-        for ingredient_name in ingredient_names:
-            lab.add_ingredient(ingredient_name)
-        lab.select_objective("Costra para res")
-        lab.save_session_blend("SPG de la sesión")
-        expect(lab.session_blend("SPG de la sesión")).to_be_visible()
-        expect(lab.protocol_result).to_contain_text("Blend guardado en esta sesión")
-        test_log.values(
-            selected_ingredients=ingredient_names,
-            selected_objective=lab.objective_select.input_value(),
-            observed_session_blends=lab.session_blend_cards.count(),
-        )
-
-    with test_log.step("Save the same formula again and reuse the existing record"):
-        page.get_by_role("button", name="Cerrar ficha técnica").click()
-        lab.blend_title_input.fill("Otro nombre para SPG")
-        lab.create_protocol()
-        expect(lab.protocol_result).to_contain_text("Blend ya guardado en esta sesión")
-        expect(lab.session_blend_cards).to_have_count(1)
-        test_log.values(
-            observed_session_blends=lab.session_blend_cards.count(),
-            expected_session_blends=1,
-            observed_server_mutations=mutation_requests,
-        )
-        assert mutation_requests == []
+@pytest.mark.case("UI-018", "Duplicate formula reopens original; variant preserves saved amounts")
+def test_duplicate_and_variant(lab):
+    page = lab.page
+    lab.add("sal_mar_gruesa")
+    lab.add("pimienta_negra")
+    lab.save("Original")
+    lab.close_sheet()
+    lab.save("Otro nombre")
+    expect(page.locator("#hypothesis-sheet-title")).to_have_text("Original")
+    lab.close_sheet()
+    cards = page.get_by_test_id("session-blends").locator("article")
+    expect(cards).to_have_count(1)
+    cards.get_by_role("button", name="Crear variante", exact=True).click()
+    expect(page.get_by_label("Nombre de tu blend", exact=True)).to_have_value("Original · variante")
+    page.get_by_label("Gramos de sal mar gruesa", exact=True).fill("60")
+    page.get_by_label("Gramos de pimienta negra", exact=True).fill("90")
+    lab.save("Variante")
+    lab.close_sheet()
+    expect(cards).to_have_count(2)
+    page.reload()
+    lab.open()
+    original = cards.filter(has=page.get_by_role("heading", name="Original", exact=True))
+    variant = cards.filter(has=page.get_by_role("heading", name="Variante", exact=True))
+    expect(original).to_contain_text("75 g")
+    expect(variant).to_contain_text("60 g")
+    expect(variant).to_contain_text("90 g")

@@ -41,8 +41,8 @@ env \
   HEADLESS="${HEADLESS:-true}" \
   PLAYWRIGHT_PROXY="$PLAYWRIGHT_PROXY" \
   .venv/bin/pytest \
-    projects/lumbre_static/remote_smoke \
-    -m remote_smoke \
+    projects/lumbre/tests \
+    -m "production and smoke" \
     --html="$REPORT_PATH" \
     --junitxml="$JUNIT_PATH" \
     --self-contained-html \

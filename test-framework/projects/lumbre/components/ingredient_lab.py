@@ -1,138 +1,37 @@
-from __future__ import annotations
-
-import re
-
-from playwright.sync_api import Locator, Page
+"""Ingredient-family interactions without assertions or calculation logic."""
 
 
 class IngredientLab:
-    """Actions and locators for the ingredient experiment laboratory."""
-
-    def __init__(self, page: Page) -> None:
+    def __init__(self, page):
         self.page = page
-        self.root = page.locator("#laboratorio")
-        self.search_input = self.root.get_by_label("Buscar componente")
-        self.family_select = self.root.get_by_label("Familia")
-        self.catalog_status = self.root.locator(".catalog-status")
-        self.catalog = self.root.get_by_test_id("ingredient-catalog")
-        self.family_groups = self.catalog.locator("details.ingredient-family-group")
-        self.open_family_groups = self.catalog.locator(
-            "details.ingredient-family-group[open]"
-        )
-        self.ingredient_cards = self.catalog.get_by_test_id("ingredient-card")
-        self.specimen_buttons = self.catalog.locator("button.ingredient-specimen")
-        self.specimen_images = self.specimen_buttons.locator("img")
-        self.selected_ingredients = self.root.get_by_role(
-            "list",
-            name="Componentes seleccionados",
-        )
-        self.selected_items = self.selected_ingredients.locator("li:not(.empty-slot)")
-        self.objective_select = self.root.get_by_label("Objetivo de la prueba")
-        self.blend_title_input = self.root.get_by_label("Nombre de tu blend")
-        self.save_blend_button = self.root.get_by_role(
-            "button",
-            name="Guardar en mis blends",
-        )
-        self.create_protocol_button = self.root.get_by_role(
-            "button",
-            name="Guardar en esta sesión",
-        )
-        self.selection_limit = self.root.locator(".bench-limit")
-        self.protocol_result = self.root.locator(".protocol-result")
-        self.registry = self.root.get_by_test_id("hypothesis-registry")
-        self.hypothesis_cards = self.registry.locator("article.hypothesis-card")
-        self.session_library = self.root.get_by_test_id("session-blends")
-        self.session_blend_cards = self.session_library.locator("article.session-blend-card")
 
-    def search(self, text: str) -> None:
-        self.search_input.fill(text)
+    def open(self):
+        self.page.get_by_role("link", name="Entrar al laboratorio", exact=True).click()
 
-    def filter_by_family(self, family: str) -> None:
-        self.family_select.select_option(family)
-
-    def ingredient_card(self, ingredient_name: str) -> Locator:
-        return self.ingredient_cards.filter(
-            has=self.page.locator(
-                "h3",
-                has_text=re.compile(f"^{re.escape(ingredient_name)}$", re.IGNORECASE),
-            )
+    def card(self, ingredient_id):
+        return self.page.get_by_test_id("ingredient-card").filter(
+            has=self.page.locator(f'[data-ingredient-id="{ingredient_id}"]')
         )
 
-    def _reveal_ingredient(self, ingredient_name: str) -> Locator:
-        card = self.ingredient_card(ingredient_name)
-        family_group = card.locator("xpath=ancestor::details")
-        if family_group.get_attribute("open") is None:
-            family_group.locator("summary").click()
-        return card
+    def family(self, card):
+        return self.page.locator("details.ingredient-family-group").filter(has=card)
 
-    def open_ingredient(self, ingredient_name: str) -> None:
-        self._reveal_ingredient(ingredient_name).get_by_role(
-            "button",
-            name=f"Inspeccionar {ingredient_name}",
-        ).click()
+    def expand(self, group):
+        if group.get_attribute("open") is None:
+            group.locator("summary").click()
 
-    def ingredient_dialog(self, ingredient_name: str) -> Locator:
-        return self.page.get_by_role("dialog").filter(
-            has=self.page.get_by_role("heading", name=ingredient_name, exact=True)
-        )
+    def add(self, ingredient_id):
+        card = self.card(ingredient_id)
+        self.expand(self.family(card))
+        card.get_by_role("button", name="Agregar", exact=True).click()
 
-    def add_ingredient(self, ingredient_name: str) -> None:
-        self._reveal_ingredient(ingredient_name).get_by_role(
-            "button",
-            name="Agregar",
-            exact=True,
-        ).click()
+    def save(self, title):
+        self.page.get_by_label("Nombre de tu blend", exact=True).fill(title)
+        self.page.get_by_role("button", name="Guardar en esta sesión", exact=True).click()
 
-    def add_open_ingredient_to_formula(self, ingredient_name: str) -> None:
-        self.ingredient_dialog(ingredient_name).get_by_role(
-            "button",
-            name="Agregar a la fórmula",
-        ).click()
+    def close_sheet(self):
+        self.page.get_by_role("button", name="Cerrar ficha técnica", exact=True).click()
 
-    def selected_ingredient(self, ingredient_name: str) -> Locator:
-        return self.selected_ingredients.get_by_role("listitem").filter(has_text=ingredient_name)
-
-    def remove_selected_ingredient(self, ingredient_name: str) -> None:
-        self.selected_ingredient(ingredient_name).get_by_role(
-            "button",
-            name=f"Retirar {ingredient_name}",
-        ).click()
-
-    def select_objective(self, objective: str) -> None:
-        self.objective_select.select_option(label=objective)
-
-    def create_protocol(self) -> None:
-        self.create_protocol_button.click()
-
-    def save_session_blend(self, title: str) -> None:
-        self.blend_title_input.fill(title)
-        self.create_protocol_button.click()
-
-    def session_blend(self, title: str) -> Locator:
-        return self.session_blend_cards.filter(
-            has=self.page.get_by_role("heading", name=title, exact=True)
-        )
-
-    def save_account_blend(self, title: str) -> None:
-        self.blend_title_input.fill(title)
-        self.save_blend_button.click()
-
-    def hypothesis_card(self, hypothesis_id: str) -> Locator:
-        return self.hypothesis_cards.filter(has=self.page.get_by_text(hypothesis_id, exact=True))
-
-    def open_hypothesis(self, hypothesis_id: str) -> None:
-        self.hypothesis_card(hypothesis_id).get_by_role(
-            "button",
-            name="Abrir ficha",
-        ).click()
-
-    def hypothesis_dialog(self, hypothesis_id: str) -> Locator:
-        return self.page.get_by_role("dialog").filter(
-            has=self.page.get_by_role("heading", name=hypothesis_id, exact=True)
-        )
-
-    def print_hypothesis(self, hypothesis_id: str) -> None:
-        self.hypothesis_dialog(hypothesis_id).get_by_role(
-            "button",
-            name="Imprimir ficha",
-        ).click()
+    def set_grams(self, ingredient_id, value):
+        name = self.card(ingredient_id).locator("h3").text_content()
+        self.page.get_by_label(f"Gramos de {name}", exact=True).fill(str(value))

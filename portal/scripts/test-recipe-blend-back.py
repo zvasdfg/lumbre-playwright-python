@@ -1,8 +1,9 @@
 """Recipe -> blend -> same recipe; isolated from store product navigation."""
+from browser_test_options import browser_launch_options
 from playwright.sync_api import sync_playwright, expect
 
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(**browser_launch_options())
     for width in (1440, 390):
         page = browser.new_page(viewport={"width": width, "height": 900})
         page.goto("http://127.0.0.1:3001/#recetas")

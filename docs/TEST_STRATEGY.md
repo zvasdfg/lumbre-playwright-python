@@ -1,5 +1,18 @@
 # Lumbre Test Strategy
 
+## Current organization — 2026-10-09
+
+The active project now follows `projects/lumbre/tests/ui/<feature>/test_ui_NNN`
+and `tests/api/system/test_api_NNN`. Local, matrix, production and Tiendanube
+selection uses strict Pytest markers under this one tree. Obsolete backend cases have been removed after migration;
+original sources are recoverable in Git at `aeaf9f4`, not deployment coverage.
+See [active architecture](STATIC_TEST_ARCHITECTURE.md) and
+[ID migration / current evidence](TEST_MIGRATION_2026-10-09.md).
+
+The dated implementation notes and backend baseline below are historical.
+In particular, old `remote_smoke`/`lumbre_static` paths have been relocated;
+old account/cart/API risks do not describe the current public product.
+
 > Perspective: Staff QA architecture
 > Stack: Python, Pytest, Playwright Sync API, Page Object Model, Component
 > Objects, APIRequestContext, pytest-xdist, OpenAPI 3.1, and JSON Schema 2020-12

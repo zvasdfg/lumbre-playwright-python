@@ -32,7 +32,7 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   }
   const compatibilityJob = workflow.split("  browser-compatibility:")[1];
   assert.match(compatibilityJob, /browser: \[firefox, webkit\]/);
-  assert.match(compatibilityJob, /test_resilience_accessibility\.py/);
+  assert.match(compatibilityJob, /portal and cross_browser/);
   assert.match(compatibilityJob, /- shell: bash\s+env:\s+(?:#[^\n]*\n\s*)*HOME: \/root\s+run:/,
     "Firefox in the root Actions container requires a root-owned HOME at launch");
   assert.doesNotMatch(workflow, /playwright install|apt-get/);
@@ -43,9 +43,16 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   assert.match(browserJob, /python -m http.server 3001/);
   assert.match(browserJob, /if: always\(\)/);
   assert.match(browserJob, /python -m pytest/);
-  assert.match(browserJob, /projects\/lumbre_static\/tests/);
+  assert.match(browserJob, /projects\/lumbre\/tests/);
   assert.match(browserJob, /not matrix/);
-  const wrapper = readFileSync(resolve(portal, "../test-framework/projects/lumbre_static/tests/test_specialized_regressions.py"), "utf8");
+  const matrixJob = workflow.split("  component-matrix:")[1].split("  browser-compatibility:")[0];
+  assert.match(matrixJob, /component: \[planner_matrix, ingredients_matrix, recipes_matrix, almanac_matrix\]/);
+  assert.match(matrixJob, /name: lumbre-static/);
+  assert.match(matrixJob, /portal and matrix and \$COMPONENT_FILTER/);
+  const canonicalTests = resolve(portal, "../test-framework/projects/lumbre/tests/ui");
+  const wrapper = readdirSync(canonicalTests).filter(domain => statSync(resolve(canonicalTests, domain)).isDirectory()).flatMap(domain =>
+    readdirSync(resolve(canonicalTests, domain)).filter(name => name.endsWith(".py"))
+      .map(name => readFileSync(resolve(canonicalTests, domain, name), "utf8"))).join("\n");
   for (const script of ["test-static", "check-static-print", "test-storage-recovery", "test-planner-goals", "test-planner-simple", "test-planner-fuel", "test-planner-kettle-fuel", "test-planner-weber-defaults", "test-recipe-blend-back"]) {
     assert.ok(wrapper.includes(`${script}.py`), script);
   }

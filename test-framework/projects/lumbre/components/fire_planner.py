@@ -1,76 +1,48 @@
-from __future__ import annotations
-
-from playwright.sync_api import Locator, Page
+"""FirePlanner interactions only: assertions and scenario data stay in tests."""
 
 
 class FirePlanner:
-    """Actions and locators for the embedded fire-planning tool."""
+    def __init__(self, page):
+        self.page = page
 
-    def __init__(self, page: Page) -> None:
-        self.root = page.get_by_test_id("fire-planner")
-        self.guests_input = self.root.get_by_label("Personas")
-        self.cooking_style_select = self.root.get_by_label("Tipo de cocción")
-        self.duration_select = self.root.get_by_label("Duración estimada")
-        self.fuel_select = self.root.locator('select[name="fuelType"]')
-        self.equipment_select = self.root.get_by_label("Equipo")
-        self.weather_select = self.root.get_by_label("Condición exterior")
-        self.serving_time_input = self.root.get_by_label("Hora de servicio")
-        self.vegetable_reserve_checkbox = self.root.get_by_label(
-            "Incluir una reserva para vegetales"
-        )
-        self.calculate_button = self.root.get_by_role(
-            "button",
-            name="Construir plan de fuego",
-        )
-        self.recommendation_status = self.root.get_by_role(
-            "status",
-            name="Recomendación de combustible",
-        )
-        self.preset_name_input = self.root.get_by_label("Nombre del preset")
-        self.save_preset_button = self.root.get_by_role(
-            "button",
-            name="Guardar preset",
-        )
-        self.preset_library = self.root.get_by_test_id("fire-presets")
-        self.storage_scope = self.root.get_by_test_id("preset-storage-scope")
-        self.preset_message = self.root.locator(".preset-message")
+    def configure(self, goal, equipment, fuel):
+        self.page.get_by_label("Objetivo de cocción", exact=True).select_option(goal)
+        self.page.get_by_label("Equipo", exact=True).select_option(equipment)
+        field = self.page.get_by_label("Combustible principal", exact=True)
+        if field.is_enabled():
+            field.select_option(fuel)
+        self.page.get_by_label("Horas de cocción", exact=True).fill("2")
+        for name in ("capabilityVerified", "fuelVerified", "smokeVerified"):
+            for control in self.page.locator(f'[name="{name}"]').all():
+                control.check()
 
-    def configure(
+    def build(self):
+        self.page.get_by_role("button", name="Construir plan de fuego", exact=True).click()
+
+    def add_stage(
         self,
+        index,
         *,
-        guests: int,
-        cooking_style: str,
-        duration_hours: int,
-        include_vegetables: bool = False,
-        fuel: str = "carbon",
-        equipment: str = "kettle",
-        weather: str = "templado",
-        serving_time: str = "15:00",
-    ) -> None:
-        self.guests_input.fill(str(guests))
-        self.cooking_style_select.select_option(cooking_style)
-        self.duration_select.select_option(str(duration_hours))
-        self.fuel_select.select_option(fuel)
-        self.equipment_select.select_option(equipment)
-        self.weather_select.select_option(weather)
-        self.serving_time_input.fill(serving_time)
-        self.vegetable_reserve_checkbox.set_checked(include_vegetables)
-
-    def calculate(self) -> None:
-        self.calculate_button.click()
-
-    def save_preset(self, name: str) -> None:
-        self.preset_name_input.fill(name)
-        self.save_preset_button.click()
-
-    def preset(self, name: str) -> Locator:
-        return self.preset_library.locator("article").filter(has_text=name)
-
-    def load_preset(self, name: str) -> None:
-        self.preset(name).get_by_role(
-            "button",
-            name=f"Cargar preset {name}",
-        ).click()
-
-    def delete_preset(self, name: str) -> None:
-        self.preset(name).get_by_role("button", name="Eliminar").click()
+        name,
+        kind="coccion",
+        goal="asar",
+        method="directo",
+        temperature="200",
+        surface="rejilla",
+        duration="30 min",
+        notes="",
+    ):
+        self.page.get_by_role("button", name="Añadir etapa", exact=True).click()
+        self.page.get_by_label(f"Nombre de etapa {index}", exact=True).fill(name)
+        self.page.get_by_label(f"Tipo de etapa {index}", exact=True).select_option(kind)
+        if kind != "pausa":
+            self.page.get_by_label(f"Objetivo de etapa {index}", exact=True).select_option(goal)
+            self.page.get_by_label(f"Método de etapa {index}", exact=True).select_option(method)
+            self.page.locator(".planner-stage-editor fieldset").nth(index - 1).locator("input").nth(
+                1
+            ).fill(temperature)
+            self.page.get_by_label(f"Soporte de etapa {index}", exact=True).select_option(surface)
+        self.page.get_by_label(f"Duración o señal para cambiar {index}", exact=True).fill(duration)
+        self.page.locator(".planner-stage-editor fieldset").nth(index - 1).locator("textarea").fill(
+            notes
+        )

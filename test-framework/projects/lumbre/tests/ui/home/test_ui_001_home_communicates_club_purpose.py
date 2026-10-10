@@ -1,27 +1,33 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [
+    pytest.mark.ui,
+    pytest.mark.portal,
+    pytest.mark.regression,
+    pytest.mark.smoke,
+    pytest.mark.navigation,
+]
 
 
-@pytest.mark.ui
-@pytest.mark.smoke
-@pytest.mark.case("UI-001", "The home page communicates Lumbre's purpose")
-def test_home_communicates_the_club_purpose(home: HomePage, test_log: TestLogger) -> None:
-    with test_log.step("Validate the main page heading"):
-        expect(home.hero_title).to_be_visible()
-        observed_title = home.hero_title.inner_text()
-        test_log.values(
-            observed_title=observed_title,
-            expected_title="El fuego nos reúne.",
+@pytest.mark.case(
+    "UI-001", "The current home communicates the purpose and its three working entry points"
+)
+def test_home_communicates_the_club_purpose(portal, test_log):
+    with test_log.step("Read the purpose and the laboratory scope"):
+        expect(
+            portal.get_by_role("heading", name="El fuego nos reúne.", exact=True)
+        ).to_be_visible()
+        expect(
+            portal.get_by_text("Fuego · Comunidad · Vida al aire libre", exact=True)
+        ).to_be_visible()
+        expect(portal.get_by_label("Alcance del laboratorio")).to_contain_text("60 componentes")
+    with test_log.step("Validate actionable entry points without membership or account UI"):
+        expect(
+            portal.get_by_role("link", name="Entrar al laboratorio", exact=True)
+        ).to_have_attribute("href", "#laboratorio")
+        expect(portal.get_by_role("button", name="Planear mi fuego", exact=False)).to_be_visible()
+        expect(portal.get_by_role("link", name="Explorar recetas", exact=False)).to_have_attribute(
+            "href", "#recetas"
         )
-
-    with test_log.step("Validate the club value proposition"):
-        expected_proposition = "Fuego · Comunidad · Vida al aire libre"
-        proposition = home.page.get_by_text(expected_proposition)
-        expect(proposition).to_be_visible()
-        test_log.values(
-            observed_proposition=proposition.inner_text(),
-            expected_proposition=expected_proposition,
-        )
+        expect(portal.get_by_test_id("account-button")).to_have_count(0)

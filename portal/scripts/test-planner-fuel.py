@@ -1,11 +1,12 @@
 """Fuel budgets: reference/manual rates, units, persistence, PDF and no invented defaults."""
+from browser_test_options import browser_launch_options
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 from pypdf import PdfReader
 OUT=Path('/tmp/lumbre-fuel-v1')
 OUT.mkdir(exist_ok=True)
 with sync_playwright() as p:
-    browser=p.chromium.launch()
+    browser=p.chromium.launch(**browser_launch_options())
     cases=[('kettle','carbon','1','3.2 kg'),('kamado','briquetas','1','3.2 kg'),
            ('offset','lena','2','6.3 kg'),('gas','gas_lp','.5','1.7 kg'),
            ('gas','gas_natural','1','3.2 m³'),('pellets','pellets','','3.2 kg')]

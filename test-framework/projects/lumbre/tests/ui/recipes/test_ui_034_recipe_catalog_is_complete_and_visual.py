@@ -1,75 +1,54 @@
-from math import ceil
+import re
 
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [
+    pytest.mark.ui,
+    pytest.mark.regression,
+    pytest.mark.recipes,
+    pytest.mark.matrix,
+    pytest.mark.recipes_matrix,
+    pytest.mark.portal,
+]
 
 
-@pytest.mark.ui
-@pytest.mark.case(
-    "UI-034",
-    "The recipe catalog exposes 100 unique recipes with distinct descriptive images",
-)
-def test_recipe_catalog_is_complete_and_visual(
-    home: HomePage,
-    test_log: TestLogger,
-) -> None:
-    expected_recipe_count = 100
-
-    with test_log.step("Read all 100 recipes through the paginated catalog"):
-        page_count = ceil(expected_recipe_count / 6)
-        observed_titles: list[str] = []
-        observed_sources: list[str] = []
-        observed_alt_texts: list[str] = []
-        observed_overlays: list[str] = []
-        observed_page_sizes: list[int] = []
-
-        for page_number in range(1, page_count + 1):
-            if page_number > 1:
-                home.go_to_recipe_page(page_number)
-            page_size = home.recipe_cards.count()
-            observed_page_sizes.append(page_size)
-            observed_titles.extend(home.recipe_cards.get_by_role("heading").all_inner_texts())
-            observed_sources.extend(
-                home.recipe_images.evaluate_all(
-                    "images => images.map(image => "
-                    "new URL(image.src).searchParams.get('url') ?? "
-                    "image.getAttribute('src'))"
-                )
-            )
-            observed_alt_texts.extend(
-                home.recipe_images.evaluate_all(
-                    "images => images.map(image => image.getAttribute('alt'))"
-                )
-            )
-            observed_overlays.extend(
-                home.recipe_art.evaluate_all(
-                    "elements => elements.map(element => "
-                    "getComputedStyle(element, '::after').backgroundImage)"
-                )
-            )
-
-        test_log.values(
-            observed_recipe_count=len(observed_titles),
-            expected_recipe_count=expected_recipe_count,
-            observed_page_count=page_count,
-            observed_page_sizes=observed_page_sizes,
-            observed_unique_titles=len(set(observed_titles)),
-            observed_unique_sources=len(set(observed_sources)),
-            observed_unique_overlays=len(set(observed_overlays)),
-        )
-
-    with test_log.step("Validate unique recipes and image ownership"):
-        assert all(page_size <= 6 for page_size in observed_page_sizes)
-        assert observed_page_sizes[-1] == 4
-        assert len(set(observed_titles)) == expected_recipe_count
-        assert len(set(observed_sources)) == expected_recipe_count
-        assert all(source for source in observed_sources)
-        assert all(
-            alt_text == f"Fotografía de {title}"
-            for title, alt_text in zip(observed_titles, observed_alt_texts, strict=True)
-        )
-        assert len(set(observed_overlays)) == 1
-        assert "linear-gradient" in observed_overlays[0]
+@pytest.mark.case("UI-034", "Every paginated recipe renders its complete sheet and restores focus")
+def test_all_recipe_sheets(page, app_url):
+    page.set_viewport_size({"width": 390, "height": 900})
+    page.goto(app_url.rstrip("/") + "/#recetas")
+    status = page.get_by_test_id("recipe-page-status")
+    expect(status).to_be_visible()
+    match = re.search(r"de\s*(\d+)\s*recetas", status.inner_text(), re.IGNORECASE)
+    assert match, status.inner_text()
+    total = int(match.group(1))
+    visited = set()
+    while True:
+        cards = page.get_by_test_id("recipe-card")
+        for card in cards.all():
+            title = card.locator("h3").inner_text()
+            assert title not in visited, f"Duplicate recipe across pages: {title}"
+            trigger = card.get_by_role("button")
+            trigger.click()
+            sheet = page.get_by_role("dialog", name=title, exact=True)
+            expect(sheet).to_be_visible()
+            expect(sheet).to_contain_text("Preparación paso a paso")
+            expect(sheet).to_contain_text("Notas y fuentes")
+            assert sheet.locator(".recipe-method li").count() > 0, title
+            image = sheet.locator("img").first
+            expect(image).to_have_js_property("complete", True)
+            assert image.evaluate("e=>e.naturalWidth") > 0, title
+            expect(sheet.get_by_role("button", name="Imprimir ficha", exact=True)).to_be_visible()
+            assert sheet.evaluate("e=>e.scrollWidth<=e.clientWidth"), title
+            page.keyboard.press("Escape")
+            expect(sheet).to_have_count(0)
+            expect(trigger).to_be_focused()
+            visited.add(title)
+        next_page = page.get_by_role("button", name="Siguiente →", exact=True)
+        if not next_page.is_enabled():
+            break
+        before = status.inner_text()
+        next_page.click()
+        expect(status).not_to_have_text(before)
+    assert len(visited) == total
+    print(f"UI-034: {len(visited)} unique recipes inspected")

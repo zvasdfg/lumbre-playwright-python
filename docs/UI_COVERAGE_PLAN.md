@@ -1,5 +1,31 @@
 # Portal and store UI coverage
 
+## Current organization — 2026-10-09
+
+The active project now follows `projects/lumbre/tests/ui/<feature>/test_ui_NNN`
+and `tests/api/system/test_api_NNN`. Local, matrix, production and Tiendanube
+selection uses strict Pytest markers under this one tree. Obsolete backend cases have been removed after migration;
+original sources are recoverable in Git at `aeaf9f4`, not deployment coverage.
+See [active architecture](STATIC_TEST_ARCHITECTURE.md) and
+[ID migration / current evidence](TEST_MIGRATION_2026-10-09.md).
+
+## Coverage extension — 2026-10-09
+
+UI-092…UI-104 add 177 executions in the original numbered feature tree.
+Almanac now owns its reader component/POM, UI-055 and seven new reader behaviors;
+all 53 documents are independently parametrized at two widths. Deferred chunk
+failures, slow loading, failed illustration revisits, editorial notes, zoom and
+keyboard are covered. Larger manual blends, multi-stage saved plans, accessible
+DOM contracts and self-contained generated PDF checks are also implemented.
+See the [case domains](../test-framework/projects/lumbre/README.md#coverage-extension--ui-092-through-ui-104)
+and migration execution record for results and real defects. No application or
+store configuration is changed by this extension. External checkout, physical
+devices and approved screenshot baselines remain explicit gaps.
+
+The dated implementation notes and backend baseline below are historical.
+In particular, old `remote_smoke`/`lumbre_static` paths have been relocated;
+old account/cart/API risks do not describe the current public product.
+
 Revision: 2026-10-08. Scope: current static Lumbre portal + Tiendanube public store.
 Evidence: deploy.yml, portal/scripts/test-*.py, check-static-print.py,
 lab-formula.test.mjs, fire-plan-model.test.mjs, fire-plan-fuel.test.mjs,

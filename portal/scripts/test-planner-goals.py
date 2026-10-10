@@ -1,4 +1,5 @@
 """Objective-first planner: real UI scenarios, persisted plans and actual A4 PDFs."""
+from browser_test_options import browser_launch_options
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 from pypdf import PdfReader
@@ -10,7 +11,7 @@ CASES = [('asar','abierta'), ('hornear','kettle'), ('hornear','kamado'),
          ('asar','pellets'), ('ahumar','pellets'), ('hornear','pellets')]
 LABELS = {'asar':'Asar','ahumar':'Ahumar','hornear':'Hornear'}
 with sync_playwright() as pw:
-    browser = pw.chromium.launch()
+    browser = pw.chromium.launch(**browser_launch_options())
     for width in (320, 390, 1440):
         for goal, equipment in CASES:
             context = browser.new_context(viewport={'width':width, 'height':1000})

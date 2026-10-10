@@ -1,33 +1,23 @@
 import pytest
 from playwright.sync_api import expect
 
-from automation.core.reporting import TestLogger
-from projects.lumbre.pages.home_page import HomePage
+pytestmark = [pytest.mark.ui, pytest.mark.regression, pytest.mark.recipes, pytest.mark.portal]
 
 
-@pytest.mark.ui
-@pytest.mark.case("UI-002", "The visual filter shows only recipes from the selected category")
-def test_recipe_filters_return_only_matching_cards(home: HomePage, test_log: TestLogger) -> None:
-    with test_log.step("Select the Vegetales filter"):
-        selected_filter = "Vegetales"
-        home.filter_recipes(selected_filter)
-        test_log.values(selected_filter=selected_filter)
-
-    with test_log.step("Validate the first filtered page"):
-        expect(home.recipe_cards).to_have_count(6)
-        expect(home.recipe_page_status).to_have_text("Mostrando 1–6 de 33 recetas")
-        test_log.values(
-            observed_card_count=home.recipe_cards.count(),
-            observed_page_status=home.recipe_page_status.inner_text(),
-            expected_card_count=6,
-            expected_filtered_count=33,
-        )
-
-    with test_log.step("Validate a representative recipe from the category"):
-        expected_recipe = "Coliflor al rescoldo"
-        expect(home.recipe_named(expected_recipe)).to_be_visible()
-        observed_titles = home.recipe_cards.get_by_role("heading").all_inner_texts()
-        test_log.values(
-            observed_recipe_titles=observed_titles,
-            expected_representative_recipe=expected_recipe,
-        )
+@pytest.mark.parametrize("filter_name", ["Fuego directo", "Lento y ahumado", "Vegetales"])
+@pytest.mark.case("UI-002", "Recipe filters and search recover from empty results")
+def test_recipe_search_and_filters(portal, filter_name):
+    page = portal
+    button = page.get_by_role("button", name=filter_name, exact=True)
+    button.click()
+    expect(button).to_have_attribute("aria-pressed", "true")
+    expect(page.get_by_test_id("recipe-card").first).to_be_visible()
+    title = page.get_by_test_id("recipe-card").first.locator("h3").inner_text()
+    search = page.get_by_placeholder("Buscar receta...", exact=True)
+    search.fill("zz-no-recipe-zz")
+    expect(page.get_by_test_id("recipe-card")).to_have_count(0)
+    search.fill(title)
+    expect(page.get_by_test_id("recipe-card").first.locator("h3")).to_have_text(title)
+    search.fill("")
+    page.get_by_role("button", name="Todas", exact=True).click()
+    expect(page.get_by_test_id("recipe-card")).to_have_count(6)

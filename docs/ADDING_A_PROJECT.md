@@ -217,8 +217,8 @@ BASE_URL=https://example.test \
 
 ## 9. Add local lifecycle orchestration only when needed
 
-The root `scripts/test-local.sh` starts the Lumbre SUT and is intentionally
-project-specific. A new locally managed SUT should receive its own explicit
+The root `scripts/test-local.sh` builds and serves the static Lumbre artifact
+without a backend or database and is intentionally project-specific. A new locally managed SUT should receive its own explicit
 runner, for example `scripts/test-example-store-local.sh`.
 
 That runner should:

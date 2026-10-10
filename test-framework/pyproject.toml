@@ -19,6 +19,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+lumbre = ["pypdf>=6.19,<7"]
 dev = [
   "ruff>=0.9,<1",
   "mypy>=1.14,<2",
@@ -29,9 +30,25 @@ dev = [
 include = ["automation*", "projects*"]
 
 [tool.pytest.ini_options]
-addopts = "-ra --strict-markers --tracing=retain-on-failure --screenshot=only-on-failure"
-testpaths = ["tests/framework"]
+addopts = "-m 'framework_unit or portal' -ra --strict-markers --import-mode=importlib --tracing=retain-on-failure --screenshot=only-on-failure"
+testpaths = ["tests/framework", "projects/lumbre/tests"]
 markers = [
+  "portal: current portal against an explicitly started local static preview",
+  "production: read-only acceptance of the published static portal",
+  "store: read-only external Tiendanube integration; explicitly selected",
+  "planner: fire planner feature",
+  "laboratory: ingredient laboratory feature",
+  "recipes: recipe catalog feature",
+  "navigation: home, navigation and local storage shell",
+  "almanac: fire almanac feature",
+  "commerce: public product catalog and purchase destinations",
+  "planner_matrix: equipment/goal/fuel browser matrix",
+  "ingredients_matrix: each ingredient browser matrix",
+  "recipes_matrix: all public recipe sheets browser matrix",
+  "almanac_matrix: all 53 published almanac documents at two viewports",
+  "accessibility: objective keyboard and accessible DOM contracts, not a complete WCAG audit",
+  "print_pdf: self-contained generated PDF content/format contracts",
+  "specialized: serialized retained scripts requiring localhost port 3001",
   "matrix: extended finite UI component/configuration matrix, isolated CI lane",
   "case(case_id, behavior): test case identity and executable behavior documentation",
   "smoke: fast critical-path coverage",

@@ -1,1 +1,1 @@
-"""Lumbre project adapter, page models, API client, and functional tests."""
+"""Canonical tests for the current Lumbre portal and store."""

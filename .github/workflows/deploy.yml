@@ -96,7 +96,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:3001/ > /dev/null
-          BASE_URL=http://127.0.0.1:3001 python -m pytest -c test-framework/pyproject.toml test-framework/tests/framework test-framework/projects/lumbre_static/tests -m 'not matrix' --junitxml=/tmp/lumbre-static-ui.xml --html=/tmp/lumbre-static-ui.html --self-contained-html --output=/tmp/lumbre-ui-artifacts
+          BASE_URL=http://127.0.0.1:3001 python -m pytest -c test-framework/pyproject.toml test-framework/tests/framework test-framework/projects/lumbre/tests -m 'framework_unit or (portal and not matrix)' --junitxml=/tmp/lumbre-static-ui.xml --html=/tmp/lumbre-static-ui.html --self-contained-html --output=/tmp/lumbre-ui-artifacts
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
@@ -169,7 +169,7 @@ jobs:
         with:
           persist-credentials: false
       - run: python -m pip install -e ./test-framework -c portal/profiles/browser/requirements.txt
-      - run: python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre_static/remote_smoke --output=/tmp/lumbre-published-artifacts --junitxml=/tmp/lumbre-published.xml --html=/tmp/lumbre-published.html --self-contained-html
+      - run: python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre/tests -m "production and smoke" --output=/tmp/lumbre-published-artifacts --junitxml=/tmp/lumbre-published.xml --html=/tmp/lumbre-published.html --self-contained-html
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
@@ -187,7 +187,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [test_planner_matrix, test_each_ingredient, test_all_recipe_sheets]
+        component: [planner_matrix, ingredients_matrix, recipes_matrix, almanac_matrix]
     container:
       image: mcr.microsoft.com/playwright/python:v1.63.0-noble
       options: --ipc=host
@@ -213,7 +213,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:3001/ >/dev/null
-          python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre_static/tests -m matrix -k "$COMPONENT_FILTER" --output=/tmp/lumbre-matrix-artifacts --junitxml=/tmp/lumbre-matrix.xml --html=/tmp/lumbre-matrix.html --self-contained-html
+          python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre/tests -m "portal and matrix and $COMPONENT_FILTER" --output=/tmp/lumbre-matrix-artifacts --junitxml=/tmp/lumbre-matrix.xml --html=/tmp/lumbre-matrix.html --self-contained-html
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
@@ -262,7 +262,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:3001/ >/dev/null
-          python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre_static/tests/test_resilience_accessibility.py --browser "$TEST_BROWSER" --output=/tmp/lumbre-compat-artifacts --junitxml=/tmp/lumbre-compat.xml --html=/tmp/lumbre-compat.html --self-contained-html
+          python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre/tests -m "portal and cross_browser" --browser "$TEST_BROWSER" --output=/tmp/lumbre-compat-artifacts --junitxml=/tmp/lumbre-compat.xml --html=/tmp/lumbre-compat.html --self-contained-html
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
