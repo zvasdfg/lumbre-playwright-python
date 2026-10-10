@@ -27,7 +27,8 @@ was performed by this implementation.
 - Removed 102 selectors belonging exclusively to retired components; shared
   modal/form/button styles and the active laboratory note remain.
 - Consolidated root dependencies onto the existing static profile and removed
-  unused Zod. The root lock decreases from 723 to 97 entries (including root),
+  backend-only dependencies. Zod remains required by the planner. After its
+  restoration, the root lock decreases from 723 to 98 entries (including root),
   without resolving new transitive versions. Cloudflare tooling remains isolated.
 - Updated current architecture, commands, target guards and source paths. Older
   engineering examples/history are labeled archival rather than runnable guides.
@@ -71,6 +72,25 @@ Evidence directory: `/tmp/lumbre-static-retirement-20261009/`, containing
 `general/` and `specialized/` reports, JUnit XML, logs, screenshots/traces and PDFs.
 
 ## Known pre-existing failures
+
+### CI dependency correction
+
+The first push of the cleanup (`ac29121`) failed in isolated CI typechecking:
+Zod had incorrectly been classified as unused despite the planner's active import.
+The local installation retained it and masked the omission. Restore the exact
+previous `zod@4.6.5` manifest and lock entry in development and static release
+profiles. Two pre-install contract tests now check shipped imports against
+declared dependencies and explicitly reproduce the missing-Zod failure without
+resolving the inherited installation. This correction does not relax UI gates
+or fix the separately recorded keyboard defects.
+
+Correction validation: nine profile contracts and 47 model/store-link contracts
+passed; TypeScript, all 100 recipe checks and the static build passed. Both Zod
+lock entries are byte-equivalent JSON to the checkpoint's original entry.
+A clean isolated offline installation remains unverified locally: the cache
+does not contain `source-map-js@1.2.2`; a verified HTTPS download of that exact
+tarball timed out. No TLS or network settings were weakened. CI must confirm
+the clean installation before publishing this correction.
 
 The prior complete headed run had 419 passed / 7 failed: six custom-dialog
 keyboard containment variants in UI-101 and one headed recipe return failure in
