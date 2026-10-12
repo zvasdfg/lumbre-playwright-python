@@ -20,16 +20,26 @@ pytestmark = [
 @pytest.mark.case(
     "UI-103", "A4 PDF keeps visible title, steps/quantities, final section and no portal chrome"
 )
-@pytest.mark.parametrize("feature", ["product", "recipe", "blend-3", "blend-12", "plan"])
+@pytest.mark.parametrize(
+    "feature",
+    ["product", "product-2", "product-3", "product-4", "recipe", "blend-3", "blend-12", "plan"],
+)
 def test_print_content(page, app_url, feature, request):
     from pypdf import PdfReader  # Project PDF dependency; not needed for matrix collection.
 
     page.set_viewport_size({"width": 1440, "height": 900})
     page.goto(app_url)
     tokens = []
-    if feature == "product":
-        page.get_by_role("button", name="Ver ficha de Sazonador multiuso", exact=True).click()
-        tokens = ["Sazonador multiuso", "LMB-F-001", "Al llevarlo al fuego"]
+    if feature.startswith("product"):
+        index = 1 if feature == "product" else int(feature.split("-")[1])
+        name = (
+            "Sazonador multiuso",
+            "Sazonador para carne de res",
+            "Sazonador para carne de cerdo",
+            "Sazonador para carne de pollo",
+        )[index - 1]
+        page.get_by_role("button", name=f"Ver ficha de {name}", exact=True).click()
+        tokens = [name, f"LMB-F-{index:03d}", "Al llevarlo al fuego"]
     elif feature == "recipe":
         card = page.get_by_test_id("recipe-card").first
         title = card.locator("h3").inner_text()
@@ -84,6 +94,13 @@ def test_print_content(page, app_url, feature, request):
         .filter(img => !img.complete || img.naturalWidth === 0).map(img => img.src);
     }""")
     assert not broken_images, f"Cannot print broken images: {broken_images}"
+    if feature.startswith("product"):
+        page.emulate_media(media="print")
+        # Product identifiers must remain searchable/copyable as one exact code.
+        # Tracking can turn LMB into "L MB" in PDF text extraction on Linux fonts.
+        expect(sheet.locator(".product-sheet-intro .section-index")).to_have_css(
+            "letter-spacing", "normal"
+        )
     output = Path(request.config.getoption("--output")) / "pdf-contracts"
     output.mkdir(parents=True, exist_ok=True)
     pdf = output / f"UI-103-{feature}.pdf"

@@ -70,6 +70,8 @@
   .product-sheet h3 { font-size: 13pt; break-after: avoid; }
   .product-sheet p, .product-sheet li, .product-sheet small { font-size: 9pt; line-height: 1.4; }
   .product-sheet p { margin: 2mm 0; }
+  /* Keep product codes intact when PDF readers infer word boundaries from glyph gaps. */
+  .product-sheet .section-index { letter-spacing: normal; }
   .product-sheet h3 { margin-bottom: 2mm; }
   .product-sheet-body { display: block; padding: 0; }
   .product-sheet-body section { padding-top: 3mm; margin-bottom: 2mm; }

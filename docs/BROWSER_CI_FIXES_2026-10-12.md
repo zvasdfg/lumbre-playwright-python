@@ -70,3 +70,45 @@ Compatibility executions overlap Chromium cases in the full set; counts do not
 mean 504 unique behaviors or exhaustive ingredient combinations. Optional store
 checks and physical-device checkout were not run or mutated. Publication is
 pending a successful new pipeline and artifact-hash verification.
+
+## Follow-up: product identifier in PDF text
+
+Actions run `38285993821`, revision `b96012a`, passed static build/install/audits,
+the four component matrices, Firefox/WebKit compatibility and serial PDF/browser
+groups. Its general lane finished **202 passed, 1 failed**; release stayed gated.
+The owner supplied the failed step's output because downloading GitHub's log
+timed out on this machine.
+
+UI-103 found all expected product copy except the exact identifier: the PDF text
+contained `L MB-F-001` instead of `LMB-F-001`. The code was present, not omitted.
+The print header inherited `.section-index` tracking (`2.16px` at print size).
+Local macOS extraction did not insert that space with its available fonts;
+therefore it is not claimed as a reproduction of the identical Linux font result.
+A regression assertion for normal print tracking failed on the original build.
+
+Correction: normal letter spacing for `.product-sheet .section-index` under print
+media only, preserving screen tracking and existing document content. UI-103
+keeps its exact PDF code/content assertions and now covers all four production
+products; it does not compact all PDF whitespace, skip the identifier, retry a
+failed assertion or change the deployment gates. Counts become 206 general +
+8 serial + 215 matrix = **429 local/framework executions**. Verification of this
+follow-up is recorded below; CI Linux validation remains required.
+
+Final follow-up evidence: `/tmp/lumbre-pdf-spacing-20261012/`.
+
+- Original-build print-tracking guard: **1 failed**, expected `normal`, actual
+  `2.16px`. This is not the Linux PDF extraction reproduction described above.
+- Corrected build: **421 isolated + 8 serial = 429 passed**, no failures or skips;
+  reports/XML live in `final/general/` and `final/serial/` respectively.
+- UI-103's eight PDF scenarios passed, including exact identifiers for all four
+  rubs. All four one-page product PDFs were rendered with Poppler and visually
+  checked for intact codes, readable layout and no clipping/overlap.
+- Typecheck, static boundary/build, 47 model contracts, nine profile/workflow
+  contracts, Ruff for the changed test and `git diff --check` passed.
+- Actual collection audit: 206 general + 8 serial + 215 matrix = 429; disjoint
+  lanes cover the full local/framework selection. Optional store checks were not run.
+- Screen styles, product copy/data, artwork, security headers and dependencies
+  are unchanged. Firefox/WebKit compatibility was not rerun for this print-only
+  change; both lanes passed revision `b96012a` in the recorded Actions run.
+- Publication remains pending the new immutable artifact's complete CI checks
+  and deployment/hash verification. Local success is not evidence of deployment.

@@ -102,7 +102,7 @@ No assertions are skipped, xfailed or relaxed to hide these defects.
 | UI-100 | fire_planner | Celsius/Fahrenheit × two widths; cook/roast/rest metadata, unit, support and printable sheet survive reload |
 | UI-101 | home / keyboard | Almanac/ingredient/blend/recipe × two widths; initial focus, forward/backward cycle, Escape and restoration; three browser engines in focused lane |
 | UI-102 | home / accessibility | Both widths; unique IDs, image alt attributes, named form controls and valid ARIA references |
-| UI-103 | home / print | Product/recipe/3-ingredient blend/12-ingredient blend/plan; self-contained A4 PDF creation, visible text/quantities, no blank page/chrome, loaded images and text origins inside page bounds |
+| UI-103 | home / print | Four production products/recipe/3-ingredient blend/12-ingredient blend/plan; self-contained A4 PDF creation, exact searchable product codes, visible text/quantities, no blank page/chrome, loaded images and text origins inside page bounds |
 | UI-104 | almanac | Both widths; explicit pending chunk, busy state and usable planner before releasing download |
 
 `almanac_matrix` is the fourth component-matrix Actions lane, using the SAME
@@ -127,10 +127,11 @@ still require separate authorized environments/manual checks.
 
 ## Latest execution
 
-October 12 browser/CI correction: 426 local/framework and 78 three-engine
-compatibility executions passed. Six focused headed cases passed after an
-additional CSS-only recipe-scroll fix. CI must validate that final revision;
-this is not another complete local run or an exhaustive-combination claim.
+October 12 final PDF-code correction: **429 local/framework passed**, including
+all eight UI-103 PDF scenarios. The prior browser/CI correction passed 78
+three-engine compatibility executions and six focused headed cases; those were
+not rerun locally for the print-only code fix. CI must validate the final artifact.
+These finite executions are not an exhaustive-combination claim.
 See [correction evidence](../../../docs/BROWSER_CI_FIXES_2026-10-12.md).
 
 ### Preserved earlier execution

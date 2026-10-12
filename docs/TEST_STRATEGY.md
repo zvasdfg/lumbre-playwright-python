@@ -33,13 +33,16 @@ checks are not a pixel-level layout audit. A read-only store suite cannot prove
 checkout, shipping totals, payment, order confirmation or emails. Those need an
 authorized sandbox or an explicitly approved manual run.
 
-The current collection is 450 executions: 426 local/framework and 24 optional
+The current collection is 453 executions: 429 local/framework and 24 optional
 store checks. Collection is not a passing execution. The cleanup validation
 had 420 passed / 6 failed on Chromium/framework and remains historical.
 The October 12 native-dialog/recovery correction passed 426 local/framework
 and 78 three-engine compatibility checks. The subsequent CSS-only correction
 for headed recipe return passed six focused headed cases, not another full run.
-The final revision still requires CI validation; counts overlap engine variants.
+The final PDF-code correction passed all 429 local/framework executions, including
+eight PDF scenarios and all four product identifiers. The three-engine checks were
+not rerun locally for that print-only change; CI must validate the final artifact.
+Counts overlap engine variants.
 See [current correction evidence](BROWSER_CI_FIXES_2026-10-12.md).
 See [execution history](TEST_EXECUTION_HISTORY.md)
 and [cleanup evidence](STATIC_RETIREMENT_2026-10-09.md).

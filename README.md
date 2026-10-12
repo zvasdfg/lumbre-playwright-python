@@ -69,16 +69,16 @@ the same prebuilt artifact and gates deployment.
 ## Current coverage and results
 
 The active project contains 64 numbered UI behaviors and four architecture
-contracts. Collection has 450 parameterized executions: 426 local/framework and
+contracts. Collection has 453 parameterized executions: 429 local/framework and
 24 optional read-only Tiendanube checks. The UI-092–UI-104 extension adds 13
-behaviors / 177 executions, including all 53 published almanac documents at two
+behaviors / 180 executions, including all 53 published almanac documents at two
 widths, large blends, multi-stage plans, keyboard, network recovery and A4 PDFs.
 Other matrices traverse 48 planner configurations, 60 ingredients and 100 recipes.
 This is finite coverage, not every possible ingredient subset or stage sequence.
 
-October 12 correction validation: 426 local/framework and 78 three-engine
-compatibility executions passed. A later CSS-only fix for the headed recipe
-return passed six focused headed cases; CI must validate the final revision.
+October 12 final PDF-code correction: all 429 local/framework executions passed.
+The preceding native-dialog/recovery revision passed 78 three-engine compatibility
+executions and six focused headed cases. CI must validate the final revision.
 Counts overlap Chromium coverage and do not imply exhaustive combinations.
 Earlier cleanup/headed failures remain historical evidence, not erased results.
 See [current browser/CI evidence](docs/BROWSER_CI_FIXES_2026-10-12.md),
