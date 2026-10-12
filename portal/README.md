@@ -53,8 +53,9 @@ From the repository root, `bash scripts/test-local.sh` builds a preview and runs
 all local/framework tests. `--headed` is forwarded to specialized script browsers.
 Optional Tiendanube checks use `bash scripts/test-store-ui.sh`; they are read-only.
 
-Actions builds once, tests that artifact in general UI, component matrices and
-compatibility lanes, then deploys only if every gate passes. A short SHA-256
+Actions builds once, tests that artifact in parallel isolated UI, serial
+shared-file/PDF, component matrix and compatibility lanes, then deploys only if
+every gate passes. No cases are removed to avoid timeouts. A short SHA-256
 check verifies that the published HTML/JavaScript match the tested artifact.
 There is no second browser suite against the published portal.
 

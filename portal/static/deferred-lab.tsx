@@ -1,23 +1,7 @@
 import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode } from "react";
+import { importWithRecovery } from "./import-with-recovery";
 
-const IngredientLab = lazy(async () => {
-  try { return await import("./ingredient-lab"); }
-  catch (error) {
-    // WebKit can retain a failed module URL across reloads. Only after an
-    // explicit recovery action, retry that same local build asset under a fresh URL.
-    const retry = new URL(window.location.href).searchParams.get("lab_retry");
-    if (retry && /^\d+$/.test(retry)) {
-      for (const link of document.querySelectorAll<HTMLLinkElement>('link[rel="modulepreload"]')) {
-        const url = new URL(link.href);
-        if (url.origin === window.location.origin && /^\/assets\/ingredient-lab-[\w-]+\.js$/.test(url.pathname)) {
-          url.searchParams.set("retry", retry);
-          return await import(/* @vite-ignore */ url.href);
-        }
-      }
-    }
-    throw error;
-  }
-});
+const IngredientLab = lazy(() => importWithRecovery("ingredient-lab", () => import("./ingredient-lab"), "lab_retry"));
 const labHashes = new Set(["#laboratorio", "#hipotesis"]);
 // Provisiones is below the lazy lab: its final position depends on the lab's height.
 const layoutDependentHashes = new Set([...labHashes, "#tienda"]);

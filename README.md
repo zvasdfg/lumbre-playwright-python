@@ -61,7 +61,10 @@ bash scripts/test-store-ui.sh
 Bare Pytest from `test-framework/` selects framework/local portal, requiring a
 preview unless selecting `-m framework_unit`. Local cases reject public targets.
 The full local runner is sequential because specialized PDF scripts share paths;
-CI runs independent matrix lanes against the same prebuilt static artifact.
+CI selects the same numbered cases with Pytest markers: isolated cases use two
+workers, shared-file/PDF cases run serially in their own job, and component
+matrices and Firefox/WebKit checks use independent lanes. Every job validates
+the same prebuilt artifact and gates deployment.
 
 ## Current coverage and results
 
@@ -73,12 +76,13 @@ widths, large blends, multi-stage plans, keyboard, network recovery and A4 PDFs.
 Other matrices traverse 48 planner configurations, 60 ingredients and 100 recipes.
 This is finite coverage, not every possible ingredient subset or stage sequence.
 
-Cleanup validation: 420 passed / 6 failed in local Chromium/framework execution.
-The six failures are existing custom-dialog keyboard-focus defects; assertions
-were not weakened. The prior headed run had 419 passed / 7 failed, including a
-recipe-return failure that did not reproduce headless. This is not an all-green
-or full three-engine claim.
-See [current cleanup evidence](docs/STATIC_RETIREMENT_2026-10-09.md) and
+October 12 correction validation: 426 local/framework and 78 three-engine
+compatibility executions passed. A later CSS-only fix for the headed recipe
+return passed six focused headed cases; CI must validate the final revision.
+Counts overlap Chromium coverage and do not imply exhaustive combinations.
+Earlier cleanup/headed failures remain historical evidence, not erased results.
+See [current browser/CI evidence](docs/BROWSER_CI_FIXES_2026-10-12.md),
+[cleanup evidence](docs/STATIC_RETIREMENT_2026-10-09.md) and
 [migration history](docs/TEST_MIGRATION_2026-10-09.md).
 
 Actions tests the built artifact before publishing. After publication only a

@@ -6,7 +6,11 @@ export default class AsyncBoundary extends Component<{ children: ReactNode }, { 
   render() {
     if (this.state.failed) return <div role="alert">
       <p>No se pudo cargar esta sección. Revisa tu conexión y recarga la página.</p>
-      <button type="button" onClick={() => window.location.reload()}>Recargar página</button>
+      <button type="button" onClick={() => {
+        const url = new URL(window.location.href);
+        url.searchParams.set("section_retry", String(Date.now()));
+        window.location.replace(url.href);
+      }}>Recargar página</button>
     </div>;
     return this.props.children;
   }

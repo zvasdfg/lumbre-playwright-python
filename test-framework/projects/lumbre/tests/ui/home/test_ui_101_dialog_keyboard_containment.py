@@ -19,6 +19,7 @@ pytestmark = [
 @pytest.mark.parametrize("feature", ["almanac", "ingredient", "blend", "recipe"])
 def test_dialog_keyboard_containment(portal, feature):
     page = portal
+    original_overflow = page.evaluate("document.body.style.overflow")
     if feature == "almanac":
         trigger = page.get_by_role("button", name="Almanaque", exact=False)
         trigger.focus()
@@ -61,3 +62,25 @@ def test_dialog_keyboard_containment(portal, feature):
     page.keyboard.press("Escape")
     expect(dialog).to_have_count(0)
     expect(trigger).to_be_focused()
+    assert page.evaluate("document.body.style.overflow") == original_overflow
+    if page.viewport_size["width"] > 850:
+        trigger.press("Enter")
+        expect(dialog).to_be_visible()
+        page.mouse.click(1, 1)
+        expect(dialog).to_have_count(0)
+        expect(trigger).to_be_focused()
+        assert page.evaluate("document.body.style.overflow") == original_overflow
+    # Reopening and closing with the visible control must also release modality.
+    trigger.press("Enter")
+    expect(dialog).to_be_visible()
+    assert dialog.evaluate("e => e.contains(document.activeElement)")
+    close_label = {
+        "almanac": "Cerrar almanaque",
+        "ingredient": "Cerrar ficha",
+        "blend": "Cerrar ficha técnica",
+        "recipe": "Cerrar ficha de receta",
+    }[feature]
+    dialog.get_by_role("button", name=close_label, exact=True).click()
+    expect(dialog).to_have_count(0)
+    expect(trigger).to_be_focused()
+    assert page.evaluate("document.body.style.overflow") == original_overflow

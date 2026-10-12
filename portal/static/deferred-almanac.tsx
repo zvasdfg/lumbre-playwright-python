@@ -1,7 +1,8 @@
 import { lazy, Suspense, useState } from "react";
 import AsyncBoundary from "./async-boundary";
+import { importWithRecovery } from "./import-with-recovery";
 
-const FireAlmanac = lazy(() => import("./fire-almanac"));
+const FireAlmanac = lazy(() => importWithRecovery("fire-almanac", () => import("./fire-almanac")));
 
 export default function DeferredAlmanac() {
   const [requested, setRequested] = useState(false);

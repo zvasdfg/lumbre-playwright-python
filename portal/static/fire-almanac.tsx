@@ -2,6 +2,7 @@
 
 import Image from "./image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import ModalBackdrop from "./modal-backdrop";
 
 type AlmanacPage = {
   document: string;
@@ -88,7 +89,6 @@ export default function FireAlmanac({ initiallyOpen = false }: { initiallyOpen?:
   const closeAlmanac = useCallback(() => {
     setOpen(false);
     setZoomed(false);
-    window.requestAnimationFrame(() => triggerRef.current?.focus());
   }, []);
 
   const goToPage = useCallback((nextPage: number) => {
@@ -101,16 +101,12 @@ export default function FireAlmanac({ initiallyOpen = false }: { initiallyOpen?:
   useEffect(() => {
     if (!open) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeAlmanac();
       if (event.key === "ArrowLeft") goToPage(pageIndex - 1);
       if (event.key === "ArrowRight") goToPage(pageIndex + 1);
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [closeAlmanac, goToPage, open, pageIndex]);
@@ -130,16 +126,14 @@ export default function FireAlmanac({ initiallyOpen = false }: { initiallyOpen?:
       </button>
 
       {open && (
-        <div
+        <ModalBackdrop
           className="almanac-backdrop"
-          role="presentation"
-          onMouseDown={(event) => event.target === event.currentTarget && closeAlmanac()}
+          labelledBy="almanac-title"
+          onClose={closeAlmanac}
+          returnFocus={triggerRef}
         >
           <section
             className="almanac-reader"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="almanac-title"
           >
             <header className="almanac-toolbar">
               <div>
@@ -246,7 +240,7 @@ export default function FireAlmanac({ initiallyOpen = false }: { initiallyOpen?:
               <strong>{String(pageIndex).padStart(2, "0")} / {lastPageIndex}</strong>
             </div>
           </section>
-        </div>
+        </ModalBackdrop>
       )}
     </>
   );

@@ -64,7 +64,7 @@ jobs:
           path: ${{ runner.temp }}/lumbre-static/dist-static/
           if-no-files-found: error
   browser-tests:
-    name: Browser and print validation
+    name: Isolated browser validation
     needs: static-build
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -96,7 +96,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:3001/ > /dev/null
-          BASE_URL=http://127.0.0.1:3001 python -m pytest -c test-framework/pyproject.toml test-framework/tests/framework test-framework/projects/lumbre/tests -m 'framework_unit or (portal and not matrix)' --junitxml=/tmp/lumbre-static-ui.xml --html=/tmp/lumbre-static-ui.html --self-contained-html --output=/tmp/lumbre-ui-artifacts
+          BASE_URL=http://127.0.0.1:3001 python -m pytest -c test-framework/pyproject.toml test-framework/tests/framework test-framework/projects/lumbre/tests -n 2 -m 'framework_unit or (portal and not matrix and not specialized)' --junitxml=/tmp/lumbre-static-ui.xml --html=/tmp/lumbre-static-ui.html --self-contained-html --output=/tmp/lumbre-ui-artifacts
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
@@ -110,9 +110,55 @@ jobs:
             /tmp/lumbre-ui-artifacts/
           if-no-files-found: warn
           retention-days: 7
+  specialized-tests:
+    name: Serial browser and PDF validation
+    needs: static-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.63.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
+        with:
+          name: lumbre-static
+          path: ${{ runner.temp }}/lumbre-static/dist-static
+      - name: Install browser test tools
+        timeout-minutes: 3
+        run: |
+          python -m pip install --disable-pip-version-check --timeout 30 --retries 2 -r portal/profiles/browser/requirements.txt
+          python -m pip install --disable-pip-version-check --timeout 30 --retries 2 -e ./test-framework -c portal/profiles/browser/requirements.txt
+      - name: Test shared-artifact scripts serially
+        shell: bash
+        run: |
+          python -m http.server 3001 --bind 127.0.0.1 --directory "$RUNNER_TEMP/lumbre-static/dist-static" > /tmp/lumbre-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3001/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3001/ > /dev/null
+          BASE_URL=http://127.0.0.1:3001 python -m pytest -c test-framework/pyproject.toml test-framework/projects/lumbre/tests -m 'portal and specialized' --junitxml=/tmp/lumbre-specialized.xml --html=/tmp/lumbre-specialized.html --self-contained-html --output=/tmp/lumbre-specialized-artifacts
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: lumbre-specialized-diagnostics
+          path: |
+            /tmp/lumbre-preview.log
+            /tmp/lumbre-*.pdf
+            /tmp/lumbre-*.png
+            /tmp/lumbre-specialized.xml
+            /tmp/lumbre-specialized.html
+            /tmp/lumbre-specialized-artifacts/
+          if-no-files-found: warn
+          retention-days: 7
   deploy-production:
     name: Deploy static production
-    needs: [static-build, browser-tests, component-matrix, browser-compatibility]
+    needs: [static-build, browser-tests, specialized-tests, component-matrix, browser-compatibility]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10

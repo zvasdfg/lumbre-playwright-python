@@ -48,6 +48,12 @@ def test_deferred_chunk_recovery(page, app_url, feature, failure):
     alert = page.get_by_role("alert").filter(has_text="No se pudo cargar esta sección")
     expect(alert).to_be_visible()
     assert interrupted, "The intended feature chunk must be interrupted"
+    # A repeated outage must still offer recovery, never a blank page or loop.
+    with page.expect_navigation(wait_until="domcontentloaded"):
+        alert.get_by_role("button", name="Recargar página", exact=True).click()
+    open_feature()
+    expect(alert).to_be_visible()
+    expect(alert.get_by_role("button", name="Recargar página", exact=True)).to_be_enabled()
     failing = False
     with page.expect_navigation(wait_until="domcontentloaded"):
         alert.get_by_role("button", name="Recargar página", exact=True).click()

@@ -1,6 +1,6 @@
 # Current test architecture
 
-Revision 2026-10-09. Canonical active project: `test-framework/projects/lumbre`.
+Revision 2026-10-12. Canonical active project: `test-framework/projects/lumbre`.
 
 ## Ownership
 
@@ -24,13 +24,19 @@ See [actual tree and commands](../test-framework/projects/lumbre/README.md).
 All current lanes select the same canonical test tree, with no duplicate suite:
 
 1. Build and model contracts.
-2. Local general browser/print: `framework_unit or (portal and not matrix)`.
-3. Parallel component lanes: `portal and matrix and planner_matrix`,
+2. Isolated general browser cases: `framework_unit or (portal and not matrix and not specialized)`, with two xdist workers.
+3. Serial shared-file browser/PDF cases: `portal and specialized`, in a separate job with no xdist.
+4. Parallel component lanes: `portal and matrix and planner_matrix`,
    `ingredients_matrix`, `recipes_matrix`, or `almanac_matrix`, against the same downloaded artifact.
-4. Firefox/WebKit focused compatibility: `portal and cross_browser`.
-5. Deploy only after every pre-release lane passes.
-6. Verify published HTML/JavaScript hashes against the validated artifact.
-7. Optional external Tiendanube: `store`, separate manual read-only workflow.
+5. Firefox/WebKit focused compatibility: `portal and cross_browser`.
+6. Deploy only after every pre-release lane passes, including both general and serial jobs.
+7. Verify published HTML/JavaScript hashes against the validated artifact.
+8. Optional external Tiendanube: `store`, separate manual read-only workflow.
+
+The general and serial markers form a disjoint partition of non-matrix cases;
+they are not different frameworks or duplicate test implementations. Serial cases
+cannot inherit `-n`; their fixture enforces this. Splitting the execution avoids
+the previous 20-minute combined job timeout without dropping any assertions.
 
 Default discovery includes framework plus current project; default marker selection
 is `framework_unit or portal`. It does not run store checks by accident.

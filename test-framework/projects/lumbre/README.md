@@ -127,6 +127,14 @@ still require separate authorized environments/manual checks.
 
 ## Latest execution
 
+October 12 browser/CI correction: 426 local/framework and 78 three-engine
+compatibility executions passed. Six focused headed cases passed after an
+additional CSS-only recipe-scroll fix. CI must validate that final revision;
+this is not another complete local run or an exhaustive-combination claim.
+See [correction evidence](../../../docs/BROWSER_CI_FIXES_2026-10-12.md).
+
+### Preserved earlier execution
+
 Static-only cleanup validation: 420 passed / 6 failed (426 local/framework).
 The remaining six failures are existing UI-101 keyboard-focus variants. All
 eight specialized groups passed headless. Optional store and fresh Firefox/WebKit

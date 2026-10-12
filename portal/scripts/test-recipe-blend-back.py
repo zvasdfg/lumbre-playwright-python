@@ -13,6 +13,9 @@ with sync_playwright() as p:
             card.get_by_role("button").click()
             for _ in range(2):
                 recipe = page.get_by_role("dialog", name=title, exact=True)
+                # Manual restoration must not be adjusted by Chromium anchoring
+                # after layout changes; this also guards the headed-only regression.
+                expect(recipe).to_have_css("overflow-anchor", "none")
                 link = recipe.locator(".recipe-blend-link")
                 link.scroll_into_view_if_needed()
                 scroll = recipe.evaluate("e => e.scrollTop")

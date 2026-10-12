@@ -1,7 +1,13 @@
 import pytest
 from playwright.sync_api import expect
 
-pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.almanac, pytest.mark.regression]
+pytestmark = [
+    pytest.mark.ui,
+    pytest.mark.portal,
+    pytest.mark.almanac,
+    pytest.mark.regression,
+    pytest.mark.cross_browser,
+]
 
 
 @pytest.mark.case("UI-095", "Close/reopen clears zoom and page without moving background scroll")

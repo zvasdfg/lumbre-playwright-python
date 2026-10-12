@@ -73,7 +73,7 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   assert.ok(workflow.includes(`image: mcr.microsoft.com/playwright/python:v${version}-noble`));
   const deployJob = workflow.split("  deploy-production:")[1].split("  component-matrix:")[0];
   const gates = /needs: \[([^\]]+)\]/.exec(deployJob)?.[1].split(",").map(value => value.trim());
-  for (const gate of ["static-build", "browser-tests", "component-matrix", "browser-compatibility"]) {
+  for (const gate of ["static-build", "browser-tests", "specialized-tests", "component-matrix", "browser-compatibility"]) {
     assert.ok(gates?.includes(gate), `Missing release gate: ${gate}`);
     assert.ok(workflow.includes(`  ${gate}:`), `Missing job: ${gate}`);
   }
@@ -83,7 +83,7 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   assert.match(compatibilityJob, /- shell: bash\s+env:\s+(?:#[^\n]*\n\s*)*HOME: \/root\s+run:/,
     "Firefox in the root Actions container requires a root-owned HOME at launch");
   assert.doesNotMatch(workflow, /playwright install|apt-get/);
-  const browserJob = workflow.split("  browser-tests:")[1].split("  deploy-production:")[0];
+  const browserJob = workflow.split("  browser-tests:")[1].split("  specialized-tests:")[0];
   assert.match(browserJob, /needs: static-build/);
   assert.match(browserJob, /actions\/download-artifact@/);
   assert.match(browserJob, /name: lumbre-static/);
@@ -92,6 +92,14 @@ test("browser CI uses a matching prebuilt image and gates deployment on all brow
   assert.match(browserJob, /python -m pytest/);
   assert.match(browserJob, /projects\/lumbre\/tests/);
   assert.match(browserJob, /not matrix/);
+  assert.match(browserJob, /-n 2/);
+  assert.match(browserJob, /not specialized/);
+  const serialJob = workflow.split("  specialized-tests:")[1].split("  deploy-production:")[0];
+  assert.match(serialJob, /needs: static-build/);
+  assert.match(serialJob, /name: lumbre-static/);
+  assert.match(serialJob, /portal and specialized/);
+  assert.doesNotMatch(serialJob, /(?:-n\s|--numprocesses)/);
+  assert.match(serialJob, /if: always\(\)/);
   const matrixJob = workflow.split("  component-matrix:")[1].split("  browser-compatibility:")[0];
   assert.match(matrixJob, /component: \[planner_matrix, ingredients_matrix, recipes_matrix, almanac_matrix\]/);
   assert.match(matrixJob, /name: lumbre-static/);
