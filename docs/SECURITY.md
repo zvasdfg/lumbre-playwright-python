@@ -79,7 +79,11 @@ Containment update, 2026-10-13: authenticated GitHub metadata confirms temporary
 private visibility. A complete Git bundle was verified and current working files
 were archived outside all public repositories with owner-only permissions.
 The owner authorized coordinated history cleanup/force push and affected artifact
-removal. These operations and deployment are in progress; historical
+removal. Local history was rewritten over 91 commits, retiring seven affected
+paths from earlier trees while preserving the exact current application tree.
+Old intermediate commits are therefore not guaranteed to build unchanged.
+A fresh scan of 1,680 reachable text blobs found no configured-rule matches.
+Remote publication, artifact removal and deployment are in progress; historical
 confidentiality is **unresolved**, not an overall PASS.
 
 Both local npm advisory requests (static and deploy profiles) failed certificate
@@ -94,7 +98,7 @@ independently queried. New guards use built-in Node modules, no new dependency.
 
 **Removing current files does not erase their earlier Git blobs or old deployed
 assets.** The internal-reference history remains reachable in the private
-repository until coordinated cleanup finishes. Temporary private visibility,
+repository until remote cleanup finishes. Temporary private visibility,
 history cleanup/force push and affected artifact removal are owner-authorized.
 No provider revocation or credential rotation was performed.
 
@@ -104,6 +108,12 @@ verify remotes and remove accessible artifacts where supported. Old clones,
 forks/caches or downloaded assets cannot be recalled; do not claim guaranteed
 erasure. Any exposed real credential must be revoked/rotated at its provider,
 not merely deleted from Git. No actual credential value was identified by this scan.
+
+After the rewritten main is published, other clones must be freshly cloned or
+carefully migrated. Do not merge/push old branches back into the clean history.
+The owner-only bundle is a recovery copy, not a public release source.
+GitHub may retain unreachable objects and cached commit views after a force push;
+check old object access separately and request provider cleanup where required.
 
 The live site still serves the previous approved release until these changes are
 committed, validated and deployed. Deployment cleanup must also check old hashed
