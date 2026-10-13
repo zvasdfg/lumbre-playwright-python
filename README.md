@@ -221,11 +221,14 @@ de planificador, 60 ingredientes, 100 recetas, 53 documentos a dos tamaños y oc
 escenarios PDF. Modelos puros incluyen 8,640 configuraciones y 1,770 pares.
 No implica todos los subconjuntos de ingredientes, gramos o secuencias posibles.
 
-Último deploy confirmado: commit 6de17af, [pipeline exitoso](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38293660881).
-Ese resultado precede a la limpieza y al laboratorio manual de esta revisión;
-esta revisión pasó sus propias 429 pruebas locales, 78 de compatibilidad y los
-controles de publicación. El detalle y los límites están en [seguridad](docs/SECURITY.md).
-Estos resultados locales no afirman un nuevo deploy ni la eliminación del historial.
+Último deploy confirmado: commit 5d08c6d, [pipeline exitoso](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38441242795).
+La revisión de laboratorio manual y límites de publicación pasó todos los jobs
+de CI y las auditorías npm. El bundle principal y el del laboratorio coinciden
+con los SHA-256 del artefacto probado en CI; los dos assets antiguos comprobados
+responden 404. Las 429 pruebas locales y 78 de compatibilidad son evidencia local
+adicional, no un conteo duplicado de CI. El [reporte de seguridad](docs/SECURITY.md)
+explica por qué el repositorio sigue temporalmente privado: GitHub todavía conserva
+objetos antiguos accesibles por SHA y se requiere evaluar su purga con soporte.
 
 Pendientes reales: pruebas físicas en teléfono, baselines visuales aprobados,
 auditoría WCAG completa y checkout/envío/pago/emails en un sandbox autorizado.

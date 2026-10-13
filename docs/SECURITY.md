@@ -83,22 +83,35 @@ removal. Local history was rewritten over 91 commits, retiring seven affected
 paths from earlier trees while preserving the exact current application tree.
 Old intermediate commits are therefore not guaranteed to build unchanged.
 A fresh scan of 1,680 reachable text blobs found no configured-rule matches.
-Remote publication, artifact removal and deployment are in progress; historical
-confidentiality is **unresolved**, not an overall PASS.
+Rewritten main was published with an explicit force-with-lease check. A new,
+non-reusing local clone contains neither of the original affected test objects.
+Nine compiled build artifacts were individually identified from their source SHA,
+deleted and verified absent. Broad artifact/log deletion was rejected and not
+performed. The 41 candidate diagnostic archives and nine affected-run log archives
+were privately inspected: no private-reference marker matches. A separate scan of
+2,013 diagnostic entries found no configured credential-pattern matches. These
+checks are not OCR, exhaustive semantic scanning or proof against all secret types.
+
+[CI run 38441242795](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38441242795)
+passed every build/browser/matrix/deploy job. The main and laboratory production
+bundles match the exact CI artifact SHA-256; both known pre-cleanup asset URLs
+return 404. The CI artifact, not an independently rebuilt local bundle, is the
+release identity. The original commit/blob remain accessible through authenticated
+GitHub API requests after force push. Keep the repository private pending provider
+purge assessment; historical confidentiality is **unresolved**, not an overall PASS.
 
 Both local npm advisory requests (static and deploy profiles) failed certificate
 validation. No dependency was installed/changed and TLS was not disabled. The
-same dependency lockfiles passed clean install/audits in the last deployed
-[CI run for 6de17af](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38293660881).
-That dated evidence is not a fresh local advisory response; rerun the audit in CI
-before publishing this revision. Browser/Python supply-chain advisories were not
+same dependency lockfiles passed fresh clean installs and npm advisory gates in
+the successful 2026-10-13 CI run linked above (static, deploy preflight and deploy).
+That evidence is from CI, not a fresh local advisory response. Browser/Python supply-chain advisories were not
 independently queried. New guards use built-in Node modules, no new dependency.
 
 ## Required follow-up: history and previously published data
 
 **Removing current files does not erase their earlier Git blobs or old deployed
-assets.** The internal-reference history remains reachable in the private
-repository until remote cleanup finishes. Temporary private visibility,
+assets.** The retired objects are no longer reachable from rewritten main, but
+remain addressable by SHA in GitHub's private storage. Temporary private visibility,
 history cleanup/force push and affected artifact removal are owner-authorized.
 No provider revocation or credential rotation was performed.
 
@@ -115,9 +128,11 @@ The owner-only bundle is a recovery copy, not a public release source.
 GitHub may retain unreachable objects and cached commit views after a force push;
 check old object access separately and request provider cleanup where required.
 
-The live site still serves the previous approved release until these changes are
-committed, validated and deployed. Deployment cleanup must also check old hashed
-assets and CDN retention; a new entry HTML alone is not proof of historical removal.
+The live site serves the verified manual-laboratory release described above.
+The two known previous bundle URLs were checked directly, not only the new HTML.
+This is not a complete inventory of every historical CDN URL or proof that
+already downloaded files/clones can be recalled. A support request draft contains
+repository/object metadata only, outside the public tree; it has not been sent.
 
 ## Reproduce the gates
 
