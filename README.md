@@ -197,7 +197,7 @@ el deploy solo ocurre en main y nunca desde una PR.
 | Job | Qué ejecuta | Dónde / destino |
 | --- | --- | --- |
 | static-build | Auditoría del árbol público, workspace aislado, npm ci, tipos, recetas, modelos, auditorías npm y build | Ubuntu 24.04; sin publicar |
-| Isolated browser validation | framework_unit or (portal and not matrix and not specialized), 206 ejecuciones, -n 2 | Contenedor Playwright, Chromium; servidor local 3001 |
+| Isolated browser validation | framework_unit or (portal and not matrix and not specialized), 208 ejecuciones, -n 2 | Contenedor Playwright, Chromium; servidor local 3001 |
 | Serial browser and PDF validation | portal and specialized, ocho grupos, sin xdist | Otro contenedor/servidor local, archivos PDF seriales |
 | Component configuration matrix | portal and matrix más planner_matrix, ingredients_matrix, recipes_matrix o almanac_matrix; 215 ejecuciones | Cuatro jobs separados, mismo artefacto; Chromium local |
 | Keyboard and recovery | portal and cross_browser | Dos jobs: Firefox y WebKit, mismo artefacto local |
@@ -206,7 +206,7 @@ el deploy solo ocurre en main y nunca desde una PR.
 
 El build se produce **una sola vez**. Todos los jobs descargan ese mismo artifact;
 no validan versiones reconstruidas distintas. El grupo general, el serial y las
-matrices suman 429 ejecuciones sin solaparse. Compatibilidad repite un subconjunto
+matrices suman 431 ejecuciones sin solaparse. Compatibilidad repite un subconjunto
 en otros motores; no son más funcionalidades independientes.
 
 Workflow separado: [.github/workflows/store-ui.yml](.github/workflows/store-ui.yml),
@@ -216,10 +216,14 @@ automáticamente en cada deploy ni habilita transacciones.
 ## Cobertura y límites
 
 64 comportamientos UI numerados y cuatro contratos de arquitectura. La colección
-contiene 429 casos local/framework + 24 store opcionales. Incluye 48 combinaciones
+contiene 431 casos local/framework + 24 store opcionales. Incluye 48 combinaciones
 de planificador, 60 ingredientes, 100 recetas, 53 documentos a dos tamaños y ocho
 escenarios PDF. Modelos puros incluyen 8,640 configuraciones y 1,770 pares.
 No implica todos los subconjuntos de ingredientes, gramos o secuencias posibles.
+UI-077 combina móvil/escritorio y aborto/HTTP 503: compara el espacio reservado
+antes/después del fallo, verifica documentos nuevos en ambas recargas y conserva
+datos locales/de sesión. El subconjunto de compatibilidad tiene 28 ejecuciones
+por motor, 84 si se seleccionan los tres; no son 84 funcionalidades distintas.
 
 Último deploy confirmado: commit 5d08c6d, [pipeline exitoso](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38441242795).
 La revisión de laboratorio manual y límites de publicación pasó todos los jobs

@@ -132,7 +132,8 @@ The live site serves the verified manual-laboratory release described above.
 The two known previous bundle URLs were checked directly, not only the new HTML.
 This is not a complete inventory of every historical CDN URL or proof that
 already downloaded files/clones can be recalled. A support request draft contains
-repository/object metadata only, outside the public tree; it has not been sent.
+repository/object metadata only, outside the public tree. The request was sent
+and GitHub acknowledged an open ticket; provider cleanup has not been confirmed.
 
 ## Reproduce the gates
 

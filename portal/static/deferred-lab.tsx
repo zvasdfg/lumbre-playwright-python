@@ -7,7 +7,7 @@ const labHashes = new Set(["#laboratorio", "#hipotesis"]);
 const layoutDependentHashes = new Set([...labHashes, "#tienda"]);
 
 function Placeholder() {
-  return <section id="laboratorio" className="lab-section" style={{ minHeight: 800 }} aria-busy="true">
+  return <section id="laboratorio" className="ingredient-lab" style={{ minHeight: 800 }} aria-busy="true">
     <p className="section-index">04 — LABORATORIO DE SABOR</p>
     <h2>Experimenta antes de encender.</h2>
     <p role="status">Cargando laboratorio…</p>
@@ -19,10 +19,12 @@ class LoadBoundary extends Component<{ children: ReactNode }, { failed: boolean 
   state = { failed: false };
   static getDerivedStateFromError() { return { failed: true }; }
   render() {
-    if (this.state.failed) return <section id="laboratorio" className="lab-section">
+    // Keep the loading footprint: collapsing it can move the retry control
+    // during hash/smooth scrolling, including between pointer down and up.
+    if (this.state.failed) return <section id="laboratorio" className="ingredient-lab" style={{ minHeight: 800 }}>
       <h2>Laboratorio de sabor</h2>
       <p role="alert">No se pudo cargar el laboratorio. Revisa tu conexión y recarga la página.</p>
-      <button type="button" onClick={() => {
+      <button type="button" className="button button-primary" onClick={() => {
         const url = new URL(window.location.href);
         url.searchParams.set("lab_retry", String(Date.now()));
         window.location.replace(url.href);

@@ -34,6 +34,14 @@ produce multiple executions of that same behavior ID, not new case IDs.
 Applicable original IDs are retained. UI-063 onward identifies new behaviors;
 retired IDs are not reused for unrelated features. API uses a separate sequence.
 
+UI-077 now includes mobile/desktop × aborted request/HTTP 503. Its controlled
+loading phase exposes section collapse deterministically; recovery must preserve
+the loading footprint, navigate to a new document twice and preserve storage.
+It retains its original ID rather than adding a duplicate "stability suite".
+Its reload check uses [wait_for_url](https://playwright.dev/python/docs/api/class-page#page-wait-for-url),
+a changed recovery query and a per-document identity, rather than relying only
+on the deprecated navigation-event waiter. No forced click or sleep masks the failure.
+
 Feature directories describe responsibility. Execution categories
 are Pytest markers, not additional suite directories:
 
