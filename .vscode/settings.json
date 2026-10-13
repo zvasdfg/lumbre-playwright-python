@@ -11,6 +11,7 @@
   "python.testing.unittestEnabled": false,
   "python.testing.cwd": "${workspaceFolder}/test-framework",
   "python.testing.pytestArgs": [
-    "tests"
+    "tests/framework",
+    "projects/lumbre/tests"
   ]
 }

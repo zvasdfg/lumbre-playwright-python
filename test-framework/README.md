@@ -1,79 +1,44 @@
-# Playwright Python Automation Framework
+# Playwright/Pytest · reusable automation core
 
-## Current organization — 2026-10-09
+This directory owns reusable tooling; it is not another Lumbre test suite.
+Use the repository [README](../README.md) for installation, feature coverage,
+commands, ports, report locations and exact GitHub Actions execution lanes.
 
-```text
-test-framework/
-├── automation/                 Reusable configuration, browser and reporting
-├── tests/framework/            Tests of that reusable infrastructure
-├── projects/
-│   └── lumbre/                 Portal and public-store project
-│   │   ├── pages/
-│   │   ├── components/
-│   │   ├── data/
-│   │   ├── support/
-│   │   ├── conftest.py
-│   │   └── tests/
-│   │       └── ui/
-│   │           ├── almanac/test_ui_NNN_*.py
-│   │           ├── home/test_ui_NNN_*.py
-│   │           ├── recipes/test_ui_NNN_*.py
-│   │           ├── ingredient_lab/test_ui_NNN_*.py
-│   │           ├── fire_planner/test_ui_NNN_*.py
-│   │           └── commerce/test_ui_NNN_*.py
-├── templates/                  Page/component/test scaffolds
-└── pyproject.toml              Dependencies, strict markers and discovery
-```
+~~~text
+automation/core/                 Settings, reporting and generic HTTP/OpenAPI contracts
+automation/adapters/playwright/  Browser/request fixtures, isolation and evidence
+tests/framework/                Numbered tests of reusable infrastructure
+templates/                      Page/component/UI/API scaffolds
+projects/lumbre/                Current portal/store adapters, cases and inputs
+pyproject.toml                  Dependencies, strict markers and default discovery
+~~~
 
-Start here: [active project guide](projects/lumbre/README.md),
-[source-to-ID migration](../docs/TEST_MIGRATION_2026-10-09.md), and
-[architecture](../docs/STATIC_TEST_ARCHITECTURE.md).
+## Ownership contracts
 
-The active project follows the original numbered, feature-separated design.
-Matrices and optional store integration are selected with Pytest
-markers under the same tree. The reusable `automation` core has no project imports.
+Tests own business assertions. Pages compose navigation; components own semantic
+widget actions. They never import cases or hide assertions. The generic core does
+not import any project. Framework and project architecture tests enforce these
+rules, unique IDs and one matching behavior per numbered module.
 
-## Installation
+Each UI test receives a fresh BrowserContext. Lumbre has no API reset fixture or
+backend. Generic request/OpenAPI utilities remain available for other projects;
+their presence is not evidence of a Lumbre API or account/cart implementation.
 
-```bash
-cd test-framework
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e '.[dev,lumbre]'
-playwright install chromium firefox webkit
-cp .env.example .env
-```
+Equivalent input variants keep the same case ID. Tests of independent business
+risks receive different IDs. Retired IDs are not recycled for unrelated behavior.
+The canonical [Lumbre guide](projects/lumbre/README.md) enumerates active domains.
 
-## Execute
+## Test-writing conventions
 
-From the repository root, the main runner owns a temporary static preview:
+- Use semantic locators scoped to the owning component; strictness is diagnostic.
+- Use web-first expect assertions for dynamic UI, plain assert for materialized data.
+- Wait on observable state, not sleeps. Headed/slowmo is observation, not stability.
+- Keep expected contracts independent of the function being tested.
+- Use synthetic data. Do not save auth state, live customer data or provider tokens.
+- Screenshots and traces are evidence, not automatically approved visual baselines.
+- Generic UI/API scaffolds are intentionally incomplete; TODOs cannot pass as tests.
+- Do not silently reuse another server or parallelize scripts sharing file paths.
 
-```bash
-bash scripts/test-local.sh
-```
-
-With an existing static preview on port 3001:
-
-```bash
-bash scripts/test-static-ui.sh
-bash scripts/test-static-ui.sh -m 'portal and laboratory'
-bash scripts/test-static-cross-browser.sh
-bash scripts/test-store-ui.sh
-```
-
-From `test-framework/`, `BASE_URL=http://127.0.0.1:3001 .venv/bin/pytest` runs
-framework and local portal cases. `pytest -m framework_unit` needs no app server.
-Optional store tests require explicit `-m store` and an HTTPS target.
-
-HTML/JUnit reports and browser failure evidence are retained per invocation.
-Each UI file owns one case ID; parameter variants retain that ID.
-Neither collection counts nor parameter counts imply exhaustive product coverage.
-Store tests are read-only; checkout/payment still require an authorized sandbox.
-
-## Retired coverage
-
-Obsolete backend cases, backend lifecycle fixtures and the parallel backend runner
-are removed. Original sources can be recovered from Git at `aeaf9f4` if needed;
-they are not current product coverage. [Historical documentation](../docs/LEGACY_TEST_FRAMEWORK.md)
-is explicitly archival, not an executable runbook. The original IDs retained for
-current behavior remain under `projects/lumbre/tests`.
+See [adding a project](../docs/ADDING_A_PROJECT.md),
+[guided test creation](../docs/GUIDED_UI_TEST_PROTOCOL.md) and
+[Playwright snippets](../docs/PLAYWRIGHT_PYTHON_SNIPPETS.md).

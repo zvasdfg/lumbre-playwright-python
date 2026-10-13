@@ -34,6 +34,8 @@ jobs:
           cache-dependency-path: portal/profiles/static/package-lock.json
       - name: Use the verified npm version
         run: npm install --global "npm@$NPM_VERSION" --registry=https://registry.npmjs.org
+      - name: Audit public repository boundaries
+        run: node scripts/audit-public-repo.mjs
       - name: Prepare isolated static workspace
         run: |
           node --test portal/scripts/static-profile.test.mjs

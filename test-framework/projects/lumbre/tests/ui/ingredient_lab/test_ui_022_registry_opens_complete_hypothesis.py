@@ -12,6 +12,7 @@ def test_registry_opens_complete_hypothesis(lab, test_log):
     with test_log.step("Create a named blend without using the retired server registry"):
         for ingredient in ("sal_kosher", "pimienta_negra", "ajo_granulado"):
             lab.add(ingredient)
+            lab.set_grams(ingredient, 30)
         lab.save("BIRRIA de prueba")
         lab.close_sheet()
     with test_log.step("Reopen the saved session sheet"):

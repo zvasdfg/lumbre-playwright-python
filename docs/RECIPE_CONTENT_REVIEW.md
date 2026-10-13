@@ -1,7 +1,7 @@
 # Recipe preparation revision 1
 
 Scope: existing portal recipe IDs 1–100, all categories. Input: titles,
-descriptions and illustrations in `portal/app/lib/data.ts`. No product formulas,
+descriptions and illustrations in `portal/data/data.ts`. No product formulas,
 brand knowledge, editorial catalog IDs or original images are changed. Recipe IDs
 belong to the application catalog; they are not Instagram CONTENT_IDs or protocols.
 
@@ -15,7 +15,7 @@ READY_FOR_PUBLICATION claim. Existing images are illustrative and are not eviden
 of a cooked result. Prior descriptive records remain in Git history.
 
 Canonical source registry and recipe-to-source assignments are in
-`portal/app/lib/recipe-preparations.ts`, reviewed 2026-09-30. Primary references:
+`portal/data/recipe-preparations.ts`, reviewed 2026-09-30. Primary references:
 
 - FoodSafety.gov: minimum internal temperatures, including rabbit/venison,
   poultry, seafood, ground meat and reheating.

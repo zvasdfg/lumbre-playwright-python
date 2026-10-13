@@ -11,6 +11,7 @@ def test_production_threshold(lab, count, percent):
     ids = ["sal_mar_gruesa", "pimienta_negra", "ajo_granulado", "comino", "sumac"]
     for ingredient in ids[:count]:
         lab.add(ingredient)
+        lab.set_grams(ingredient, 150 / count)
     lab.save("Prueba umbral")
     recommendations = lab.page.locator(".lab-product-recommendations article")
     chicken = recommendations.filter(has_text="LMB-F-004")

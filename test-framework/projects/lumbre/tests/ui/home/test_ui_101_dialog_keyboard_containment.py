@@ -40,6 +40,8 @@ def test_dialog_keyboard_containment(portal, feature):
         else:
             lab.add("sal_kosher")
             lab.add("pimienta_negra")
+            lab.set_grams("sal_kosher", 31)
+            lab.set_grams("pimienta_negra", 19)
             trigger = page.get_by_role("button", name="Guardar en esta sesión", exact=True)
             page.get_by_label("Nombre de tu blend", exact=True).fill("Accesibilidad QA")
             trigger.focus()

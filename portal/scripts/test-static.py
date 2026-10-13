@@ -1,0 +1,193 @@
+"""Acceptance checks against the standalone static preview (no backend fixtures)."""
+from browser_test_options import browser_launch_options
+from pathlib import Path
+import os
+from playwright.sync_api import expect, sync_playwright
+
+BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:3001").rstrip("/")
+
+def check_print_action(page, sheet):
+    page.evaluate("() => { window.__printCalls = 0; window.print = () => { window.__printCalls += 1; }; }")
+    button = sheet.get_by_role("button", name="Imprimir ficha", exact=True)
+    expect(button).to_be_in_viewport()
+    button.click()
+    assert page.evaluate("window.__printCalls") == 1, "Print button did not call window.print"
+
+with sync_playwright() as playwright:
+    browser = playwright.chromium.launch(**browser_launch_options())
+    for width in (1440, 390):
+        context = browser.new_context(viewport={"width": width, "height": 900})
+        page = context.new_page()
+        errors, api_requests, failed_assets = [], [], []
+        page.on("pageerror", lambda error: errors.append(str(error)))
+        page.on("request", lambda request: api_requests.append(request.url)
+                if "/api/" in request.url else None)
+        page.on("response", lambda response: failed_assets.append(response.url)
+                if response.status >= 400 else None)
+        page.goto(BASE_URL)
+        expect(page.locator('[data-app-ready="true"]')).to_be_visible()
+        # First navigation must survive the lazy lab replacing its short placeholder.
+        if width < 700:
+            page.locator(".mobile-nav summary").click()
+            page.locator('.mobile-nav a[href="#tienda"]').click()
+        else:
+            page.get_by_role("navigation", name="Navegación principal").get_by_role("link", name="Provisiones", exact=True).click()
+        page.wait_for_function("""() => {
+            const target = document.getElementById('tienda');
+            const lab = document.getElementById('laboratorio');
+            return lab && !lab.hasAttribute('aria-busy') &&
+              Math.abs(target.getBoundingClientRect().top - parseFloat(getComputedStyle(target).scrollMarginTop)) < 4;
+        }""")
+        expect(page.get_by_test_id("product-card")).to_have_count(4)
+        for index, name in enumerate(("Sazonador multiuso", "Sazonador para carne de res", "Sazonador para carne de cerdo", "Sazonador para carne de pollo")):
+            store_link = page.get_by_role("link", name=f"Comprar {name} en la tienda", exact=True)
+            expected_store_url = store_link.get_attribute("href")
+            assert expected_store_url.startswith(f"https://lumbre16.mitiendanube.com/productos/lmb-f-{index + 1:03d}-")
+            expect(store_link).to_be_visible()
+            trigger = page.get_by_role("button", name=f"Ver ficha de {name}", exact=True)
+            trigger.click()
+            sheet = page.get_by_role("dialog", name=name, exact=True)
+            expect(sheet).to_be_visible()
+            buy_link = sheet.get_by_role("link", name="Comprar en la tienda ↗", exact=True)
+            expect(buy_link).to_have_attribute("href", expected_store_url)
+            # Ordinary sheet links must not override the primary button's white text.
+            expect(buy_link).to_have_css("color", "rgb(255, 255, 255)")
+            expect(buy_link).to_have_css("text-decoration-line", "none")
+            buy_link.focus()
+            expect(buy_link).to_have_css("color", "rgb(255, 255, 255)")
+            expect(sheet.get_by_role("heading", name="¿Con qué combinarlo?", exact=True)).to_be_visible()
+            expect(sheet.locator(".taste-chart li")).to_have_count(5)
+            expect(sheet.locator("svg.taste-radar")).to_be_visible()
+            expect(sheet.locator(".radar-point")).to_have_count(5)
+            expect(sheet.locator(".taste-radar text")).to_have_text(["Dulce", "Salado", "Ácido", "Amargo", "Umami"])
+            expect(sheet).to_contain_text("no una medición del producto")
+            expect(sheet.locator(".product-pairings li")).to_have_count(3)
+            expect(sheet.get_by_role("button", name="Imprimir ficha", exact=True)).to_be_visible()
+            check_print_action(page, sheet)
+            content = sheet.inner_text()
+            if width == 1440:
+                page.pdf(path=f"/tmp/lumbre-print-product-{index + 1}.pdf", prefer_css_page_size=True, print_background=True)
+            assert sheet.evaluate("e => e.scrollWidth <= e.clientWidth"), "Sheet overflow"
+            if index == 0:
+                sheet.locator("svg.taste-radar").scroll_into_view_if_needed()
+                page.screenshot(path=str(Path("/tmp") / f"lumbre-product-sheet-{width}.png"))
+                page.keyboard.press("Escape")
+            else:
+                sheet.get_by_role("button", name="Cerrar ficha de producto", exact=True).click()
+            expect(sheet).to_have_count(0)
+            expect(trigger).to_be_focused()
+            registry_card = page.get_by_test_id("hypothesis-registry").locator(".hypothesis-card").nth(index)
+            registry_card.get_by_role("button", name="Abrir ficha", exact=True).click()
+            expect(sheet).to_be_visible()
+            assert sheet.inner_text() == content, "Registry and provisions must show the same product sheet"
+            sheet.get_by_role("button", name="Cerrar ficha de producto", exact=True).click()
+        expect(page.get_by_test_id("recipe-card")).to_have_count(6)
+        for index in range(3):
+            recipe_card = page.get_by_test_id("recipe-card").nth(index)
+            title = recipe_card.locator("h3").inner_text()
+            recipe_trigger = recipe_card.get_by_role("button")
+            recipe_trigger.click()
+            recipe_sheet = page.get_by_role("dialog", name=title, exact=True)
+            expect(recipe_sheet).to_be_visible()
+            expect(recipe_sheet).to_contain_text("Preparación paso a paso")
+            expect(recipe_sheet.locator(".recipe-method li")).to_have_count(4)
+            expect(recipe_sheet).to_contain_text("todavía no probada en cocina")
+            check_print_action(page, recipe_sheet)
+            assert recipe_sheet.evaluate("e => e.scrollWidth <= e.clientWidth")
+            if width == 1440:
+                page.pdf(path=f"/tmp/lumbre-print-recipe-{index + 1}.pdf", prefer_css_page_size=True, print_background=True)
+            if index == 0:
+                page.screenshot(path=f"/tmp/lumbre-recipe-{width}.png")
+            page.keyboard.press("Escape")
+            expect(recipe_sheet).to_have_count(0)
+            expect(recipe_trigger).to_be_focused()
+        page.get_by_role("button", name="Ir a página 2", exact=True).click()
+        expect(page.get_by_test_id("recipe-page-status")).to_contain_text("7–12")
+
+        page.locator('select[name="equipment"]').select_option("offset")
+        page.locator('select[name="cookingStyle"]').select_option("indirecto")
+        page.get_by_role("button", name="Construir plan de fuego", exact=True).click()
+        expect(page.get_by_role("status", name="Plan de fuego listo")).to_be_visible()
+        page.get_by_label("Nombre del plan", exact=True).fill("Prueba local")
+        page.get_by_role("button", name="Guardar plan", exact=True).click()
+        page.reload()
+        page.get_by_role("button", name="Editar plan Prueba local", exact=True).click()
+        expect(page.locator('select[name="equipment"]')).to_have_value("offset")
+
+        # The laboratory is downloaded when visited, not at initial page load.
+        page.get_by_role("link", name="Entrar al laboratorio", exact=True).click()
+        expect(page.get_by_label("Fórmula de partida", exact=True)).to_have_count(0)
+        for ingredient in ("sal_kosher", "pimienta_negra", "ajo_granulado", "cebolla_granulada"):
+            card = page.get_by_test_id("ingredient-card").filter(
+                has=page.locator(f'[data-ingredient-id="{ingredient}"]')
+            )
+            group = page.locator("details.ingredient-family-group").filter(has=card)
+            if group.get_attribute("open") is None:
+                group.locator("summary").click()
+            card.get_by_role("button", name="Agregar", exact=True).click()
+            name = card.locator("h3").text_content()
+            quantity = page.get_by_label(f"Gramos de {name}", exact=True)
+            expect(quantity).to_have_value("")
+            quantity.fill("30")
+        expect(page.get_by_label("Gramos de sal kosher", exact=True)).to_have_value("30")
+        expect(page.get_by_label("Gramos de pimienta negra", exact=True)).to_have_value("30")
+        expect(page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_value("30")
+        page.get_by_role("button", name="Retirar cebolla granulada", exact=True).click()
+        expect(page.get_by_label("Gramos de sal kosher", exact=True)).to_have_value("30")
+        expect(page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_value("30")
+        card.get_by_role("button", name="Agregar", exact=True).click()
+        expect(page.get_by_label("Gramos de cebolla granulada", exact=True)).to_have_value("")
+        page.get_by_label("Gramos de cebolla granulada", exact=True).fill("30")
+        page.get_by_label("Gramos de ajo granulado", exact=True).fill("0.5")
+        page.get_by_label("Primero, el fuego", exact=True).select_option("indirecto")
+        expect(page.get_by_label("Gramos de ajo granulado", exact=True)).to_have_value("0.5")
+        page.get_by_label("Nombre de tu blend", exact=True).fill("SPG local")
+        page.get_by_role("button", name="Guardar en esta sesión", exact=True).click()
+        expect(page.get_by_test_id("hypothesis-print-preview")).to_be_visible()
+        experiment = page.get_by_test_id("hypothesis-print-preview")
+        expect(experiment.locator("#hypothesis-sheet-title")).to_have_text("SPG local")
+        expect(experiment.locator(".hypothesis-print-header dl div").filter(has_text="Alias")).to_contain_text("SPG local")
+        expect(experiment.locator(".hypothesis-print-header dl div").filter(has_text="Documento")).to_contain_text("SES-")
+        expect(experiment).not_to_contain_text("Captura aportada")
+        expect(experiment).not_to_contain_text("Sal reservada")
+        expect(experiment).not_to_contain_text("codex-clipboard")
+        expect(experiment.get_by_role("heading", name="Cantidades para preparar tu mezcla")).to_be_visible()
+        expect(experiment.locator(".lab-sheet-quantities tbody tr")).to_have_count(4)
+        expect(experiment.locator(".lab-sheet-quantities thead th")).to_have_count(2)
+        expect(experiment.locator(".lab-sheet-quantities")).not_to_contain_text("%")
+        expect(experiment.locator(".lab-sheet-quantities tbody tr").filter(has_text="ajo granulado")).to_contain_text("0.5 g")
+        expect(experiment.locator(".lab-sheet-quantities tfoot")).to_contain_text("90.5 g")
+        check_print_action(page, experiment)
+        experiment.evaluate("e => e.scrollTop = e.scrollHeight")
+        check_print_action(page, experiment)
+        if width == 1440:
+            page.pdf(path="/tmp/lumbre-print-experiment.pdf", prefer_css_page_size=True, print_background=True)
+        page.get_by_role("button", name="Cerrar ficha técnica", exact=True).click()
+        page.reload()
+        expect(page.get_by_test_id("session-blends")).to_contain_text("SPG local")
+        expect(page.get_by_test_id("session-blends")).to_contain_text("0.5 g")
+        expect(page.get_by_test_id("hypothesis-registry").locator(".hypothesis-card")).to_have_count(4)
+
+        page.get_by_role("button", name="Almanaque", exact=False).click()
+        page.get_by_role("button", name="Página siguiente", exact=True).click()
+        expect(page.get_by_test_id("almanac-page-status")).to_contain_text("1")
+        almanac_index = page.get_by_label("Ir a una página del almanaque")
+        expect(almanac_index.locator("option")).to_have_count(54)
+        for number in [*range(16, 49), *range(50, 55)]:
+            almanac_index.select_option(str(number if number < 49 else number - 1))
+            expect(page.get_by_test_id("almanac-page-status")).to_contain_text(f"DOC. {number:03d}")
+            image = page.get_by_test_id("almanac-page").locator("img")
+            expect(image).to_have_attribute("src", f"/editorial/almanac/page-{number:03d}.jpeg")
+            expect(image).to_have_js_property("naturalWidth", 1254)
+        expect(page.get_by_role("button", name="Página siguiente", exact=True)).to_be_disabled()
+        page.get_by_role("button", name="Página anterior", exact=True).click()
+        expect(page.get_by_test_id("almanac-page-status")).to_contain_text("DOC. 053")
+        page.get_by_role("button", name="Cerrar almanaque", exact=True).click()
+        assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "Horizontal overflow"
+        assert not api_requests, api_requests
+        assert not errors, errors
+        assert not failed_assets, failed_assets
+        page.screenshot(path=str(Path("/tmp") / f"lumbre-static-{width}.png"))
+        context.close()
+        print(f"PASS {width}px: tools, static catalog, loaded assets, printable sheets and no API traffic")
+    browser.close()

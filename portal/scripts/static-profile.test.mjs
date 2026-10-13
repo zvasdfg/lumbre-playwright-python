@@ -61,6 +61,7 @@ test("CI pins the verified npm version and preflights the real deploy installati
   assert.match(workflow, /NPM_VERSION: "11\.17\.0"/);
   assert.equal(workflow.match(/npm install --global "npm@\$NPM_VERSION"/g)?.length, 2);
   const build = workflow.split("  static-build:")[1].split("  browser-tests:")[0];
+  assert.match(build, /node scripts\/audit-public-repo\.mjs/);
   assert.match(build, /prepare-deploy-workspace\.mjs/);
   assert.match(build, /cd "\$RUNNER_TEMP\/lumbre-deploy-preflight"\s+npm ci\s+npm ls sharp\s+npm audit/);
 });

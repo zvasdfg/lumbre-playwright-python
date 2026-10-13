@@ -9,6 +9,8 @@ def test_duplicate_and_variant(lab):
     page = lab.page
     lab.add("sal_mar_gruesa")
     lab.add("pimienta_negra")
+    lab.set_grams("sal_mar_gruesa", 75)
+    lab.set_grams("pimienta_negra", 75)
     lab.save("Original")
     lab.close_sheet()
     lab.save("Otro nombre")

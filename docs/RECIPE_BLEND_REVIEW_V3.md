@@ -13,7 +13,7 @@ evidence, dosage validation or authorization to publish.
   garlic in 002 and its strict identical-ingredients criterion are superseded.
 - `baseRecipePreparations` preserves the pre-change recipe records, including
   the two revision-2 adaptations. Explicit, per-ID changes live in
-  `portal/app/lib/recipe-blends.ts`; no fuzzy ingredient matching at runtime.
+  `portal/data/recipe-blends.ts`; no fuzzy ingredient matching at runtime.
 - The production catalog and product sheet now include garlic in 002. The
   existing photo is preserved, with a visible note that its label omits garlic.
   Historical backend SQL migrations are not rewritten or executed.

@@ -12,6 +12,8 @@ def test_hypothesis_sheet_prints_from_preview(lab, test_log):
     with test_log.step("Create the current local technical sheet"):
         lab.add("sal_kosher")
         lab.add("pimienta_negra")
+        lab.set_grams("sal_kosher", 31)
+        lab.set_grams("pimienta_negra", 19)
         lab.save("Ficha para imprimir")
         sheet = page.get_by_test_id("hypothesis-print-preview")
         expect(sheet).to_contain_text("Vista previa · formato A4")

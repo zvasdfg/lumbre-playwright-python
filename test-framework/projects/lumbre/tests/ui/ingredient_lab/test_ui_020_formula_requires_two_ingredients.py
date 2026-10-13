@@ -12,7 +12,10 @@ def test_formula_requires_two_ingredients(lab, test_log):
         expect(save).to_be_disabled()
     with test_log.step("One ingredient is insufficient"):
         lab.add("sal_kosher")
+        lab.set_grams("sal_kosher", 20)
         expect(save).to_be_disabled()
     with test_log.step("A second ingredient completes the minimum"):
         lab.add("pimienta_negra")
+        expect(save).to_be_disabled()
+        lab.set_grams("pimienta_negra", 30)
         expect(save).to_be_enabled()

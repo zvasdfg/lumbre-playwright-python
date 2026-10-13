@@ -91,7 +91,8 @@ def home(page: Page, app_url: str) -> HomePage:
 ```
 
 Add an autouse reset fixture only when the SUT provides a deterministic reset
-contract. A test-only endpoint such as Lumbre's is not a core requirement.
+contract. A test-only endpoint is optional for projects with a backend; the current Lumbre
+portal has none.
 
 ## 4. Add a domain API client
 

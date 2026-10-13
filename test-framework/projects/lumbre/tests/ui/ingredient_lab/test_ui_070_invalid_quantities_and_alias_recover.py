@@ -16,6 +16,8 @@ def test_invalid_quantities(page, app_url, grams):
         card = lab.card(ingredient)
         lab.expand(lab.family(card))
         card.get_by_role("button", name="Agregar", exact=True).click()
+    lab.set_grams("sal_kosher", 75)
+    lab.set_grams("pimienta_negra", 75)
     title = page.get_by_label("Nombre de tu blend", exact=True)
     save = page.get_by_role("button", name="Guardar en esta sesión", exact=True)
     title.fill("AB")

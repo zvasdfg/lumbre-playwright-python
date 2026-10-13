@@ -16,6 +16,7 @@ const files = [
   "static", "data",
   "public/brand", "public/editorial", "postcss.config.mjs", "tsconfig.static.json",
   ".npmrc",
+  "scripts/public-safety.mjs", "scripts/public-safety.test.mjs",
   "scripts/check-static.mjs", "scripts/check-recipes.mjs",
   "scripts/fire-plan-model.test.mjs", "scripts/fire-plan-fuel.test.mjs", "scripts/verify-static-deployment.mjs",
   "scripts/ingredient-families.test.mjs",

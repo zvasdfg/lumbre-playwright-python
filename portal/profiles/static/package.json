@@ -8,7 +8,7 @@
   },
   "scripts": {
     "typecheck": "tsc --project tsconfig.static.json --noEmit --incremental false",
-    "test": "node --experimental-strip-types --test scripts/fire-plan-model.test.mjs scripts/fire-plan-fuel.test.mjs scripts/ingredient-families.test.mjs scripts/lab-formula.test.mjs scripts/store-links.test.mjs",
+    "test": "node --experimental-strip-types --test scripts/fire-plan-model.test.mjs scripts/fire-plan-fuel.test.mjs scripts/ingredient-families.test.mjs scripts/lab-formula.test.mjs scripts/store-links.test.mjs scripts/public-safety.test.mjs",
     "check:recipes": "node --experimental-strip-types scripts/check-recipes.mjs",
     "build:static": "vite build --config static/vite.config.ts && node scripts/check-static.mjs",
     "preview:static": "vite preview --config static/vite.config.ts"

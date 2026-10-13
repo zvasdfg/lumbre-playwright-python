@@ -9,6 +9,8 @@ def test_heat_transition(lab):
     page = lab.page
     lab.add("sal_mar_gruesa")
     lab.add("pimienta_negra")
+    lab.set_grams("sal_mar_gruesa", 75)
+    lab.set_grams("pimienta_negra", 75)
     lab.save("Directo")
     lab.close_sheet()
     salt = page.get_by_label("Gramos de sal mar gruesa", exact=True)
