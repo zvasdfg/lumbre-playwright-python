@@ -28,6 +28,14 @@ The old 31 optional external cases became 24 real store cases after removing
 seven duplicate/retired-route checks. Default local CI coverage is not replaced
 by tests against production; the only post-deploy gate is artifact identity.
 
+Publication outcome, 2026-10-27: documentation commit **d31a863** pushed to main.
+[CI 40602275948](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/40602275948)
+failed npm audit on two high-severity Vite/Zod findings; UI/deploy were skipped.
+No runtime/dependency change was made or deployed. The same repository was then
+made public with the owner's explicit retained-object risk acceptance, verified
+via the unauthenticated GitHub API. Historical purge remains unconfirmed.
+Dependency remediation and a newly passing release remain pending.
+
 Local documentation-release checks, 2026-10-27: 49 model/publication + nine profile
 contracts and 18 infrastructure executions passed. Types, 100-recipe integrity,
 build/public-output guards, current-tree scanner (563 files), whitespace and

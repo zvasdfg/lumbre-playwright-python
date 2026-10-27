@@ -17,6 +17,12 @@ el código y la colección actual; colección no significa ejecución exitosa.
 La decisión del propietario de volver público este mismo repositorio acepta
 el riesgo de objetos históricos aún recuperables: **la purga no está confirmada**.
 Ver [estado y alcance de seguridad](docs/SECURITY.md).
+El cambio a público se verificó el 27 de octubre sin autenticación. La entrega
+documental d31a863 quedó en main, pero su
+[pipeline](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/40602275948)
+se detuvo en npm audit: dos vulnerabilidades altas en Vite/Zod. No ejecutó UI ni
+desplegó. La base funcional de producción sigue siendo 7971085; actualizar las
+dependencias y sus lockfiles, revalidar y desplegar queda pendiente.
 
 ## Funcionalidades actuales
 

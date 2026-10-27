@@ -25,6 +25,10 @@ sin respuesta del proveedor en la conversación visible. El 27 de octubre el
 portal de soporte pidió iniciar sesión; no se verificó su estado actual ni
 una respuesta nueva. No confundir estado del ticket con los HTTP 200 comprobados.
 
+El cambio a público se completó por la configuración de GitHub y se comprobó
+mediante su API **sin autenticación** el 27 de octubre: private=false y
+visibility=public. No fue acompañado de una purga ni de cambios en credenciales.
+
 ## Información pública y privada
 
 **Público:** código del portal/framework, imágenes aprobadas, propuestas de
@@ -119,6 +123,23 @@ certificado. No devolvieron un dictamen de vulnerabilidades. No se cambiaron red
 TLS ni lockfiles. CI ejecuta auditorías nuevas antes de permitir cada despliegue;
 el PASS del 13 no es una auditoría actual. No se consultaron independientemente
 advisories de toda la cadena Python/navegadores.
+
+### Nuevo bloqueo comprobado en CI, 27 de octubre
+
+El [run 40602275948](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/40602275948)
+del commit documental d31a863 aprobó instalación, tipos y contratos, pero npm
+audit detectó **dos vulnerabilidades altas** en Vite y Zod de los locks actuales.
+El log identifica Vite 8.3.0–8.3.2 y Zod <4.6.6 como rangos afectados; las versiones
+fijadas son 8.3.1 y 4.6.5. Por ello UI/deploy se omitieron correctamente y producción
+no cambió. Esto sustituye cualquier inferencia de seguridad actual basada en el
+PASS del 13 de octubre. El reporte se leyó en el job, no se obtuvo localmente.
+
+Pendiente: actualizar de forma coordinada manifiestos/locks static y desarrollo,
+revisar compatibilidad y ejecutar auditorías, build y UI antes de otro deploy.
+No se ejecutó npm audit fix --force, no se modificaron dependencias en esta entrega
+y no se desactivó el gate. La reapertura aceptada del repo no es una aprobación
+de estas vulnerabilidades ni una afirmación de que afecten por igual al sitio
+estático y a las herramientas de desarrollo.
 
 ## Reproducir los controles
 
