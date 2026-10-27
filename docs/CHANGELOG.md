@@ -1,9 +1,11 @@
 # Engineering changes and verification history
 
 This is a sanitized index, not an additional runbook or suite. Current commands,
-features and limits belong in the root README. Old source and detailed records
-remain recoverable in Git except retired confidential content, which is retained
-only in the owner's private backup; they are not current executable requirements.
+features and limits belong in the root README. Reviewed 2026-10-27. History cleanup
+rewrote earlier commit identities; pre-cleanup labels below are dated evidence,
+not guaranteed checkout targets. Original recovery copies are owner-private.
+GitHub still retains known confidential objects by SHA: do not claim they exist
+only in the backup. Historical records are not current executable requirements.
 
 | Date / checkpoint | Change and actual evidence |
 | --- | --- |
@@ -15,13 +17,24 @@ only in the owner's private backup; they are not current executable requirements
 | 2026-10-12 / 6de17af | Print tracking correction; UI-103 extended to all four products, exact PDF assertions retained. Local 429 passed; all jobs and production bundle verification succeeded in the linked run below. |
 | 2026-10-13 / 5d08c6d | Documentation consolidation, manual laboratory and publication guards. Verified private backup, coordinated history cleanup/force push, nine affected build artifacts removed. All CI jobs and deployment passed; main/lab production SHA-256 matches CI and two known old URLs return 404. GitHub retained original objects by SHA, so the repository remains temporarily private pending provider cleanup. |
 | 2026-10-13 / f54306c | Documentation-only follow-up. CI failed UI-077 Firefox-abort at the first recovery navigation; deployment was skipped. A green prior release does not imply this run passed. |
-| 2026-10-13 / UI-077 correction | CI trace showed header pointer interception and continuing scroll with no URL change. The failed laboratory panel collapsed the 800px placeholder to roughly 65px and lacked its normal section styling. The original two local checks passed despite the CI failure; controlled-loading regression then failed all four scenarios against the original CI build. Shared loading/error styling and footprint restored. On local Playwright 1.63: 423 nonserial + eight serial = 431 passed; 84 compatibility passed; six independent Firefox repetitions = 24 passed; 49 model/publication and nine profile contracts passed. No failures/skips in successful suites. CI/Linux validation and deployment are pending at the time of this change; local results do not imply publication success. |
+| 2026-10-13 / 7971085, UI-077 correction | CI trace showed header pointer interception and continuing scroll without navigation: the failed lab panel collapsed an 800px placeholder to roughly 65px. Controlled-loading regression reproduced all four failures against the original CI build. Shared loading/error styling and footprint restored. Local: 423 nonserial + eight serial = 431 passed; 84 compatibility; 24 independent focused Firefox repetitions; 49 model/publication and nine profile contracts. CI 38457776095 then passed every job and deployed successfully; main/lab artifact SHA-256 and two old URLs with 404 verified. |
+| 2026-10-27 / documentation and publication decision | All 12 canonical Markdown documents aligned with source, current manual laboratory and original numbered framework. Full ID catalog, execution lanes, examples and dated evidence clarified; no runtime feature or dependency change. Collection rechecked: 431 default = 208 general + 215 matrix + eight serial; 24 store opt-in; 28 compatibility per engine. Owner explicitly authorized reopening this same repository accepting retained-object risk; provider purge remains unconfirmed. Collection is not a fresh UI PASS; this delivery's actual checks/run are attributable to its commit in Actions. |
 
 Last completed deployment evidence:
-[GitHub Actions run 38441242795](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38441242795).
+[GitHub Actions run 38457776095](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38457776095)
+for the functional baseline 7971085. Later documentation publication results are
+available in [Actions](https://github.com/zvasdfg/lumbre-playwright-python/actions).
 The old 31 optional external cases became 24 real store cases after removing
 seven duplicate/retired-route checks. Default local CI coverage is not replaced
 by tests against production; the only post-deploy gate is artifact identity.
+
+Local documentation-release checks, 2026-10-27: 49 model/publication + nine profile
+contracts and 18 infrastructure executions passed. Types, 100-recipe integrity,
+build/public-output guards, current-tree scanner (563 files), whitespace and
+documentation checks passed (12 Markdown files, 53 local links, 24 Python/shell
+blocks; 64 UI IDs/counts/owners/lanes matched collection). This is not a new local
+431-case UI execution. Fresh local npm audit responses were unavailable due to
+certificate validation; no network/TLS changes or advisory bypass was used.
 
 Historical failed runs and parameter counts must not be described as tests of a
 later revision. Compatibility counts overlap engine variants. No table row claims

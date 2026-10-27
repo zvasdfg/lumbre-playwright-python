@@ -1,7 +1,9 @@
 # Fire planner: current model and evidence
 
-Canonical executable sources: portal/static/fire-plan-model.ts and
-portal/static/fire-plan-fuel.tsx; tests are portal/scripts/fire-plan-*.test.mjs.
+Implementation/documentation review: 2026-10-27. Canonical executable sources:
+[fire-plan-model.ts](../portal/static/fire-plan-model.ts) and
+[fire-plan-fuel.tsx](../portal/static/fire-plan-fuel.tsx), which owns budgeting logic.
+Tests live under portal/scripts; execution is documented in the root README.
 This engineering model is not an approved cooking recipe or empirical calibration.
 This document supersedes the v1/v2 planning notes, not their historical results.
 
@@ -61,3 +63,19 @@ unit equivalence, invalid values and source/override boundaries. Browser cases
 cover 48 valid equipment/goal/fuel tuples, controls, persistence and printing.
 This does not exhaust continuous temperatures/durations, loads, weather, stage
 sequences or physical devices. Measured equipment calibration remains pending.
+
+From repository root, after installation:
+
+~~~bash
+npm test --prefix portal
+bash scripts/test-local.sh -m 'portal and planner'
+~~~
+
+The first command includes pure model/publication contracts, not browser tests.
+The second builds/serves the portal and includes planner UI cases plus serialized
+UI-080–084. UI-064 is the 48-case matrix; units, invalidation, saved-state and
+stage contracts also live in the numbered planner directory. Counts describe
+finite inputs, not every continuous temperature, duration or combination.
+Older diagram/report HTML files in docs are archived design evidence, not the
+active model contract. Manufacturer links were not re-researched in this review;
+do not attribute Lumbre's interpolations, reserve or equipment scaling to Weber.

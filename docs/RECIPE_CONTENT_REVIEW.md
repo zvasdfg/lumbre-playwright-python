@@ -1,5 +1,10 @@
 # Recipe preparation revision 1
 
+Culinary record: 2026-09-30. Operational/documentation review: 2026-10-27.
+This preserves the dated research and QA below; it does not claim a new kitchen
+trial, current legal/medical guidance or editorial approval. Active commands and
+coverage are updated separately from historical results.
+
 Scope: existing portal recipe IDs 1–100, all categories. Input: titles,
 descriptions and illustrations in `portal/data/data.ts`. No product formulas,
 brand knowledge, editorial catalog IDs or original images are changed. Recipe IDs
@@ -48,22 +53,31 @@ timings and tenderness targets are estimates. No nutrition or shelf-life claims.
 
 ## Verification commands
 
-From `portal/`:
+From repository root, after installation:
 
-```sh
-node --experimental-strip-types scripts/check-recipes.mjs
-npm run typecheck
-npm run build:static
-npm run preview:static
-../test-framework/.venv/bin/python scripts/test-recipe-sheets.py
-../test-framework/.venv/bin/python scripts/test-static.py
-```
+~~~bash
+npm run check:recipes --prefix portal
+npm run typecheck --prefix portal
+bash scripts/test-local.sh -m 'portal and recipes'
+bash scripts/test-local.sh -m 'portal and print_pdf'
+~~~
 
-The recipe UI check traverses 17 pages / 100 recipes at 1440px and 390px,
-checks content, source links, focus restoration, overflow and sticky print access.
-It writes 100 PDF QA files under `/tmp/lumbre-recipe-qa/` (not versioned).
-PDF text/page checks and rendered sample inspection complement, not replace,
-editorial review. Structural assertions cannot prove culinary success.
+UI-034 traverses all 100 recipes at 1440/390px, checking content, sources, focus,
+overflow and print access. UI-085 covers product-link return through the retained
+serial adapter. UI-103 generates eight representative PDFs across features,
+including one recipe; CI does not export 100 recipe PDFs on every deployment.
+
+Optional deep PDF audit, with a separately started static preview in 3001 and
+no concurrent PDF-writing suite:
+
+~~~bash
+test-framework/.venv/bin/python portal/scripts/test-recipe-sheets.py
+test-framework/.venv/bin/python portal/scripts/check-recipe-print.py
+~~~
+
+That standalone audit writes 100 PDFs under /tmp/lumbre-recipe-qa, outside Git;
+it is not an additional default suite. Rendered sample inspection complements,
+not replaces, editorial review. Structural assertions cannot prove culinary success.
 
 ## Local verification — 2026-09-30
 
@@ -79,8 +93,14 @@ editorial review. Structural assertions cannot prove culinary success.
   PDFs and the experimental formula PDF also passed their text/page checks.
 - Production was not modified; no commit, push or deployment performed.
 
+Those results and the old main-chunk warning belong only to September 30. They
+are not current bundle measurements or evidence that today's UI suite passed.
+Current runtime publication is tracked in [CHANGELOG](CHANGELOG.md).
+
 ## Pending
 
 Kitchen trials (yield, flavor, texture and time) and user editorial approval.
-No deployment, push or commitment to nutritional/allergen certification. Check
-ingredient labels and substitutions individually for allergens.
+Technical deployment does not provide nutritional/allergen certification or
+editorial approval. Check ingredient labels and substitutions individually for
+allergens. Source registries remain canonical; this documentation update did
+not independently revalidate every external culinary link.

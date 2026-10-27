@@ -12,6 +12,12 @@ Este README es la fuente canónica para funcionalidades, estructura, instalació
 y ejecución. El [catálogo numerado de pruebas](test-framework/projects/lumbre/README.md)
 describe los casos; no hay una segunda suite paralela de Lumbre.
 
+Revisión documental: **2026-10-27**. Los comandos y conteos se contrastaron con
+el código y la colección actual; colección no significa ejecución exitosa.
+La decisión del propietario de volver público este mismo repositorio acepta
+el riesgo de objetos históricos aún recuperables: **la purga no está confirmada**.
+Ver [estado y alcance de seguridad](docs/SECURITY.md).
+
 ## Funcionalidades actuales
 
 | Módulo | Qué permite |
@@ -30,7 +36,10 @@ describe los casos; no hay una segunda suite paralela de Lumbre.
 formulación. Agregar ingredientes no inventa gramos ni redistribuye cantidades;
 retirarlos conserva los gramos restantes y recalcula total/radar. Los registros
 anteriores válidos siguen legibles, pero sus cantidades no son recomendaciones.
-El radar representa una estimación relativa, no una cata ni porcentajes de fabricación.
+El radar pondera los perfiles por los gramos introducidos y escala el mayor
+de los cinco sabores al máximo del gráfico. No representa una cata ni porcentajes
+de fabricación. La coincidencia comercial usa ingredientes compartidos divididos
+entre la unión de ingredientes (Jaccard), no gramos ni equivalencia sensorial.
 
 El planificador contempla parrilla abierta, kettle, kamado, ahumador vertical,
 offset, gas y pellets. Exige confirmar capacidades cuando corresponda; no todos
@@ -83,6 +92,8 @@ El [README del core](test-framework/README.md) explica esa separación.
 ## Instalación
 
 Desde la raíz del repositorio: Node >=22.13, npm 11.17 y Python >=3.11.
+CI fija npm 11.17.0 y Playwright 1.63.0; las restricciones del comando siguiente
+alinean Python con la imagen de navegadores. No actualizar lockfiles por separado.
 No se necesitan Cloudflare ni credenciales de tienda para probar el portal local.
 
 ~~~bash
@@ -96,6 +107,10 @@ cp test-framework/.env.example test-framework/.env
 En Linux, instalar las dependencias del navegador con playwright install --with-deps
 o usar la imagen de Playwright fijada en el workflow. El archivo .env local se ignora.
 No ejecutar npm audit fix --force sin revisar su cambio de dependencias.
+Para desarrollo interactivo: npm run dev --prefix portal (Vite, normalmente
+5173). Para UI de release usar el build/preview en 3001, no el servidor de
+desarrollo. El core genérico usa 3000 si no recibe BASE_URL; los runners y la
+configuración de ejemplo de Lumbre lo fijan en 3001.
 
 ## Ejecutar las pruebas en local
 
@@ -184,8 +199,9 @@ No bloquea el build local y no es una segunda suite de regresión del portal rem
 El runner administrado guarda HTML, JUnit, logs, screenshots y traces en
 test-framework/reports/runs/; el último HTML es reports/lumbre-report.html dentro
 del framework. Los otros runners imprimen sus rutas temporales. Los informes,
-traces y capturas **no se versionan**. En CI los artifacts duran siete días y
-deben contener solo datos sintéticos; no iniciar sesión en una tienda real para
+traces y capturas **no se versionan**. En CI los diagnósticos duran siete días;
+el artifact de build lumbre-static usa la retención configurada en GitHub.
+Ambos deben contener solo datos sintéticos; no iniciar sesión en una tienda real para
 generarlos. Las imágenes pueden revelar datos aunque el log esté redactado.
 
 ## Cómo se ejecuta en GitHub Actions
@@ -215,7 +231,8 @@ automáticamente en cada deploy ni habilita transacciones.
 
 ## Cobertura y límites
 
-64 comportamientos UI numerados y cuatro contratos de arquitectura. La colección
+64 comportamientos UI numerados (62 portal y dos store), cinco IDs del core
+y cuatro contratos de arquitectura. La colección
 contiene 431 casos local/framework + 24 store opcionales. Incluye 48 combinaciones
 de planificador, 60 ingredientes, 100 recetas, 53 documentos a dos tamaños y ocho
 escenarios PDF. Modelos puros incluyen 8,640 configuraciones y 1,770 pares.
@@ -225,14 +242,16 @@ antes/después del fallo, verifica documentos nuevos en ambas recargas y conserv
 datos locales/de sesión. El subconjunto de compatibilidad tiene 28 ejecuciones
 por motor, 84 si se seleccionan los tres; no son 84 funcionalidades distintas.
 
-Último deploy confirmado: commit 5d08c6d, [pipeline exitoso](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38441242795).
-La revisión de laboratorio manual y límites de publicación pasó todos los jobs
-de CI y las auditorías npm. El bundle principal y el del laboratorio coinciden
-con los SHA-256 del artefacto probado en CI; los dos assets antiguos comprobados
-responden 404. Las 429 pruebas locales y 78 de compatibilidad son evidencia local
-adicional, no un conteo duplicado de CI. El [reporte de seguridad](docs/SECURITY.md)
-explica por qué el repositorio sigue temporalmente privado: GitHub todavía conserva
-objetos antiguos accesibles por SHA y se requiere evaluar su purga con soporte.
+Base funcional desplegada confirmada al iniciar esta revisión: commit 7971085,
+[pipeline exitoso del 13 de octubre](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38457776095).
+Incluye la corrección de UI-077; todos sus jobs y auditorías npm pasaron.
+La evidencia conservada de ese despliegue verifica los SHA-256 del bundle principal
+y laboratorio contra CI y dos URLs anteriores con respuesta 404. Su ejecución
+local fue 431 + 84 de compatibilidad; no son ejecuciones realizadas hoy ni
+funcionalidades independientes. La colección del 27 de octubre confirma los
+conteos de las selecciones actuales. Para el resultado de la publicación documental
+posterior, consultar [Actions](https://github.com/zvasdfg/lumbre-playwright-python/actions)
+y [cambios verificados](docs/CHANGELOG.md), sin trasladar un PASS a otra revisión.
 
 Pendientes reales: pruebas físicas en teléfono, baselines visuales aprobados,
 auditoría WCAG completa y checkout/envío/pago/emails en un sandbox autorizado.
@@ -252,6 +271,20 @@ clientes ni proporciones de fabricación. Solo se publican assets compilados,
 imágenes aprobadas y headers; no docs, backups, source maps o informes. La limpieza
 del árbol actual **no elimina lo ya expuesto en Git, caches o artifacts remotos**.
 Los secretos del deploy viven en GitHub Environments, no en el JavaScript.
+package.json contiene private: true para impedir publicar el paquete en npm;
+no determina la visibilidad del repositorio GitHub.
+
+### Mantenimiento y reversión
+
+Para una entrega: revisar diff, ejecutar los contratos/tipos/build y la selección
+UI afectada; publicar un commit normal a main y esperar todos los gates de CI.
+Nunca reconstruir el artifact entre validación y deploy. Ante una regresión,
+revertir un commit de la historia limpia y pasar los mismos gates. No volver a
+mezclar ramas anteriores a la limpieza ni publicar el backup privado.
+Las guías de recetas conservan evidencia histórica fechada; los HTML de diseño/QA
+en docs son archivos de referencia, no especificaciones operativas vigentes.
+Los doce Markdown enlazados aquí tienen responsabilidades distintas; no existen
+copias de estas instrucciones en otra suite activa.
 
 - [Seguridad, límites del escaneo y pendientes](docs/SECURITY.md)
 - [Casos por ID y dominios de entrada](test-framework/projects/lumbre/README.md)

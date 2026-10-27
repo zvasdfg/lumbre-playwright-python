@@ -1,124 +1,171 @@
-# Lumbre test project
+# Lumbre · catálogo numerado de pruebas
 
-Canonical active project, revision 2026-10-12. The organization follows the
-original framework: reusable core, project-owned POMs, test data and numbered
-UI modules grouped by functional ownership. There is no second active
-`lumbre_static` suite.
+Revisión de código y colección: **2026-10-27**. Una sola suite activa, con la
+separación original: core reutilizable, proyecto, POMs/componentes, datos y tests.
+Este documento define casos y cobertura; el [README principal](../../../README.md)
+define instalación, ejecución local/headed/CI, destinos y evidencia de releases.
 
-```text
+~~~text
 projects/lumbre/
-├── components/
-│   ├── fire_almanac.py          FireAlmanac: reader actions, no assertions
-│   ├── fire_planner.py          FirePlanner: actions, no business assertions
-│   └── ingredient_lab.py        IngredientLab: actions, no business assertions
-├── pages/home_page.py          HomePage: composition and page navigation
-├── data/cases.py               Independent configuration/ingredient inputs
-├── support/specialized.py      Technical adapter for retained script contracts
-├── conftest.py                 Fresh contexts, viewport fixtures, target guards
+├── components/                 fire_almanac, fire_planner, ingredient_lab: acciones
+├── pages/home_page.py          Navegación y composición, sin oráculos de negocio
+├── data/cases.py               Entradas independientes del modelo probado
+├── support/specialized.py      Adaptador técnico de ocho grupos seriales
+├── conftest.py                 Contextos limpios, viewports y protección de destino
 └── tests/
-    ├── test_architecture.py    Numbering, ownership and safe-selection contracts
+    ├── test_architecture.py    Cuatro contratos estructurales
     └── ui/
-        ├── almanac/           UI-055 boundaries; UI-092 every document; UI-093 zoom…
-        ├── home/              UI-001 purpose; UI-028 mobile; UI-063 navigation…
-        ├── recipes/           UI-002 filters; UI-034 all sheets; UI-053 pagination…
-        ├── ingredient_lab/    UI-016 each ingredient; UI-017 limit; UI-068 radar…
-        ├── fire_planner/      UI-012 methods; UI-033 saved plans; UI-064 matrix…
-        └── commerce/          UI-030 catalog; UI-086 store return; UI-087 gallery…
-```
+        ├── home/              Navegación, accesibilidad, recuperación, impresión
+        ├── recipes/           Catálogo, búsqueda, fichas y referencias de producto
+        ├── ingredient_lab/    Selección, gramos manuales, radar y blends de sesión
+        ├── fire_planner/      Configuración, combustible, etapas y planes locales
+        ├── almanac/           Documentos, notas, zoom, teclado y recuperación
+        └── commerce/          Catálogo local y tienda externa de solo lectura
+~~~
 
-## IDs and discovery
+## Cómo leer el catálogo
 
-One behavior per `test_ui_NNN_<behavior>.py`, with matching
-`@pytest.mark.case("UI-NNN", "Observable result")`. Parameterized inputs
-produce multiple executions of that same behavior ID, not new case IDs.
-Applicable original IDs are retained. UI-063 onward identifies new behaviors;
-retired IDs are not reused for unrelated features. API uses a separate sequence.
+Cada archivo test_ui_NNN_*.py declara su mismo ID mediante @pytest.mark.case.
+Un ID es un comportamiento; sus parámetros generan varias ejecuciones. Los
+huecos son IDs retirados, no pruebas omitidas. No se reciclan para otros fines.
+No hay suite lumbre_static ni pruebas del backend eliminado. Algunas referencias
+históricas fueron reescritas por seguridad: no se garantiza recuperar cualquier
+antiguo checkpoint por su hash ni se debe mezclar historia previa a la limpieza.
 
-UI-077 now includes mobile/desktop × aborted request/HTTP 503. Its controlled
-loading phase exposes section collapse deterministically; recovery must preserve
-the loading footprint, navigate to a new document twice and preserve storage.
-It retains its original ID rather than adding a duplicate "stability suite".
-Its reload check uses [wait_for_url](https://playwright.dev/python/docs/api/class-page#page-wait-for-url),
-a changed recovery query and a per-document identity, rather than relying only
-on the deprecated navigation-event waiter. No forced click or sleep masks the failure.
+En la tabla, **N** cuenta ejecuciones Chromium de la colección actual. Salvo
+STORE, todos son portal. **M** va a la matriz, **S** al grupo serial y **C** se
+repite además en Firefox/WebKit. Sin letra: lane general. C no es otro caso.
+La colección completa tiene 455 ejecuciones: 431 framework/portal y 24 STORE
+opt-in. Descubrir/coleccionar no demuestra PASS.
 
-Feature directories describe responsibility. Execution categories
-are Pytest markers, not additional suite directories:
+## Casos UI, en orden de ID
 
-| Marker | Selection |
-| --- | --- |
-| `portal` | Local current-portal cases |
-| `store` | Public Tiendanube integration, read only |
-| `matrix` | Extended ingredient/equipment/recipe/almanac traversal |
-| `planner`, `laboratory`, `recipes`, `navigation`, `commerce`, `almanac` | Feature |
-| `cross_browser` | Focused keyboard/recovery/transition compatibility |
-| `accessibility`, `print_pdf` | Cross-feature keyboard/DOM and PDF contracts |
-| `specialized` | Retained serialized scripts with shared PDF files |
+| ID | Componente | N / lane | Resultado observable |
+| --- | --- | --- | --- |
+| UI-001 | home | 2 | Propósito y entradas funcionales de inicio |
+| UI-002 | recipes | 6 | Filtros, búsqueda, vacío y recuperación |
+| UI-003 | recipes | 2 | Consulta sin coincidencias y limpieza |
+| UI-006 | recipes | 2 | Búsqueda por título real |
+| UI-012 | fire_planner | 6 | Defaults por método, persistencia e impresión vigente |
+| UI-015 | ingredient_lab | 2 | Búsqueda, gramos, radar, alias y eliminación |
+| UI-016 | ingredient_lab | 60 M | Ficha, selección y retiro de cada ingrediente |
+| UI-017 | ingredient_lab | 2 | Límite de 12 componentes y recuperación al retirar |
+| UI-018 | ingredient_lab | 2 | Duplicar/reabrir/crear variante sin alterar original |
+| UI-019 | ingredient_lab | 2 | Blend de sesión sin mutación remota |
+| UI-020 | ingredient_lab | 2 | Mínimo de dos componentes para guardar |
+| UI-021 | ingredient_lab | 2 | Retirar conserva gramos de los demás |
+| UI-022 | ingredient_lab | 2 | Biblioteca conserva documento, alias y gramos |
+| UI-026 | recipes | 2 | Abrir la receta seleccionada |
+| UI-028 | home | 2 | Controles críticos en 320/390 px |
+| UI-029 | recipes | 2 | Escape cierra ficha y devuelve foco al disparador |
+| UI-030 | commerce | 2 | Cuatro productos de producción en catálogo local |
+| UI-031 | ingredient_lab | 2 | Fotografías distintas para los 60 ingredientes |
+| UI-032 | commerce | 2 | Cuatro fotos de producto distintas y cargadas |
+| UI-033 | fire_planner | 2 | Eliminar/deshacer, recargar, duplicar y cancelar |
+| UI-034 | recipes | 1 M | Las 100 fichas paginadas en dos tamaños, contenido y foco |
+| UI-052 | home | 2 | Privacidad local y compra externa en footer |
+| UI-053 | recipes | 2 | Paginación, producto vinculado y retorno al contexto |
+| UI-054 | ingredient_lab | 2 | Expandir/contraer familia y encontrar comino |
+| UI-055 | almanac | 2 | Límites del lector e imágenes |
+| UI-060 | ingredient_lab | 2 | Vista A4 guardada y llamada a imprimir |
+| UI-063 | home | 10 | Primera navegación a cinco anclas en dos tamaños |
+| UI-064 | fire_planner | 48 M | Equipos, objetivos y combustible válido con presupuesto |
+| UI-065 | fire_planner | 10 | Soportes, unidades y etapas ordenadas |
+| UI-066 | fire_planner | 1 | Máximo de 12 etapas y retiro |
+| UI-067 | ingredient_lab | 2 | Cocción y fórmula guardada permanecen separadas |
+| UI-068 | ingredient_lab | 2 | Cuatro pimientas ponderadas por gramos en el radar |
+| UI-069 | ingredient_lab | 6 | Coincidencia de ingredientes: sin match, umbral 80 y 100 |
+| UI-070 | ingredient_lab | 5 | Gramos/alias inválidos y corrección |
+| UI-071 | fire_planner | 8 | Cambiar configuración invalida impresión anterior |
+| UI-072 | fire_planner | 4 | Reemplazar/copiar un plan y recargar |
+| UI-073 | fire_planner | 2 | Protección frente a otra pestaña |
+| UI-074 | fire_planner | 3 C | Límites de duración y recuperación |
+| UI-075 | fire_planner | 1 C | Transición a preset rápido |
+| UI-076 | commerce | 2 C | Ficha modal aísla fondo y restaura foco |
+| UI-077 | ingredient_lab | 4 C | Chunk abortado/503, espacio reservado y dos recuperaciones |
+| UI-078 | home | 1 S | Aceptación estática y PDFs representativos |
+| UI-079 | home | 1 S | Almacenamiento corrupto, denegado y sin cuota |
+| UI-080 | fire_planner | 1 S | Objetivos, incompatibilidades y ficha imprimible |
+| UI-081 | fire_planner | 1 S | Controles primarios, defaults, unidades y planes |
+| UI-082 | fire_planner | 1 S | Estimaciones de cada combustible |
+| UI-083 | fire_planner | 1 S | Tamaño kettle y combustible |
+| UI-084 | fire_planner | 1 S | Referencias/defaults Weber y sus límites |
+| UI-085 | recipes | 1 S | Ir al producto y volver a receta |
+| UI-086 | commerce | 16 STORE | Cuatro destinos de compra × dos tamaños × tarjeta/ficha |
+| UI-087 | commerce | 8 STORE | Galerías de cuatro productos × dos tamaños |
+| UI-092 | almanac | 106 M | 53 documentos × dos tamaños: asset, ordinal y overflow |
+| UI-093 | almanac | 6 | Tres documentos × dos tamaños: zoom, fit y reset |
+| UI-094 | almanac | 2 C | Flechas, límites, Escape y foco en disparador |
+| UI-095 | almanac | 2 C | Cerrar/reabrir, scroll y backdrop de escritorio |
+| UI-096 | home | 6 C | Chunks de almanaque/receta/producto abortados/503 y recarga |
+| UI-097 | almanac | 4 | Imagen abortada/503 y recuperación al revisitar |
+| UI-098 | almanac | 18 | Nueve documentos con notas editoriales × dos tamaños |
+| UI-099 | ingredient_lab | 12 | 3/6/12 componentes × fuego × tamaños; límite y persistencia |
+| UI-100 | fire_planner | 4 | Cocción/horneado/reposo, °C/°F y ficha tras recargar |
+| UI-101 | home | 8 C | Teclado/foco/Escape en cuatro diálogos × dos tamaños |
+| UI-102 | home | 2 | IDs únicos, alt, nombres de controles y referencias ARIA |
+| UI-103 | home | 8 | PDF: cuatro productos, receta, dos blends y plan |
+| UI-104 | almanac | 2 | Chunk lento: busy explícito y planificador aún usable |
 
-## Execution
+Fuentes ejecutables: [home](tests/ui/home), [recipes](tests/ui/recipes),
+[ingredient_lab](tests/ui/ingredient_lab), [fire_planner](tests/ui/fire_planner),
+[almanac](tests/ui/almanac), [commerce](tests/ui/commerce).
 
-Use the root [README](../../../README.md) for installation, local/headed/CI/store
-commands, exact markers, targets, reports and safety boundaries. This guide owns
-case IDs and domains, not a duplicate operational runbook.
+## Core y arquitectura
 
-## Coverage extension — UI-092 through UI-104
-
-180 parameterized executions across these 13 behavior IDs. UI-055 retains
-its original ID but now lives under `ui/almanac/`. Collection is not a PASS;
-current executed results are recorded separately. No assertion is skipped,
-xfailed or relaxed to hide a defect.
-
-| ID | Owner | Input / observable contract |
+| ID | N | Contrato |
 | --- | --- | --- |
-| UI-092 | almanac | 53 published documents × two widths; asset, dimensions, alternative text, ordinal, progress and overflow |
-| UI-093 | almanac | Documents 001/011/054 × two widths; zoom scrolling, fit and page-change reset |
-| UI-094 | almanac | Both widths; arrow boundaries, Escape, trigger focus and cover on reopening |
-| UI-095 | almanac | Both widths; close/reopen, scroll preservation and desktop backdrop dismissal |
-| UI-096 | home / deferred UI | Almanac/recipe/product × aborted/503 chunks; reload, actual refetch, preserved local/session sentinel data |
-| UI-097 | almanac | Both widths × aborted/503 image; alternate page remains usable and failed image recovers on revisit |
-| UI-098 | almanac | Nine editorial-note documents × two widths; warning follows document and reference-link destination changes |
-| UI-099 | ingredient_lab | 3/6/12 ingredients × direct/indirect × two widths; 150.01 g blocks save, exact grams/alias survive session reload and variant |
-| UI-100 | fire_planner | Celsius/Fahrenheit × two widths; cook/roast/rest metadata, unit, support and printable sheet survive reload |
-| UI-101 | home / keyboard | Almanac/ingredient/blend/recipe × two widths; initial focus, forward/backward cycle, Escape and restoration; three browser engines in focused lane |
-| UI-102 | home / accessibility | Both widths; unique IDs, image alt attributes, named form controls and valid ARIA references |
-| UI-103 | home / print | Four production products/recipe/3-ingredient blend/12-ingredient blend/plan; self-contained A4 PDF creation, exact searchable product codes, visible text/quantities, no blank page/chrome, loaded images and text origins inside page bounds |
-| UI-104 | almanac | Both widths; explicit pending chunk, busy state and usable planner before releasing download |
+| FRAMEWORK-001 | 7 | Settings, normalización y destinos por worker |
+| FRAMEWORK-002 | 4 | OpenAPI: documento, request y response sintéticos |
+| FRAMEWORK-003 | 1 | Registro de pasos/valores/evidencia |
+| FRAMEWORK-004 | 1 | Core no importa proyectos |
+| FRAMEWORK-005 | 1 | Templates/POMs respetan separación de responsabilidades |
+| ARCH-001 | 1 | Numeración e identidad de casos |
+| ARCH-002 | 1 | Imports y separación de proyecto/core |
+| ARCH-003 | 1 | Discovery y selección segura de destinos |
+| ARCH-004 | 1 | POMs sin oráculos de negocio |
 
-`almanac_matrix` is the fourth component-matrix Actions lane, using the SAME
-validated build as the other lanes. `accessibility` and `print_pdf` select the
-cross-feature contracts; directories still express ownership. All files retain
-one matching numbered behavior ID. Run the reader only with:
+Los cinco IDs del core ocupan cuatro archivos; la regla un archivo/un ID UI
+pertenece al proyecto, no describe todos los módulos de infraestructura.
 
-```bash
-bash scripts/test-local.sh -m 'portal and almanac'
-bash scripts/test-local.sh -m 'portal and accessibility'
-bash scripts/test-local.sh -m 'portal and print_pdf'   # Chromium; install .[lumbre]
-```
+## Selección y partición sin duplicar suites
 
-PDF assertions are not a full visual audit: origin bounds do not prove every
-glyph is unclipped or layouts do not overlap. Locally rendered pages are review
-evidence, not auto-approved screenshot baselines. DOM checks are not a complete
-WCAG/axe audit. Empty `alt` is valid for decorative images. The 12 equal-weight
-blend fixture is synthetic boundary data, not a recommended culinary formula.
-The image-failure case covers navigation/revisit recovery; it does not claim a
-dedicated missing-image placeholder exists. Stocked checkout and physical phones
-still require separate authorized environments/manual checks.
+Los markers funcionales son planner, laboratory, recipes, almanac, navigation y
+commerce. portal/store separan el preview del servicio externo. matrix y sus
+submarkers seleccionan catálogos finitos; specialized selecciona los ocho grupos
+seriales. accessibility/print_pdf seleccionan contratos transversales.
 
-## Current laboratory behavior
+| Selección de CI | Ejecuciones |
+| --- | --- |
+| framework_unit or (portal and not matrix and not specialized) | 208 |
+| portal and matrix | 215: planner 48 + ingredientes 60 + recetas 1 + almanaque 106 |
+| portal and specialized | 8 |
+| portal and cross_browser | 28 por motor; ya incluidas en Chromium general |
+| store | 24, ejecución manual de solo lectura |
 
-Gram inputs are manual. Adding a component leaves its amount blank; removing
-one preserves other amounts and updates total/radar. Saving requires 2–12 valid
-positive amounts and a total at most 150 g. Existing IDs are updated in place to
-protect manual entry, persistence, PDF and ingredient-based product matching.
-Fixture amounts are synthetic test data, never manufacturing recipes.
+Los ocho grupos seriales llaman scripts retenidos mediante support/specialized.py;
+no son otra suite ni ocho únicas interacciones. UI-034 recorre 100 recetas en
+dos tamaños dentro de una ejecución. UI-092 sí parametriza cada documento/tamaño.
+Los conteos no deben intercambiarse con el número de comportamientos.
 
-## Results and retirement
+## Contratos y límites actuales
 
-Use the root README for the latest deployed revision and [sanitized history](../../../docs/CHANGELOG.md)
-for prior checkpoints. This worktree requires its own execution evidence. Optional
-store checks never submit cart/payment/orders or modify stock.
+Laboratorio: agregar deja gramos vacíos, retirar conserva los demás, guardar
+requiere 2–12 cantidades positivas y total <=150 g. Radar relativo ponderado por
+gramos; datos desconocidos no se inventan. Matching comercial por ingredientes,
+no pesos. Los datos numéricos de pruebas son sintéticos, no recetas recomendadas.
 
-The obsolete backend cases and duplicate published-portal probes were retired.
-The original sources remain in Git at aeaf9f4; those IDs are not recycled for
-unrelated contracts. Eight specialized groups remain numbered adapters because
-their shared-file assertions must run serially, not a second framework.
+UI-077 mantiene el espacio del panel al fallar; controla la descarga, comprueba
+dos documentos nuevos con wait_for_url y una identidad por documento, conserva
+almacenamiento y no usa force/sleep para esconder intercepción de puntero.
+
+Los PDF se validan por texto/códigos, páginas, imágenes y límites de origen del
+texto; esto no prueba ausencia de todo solapamiento o recorte. DOM/teclado no es
+auditoría WCAG completa. Viewports no son teléfonos físicos. No se cubren todos
+los subconjuntos de ingredientes ni valores continuos de gramos/temperaturas.
+Modelos puros complementan UI con 8,640 configuraciones y 1,770 pares.
+
+STORE visita páginas públicas, nunca carrito/pagos/pedidos/inventario ni sesiones
+de administración. Checkout, envíos y correos requieren un sandbox autorizado.
+Para resultados realmente ejecutados y fallos históricos, ver
+[CHANGELOG](../../../docs/CHANGELOG.md); no inferir PASS de este inventario.

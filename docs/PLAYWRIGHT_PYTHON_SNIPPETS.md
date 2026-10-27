@@ -1,316 +1,135 @@
-# Playwright Python Snippets
-
-> Historical learning/reference examples. Some examples describe former Lumbre
-> backend widgets, not current executable coverage. For current interfaces,
-> commands and numbered cases, use [the active project guide](../test-framework/projects/lumbre/README.md).
-> The reusable testing principles still apply; retired examples are not runbooks.
-
-Practical reference for the Lumbre framework. Examples use Playwright Sync API,
-Pytest, Page Objects, Component Objects, structured test steps, and web-first
-assertions.
-
-Use these snippets inside the review checkpoints defined by the
-[Guided UI test creation protocol](GUIDED_UI_TEST_PROTOCOL.md). A scaffold is a
-starting point, not a substitute for selecting a risk and designing an oracle.
-
-## 1. Generate scaffolds in VS Code
-
-In a Python file, type a prefix and press Tab:
-
-| Prefix | Generates |
-| --- | --- |
-| `pw-ui-test` | Complete skipped UI test scaffold |
-| `pw-api-test` | Complete skipped API test scaffold |
-| `pw-step` | `test_log.step()` block |
-| `pw-values` | Observed and expected value log |
-| `pw-visible` | Visibility assertion |
-| `pw-not-visible` | Negative visibility assertion |
-| `pw-text` | Exact text assertion |
-| `pw-fill` | Fill a form control through a locator |
-| `pw-select` | Select an option by its stable value |
-| `pw-dialog` | Scoped dialog and child-control locators |
-| `pw-component` | Component Object scaffold |
-
-Equivalent copyable files exist in `test-framework/templates/`.
-
-Generated tests contain a skip marker. Keep it until every TODO is complete:
-
-```python
-@pytest.mark.skip(reason="Pending exercise: complete the TODOs and remove this marker")
-```
-
-## 2. Semantic locators
-
-The portal is Spanish, so accessible locator strings intentionally preserve
-Spanish product copy:
-
-```python
-page.get_by_role("button", name="Confirmar reservación")
-page.get_by_label("Correo electrónico")
-page.get_by_placeholder("Buscar receta...")
-page.get_by_text("Lugar apartado", exact=False)
-page.get_by_test_id("recipe-card")
-```
-
-Scope inside a component to avoid ambiguity:
-
-```python
-cart = page.get_by_role("dialog", name="Tu canasta")
-remove_button = cart.get_by_role("button", name="Eliminar Pinzas Forja 45")
-```
-
-Filter a collection by contained semantics:
-
-```python
-card = page.get_by_test_id("recipe-card").filter(
-    has=page.get_by_role("heading", name="Coliflor al rescoldo")
-)
-```
-
-Use `exact=True` when the product contract requires an exact accessible name.
-
-## 3. Common UI actions
+# Playwright Python · ejemplos actuales
+
+Revisión: 2026-10-27. Ejecutar desde la raíz con la instalación del
+[README](../README.md). Fragmentos para adaptar, no una segunda suite ni casos
+nuevos listos para registrar. No incluyen cuentas, carrito ni endpoints retirados.
+Los snippets de editor generan scaffolds: quitar TODO/skip no basta sin un oráculo.
+
+## Estructura de un caso
+
+Usar un ID disponible y actualizar el catálogo; UI-029 ya existe. El ejemplo
+completo con metadata, fixture y test_log está en el
+[protocolo guiado](GUIDED_UI_TEST_PROTOCOL.md). Los tests contienen expectativas;
+POMs/componentes solo navegación y acciones semánticas.
+
+~~~python
+from playwright.sync_api import expect
+
+
+def assert_recipe_dialog_closes(page):
+    trigger = page.get_by_test_id("recipe-card").first.get_by_role("button")
+    trigger.click()
+    expect(page.get_by_role("dialog")).to_be_visible()
+    page.keyboard.press("Escape")
+    expect(page.get_by_role("dialog")).to_have_count(0)
+    expect(trigger).to_be_focused()
+~~~
+
+Este helper de ejemplo contiene un oráculo y por tanto pertenece al área de tests,
+no al POM. Una vez materializados datos Python, usar assert; para UI cambiante,
+expect reintenta de forma acotada.
+
+## HomePage y laboratorio reales
+
+HomePage expone hero_title, recipe_cards, product_cards, ingredient_lab,
+fire_planner, open(), filter_recipes(label), search_recipes(text),
+recipe_named(name) y product_named(name). No expone view_recipe(), toast, cart,
+membership ni api. No copiar selectores de versiones anteriores.
+
+~~~python
+def inspect_manual_blend(home):
+    home.open()
+    home.ingredient_lab.open()
+    # Los IDs deben venir de data/cases.py; add no inventa una cantidad.
+    # Tras seleccionar ingredientes, el usuario introduce gramos positivos.
+    home.page.get_by_label("Nombre de tu blend", exact=True).fill("Prueba sintética")
+~~~
+
+IngredientLab ofrece card(id), family(card), expand(group), add(id),
+set_grams(id, value), save(title) y close_sheet(). Guardar requiere 2–12
+ingredientes, alias válido, gramos positivos y total <=150 g. Usar fixtures
+sintéticos, no proporciones de fabricación. Validar efectos en el test, no dar
+por correcto un click solo porque no lanzó excepción.
+
+## Pasos y valores observados
+
+~~~python
+def inspect_recipe_count(home, test_log):
+    with test_log.step("Inspect the recipe catalog"):
+        home.open()
+        expect(home.recipe_cards.first).to_be_visible()
+        count = home.recipe_cards.count()
+        assert count > 0
+~~~
+
+test_log requiere metadata case en el test que lo consume; estos helpers no se
+coleccionan por sí solos. Nunca registrar tokens, cookies o datos de clientes
+como valores de reporte.
+
+## Formularios, diálogos y esperas
+
+~~~python
+def search_recipe(page, title):
+    page.get_by_placeholder("Buscar receta...", exact=True).fill(title)
+    expect(page.get_by_test_id("recipe-card").first).to_be_visible()
+~~~
+
+Para un select real, select_option(value) debe usar una opción existente del DOM;
+no aplicar select_option a botones de presets. Preferir get_by_label exacto para
+inputs y get_by_role con nombre para acciones. Un cambio de copy/label exige
+revisar accesibilidad y el contrato, no agregar .first para silenciar ambigüedad.
+
+No usar wait_for_timeout ni force=True para resolver carreras. Esperar estado
+visible, respuesta/ruta o documento nuevo. Los límites explícitos pertenecen al
+caso y al riesgo, no a un timeout global infinito.
+
+## Fallos de chunks controlados
+
+~~~python
+def fail_laboratory_download(page, base_url):
+    page.route("**/*ingredient-lab*.js*", lambda route: route.fulfill(status=503, body="unavailable"))
+    page.goto(base_url)
+    page.get_by_role("link", name="Entrar al laboratorio", exact=True).click()
+    expect(page.get_by_role("alert")).to_be_visible()
+~~~
+
+Es solo la inyección de fallo, no una prueba completa de recuperación. UI-077
+controla también carga pendiente, espacio reservado, datos de sesión/locales,
+click de recuperar, wait_for_url y una identidad nueva de documento dos veces.
+Retirar la ruta fallida al probar recuperación. No asumir que page.reload o una
+query nueva prueban por sí solos que descargó el módulo correcto.
+
+## OpenAPI reutilizable (no es una API de Lumbre)
 
-```python
-locator.click()
-locator.fill("coliflor")
-locator.check()
-locator.select_option("intermedio")
-locator.focus()
-locator.press("Enter")
-locator.press_sequentially("Ana Parrilla")
-locator.press("Tab")
-page.goto("http://localhost:3000")
-```
-
-Do not add `wait_for_timeout()` after these actions. Playwright waits for
-actionability automatically.
-
-## 4. Web-first assertions
-
-```python
-expect(locator).to_be_visible()
-expect(locator).not_to_be_visible()
-expect(locator).to_have_text("Exact text")
-expect(locator).to_contain_text("Stable fragment")
-expect(locator).to_have_count(2)
-expect(locator).to_be_focused()
-expect(locator).to_have_attribute("required", "")
-```
-
-Web-first assertions retry until success or timeout. Avoid replacing them with
-one-time reads for dynamic UI:
+~~~python
+from automation.core.contracts import OpenApiContract
 
-```python
-# More race-prone for dynamic state
-assert locator.is_visible() is True
-```
 
-## 5. Structured steps and values
-
-```python
-with test_log.step("Validate the cart total"):
-    expect(home.cart.total).to_have_text(expected_total)
-    test_log.values(
-        observed_total=home.cart.total.inner_text(),
-        expected_total=expected_total,
-    )
-```
+def validate_example_response(document, payload):
+    contract = OpenApiContract(document)
+    contract.validate_document()
+    contract.validate_response("/example", "get", 200, payload)
+~~~
 
-For UI tests, each completed step automatically creates one viewport screenshot
-in the HTML report. Keep each step focused on one observable action or result.
+El documento/payload anterior son entradas que debe aportar el proyecto consumidor.
+También existen validate_request(path, method, payload) y
+response_statuses(path, method). Solo $ref locales; referencias externas/circulares
+fallan explícitamente. No crear endpoints ficticios dentro de Lumbre para usarlo.
 
-Log useful inputs, actual values, and oracles. Do not log passwords, tokens,
-secrets, or real personal information.
+## Herramientas de observación
 
-## 6. Locator collections
+Con preview estático en 3001:
 
-Wait for the expected collection state before reading it:
+~~~bash
+test-framework/.venv/bin/playwright codegen http://127.0.0.1:3001
+bash scripts/test-static-ui.sh --headed -m 'portal and smoke'
+test-framework/.venv/bin/pytest -c test-framework/pyproject.toml --collect-only -q
+~~~
 
-```python
-expect(home.recipe_cards).to_have_count(2)
+Para abrir un trace: playwright show-trace seguido del path real que imprimió
+el runner. Codegen propone acciones, no expectativas de negocio; revisar locators,
+datos, foco, errores, persistencia y arquitectura antes de incorporar su salida.
+Reports y traces quedan fuera de Git; no grabar sesiones administrativas reales.
 
-observed_count = home.recipe_cards.count()
-observed_titles = home.recipe_cards.get_by_role("heading").all_inner_texts()
-```
-
-Avoid calling `all()` on a dynamically loading collection before a condition
-confirms that it is ready.
-
-## 7. DOM properties with `evaluate()`
-
-Use `evaluate()` when Playwright has no dedicated API for the required browser
-property:
-
-```python
-name_is_missing = home.membership.name_input.evaluate(
-    "element => element.validity.valueMissing"
-)
-assert name_is_missing is True
-```
-
-The JavaScript executes in the page and serializes its result back to Python.
-Prefer dedicated Playwright APIs whenever one exists.
-
-For diagnostic logging of focus, compare the located DOM node with the
-browser's current `document.activeElement`:
-
-```python
-observed_email_focused = home.membership.email_input.evaluate(
-    "element => element === document.activeElement"
-)
-expect(home.membership.email_input).to_be_focused()
-```
-
-The `evaluate()` call is a one-time read for diagnostics. The `expect()` call
-is the retrying assertion that determines the test result. Playwright Python
-does not expose `Locator.is_focused()`.
-
-## 8. API GET and parsed JSON
-
-Successful query helpers can return parsed JSON:
-
-```python
-response = api.recipes(category="vegetales", query="duraznos")
-
-observed_count = response["count"]
-expected_count = 1
-test_log.values(
-    observed_count=observed_count,
-    expected_count=expected_count,
-)
-assert observed_count == expected_count
-```
-
-## 9. API POST and raw APIResponse
-
-Return `APIResponse` when the test must validate status or expected errors:
-
-```python
-payload = {
-    "name": "Ana Parrilla",
-    "email": "ana.parrilla@example.test",
-    "experience": "intermedio",
-    "terms": "accepted",
-}
-
-response = api.create_member(payload)
-body = response.json()
-
-test_log.values(
-    observed_status=response.status,
-    expected_status=201,
-    observed_created=body["created"],
-    expected_created=True,
-)
-
-assert response.status == 201
-assert body["created"] is True
-```
-
-`response.status` is a property. `response.json()` is a method.
-
-## 10. Negative API response
-
-```python
-payload = {
-    "name": "Test grill",
-    "category": "herramientas",
-    "price": 0,
-}
-
-response = administrator_api.create_product(payload)
-body = response.json()
-
-assert response.status == 422
-assert body["error"] == "Valid product data is required"
-```
-
-Do not call a helper that asserts `to_be_ok()` when a `4xx` response is the
-expected behavior.
-
-## 11. Pytest parametrization
-
-```python
-@pytest.mark.parametrize(
-    "close_method",
-    ["button", "backdrop"],
-    ids=["close-button", "backdrop"],
-)
-def test_membership_modal_closes(
-    home: HomePage,
-    test_log: TestLogger,
-    close_method: str,
-) -> None:
-    home.open_membership()
-    home.membership.close(close_method)
-    expect(home.membership.root).not_to_be_visible()
-```
-
-Parametrize variations of the same behavior. Create a new file when the
-workflow or primary risk changes.
-
-## 12. Route mocking
-
-```python
-from playwright.sync_api import Route
-
-
-def return_server_error(route: Route) -> None:
-    route.fulfill(
-        status=500,
-        content_type="application/json",
-        body='{"error":"Internal server error"}',
-    )
-
-
-page.route("**/api/members", return_server_error)
-```
-
-Register the route before the action that sends the request. `ERR-001` uses
-this technique to prove that an HTTP 500 keeps the membership form open,
-re-enables submission, preserves entered data, and displays useful feedback.
-
-## 13. Component Object pattern
-
-```python
-from playwright.sync_api import Locator, Page
-
-
-class ExampleComponent:
-    def __init__(self, page: Page) -> None:
-        self.root = page.get_by_role("region", name="Example")
-
-    def item_named(self, name: str) -> Locator:
-        return self.root.get_by_role("listitem").filter(
-            has=self.root.get_by_text(name, exact=True)
-        )
-```
-
-Scope all component locators to `root` whenever possible.
-
-## 14. Trace Viewer
-
-The framework retains a trace when a test fails:
-
-```bash
-cd test-framework
-.venv/bin/playwright show-trace test-results/<test-directory>/trace.zip
-```
-
-Inspect the failed action, locator, before/after DOM, console, and network.
-
-## 15. Codegen for exploration
-
-```bash
-cd test-framework
-.venv/bin/playwright codegen http://localhost:3000
-```
-
-Codegen output is a draft. Move reusable actions into Page/Component Objects,
-remove arbitrary waits, prefer semantic locators, and keep business assertions
-visible in the test.
-
-Execution, reporting, Inspector, and static-quality commands are maintained in
-the root [README](../README.md) and the
-[framework README](../test-framework/README.md).
+Para comandos completos, browser engines y CI consultar el README. Para los IDs
+y límites vigentes consultar el [catálogo](../test-framework/projects/lumbre/README.md).

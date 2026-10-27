@@ -1,146 +1,133 @@
-# Public repository and release security
+# Seguridad de publicación y repositorio
 
-Review date: 2026-10-12. Scope: current worktree, reachable local Git text history,
-public images/build boundaries and release/test configuration. This is a technical
-audit, not a penetration test, a complete secret detector or legal/privacy advice.
-No credentials, matched secret values or internal recipes belong in this report.
+Revisión: **2026-10-27**. Alcance: árbol actual, límites del build y CI, evidencia
+conservada de la limpieza y accesibilidad de dos objetos históricos conocidos.
+No es pentest, detector completo de secretos ni garantía de borrado en terceros.
+No incluir aquí valores confidenciales, fórmulas, tokens ni los SHA afectados.
 
-## Public versus private
+## Decisión de visibilidad y riesgo pendiente
 
-Public: app/framework source, approved brand/editorial images, recipe proposals,
-ingredient catalog and product ingredient declarations. Anything in browser JS
-is inspectable, even when the UI does not display it. Production manufacturing
-amounts, internal prototype weights and private provenance must not ship.
+El propietario autorizó el 27 de octubre **hacer público este mismo repositorio
+aceptando expresamente el riesgo**: GitHub todavía permite recuperar por SHA dos
+objetos confidenciales de la historia anterior. Las comprobaciones autenticadas
+de ese día devolvieron HTTP 200. La limpieza del árbol y de main no los borró del
+almacenamiento del proveedor. **La purga sigue sin confirmarse.**
 
-Private: credentials, tokens, cookies/auth state, customer/order/payment data,
-internal formulations, raw provider exports, backups, machine paths and traces
-from authenticated real accounts. Saved user blends remain in their own browser
-session; fire plans remain local. Tiendanube owns orders, payments and shipping.
-No remote account/database sync is implemented by this static portal.
+Esta decisión sustituye la contención temporal mediante repositorio privado;
+no convierte la confidencialidad histórica en PASS. En un repositorio público
+debe asumirse que esos objetos podrían recuperarse y difundirse. No se afirma
+que todos los objetos antiguos, clones, forks, caches o descargas sean recuperables
+ni que puedan eliminarse. La copia privada de recuperación no se debe publicar.
 
-## Findings and containment in this revision
+Soporte: solicitud enviada el 13 de octubre, seguimiento el 14 y solicitud de
+escalación el 20. Última lectura verificada del ticket: 21 de octubre, abierto
+sin respuesta del proveedor en la conversación visible. El 27 de octubre el
+portal de soporte pidió iniciar sesión; no se verificó su estado actual ni
+una respuesta nueva. No confundir estado del ticket con los HTTP 200 comprobados.
 
-- Internal formulation references were present in the laboratory's source and
-  compiled JavaScript, despite not appearing in its printed sheets. The owner
-  authorized removing them and using manual quantities temporarily. They and their
-  recipe-reproduction tests are removed; numeric/radar/storage tests use synthetic
-  user-entered amounts instead. Product identity/80% ingredient matching remains.
-- Obsolete/repeated Markdown was retired after preserving an owner-local restricted
-  archive outside this repository. Non-Markdown design/QA evidence is retained;
-  private provenance in metadata is sanitized separately, not deleted in bulk.
-  Current docs consolidate architecture, execution, risk and source authority.
-- Ignore rules now cover private credentials, caches, reports, captures, auth
-  state and archives. Ignore rules alone do not protect already tracked files.
-- A current-tree guard reports only paths, rule IDs and line numbers, not values.
-  It is a static-build CI prerequisite. Build guards allow only compiled JS/CSS,
-  the entry HTML/headers and public images; they reject docs, reports, backups,
-  source maps, private references, known token formats and active SVG content.
-- Security headers remain unchanged: restrictive CSP, connect-src none, no forms,
-  frame denial, nosniff and restricted browser permissions. No TLS/audit bypass.
+## Información pública y privada
 
-## Verification evidence and limits
+**Público:** código del portal/framework, imágenes aprobadas, propuestas de
+recetas, catálogo de ingredientes y declaraciones públicas de producto. Todo
+JavaScript del navegador puede inspeccionarse aunque la pantalla oculte datos.
+El repositorio público expone también documentación y fuentes que no se despliegan
+en el sitio. private: true en package.json bloquea npm publish, no GitHub.
 
-The initial redacted scan traversed 1,690 unique text objects reachable through
-90 local commits. It found internal-reference provenance but no matches for its
-private-key/provider-token/credential-URL patterns. This is **not** a guarantee
-that every credential format, binary asset, remote branch or external artifact
-was inspected. The current-tree guard adds hardcoded-provider checks.
+**Privado:** credenciales, tokens, cookies/auth state, datos de clientes/pedidos/
+pagos, formulaciones de fabricación, pesos de prototipos, exports, backups y
+traces autenticados. No introducirlos en código, tests, issues o artifacts.
+Las mezclas del usuario son de sesión y los planes de fuego locales; el portal
+no implementa cuentas ni sincronización remota. Tiendanube gestiona transacciones.
 
-Raw audit output, original documents and test artifacts stay outside the public
-tree. Their locations are intentionally omitted from this public report.
-The final current-tree scan has no findings under the configured rules. Five
-historical canonical product-source objects were additionally checked: no
-manufacturing-quantity fields were found there. Internal prototype-reference
-history nevertheless remains accessible, as described below.
+## Contención ya implementada
 
-Final local verification for this worktree:
+- Se retiraron del laboratorio referencias internas y su cálculo automático.
+  Las cantidades son manuales temporalmente; los tests usan datos sintéticos.
+  El matching comercial mantiene solo ingredientes declarados, no proporciones.
+- Se consolidaron 12 documentos Markdown canónicos, preservando fuera del repo
+  un archivo privado de material retirado. No se eliminaron indiscriminadamente
+  imágenes o evidencia no Markdown. Dos metadatos históricos se sanearon de forma
+  acotada; esto no equivale a inspeccionar todos los píxeles.
+- Ignore rules excluyen credenciales, auth state, reports, capturas, caches y
+  backups. No protegen archivos ya versionados ni un add forzado.
+- audit-public-repo.mjs revisa el árbol tracked/nuevo no ignorado y emite rutas,
+  IDs de regla y líneas, nunca valores. Es requisito de static-build.
+- El build permite solo HTML/headers de entrada, JS/CSS compilados e imágenes
+  públicas. Rechaza docs, reportes, backups, source maps, referencias privadas,
+  formatos de tokens conocidos y SVG activo.
+- Headers: CSP restrictiva (connect-src none, form-action none), frame denial,
+  nosniff y permisos de cámara/micrófono/geolocalización/pago denegados.
+  No se deshabilitó TLS ni se omitieron auditorías para publicar.
 
-- 421 isolated + eight serial = **429 passed**, no failures/skips. First migration
-  run had stale automatic-quantity expectations and capitalization-sensitive
-  locators; those failures were retained before the successful full rerun.
-- **78 passed** in focused Chromium/Firefox/WebKit compatibility.
-- After the final build-guard changes, 12 focused laboratory/PDF cases passed
-  again against the final generated assets. The full 429/78 runs preceded only
-  those non-runtime guard/test additions; they were not repeated again afterward.
-- **49 model/publication contracts + nine profile/workflow contracts passed**;
-  obsolete private-recipe assertions were replaced by manual-state contracts,
-  not relabelled as tests of confidential formulas.
-- Typecheck, static build/public-output guards, changed numbered-test Ruff,
-  whitespace, JSON/YAML parsing and 28 local Markdown links passed.
-- Metadata of 239 public raster images had no GPS/owner/personal-pattern flags.
-  This is not OCR or a visual inspection of every pixel. Public report/planner
-  screenshots were sampled separately; no real customer/credential data was seen
-  in those samples. Existing artwork/public data and headers are unchanged.
-- 21 obsolete/redundant Markdown files removed, leaving 12 canonical documents.
-  Their owner-local backup was retained; non-Markdown artifacts were not deleted
-  in bulk. Two historical metadata records were narrowly sanitized.
+## Evidencia histórica, con fecha y alcance
 
-Containment update, 2026-10-13: authenticated GitHub metadata confirms temporary
-private visibility. A complete Git bundle was verified and current working files
-were archived outside all public repositories with owner-only permissions.
-The owner authorized coordinated history cleanup/force push and affected artifact
-removal. Local history was rewritten over 91 commits, retiring seven affected
-paths from earlier trees while preserving the exact current application tree.
-Old intermediate commits are therefore not guaranteed to build unchanged.
-A fresh scan of 1,680 reachable text blobs found no configured-rule matches.
-Rewritten main was published with an explicit force-with-lease check. A new,
-non-reusing local clone contains neither of the original affected test objects.
-Nine compiled build artifacts were individually identified from their source SHA,
-deleted and verified absent. Broad artifact/log deletion was rejected and not
-performed. The 41 candidate diagnostic archives and nine affected-run log archives
-were privately inspected: no private-reference marker matches. A separate scan of
-2,013 diagnostic entries found no configured credential-pattern matches. These
-checks are not OCR, exhaustive semantic scanning or proof against all secret types.
+La auditoría inicial del 12 de octubre recorrió 1,690 objetos de texto únicos
+en 90 commits locales y detectó procedencia interna. No encontró los patrones
+de claves privadas/tokens/URLs con credenciales configurados. No cubre todos
+los formatos de secreto, binarios, branches remotos ni almacenamiento externo.
 
-[CI run 38441242795](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38441242795)
-passed every build/browser/matrix/deploy job. The main and laboratory production
-bundles match the exact CI artifact SHA-256; both known pre-cleanup asset URLs
-return 404. The CI artifact, not an independently rebuilt local bundle, is the
-release identity. The original commit/blob remain accessible through authenticated
-GitHub API requests after force push. Keep the repository private pending provider
-purge assessment; historical confidentiality is **unresolved**, not an overall PASS.
+El 13 de octubre se verificó un bundle completo y archivo del worktree con
+permisos solo del propietario, fuera del repo. Con autorización se reescribieron
+91 commits, retirando siete paths afectados y preservando el árbol de aplicación
+actual. Un nuevo escaneo de 1,680 blobs alcanzables no encontró sus reglas.
+Se publicó con force-with-lease y un clon nuevo sin reutilizar objetos no contenía
+los dos objetos de prueba originales. No garantiza que viejos commits compilen.
 
-Both local npm advisory requests (static and deploy profiles) failed certificate
-validation. No dependency was installed/changed and TLS was not disabled. The
-same dependency lockfiles passed fresh clean installs and npm advisory gates in
-the successful 2026-10-13 CI run linked above (static, deploy preflight and deploy).
-That evidence is from CI, not a fresh local advisory response. Browser/Python supply-chain advisories were not
-independently queried. New guards use built-in Node modules, no new dependency.
+Se identificaron, eliminaron y comprobaron ausentes nueve artifacts de build
+afectados. No hubo borrado masivo de artifacts/logs: 41 archivos diagnósticos y
+nueve archivos de logs candidatos se inspeccionaron privadamente sin coincidencias
+de referencias internas. En 2,013 entradas diagnósticas no se hallaron patrones
+de credenciales configurados. No es OCR ni análisis semántico exhaustivo.
 
-## Required follow-up: history and previously published data
+Metadata de 239 imágenes raster públicas no mostró flags GPS/propietario/patrones
+personales; solo se muestrearon capturas visualmente. No se identificó un valor
+real de credencial ni se realizó rotación/revocación. Si aparece uno, revocarlo
+en su proveedor: borrarlo de Git no lo invalida.
 
-**Removing current files does not erase their earlier Git blobs or old deployed
-assets.** The retired objects are no longer reachable from rewritten main, but
-remain addressable by SHA in GitHub's private storage. Temporary private visibility,
-history cleanup/force push and affected artifact removal are owner-authorized.
-No provider revocation or credential rotation was performed.
+## Release funcional y comprobación actual
 
-To contain historical disclosure, keep the repository temporarily private.
-Preserve the verified private backup, agree affected branches/tags and clone migration, then
-verify remotes and remove accessible artifacts where supported. Old clones,
-forks/caches or downloaded assets cannot be recalled; do not claim guaranteed
-erasure. Any exposed real credential must be revoked/rotated at its provider,
-not merely deleted from Git. No actual credential value was identified by this scan.
+La base funcional es **7971085**, con
+[CI 38457776095 exitoso](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/38457776095)
+del 13 de octubre. Incluye la corrección UI-077 posterior a un fallo real en
+Firefox. Pasaron general, serial, cuatro matrices, dos motores adicionales,
+auditorías npm, deploy y verificación del bundle publicado. La evidencia guardada
+verifica SHA-256 de main/laboratorio contra CI y dos URLs anteriores con 404.
+No demuestra inventario completo de URLs históricas ni recuperación de descargas.
 
-After the rewritten main is published, other clones must be freshly cloned or
-carefully migrated. Do not merge/push old branches back into the clean history.
-The owner-only bundle is a recovery copy, not a public release source.
-GitHub may retain unreachable objects and cached commit views after a force push;
-check old object access separately and request provider cleanup where required.
+Evidencia local de esa revisión: 431 ejecuciones framework/portal, 84 de
+compatibilidad y 24 repeticiones Firefox enfocadas; 49 contratos de modelos/
+publicación y nueve de perfiles. Son resultados de octubre 13, no de una suite
+UI ejecutada el 27. El [CHANGELOG](CHANGELOG.md) conserva también los fallos.
 
-The live site serves the verified manual-laboratory release described above.
-The two known previous bundle URLs were checked directly, not only the new HTML.
-This is not a complete inventory of every historical CDN URL or proof that
-already downloaded files/clones can be recalled. A support request draft contains
-repository/object metadata only, outside the public tree. The request was sent
-and GitHub acknowledged an open ticket; provider cleanup has not been confirmed.
+El 27 se releyeron código/workflows y se coleccionaron todas las selecciones:
+431 default, 208 general, 215 matrices, ocho seriales, 28 compatibilidad por motor
+y 24 store opt-in. Colección no es PASS. Los controles de esta entrega documental
+y sus resultados deben corresponder al commit/run que realmente los ejecute;
+ver [Actions](https://github.com/zvasdfg/lumbre-playwright-python/actions).
 
-## Reproduce the gates
+Controles locales ejecutados el 27 para esta entrega documental: 49 contratos
+de modelos/publicación, nueve de perfiles y 18 de infraestructura aprobados;
+TypeScript, integridad de 100 recetas, build y límite estático aprobados.
+Scanner: 563 archivos actuales sin hallazgos bajo sus reglas. Las 12 guías tienen
+53 enlaces locales existentes y 24 bloques Python/shell con sintaxis válida;
+los 64 IDs UI, parámetros, componentes y lanes coinciden con la colección.
+No se volvió a ejecutar localmente toda la UI por un cambio solo documental:
+el workflow del commit vuelve a validarla antes del deploy.
 
-From repository root:
+Las dos consultas npm locales del 27 (static/deploy) fallaron por validación de
+certificado. No devolvieron un dictamen de vulnerabilidades. No se cambiaron red,
+TLS ni lockfiles. CI ejecuta auditorías nuevas antes de permitir cada despliegue;
+el PASS del 13 no es una auditoría actual. No se consultaron independientemente
+advisories de toda la cadena Python/navegadores.
+
+## Reproducir los controles
+
+Desde la raíz del repositorio:
 
 ~~~bash
 node scripts/audit-public-repo.mjs
+npm run typecheck --prefix portal
+npm run check:recipes --prefix portal
 npm test --prefix portal
 npm run test:profile --prefix portal
 npm run build:static --prefix portal
@@ -148,26 +135,29 @@ npm audit --prefix portal --package-lock-only --audit-level=high --registry=http
 npm audit --prefix portal/profiles/deploy --package-lock-only --audit-level=high --registry=https://registry.npmjs.org
 ~~~
 
-The scanner covers the current tracked/new non-ignored worktree, not history.
-Build checks validate the actual generated output. Ignore rules prevent accidental
-adds; neither tool can stop an explicitly bypassed gate or provide cryptographic
-proof of absence of all proprietary information.
+El scanner no cubre historia/artifacts/OCR. Los controles de build sí inspeccionan
+la salida generada. Ninguno ofrece prueba criptográfica de ausencia de todo dato
+propietario. Para UI usar la selección y servidor del README, no el sitio real
+como sustituto del artefacto que se pretende desplegar.
 
-## CI and evidence handling
+## CI, evidencia y mantenimiento
 
-Only the protected production job receives GitHub Environment secrets
-CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN. Wrangler is isolated from browser
-dependencies. PR jobs never deploy. All local UI lanes gate the same build; after
-deployment a SHA-256 check verifies the published entry bundle.
+Solo el job de producción recibe CLOUDFLARE_ACCOUNT_ID y CLOUDFLARE_API_TOKEN
+mediante GitHub Environment; Wrangler está aislado de dependencias del navegador.
+PRs nunca despliegan. Los jobs UI descargan el mismo build; después se verifica
+el SHA-256 del bundle de entrada publicado, sin repetir toda la suite en remoto.
 
-Reports/screenshots/traces are ignored locally; CI diagnostics use synthetic
-unauthenticated contexts and seven-day retention. In a public GitHub repository,
-assume artifacts/logs can be accessed by others: do not upload real customer data
-or secret-bearing traces. Raw artifacts may contain information redaction misses.
-The owner explicitly authorized removing affected historical artifacts; retain
-redacted metadata in the private backup and verify removal independently.
+Reports/capturas/traces no se versionan. Diagnósticos CI: siete días; artifact
+lumbre-static: retención del repositorio. Al ser público, asumir accesibles logs
+y artifacts; usar datos sintéticos y contextos sin autenticar. El respaldo privado
+y las evidencias originales confidenciales quedan fuera del árbol público.
 
-Primary guidance checked for this review:
+Otros clones deben migrarse o clonarse de nuevo; no fusionar/pushear ramas anteriores
+a la limpieza. Revertir solo dentro de historia limpia. Verificar aparte cualquier
+purga del proveedor antes de declararla terminada; la aceptación del riesgo no
+autoriza reintroducir formulaciones en el árbol actual.
 
-- [GitHub: remove sensitive data](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository): history cleanup needs coordination; other clones/forks and cached references are separate.
-- [GitHub: download workflow artifacts](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts): signed-in readers can download artifacts; diagnostics must not be treated as private just because they are not in the website build.
+Referencias oficiales sobre el procedimiento y sus límites:
+[GitHub: eliminar información sensible](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository),
+[GitHub: descargar artifacts](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/download-workflow-artifacts).
+Los enlaces son orientación, no evidencia de que GitHub haya completado la purga.

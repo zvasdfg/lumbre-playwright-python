@@ -1,5 +1,9 @@
 # Lumbre ingredient knowledge base methodology
 
+Implementation/documentation review: 2026-10-27. This clarifies current portal
+behavior without changing the ingredient research or claiming physical trials.
+Installation and execution are in the [root README](../../../README.md).
+
 ## Scope
 
 These records support culinary experiments for grilling and live-fire cooking.
@@ -20,6 +24,18 @@ points that still require controlled kitchen validation.
 
 Scores are comparative within this catalog; they are not laboratory
 measurements.
+
+The user-facing radar is different from the raw 0–5 catalog scale: it combines
+ingredient profiles weighted by manually entered grams, then scales the largest
+of the five mouth tastes to the chart maximum for that blend. Unknown values
+are not invented. Heat/pungency and aromas are described separately, not extra
+radar axes. A relative chart is not a sensory panel or manufacturing percentage.
+
+The laboratory temporarily uses manual positive grams, 2–12 components and a
+maximum 150 g batch. Adding an ingredient leaves grams blank; removing one keeps
+the others unchanged. No confidential reference formulas or automatic weight
+allocation are supplied. dosificacion is a food-application research range, not
+a proportion of a commercial blend or an automatic user-batch recommendation.
 
 ## Validation status
 
@@ -51,6 +67,13 @@ practice; they do not prove Lumbre's selected proportions, thermal behavior, or
 sensory result. Those claims still require the controlled kitchen trial above.
 Sweet spices such as cinnamon and cardamom are not counted as sweeteners.
 
+These public role/structure references are not commercial-product recommendations.
+Production LMB-F matching uses only declared ingredient IDs: intersection divided
+by union (Jaccard), recommended at >=80%. It does not compare quantities, establish
+equivalent flavor or reveal manufacturing weights. Runtime sources are
+[flavor-formulas.ts](../flavor-formulas.ts) and
+[ingredient-lab.tsx](../../static/ingredient-lab.tsx).
+
 ## Family taxonomy
 
 `familia` answers what an ingredient is in culinary terms; it does not describe
@@ -81,3 +104,11 @@ date can shorten quality life.
 Supplier entries identify practical sourcing channels in Mexico. They are
 candidates to verify for lot, origin, processing, allergens, and freshness;
 they are not endorsements.
+
+## Engineering checks versus culinary validation
+
+UI-016 inspects all 60 ingredients; UI-068 checks a multi-pepper weighted radar;
+UI-069 checks the commercial matching threshold; UI-099 checks manual grams,
+batch bounds and persistence. These contracts establish software behavior, not
+sensory accuracy, ingredient safety or approval of an experimental blend. See the
+[numbered test catalog](../../../test-framework/projects/lumbre/README.md).

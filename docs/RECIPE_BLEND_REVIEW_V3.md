@@ -1,5 +1,9 @@
 # Recipe/blend integration — revision 3
 
+Historical editorial record, operationally reviewed 2026-10-27. Preserve the
+September evidence below; current execution commands belong to the
+[recipe review](RECIPE_CONTENT_REVIEW.md) and [README](../README.md).
+
 Date: 2026-09-30. Scope: application recipe IDs 1–100. These are not editorial
 CONTENT_IDs. Inputs: existing recipe preparations, production catalog and the
 owner's explicit correction that LMB-F-002 contains salt, pepper, garlic and
@@ -9,14 +13,15 @@ evidence, dosage validation or authorization to publish.
 
 ## Source and revision preservation
 
-- Prior review remains in `RECIPE_BLEND_REVIEW.md` (revision 2). Its omission of
-  garlic in 002 and its strict identical-ingredients criterion are superseded.
+- The retired revision-2 review was archived privately during documentation
+  consolidation; it is not a current file/link. Its omission of garlic in 002
+  and strict identical-ingredients criterion are superseded.
 - `baseRecipePreparations` preserves the pre-change recipe records, including
   the two revision-2 adaptations. Explicit, per-ID changes live in
   `portal/data/recipe-blends.ts`; no fuzzy ingredient matching at runtime.
 - The production catalog and product sheet now include garlic in 002. The
   existing photo is preserved, with a visible note that its label omits garlic.
-  Historical backend SQL migrations are not rewritten or executed.
+  Backend/SQL migrations are retired and are not part of current execution.
 - Original images, content-engine knowledge/catalog and `source/` are untouched.
 
 ## Approved mapping
@@ -46,7 +51,8 @@ variant, including partial-salt exceptions for skin/sauce preparations. All 73
 notes link to the corresponding canonical product sheet. The remaining 27
 recipes have no blend section.
 
-Amounts and salt concentrations remain UNKNOWN; no gram-for-gram replacement
+Manufacturing amounts and salt concentrations are not public inputs and are not
+inferred from ingredient lists; no gram-for-gram replacement
 or validated taste outcome is claimed. Existing flavor-chart scores are not
 recalculated from the garlic correction because ingredient presence alone does
 not establish sensory intensity. Recommendations remain untested proposals.
@@ -60,7 +66,10 @@ safety/timing fields. Browser tests traverse all 100 recipes at desktop/mobile
 widths and check all 73 product links, printable notes and hidden print buttons.
 PDF checks test completeness, page counts and absence of blank pages.
 
-No commit, push or deployment is included in this request.
+## Historical local evidence — 2026-09-30
+
+No commit, push or deployment was included in that review. This is not a claim
+about today's deployed portal; consult [CHANGELOG](CHANGELOG.md).
 
 Verified locally: recipe-data checks, TypeScript, static build and whitespace
 checks passed. The full desktop recipe/link traversal passed. All 100 exported
@@ -70,3 +79,8 @@ static portal regression passed at 1440px and 390px, including tools/catalog,
 no API traffic, no accounts/cart, and API routes remaining 404.
 The full 390px traversal also passed: all 100 recipe sheets and all 73 links,
 with focus restoration, print controls and overflow checks.
+
+Current CI uses numbered recipe tests and representative PDF contracts. The
+100-PDF export and old retired-route probes above describe the dated run only;
+they are not an additional active backend/production suite. Kitchen/dosage
+validation remains pending regardless of technical deployment.
