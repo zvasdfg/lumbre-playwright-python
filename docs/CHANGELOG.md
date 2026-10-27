@@ -34,7 +34,21 @@ failed npm audit on two high-severity Vite/Zod findings; UI/deploy were skipped.
 No runtime/dependency change was made or deployed. The same repository was then
 made public with the owner's explicit retained-object risk acceptance, verified
 via the unauthenticated GitHub API. Historical purge remains unconfirmed.
-Dependency remediation and a newly passing release remain pending.
+That failed run did not deploy. Dependency remediation follows in the entry below;
+do not reinterpret the original run as successful.
+
+Pipeline remediation, 2026-10-27: coordinated Vite 8.3.5/Zod 4.6.7 static and
+development manifests/locks. Isolated deploy audit additionally exposed Undici;
+Wrangler 4.154.0 brings Undici 7.30.1 while retaining sharp 0.35.5. Locks regenerated
+with npm 11.17.0, public registry URLs/integrities preserved, no local file links
+or missing Linux bindings. Profile contracts now protect the reviewed patches
+and portable native packages. Clean static install, corporate-registry audit,
+49 model/publication contracts, types, recipe integrity and build passed.
+The patched deployment profile also passed a clean install/audit and Wrangler
+dry-run with the generated assets; no production secret was used locally.
+Official-registry audits and browser/deploy results remain attributable to the
+actual Actions run for the remediation commit, not the failed documentation run.
+No advisory/CI gate, TLS validation or historical security warning was bypassed.
 
 Local documentation-release checks, 2026-10-27: 49 model/publication + nine profile
 contracts and 18 infrastructure executions passed. Types, 100-recipe integrity,

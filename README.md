@@ -21,8 +21,11 @@ El cambio a público se verificó el 27 de octubre sin autenticación. La entreg
 documental d31a863 quedó en main, pero su
 [pipeline](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/40602275948)
 se detuvo en npm audit: dos vulnerabilidades altas en Vite/Zod. No ejecutó UI ni
-desplegó. La base funcional de producción sigue siendo 7971085; actualizar las
-dependencias y sus lockfiles, revalidar y desplegar queda pendiente.
+desplegó. La corrección posterior fija Vite 8.3.5, Zod 4.6.7 y Wrangler 4.154.0
+(Undici 7.30.1), con manifiestos/lockfiles coordinados y bindings Linux conservados.
+Las auditorías del registro corporativo configurado y el build limpio pasaron;
+las auditorías oficiales y el resultado del despliegue de cada revisión están en
+[Actions](https://github.com/zvasdfg/lumbre-playwright-python/actions).
 
 ## Funcionalidades actuales
 

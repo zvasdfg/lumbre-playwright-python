@@ -124,22 +124,41 @@ TLS ni lockfiles. CI ejecuta auditorías nuevas antes de permitir cada despliegu
 el PASS del 13 no es una auditoría actual. No se consultaron independientemente
 advisories de toda la cadena Python/navegadores.
 
-### Nuevo bloqueo comprobado en CI, 27 de octubre
+### Bloqueo comprobado en la publicación documental, 27 de octubre
 
 El [run 40602275948](https://github.com/zvasdfg/lumbre-playwright-python/actions/runs/40602275948)
 del commit documental d31a863 aprobó instalación, tipos y contratos, pero npm
-audit detectó **dos vulnerabilidades altas** en Vite y Zod de los locks actuales.
+audit detectó **dos vulnerabilidades altas** en Vite y Zod de los locks de esa revisión.
 El log identifica Vite 8.3.0–8.3.2 y Zod <4.6.6 como rangos afectados; las versiones
-fijadas son 8.3.1 y 4.6.5. Por ello UI/deploy se omitieron correctamente y producción
+fijadas eran 8.3.1 y 4.6.5. Por ello UI/deploy se omitieron correctamente y producción
 no cambió. Esto sustituye cualquier inferencia de seguridad actual basada en el
 PASS del 13 de octubre. El reporte se leyó en el job, no se obtuvo localmente.
 
-Pendiente: actualizar de forma coordinada manifiestos/locks static y desarrollo,
-revisar compatibilidad y ejecutar auditorías, build y UI antes de otro deploy.
-No se ejecutó npm audit fix --force, no se modificaron dependencias en esta entrega
-y no se desactivó el gate. La reapertura aceptada del repo no es una aprobación
-de estas vulnerabilidades ni una afirmación de que afecten por igual al sitio
-estático y a las herramientas de desarrollo.
+### Corrección del pipeline, 27 de octubre
+
+Vite se actualiza a 8.3.5 y Zod a 4.6.7 en desarrollo/release. La revisión aislada
+del deploy encontró además una cadena Undici vulnerable en Wrangler 4.148.0;
+Wrangler 4.154.0 incorpora Miniflare 5.20261023.1-beta y Undici 7.30.1. Se conserva
+el override de sharp 0.35.5. Referencias:
+[Vite](https://github.com/vitejs/vite/releases/tag/v8.3.5),
+[Zod](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5),
+[Undici](https://github.com/advisories/GHSA-2m5v-pch6-74hx).
+
+Los locks fueron regenerados con npm 11.17.0 en workspaces vacíos, manteniendo
+URLs públicas e integridades. Las pruebas de perfil comprueban paridad desarrollo/
+release, parches revisados y todos los bindings opcionales de Rolldown, incluido
+Linux x64. No se editaron a mano hashes de integridad ni se omitió npm ci.
+
+La consulta directa al registro npm público sigue fallando por certificados en
+este equipo. Se usó el registro corporativo **ya configurado**, con TLS activo y
+caché temporal propia: las instalaciones limpias/auditorías del portal y deploy
+devuelven cero vulnerabilidades. La simulación wrangler deploy --dry-run con
+el build actual también pasó, sin publicar ni usar secretos de Cloudflare.
+Esto es evidencia de ese registro, no una respuesta local de
+registry.npmjs.org. CI mantiene sus auditorías contra el registro oficial y todas
+las lanes UI como requisitos del deploy; consultar el run del commit para el
+resultado real. No se usó audit fix --force, exclusiones de advisories ni cambios
+de red/certificados. Esta corrección no resuelve la purga histórica pendiente.
 
 ## Reproducir los controles
 

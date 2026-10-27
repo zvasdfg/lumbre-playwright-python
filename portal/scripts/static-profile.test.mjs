@@ -26,7 +26,7 @@ function assertDeclaredImports(source, declared, file) {
 
 test("dependency guard catches missing Zod without resolving locally installed packages", () => {
   assert.throws(() => assertDeclaredImports('import { z } from "zod";', {}, "fire-plan-model.ts"), /Undeclared release dependency zod/);
-  assertDeclaredImports('import { z } from "zod";', {zod: "4.6.5"}, "fire-plan-model.ts");
+  assertDeclaredImports('import { z } from "zod";', {zod: "4.6.7"}, "fire-plan-model.ts");
   assert.deepEqual(importedPackages(`import { readFile } from "node:fs";
     import "./local.css";
     const generated = import("data:text/javascript,export default 1");
@@ -144,6 +144,17 @@ test("static lock matches its manifest and excludes legacy dependency chains", (
     assert.equal(lock.packages[`node_modules/${name}`].version, version, name);
   }
   assert.equal(lock.packages["node_modules/source-map-js"].version, "1.2.2");
+  // A macOS regeneration must retain native packages needed by Linux CI.
+  const bindings = lock.packages["node_modules/rolldown"].optionalDependencies;
+  assert.ok(Object.hasOwn(bindings, "@rolldown/binding-linux-x64-gnu"));
+  for (const [name, version] of Object.entries(bindings)) {
+    assert.equal(lock.packages[`node_modules/${name}`]?.version, version, `Missing portable binding: ${name}`);
+    assert.match(lock.packages[`node_modules/${name}`].integrity, /^sha512-/);
+  }
+  // Reviewed security patches; npm audit remains the current-advisory gate.
+  for (const [name, version] of [["vite", "8.3.5"], ["zod", "4.6.7"]]) {
+    assert.equal(lock.packages[`node_modules/${name}`].version, version, `${name}: keep the reviewed patch pinned`);
+  }
 });
 
 test("deploy profile is separate, patched and portable to the public CI registry", () => {
@@ -161,6 +172,7 @@ test("deploy profile is separate, patched and portable to the public CI registry
   const lock = read("profiles/deploy/package-lock.json");
   assert.deepEqual(Object.keys(deploy.devDependencies), ["wrangler"]);
   assert.equal(lock.packages["node_modules/wrangler"].version, deploy.devDependencies.wrangler);
+  assert.equal(deploy.devDependencies.wrangler, "4.154.0", "Keep the reviewed Undici remediation in the deploy profile");
   assert.equal(lock.packages["node_modules/sharp"].version, "0.35.5");
   assert.equal(deploy.overrides.miniflare.sharp, "0.35.5");
   for (const name of ["react", "react-dom", "vite", "tailwindcss", "next", "better-auth", "drizzle-orm"]) {
