@@ -10,7 +10,9 @@ class HomePage:
     def __init__(self, page: Page, base_url: str):
         self.page = page
         self.base_url = base_url.rstrip("/")
-        self.hero_title = page.get_by_role("heading", name="El fuego nos reúne.", exact=True)
+        self.home_title = page.get_by_role(
+            "heading", name="Sazonadores para cocinar al fuego.", exact=True
+        )
         self.recipe_cards = page.get_by_test_id("recipe-card")
         self.product_cards = page.get_by_test_id("product-card")
         self.ingredient_lab = IngredientLab(page)

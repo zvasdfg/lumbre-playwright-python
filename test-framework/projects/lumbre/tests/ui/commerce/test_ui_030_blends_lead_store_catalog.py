@@ -15,7 +15,7 @@ def test_blends_lead_store_catalog(portal, test_log):
     with test_log.step("Read all current product cards"):
         cards = portal.get_by_test_id("product-card")
         expect(cards).to_have_count(4)
-        actual = cards.locator("h3").all_text_contents()
+        actual = cards.get_by_role("heading", level=2).all_text_contents()
         test_log.values(observed_names=actual, expected_names=expected)
     with test_log.step("Check the production catalog rather than retired merchandise"):
         assert actual == expected

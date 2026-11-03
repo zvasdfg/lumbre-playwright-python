@@ -10,6 +10,7 @@ for name in [f"product-{index}" for index in range(1, 5)] + ["experiment"] + [f"
     assert all(len(text) > 80 for text in texts), (name, "Blank or almost empty page")
     assert all("El fuego nos" not in text for text in texts), "Portal leaked into print"
     combined = " ".join(" ".join(texts).split())
+    assert "sazonadores para cocinar al fuego" not in combined.casefold(), "New home title leaked into print"
     if name.startswith("product"):
         assert "Al llevarlo al fuego" in combined, "Last section is missing"
         assert "Umami" in combined, "Chart content is missing"

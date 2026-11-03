@@ -1,11 +1,11 @@
-.product-card { position: relative; padding-bottom: 3.5rem; }
-.product-card .product-card-open { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; border: 0; border-radius: 0; cursor: pointer; color: var(--ember); }
-.product-card-open span { position: absolute; bottom: .8rem; left: 1rem; font-weight: 800; text-decoration: underline; }
+.product-card { position: relative; padding-bottom: 0; }
+.product-card .product-card-open { position: static; width: 100%; height: auto; min-height: 44px; padding: 10px 12px; background: transparent; border: 1px solid #aaa; border-radius: 0; cursor: pointer; color: var(--ember); }
+.product-card-open span { position: static; font-weight: 700; text-decoration: underline; }
 .product-card-open:focus-visible { outline: 3px solid var(--ember); outline-offset: 4px; }
 .product-card .product-card-open:hover,
 .product-card .product-card-open:active { background: transparent; color: var(--ember); }
-.product-grid .product-card:hover .product-art img,
-.product-grid .product-card:focus-within .product-art img { transform: scale(1.14); filter: none; }
+.product-grid .product-image-open:hover img,
+.product-grid .product-image-open:focus-visible img { transform: scale(1.035); filter: none; }
 @media (prefers-reduced-motion: reduce) {
   .product-card .product-art img { transition: none; }
 }

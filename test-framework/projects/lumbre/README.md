@@ -35,14 +35,14 @@ antiguo checkpoint por su hash ni se debe mezclar historia previa a la limpieza.
 En la tabla, **N** cuenta ejecuciones Chromium de la colección actual. Salvo
 STORE, todos son portal. **M** va a la matriz, **S** al grupo serial y **C** se
 repite además en Firefox/WebKit. Sin letra: lane general. C no es otro caso.
-La colección completa tiene 455 ejecuciones: 431 framework/portal y 24 STORE
+La colección completa tiene 461 ejecuciones: 437 framework/portal y 24 STORE
 opt-in. Descubrir/coleccionar no demuestra PASS.
 
 ## Casos UI, en orden de ID
 
 | ID | Componente | N / lane | Resultado observable |
 | --- | --- | --- | --- |
-| UI-001 | home | 2 | Propósito y entradas funcionales de inicio |
+| UI-001 | home | 2 | Bienvenida compacta, catálogo primero, compra externa y accesos a herramientas |
 | UI-002 | recipes | 6 | Filtros, búsqueda, vacío y recuperación |
 | UI-003 | recipes | 2 | Consulta sin coincidencias y limpieza |
 | UI-006 | recipes | 2 | Búsqueda por título real |
@@ -56,7 +56,7 @@ opt-in. Descubrir/coleccionar no demuestra PASS.
 | UI-021 | ingredient_lab | 2 | Retirar conserva gramos de los demás |
 | UI-022 | ingredient_lab | 2 | Biblioteca conserva documento, alias y gramos |
 | UI-026 | recipes | 2 | Abrir la receta seleccionada |
-| UI-028 | home | 2 | Controles críticos en 320/390 px |
+| UI-028 | home | 3 | Nombre y compra del primer producto sin scroll en 320×640, 390×667 y 390×844; sin overlays ni desbordamiento |
 | UI-029 | recipes | 2 | Escape cierra ficha y devuelve foco al disparador |
 | UI-030 | commerce | 2 | Cuatro productos de producción en catálogo local |
 | UI-031 | ingredient_lab | 2 | Fotografías distintas para los 60 ingredientes |
@@ -106,6 +106,7 @@ opt-in. Descubrir/coleccionar no demuestra PASS.
 | UI-102 | home | 2 | IDs únicos, alt, nombres de controles y referencias ARIA |
 | UI-103 | home | 8 | PDF: cuatro productos, receta, dos blends y plan |
 | UI-104 | almanac | 2 | Chunk lento: busy explícito y planificador aún usable |
+| UI-105 | home | 5 | Retícula en 320/390/768/1024/1440 px, atajos visibles, Almanaque sin superposición, Escape, ficha explícita y contraste del resultado |
 
 Fuentes ejecutables: [home](tests/ui/home), [recipes](tests/ui/recipes),
 [ingredient_lab](tests/ui/ingredient_lab), [fire_planner](tests/ui/fire_planner),
@@ -137,7 +138,7 @@ seriales. accessibility/print_pdf seleccionan contratos transversales.
 
 | Selección de CI | Ejecuciones |
 | --- | --- |
-| framework_unit or (portal and not matrix and not specialized) | 208 |
+| framework_unit or (portal and not matrix and not specialized) | 214 |
 | portal and matrix | 215: planner 48 + ingredientes 60 + recetas 1 + almanaque 106 |
 | portal and specialized | 8 |
 | portal and cross_browser | 28 por motor; ya incluidas en Chromium general |

@@ -39,7 +39,9 @@ def test_dialog_keyboard_containment(portal, feature):
             page.keyboard.press("Enter")
         else:
             lab.add("sal_kosher")
+            expect(lab.card("sal_kosher").get_by_role("button", name="Retirar", exact=True)).to_have_attribute("aria-pressed", "true")
             lab.add("pimienta_negra")
+            expect(lab.card("pimienta_negra").get_by_role("button", name="Retirar", exact=True)).to_have_attribute("aria-pressed", "true")
             lab.set_grams("sal_kosher", 31)
             lab.set_grams("pimienta_negra", 19)
             trigger = page.get_by_role("button", name="Guardar en esta sesión", exact=True)

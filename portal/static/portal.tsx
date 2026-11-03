@@ -1,4 +1,4 @@
-import { Suspense, lazy, useMemo, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import Image from "./image";
 import { productStoreUrl } from "./store-links";
 import "./store-links.css";
@@ -42,6 +42,10 @@ export default function StaticPortal() {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [productRecipeOrigin, setProductRecipeOrigin] = useState<Recipe | null>(null);
   const [recipeScrollTop, setRecipeScrollTop] = useState(0);
+  useEffect(() => {
+    // Provisions no longer depend on the lazy laboratory to align their anchor.
+    if (window.location.hash === "#tienda") document.getElementById("tienda")?.scrollIntoView({ behavior: "instant" });
+  }, []);
   const filteredRecipes = useMemo(() => {
     const normalized = search.trim().toLocaleLowerCase("es");
     return recipes.filter((recipe) => {
@@ -63,20 +67,28 @@ export default function StaticPortal() {
 
 
   return (
-    <main data-app-ready="true">
+    <main id="inicio" data-app-ready="true">
       <header className="site-header">
         <a className="brand" href="#inicio" aria-label="Lumbre, inicio">
           <Image src="/brand/lumbre-logo-primary.png" alt="" width={72} height={86} priority unoptimized />
           <span className="brand-wordmark">LUMBRE</span>
         </a>
         <nav aria-label="Navegación principal">
+          <a href="#tienda">Provisiones</a>
           <a href="#metodo">Método</a>
           <a href="#planificador">Planificador</a>
           <a href="#recetas">Recetas</a>
           <a href="#laboratorio">Laboratorio</a>
-          <a href="#tienda">Provisiones</a>
         </nav>
-        <details className="mobile-nav" onClick={(event) => {
+        <div className="header-almanac"><FireAlmanac /></div>
+        <details className="mobile-nav" onBlur={event => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) event.currentTarget.open = false;
+        }} onKeyDown={event => {
+          if (event.key !== "Escape") return;
+          event.preventDefault();
+          event.currentTarget.open = false;
+          event.currentTarget.querySelector("summary")?.focus();
+        }} onClick={(event) => {
           const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
           if (!link) return;
           event.currentTarget.open = false;
@@ -88,35 +100,72 @@ export default function StaticPortal() {
         }}>
           <summary>Menú</summary>
           <div>
+            <a href="#tienda">Provisiones</a>
             <a href="#metodo">Método</a>
             <a href="#planificador">Planificador</a>
             <a href="#recetas">Recetas</a>
             <a href="#laboratorio">Laboratorio</a>
-            <a href="#tienda">Provisiones</a>
           </div>
         </details>
       </header>
 
-      <section className="hero" id="inicio">
-        <div className="hero-copy">
-          <p className="eyebrow">Fuego · Comunidad · Vida al aire libre</p>
-          <h1>El fuego nos<br /><em>reúne.</em></h1>
-          <p className="hero-description">Un laboratorio abierto para entender la brasa, diseñar mezclas y cocinar con intención. Aquí cada fuego deja conocimiento para el siguiente.</p>
-          <div className="hero-actions">
-            <a className="button button-primary" href="#laboratorio">Entrar al laboratorio</a>
-            <button className="button button-quiet planner-trigger" type="button" onClick={() => document.getElementById("planificador")?.scrollIntoView({ behavior: "smooth" })}>Planear mi fuego <span>↗</span></button>
-            <a className="button button-quiet" href="#recetas">Explorar recetas <span>↗</span></a>
-          </div>
-          <div className="hero-proof" aria-label="Alcance del laboratorio">
-            <span><strong>60</strong> componentes</span>
-            <span><strong>11</strong> familias</span>
-            <span><strong>4</strong> protocolos</span>
-          </div>
+      <section className="shop-section shop-section-first" id="tienda" aria-labelledby="store-title">
+        <div className="shop-heading">
+          <p className="section-index">PROVISIONES LUMBRE</p>
+          <h1 id="store-title">Sazonadores para cocinar al fuego.</h1>
+          <p>Cuatro mezclas. Encuentra la tuya.</p>
+          <nav className="store-tool-links" aria-label="Herramientas de Lumbre">
+            <a href="#planificador" aria-label="Usar el Planificador">Planificador</a>
+            <a href="#laboratorio" aria-label="Abrir el Laboratorio">Laboratorio</a>
+            <a href="#recetas" aria-label="Explorar el Recetario">Recetas</a>
+          </nav>
         </div>
-        <div className="hero-visual">
-          <Image className="hero-photo" src="/editorial/lumbre-hero-v2.jpg" alt="Parrilla encendida frente a montañas al atardecer" fill priority sizes="(max-width: 850px) 100vw, 52vw" />
-          <div className="hero-stamp" aria-hidden="true"><Image src="/brand/lumbre-mark-red.png" alt="" width={58} height={58} unoptimized /><span>HECHO PARA<br />VIVIR AFUERA</span></div>
-          <p className="visual-note"><span>CUADERNO 01</span> Observar. Formular.<br />Encender. Registrar.</p>
+        <div className="product-grid">
+          {productCatalog.map((product, index) => (
+            <article
+              className="product-card"
+              key={product.id}
+              data-testid="product-card"
+              data-category={product.category}
+            >
+              <button className={`product-art product-image-open product-${product.category}`} type="button"
+                aria-label={`Ver imagen y ficha de ${product.name}`} onClick={() => setSelectedProduct(product)}>
+                {product.badge && <span className="product-badge">{product.badge}</span>}
+                {product.image ? (
+                  <Image
+                    src={product.image}
+                    alt={product.imageAlt ?? `Fotografía de ${product.name}`}
+                    fill
+                    priority={index === 0}
+                    sizes="(max-width: 520px) 100vw, 33vw"
+                  />
+                ) : (
+                  <span className="product-placeholder" aria-hidden="true">
+                    {productInitials(product.name)}
+                  </span>
+                )}
+              </button>
+              <p>{product.productCode ? `${productCategoryLabel()} · ${product.productCode}` : productCategoryLabel()}</p>
+              <h2 className="product-title">{product.name}</h2>
+              <div className="product-purchase">
+                <strong>{currency.format(product.price)}{product.netContent ? ` · ${product.netContent}` : ""}</strong>
+                <a className="button button-primary product-store-link" href={productStoreUrl(product.productCode)} aria-label={`Comprar ${product.name} en la tienda`}>Comprar en la tienda ↗</a>
+                <span>Precio y disponibilidad actualizados en la tienda</span>
+              </div>
+              <button className="product-card-open" type="button" aria-label={`Ver ficha de ${product.name}`} onClick={() => setSelectedProduct(product)}><span>Ver ficha del sazonador ↗</span></button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="portal-tools" id="presentacion" aria-labelledby="tools-title">
+        <p className="section-index">HERRAMIENTAS DEL LABORATORIO</p>
+        <h2 id="tools-title">El fuego nos reúne.</h2>
+        <p>Diseña tus mezclas, planea el fuego y encuentra qué cocinar.</p>
+        <div className="tools-actions">
+          <a className="button button-primary" href="#laboratorio">Entrar al laboratorio</a>
+          <button className="button button-quiet planner-trigger" type="button" onClick={() => document.getElementById("planificador")?.scrollIntoView({ behavior: "smooth" })}>Planear mi fuego <span>↗</span></button>
+          <a className="button button-quiet" href="#recetas">Explorar recetas <span>↗</span></a>
         </div>
       </section>
 
@@ -198,47 +247,6 @@ export default function StaticPortal() {
 
       <IngredientLab />
 
-      <section className="shop-section" id="tienda">
-        <div className="shop-heading"><p className="section-index">05 — DESPENSA LUMBRE</p><h2>Prueba nuestros<br />sazonadores.</h2><p>Cuatro mezclas para llevar al fuego. Conoce sus ingredientes y consulta sus fichas en nuestro laboratorio.</p><a className="text-link" href="#laboratorio">Conocer los componentes →</a></div>
-        <div className="product-grid">
-          {productCatalog.map((product) => (
-            <article
-              className="product-card"
-              key={product.id}
-              data-testid="product-card"
-              data-category={product.category}
-            >
-              <div className={`product-art product-${product.category}`}>
-                {product.badge && <span className="product-badge">{product.badge}</span>}
-                {product.image ? (
-                  <Image
-                    src={product.image}
-                    alt={product.imageAlt ?? `Fotografía de ${product.name}`}
-                    fill
-                    sizes="(max-width: 520px) 100vw, 33vw"
-                  />
-                ) : (
-                  <span className="product-placeholder" aria-hidden="true">
-                    {productInitials(product.name)}
-                  </span>
-                )}
-              </div>
-              <p>{product.productCode ? `${productCategoryLabel()} · ${product.productCode}` : productCategoryLabel()}</p>
-              <h3>{product.name}</h3>
-              {product.description && <p className="product-description">{product.description}</p>}
-              {product.ingredients && (
-                <p className="product-ingredients"><strong>Ingredientes:</strong> {product.ingredients.join(", ")}.</p>
-              )}
-              <div>
-                <strong>{currency.format(product.price)}{product.netContent ? ` · ${product.netContent}` : ""}</strong><span>Precio y disponibilidad actualizados en la tienda</span>
-              </div>
-              <button className="product-card-open" type="button" aria-label={`Ver ficha de ${product.name}`} onClick={() => setSelectedProduct(product)}><span>Ver ficha del sazonador ↗</span></button>
-              <a className="button button-primary product-store-link" href={productStoreUrl(product.productCode)} aria-label={`Comprar ${product.name} en la tienda`}>Comprar en la tienda ↗</a>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <AsyncBoundary><Suspense fallback={<p role="status">Cargando ficha…</p>}>{selectedProduct && <ProductSheet product={selectedProduct} onClose={() => {
         setSelectedProduct(null); setProductRecipeOrigin(null); setRecipeScrollTop(0);
       }} onBack={productRecipeOrigin ? () => {
@@ -251,9 +259,6 @@ export default function StaticPortal() {
         <div><p>Tu privacidad</p><span>Tus mezclas y presets se guardan únicamente en este navegador. Las compras se realizan en nuestra tienda Tiendanube.</span></div>
         <small>© 2026 Lumbre · Diseñado alrededor del fuego en México.</small>
       </footer>
-
-      <FireAlmanac />
-
 
       <AsyncBoundary><Suspense fallback={<p role="status">Cargando receta…</p>}>{selectedRecipe && <RecipeSheet recipe={selectedRecipe} initialScrollTop={recipeScrollTop} onClose={() => { setSelectedRecipe(null); setRecipeScrollTop(0); }} onOpenBlend={(code, scrollTop) => {
         const product = productionProducts.find(item => item.details.productCode === code);

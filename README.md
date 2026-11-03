@@ -12,7 +12,7 @@ Este README es la fuente canónica para funcionalidades, estructura, instalació
 y ejecución. El [catálogo numerado de pruebas](test-framework/projects/lumbre/README.md)
 describe los casos; no hay una segunda suite paralela de Lumbre.
 
-Revisión documental: **2026-10-27**. Los comandos y conteos se contrastaron con
+Revisión documental: **2026-11-02**. Los comandos y conteos se contrastaron con
 el código y la colección actual; colección no significa ejecución exitosa.
 La decisión del propietario de volver público este mismo repositorio acepta
 el riesgo de objetos históricos aún recuperables: **la purga no está confirmada**.
@@ -31,7 +31,7 @@ las auditorías oficiales y el resultado del despliegue de cada revisión están
 
 | Módulo | Qué permite |
 | --- | --- |
-| Inicio y Método | Navegación por secciones en móvil/escritorio, anclas al primer clic, menú móvil, foco visible y respeto a movimiento reducido. |
+| Inicio y Método | Bienvenida breve y Provisiones primero; navegación por secciones en móvil/escritorio, anclas al primer clic, menú móvil, foco visible y respeto a movimiento reducido. |
 | Planificador | Asar, ahumar y hornear; restricciones por equipo, combustible, método y montaje; temperaturas iniciales y control de horas; estimación de combustible y reserva. |
 | Planes de fuego | Etapas de cocción/reposo, soportes y unidades °C/°F; hasta 12 etapas; guardar, copiar, reemplazar, recuperar y eliminar planes locales; ficha A4 para imprimir/PDF. |
 | Laboratorio | 60 ingredientes en familias, búsqueda, fichas y selección de 2–12 componentes; gramos manuales y lote máximo de 150 g; radar dinámico de los cinco sabores en boca. |
@@ -55,6 +55,51 @@ offset, gas y pellets. Exige confirmar capacidades cuando corresponda; no todos
 los equipos admiten todos los objetivos. Weber aporta referencias, mientras que
 extrapolaciones y márgenes son supuestos explícitos de Lumbre, no mediciones del
 equipo del usuario. Ver [modelo de combustible](docs/PLANNER_MODEL.md).
+
+## Portada orientada a compra — decisión UX del 2 de noviembre de 2026
+
+Inicio (`/` y `/#inicio`) abre con una bienvenida breve: «Sazonadores para cocinar
+al fuego.» y «Cuatro mezclas. Encuentra la tuya.». Provisiones (`#tienda`) es el
+primer bloque y el primer enlace de ambos menús. No hay fotografía de portada
+antes del catálogo. Los atajos a Planificador, Laboratorio y Recetas se ven junto
+a la bienvenida; se conservan también los accesos después de los productos.
+No se eliminan herramientas ni cambian sus anclas.
+
+Cada tarjeta muestra una foto cuadrada, nombre, precio, enlace de compra y un
+botón explícito de ficha. Las descripciones completas e ingredientes siguen en
+la ficha, sin repetirse en la tarjeta. No hay una capa de botón invisible sobre
+todo el artículo. La primera imagen carga con prioridad. Hay cuatro columnas en
+escritorio ancho, dos en tabletas y tarjetas de miniatura/texto en móvil: la
+identidad del primer producto y su botón deben caber sin scroll en 320×640,
+390×667 y 390×844.
+Esto se comprueba por coordenadas, centro y esquinas libres de overlays,
+no sólo con `to_be_visible()`. No es garantía para todo dispositivo/zoom.
+
+El logo vuelve a `#inicio`; `#tienda`, `#metodo`, `#planificador`, `#recetas` y
+`#laboratorio` se conservan. Compra e inventario siguen en Tiendanube. La
+disponibilidad no se deduce del botón del portal. No se alteran dependencias,
+perfiles aislados ni pasos de despliegue por este cambio de presentación.
+
+Contratos: `npm test` cubre estructura y destinos; UI-001 cubre bienvenida,
+productos y accesos; UI-028 cubre la primera pantalla móvil; UI-063 comprueba
+navegación al primer clic. La aceptación estática serial también valida el nuevo
+título. UI-105 cubre cinco tamaños, fotos, acciones explícitas, Escape, deferral y
+contraste del resultado. El Almanaque vive en el encabezado, no flotando sobre
+las herramientas; los encabezados móviles se compactan sin ocultar controles.
+Abrir `#tienda` no debe descargar el módulo del Laboratorio, que ahora se carga
+únicamente por sus destinos o proximidad real. Ver [auditoría UX/UI](docs/UX_UI_AUDIT.md).
+La navegación por anclas y la alineación al cargar el Laboratorio son inmediatas:
+no deben seguir moviendo un control mientras el usuario intenta pulsarlo. Las
+acciones explícitas de resultado/variante conservan su desplazamiento suave.
+
+Las cuatro portadas comerciales usan JPEG versionados en
+`portal/public/editorial/products/r011/`, con etiquetas de **200 g**, referenciados desde el catálogo canónico
+`portal/data/production-products.ts`. Tarjetas, archivo del laboratorio y fichas
+comparten esas rutas. Los archivos anteriores se conservan para rollback.
+El contrato de imágenes comprueba las cuatro rutas, bytes JPEG y respaldo previo;
+actualizar fotos de Tiendanube no equivale a desplegar el portal.
+El contenido neto comercial de 200 g no modifica el límite independiente de 150 g
+del Laboratorio ni el peso empacado usado para calcular envíos.
 
 ## Dónde está cada cosa
 
@@ -222,7 +267,7 @@ el deploy solo ocurre en main y nunca desde una PR.
 | Job | Qué ejecuta | Dónde / destino |
 | --- | --- | --- |
 | static-build | Auditoría del árbol público, workspace aislado, npm ci, tipos, recetas, modelos, auditorías npm y build | Ubuntu 24.04; sin publicar |
-| Isolated browser validation | framework_unit or (portal and not matrix and not specialized), 208 ejecuciones, -n 2 | Contenedor Playwright, Chromium; servidor local 3001 |
+| Isolated browser validation | framework_unit or (portal and not matrix and not specialized), 214 ejecuciones, -n 2 | Contenedor Playwright, Chromium; servidor local 3001 |
 | Serial browser and PDF validation | portal and specialized, ocho grupos, sin xdist | Otro contenedor/servidor local, archivos PDF seriales |
 | Component configuration matrix | portal and matrix más planner_matrix, ingredients_matrix, recipes_matrix o almanac_matrix; 215 ejecuciones | Cuatro jobs separados, mismo artefacto; Chromium local |
 | Keyboard and recovery | portal and cross_browser | Dos jobs: Firefox y WebKit, mismo artefacto local |
@@ -231,7 +276,7 @@ el deploy solo ocurre en main y nunca desde una PR.
 
 El build se produce **una sola vez**. Todos los jobs descargan ese mismo artifact;
 no validan versiones reconstruidas distintas. El grupo general, el serial y las
-matrices suman 431 ejecuciones sin solaparse. Compatibilidad repite un subconjunto
+matrices suman 437 ejecuciones sin solaparse. Compatibilidad repite un subconjunto
 en otros motores; no son más funcionalidades independientes.
 
 Workflow separado: [.github/workflows/store-ui.yml](.github/workflows/store-ui.yml),
@@ -240,9 +285,9 @@ automáticamente en cada deploy ni habilita transacciones.
 
 ## Cobertura y límites
 
-64 comportamientos UI numerados (62 portal y dos store), cinco IDs del core
+65 comportamientos UI numerados (63 portal y dos store), cinco IDs del core
 y cuatro contratos de arquitectura. La colección
-contiene 431 casos local/framework + 24 store opcionales. Incluye 48 combinaciones
+contiene 437 casos local/framework + 24 store opcionales. Incluye 48 combinaciones
 de planificador, 60 ingredientes, 100 recetas, 53 documentos a dos tamaños y ocho
 escenarios PDF. Modelos puros incluyen 8,640 configuraciones y 1,770 pares.
 No implica todos los subconjuntos de ingredientes, gramos o secuencias posibles.

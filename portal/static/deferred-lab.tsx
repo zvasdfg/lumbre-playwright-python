@@ -3,8 +3,8 @@ import { importWithRecovery } from "./import-with-recovery";
 
 const IngredientLab = lazy(() => importWithRecovery("ingredient-lab", () => import("./ingredient-lab"), "lab_retry"));
 const labHashes = new Set(["#laboratorio", "#hipotesis"]);
-// Provisiones is below the lazy lab: its final position depends on the lab's height.
-const layoutDependentHashes = new Set([...labHashes, "#tienda"]);
+// Only laboratory destinations depend on this deferred section's final height.
+const layoutDependentHashes = labHashes;
 
 function Placeholder() {
   return <section id="laboratorio" className="ingredient-lab" style={{ minHeight: 800 }} aria-busy="true">
@@ -37,9 +37,9 @@ class LoadBoundary extends Component<{ children: ReactNode }, { failed: boolean 
 function LoadedLab() {
   useEffect(() => {
     // Re-align the current destination after replacing the shorter placeholder.
-    // Read the current hash so a newer navigation is never sent back to the lab/shop.
+    // Read the current hash so newer navigation is never sent back to the lab.
     if (layoutDependentHashes.has(window.location.hash)) {
-      document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+      document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: "instant" });
     }
   }, []);
   return <IngredientLab />;

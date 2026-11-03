@@ -40,9 +40,9 @@ export const productionProducts = [
   id, name, category: "blends" as const, price: 99, stock: 0, badge: "Producción",
   details: {
     ...details,
-    image: `/editorial/products/${details.productCode.toLowerCase()}.jpeg`,
+    image: `/editorial/products/r011/${details.productCode.toLowerCase()}.jpg`,
     imageAlt: `Frasco ${details.productCode}, ${name} Lumbre`,
-    netContent: "150 g",
+    netContent: "200 g",
   } satisfies ProductDetails,
 }));
 

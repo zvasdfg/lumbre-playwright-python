@@ -31,7 +31,7 @@ expect reintenta de forma acotada.
 
 ## HomePage y laboratorio reales
 
-HomePage expone hero_title, recipe_cards, product_cards, ingredient_lab,
+HomePage expone home_title (bienvenida compacta), recipe_cards, product_cards, ingredient_lab,
 fire_planner, open(), filter_recipes(label), search_recipes(text),
 recipe_named(name) y product_named(name). No expone view_recipe(), toast, cart,
 membership ni api. No copiar selectores de versiones anteriores.

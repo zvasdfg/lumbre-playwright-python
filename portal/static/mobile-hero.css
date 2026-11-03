@@ -1,6 +1,6 @@
 /* Static portal: keep the mobile reading order independent of desktop columns. */
 @media (max-width: 850px) {
-  #inicio.hero { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  #inicio .hero { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 0; }
   #inicio .hero-copy { min-width: 0; min-height: 0; padding: 28px 24px 32px; }
   #inicio .hero-copy::before { position: static; display: block; margin-bottom: 22px; font-size: 9px; line-height: 1.6; letter-spacing: .14em; }
   #inicio .eyebrow { margin: 0; max-width: 32em; font-size: 10px; line-height: 1.7; letter-spacing: .12em; }

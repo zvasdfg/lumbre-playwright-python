@@ -46,7 +46,7 @@ def test_store_product_and_return(page, app_url, index, name, width, entry):
     page.wait_for_load_state("load")
     assert page.url.rstrip("/") == href.rstrip("/")
     expect(
-        page.get_by_role("heading", name=f"LMB-F-{index:03d} · {name} · 150 g", exact=False)
+        page.get_by_role("heading", name=f"LMB-F-{index:03d} · {name} · 200 g", exact=False)
     ).to_be_visible()
     expect(page.get_by_text(f"SKU: LMB-F-{index:03d}", exact=True)).to_be_visible()
     # Stock is live: do not require zero stock or a fixed price forever.

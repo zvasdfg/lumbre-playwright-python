@@ -26,7 +26,10 @@ with sync_playwright() as playwright:
                 if response.status >= 400 else None)
         page.goto(BASE_URL)
         expect(page.locator('[data-app-ready="true"]')).to_be_visible()
-        # First navigation must survive the lazy lab replacing its short placeholder.
+        expect(page.locator("main > section").first).to_have_attribute("id", "tienda")
+        expect(page.get_by_role("heading", name="Sazonadores para cocinar al fuego.", exact=True)).to_be_visible()
+        expect(page.locator("h1")).to_have_count(1)
+        # Provisions is now first and must align without loading the deferred lab.
         if width < 700:
             page.locator(".mobile-nav summary").click()
             page.locator('.mobile-nav a[href="#tienda"]').click()
@@ -34,9 +37,7 @@ with sync_playwright() as playwright:
             page.get_by_role("navigation", name="Navegación principal").get_by_role("link", name="Provisiones", exact=True).click()
         page.wait_for_function("""() => {
             const target = document.getElementById('tienda');
-            const lab = document.getElementById('laboratorio');
-            return lab && !lab.hasAttribute('aria-busy') &&
-              Math.abs(target.getBoundingClientRect().top - parseFloat(getComputedStyle(target).scrollMarginTop)) < 4;
+            return Math.abs(target.getBoundingClientRect().top - parseFloat(getComputedStyle(target).scrollMarginTop)) < 4;
         }""")
         expect(page.get_by_test_id("product-card")).to_have_count(4)
         for index, name in enumerate(("Sazonador multiuso", "Sazonador para carne de res", "Sazonador para carne de cerdo", "Sazonador para carne de pollo")):
@@ -76,6 +77,9 @@ with sync_playwright() as playwright:
                 sheet.get_by_role("button", name="Cerrar ficha de producto", exact=True).click()
             expect(sheet).to_have_count(0)
             expect(trigger).to_be_focused()
+            if index == 0:
+                page.get_by_role("link", name="Entrar al laboratorio", exact=True).click()
+                expect(page.get_by_test_id("hypothesis-registry")).to_be_visible()
             registry_card = page.get_by_test_id("hypothesis-registry").locator(".hypothesis-card").nth(index)
             registry_card.get_by_role("button", name="Abrir ficha", exact=True).click()
             expect(sheet).to_be_visible()

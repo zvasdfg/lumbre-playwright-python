@@ -115,7 +115,10 @@ def test_print_content(page, app_url, feature, request):
         assert re.sub(r"\s+", " ", token).casefold() in folded, (
             f"PDF missing screen content: {token}"
         )
-    for chrome in ("Entrar al laboratorio", "Tus fuegos repetibles", "El fuego nos reúne"):
+    for chrome in (
+        "Entrar al laboratorio", "Tus fuegos repetibles", "El fuego nos reúne",
+        "Sazonadores para cocinar al fuego", "Cuatro mezclas. Encuentra la tuya",
+    ):
         assert chrome.casefold() not in folded, f"Portal leaked into print: {chrome}"
     for p in reader.pages:
         assert abs(float(p.mediabox.width) - 595.28) < 2

@@ -61,6 +61,7 @@ with sync_playwright() as pw:
                 assert 1 <= len(texts) <= 4 and all(len(t)>80 for t in texts), texts
                 assert LABELS[goal] in ' '.join(texts) and 'REGISTRO EN CAMPO' in ' '.join(texts)
                 assert 'El fuego nos' not in ' '.join(texts)
+                assert 'sazonadores para cocinar al fuego' not in ' '.join(texts).casefold()
                 print('PDF',goal,len(texts),'pages',flush=True)
             assert not errors, errors
             context.close()

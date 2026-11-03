@@ -1,0 +1,79 @@
+/* Current UX corrections. Keep storefront, navigation and mobile rhythm together. */
+@media screen {
+  /* Hash navigation and lazy-section alignment must settle before interaction.
+     Keep smooth motion only on explicit result/variant actions, not every scroll. */
+  html { scroll-behavior: auto; }
+  .site-header { grid-template-columns: auto minmax(0, 1fr) auto; gap: 24px; padding-inline: clamp(20px, 4vw, 56px); }
+  .site-header > nav { justify-self: center; gap: clamp(14px, 2vw, 28px); }
+  .header-almanac { position: relative; justify-self: end; }
+  .header-almanac .almanac-trigger { position: static; min-width: 0; min-height: 44px; padding: 8px 12px; box-shadow: none; transform: none; }
+  .header-almanac .almanac-trigger > span { font-size: 20px; }
+  .header-almanac .almanac-trigger strong { font-size: 11px; }
+  .header-almanac [role="alert"] { position: absolute; top: 100%; right: 0; z-index: 60; width: min(320px, calc(100vw - 40px)); border: 1px solid #777; padding: 16px; background: #fff; color: #111; font-size: 14px; line-height: 1.6; }
+  .header-almanac [role="alert"] button { min-height: 44px; }
+
+  #tienda.shop-section-first { display: block; min-height: 0; padding: 32px clamp(20px, 5vw, 72px) 40px; border-top: 0; }
+  #tienda .shop-heading { position: static; margin-bottom: 24px; }
+  #tienda #store-title { max-width: 40ch; margin: 10px 0; font-size: clamp(28px, 2.8vw, 40px); line-height: 1.12; }
+  #tienda .shop-heading > p { max-width: none; margin: 8px 0; }
+  .store-tool-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 8px; }
+  .store-tool-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; font-size: 13px; line-height: 1.4; letter-spacing: 0; text-transform: none; text-decoration: underline; text-underline-offset: 4px; }
+  .store-tool-links a::after { display: none; }
+  #tienda .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+  #tienda .product-card { display: flex; flex-direction: column; min-width: 0; padding: 0 0 16px; border: 1px solid #ccc; }
+  #tienda .product-art { width: 100%; height: auto; min-height: 0; padding: 0; border: 0; border-bottom: 1px solid #ddd; border-radius: 0; aspect-ratio: 1; background: #fff; }
+  #tienda .product-art img { object-fit: cover; }
+  #tienda .product-card > p { margin: 14px 16px 6px; font-size: 10px; line-height: 1.4; }
+  #tienda .product-card .product-title { min-height: 2.5em; margin: 0 16px; font-family: var(--font-exo), sans-serif; font-size: 20px; font-weight: 700; line-height: 1.25; }
+  #tienda .product-purchase { display: flex; flex: 1; flex-direction: column; gap: 8px; position: static; margin: 12px 16px; }
+  #tienda .product-purchase > strong { font-size: 15px; }
+  #tienda .product-store-link { margin: 0; min-height: 44px; padding: 12px 8px; font-size: 11px; line-height: 1.4; letter-spacing: 0; }
+  #tienda .product-purchase > span { font-size: 12px; line-height: 1.5; }
+  #tienda .product-card-open { position: static; inset: auto; width: calc(100% - 32px); height: auto; min-height: 44px; margin: 0 16px; padding: 10px; border: 1px solid #aaa; border-radius: 0; font-size: 13px; line-height: 1.4; }
+  #tienda .product-card-open span { position: static; }
+  .planner-output .planner-help { color: #4c4c4c; }
+  .planner-controls .planner-help { color: #ddd; }
+}
+
+@media screen and (max-width: 1100px) {
+  #tienda .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media screen and (min-width: 851px) and (max-width: 1050px) {
+  .site-header .brand-wordmark { display: none; }
+}
+@media screen and (max-width: 850px) {
+  .site-header { grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; padding-inline: 16px; }
+  .header-almanac .almanac-trigger { display: flex; gap: 6px; padding: 8px; }
+  .header-almanac .almanac-trigger small { display: none; }
+  .header-almanac .almanac-trigger strong { letter-spacing: 0; }
+  #tienda.shop-section-first { padding: 24px 20px 32px; }
+  #tienda #store-title { max-width: 24ch; font-size: clamp(28px, 7vw, 34px); line-height: 1.12; }
+  #tienda .shop-heading > p { margin: 8px 0; font-size: 14px; line-height: 1.5; }
+  .store-tool-links { gap: 4px 12px; }
+  #planificador, #recetas, #metodo, #laboratorio.ingredient-lab { padding: 32px 20px; }
+  #planificador .planner-heading h2, #recetas .section-heading h2,
+  #metodo .knowledge-heading h2, #laboratorio .lab-intro h2 { font-size: 32px; line-height: 1.1; margin-top: 12px; }
+  #planificador .planner-heading, #recetas .section-heading,
+  #metodo .knowledge-heading { gap: 16px; }
+  #recetas .section-heading { margin-bottom: 24px; }
+  #planificador .planner-heading > p { font-size: 14px; line-height: 1.6; }
+  #planificador .quick-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 24px; }
+  #planificador .quick-plans > span { grid-column: 1 / -1; width: auto; padding: 12px 0; }
+  #planificador .quick-plans button { flex-direction: column; justify-content: start; min-width: 0; gap: 8px; padding: 12px 8px; font-size: 11px; line-height: 1.4; letter-spacing: 0; text-align: left; }
+  #planificador .quick-plans small { font-size: 10px; line-height: 1.4; }
+  #laboratorio.ingredient-lab::before { display: none; }
+  #laboratorio .lab-intro { gap: 16px; margin-bottom: 24px; }
+  #laboratorio .lab-manifesto dl { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; }
+  #laboratorio .lab-manifesto dd { font-size: 13px; line-height: 1.4; }
+  #laboratorio .registry-jump { margin-top: 16px; }
+}
+@media screen and (max-width: 520px) {
+  #tienda .product-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  #tienda .product-card { display: grid; grid-template-columns: 112px minmax(0, 1fr); grid-template-rows: min-content auto auto auto; column-gap: 14px; padding: 14px; }
+  #tienda .product-art { grid-column: 1; grid-row: 1 / 3; width: 112px; height: 112px; border: 0; }
+  #tienda .product-card > p { grid-column: 2; grid-row: 1; margin: 0 0 6px; font-size: 10px; letter-spacing: 0; }
+  #tienda .product-card .product-title { grid-column: 2; grid-row: 2; min-height: 0; margin: 0; font-size: 18px; }
+  #tienda .product-purchase { grid-column: 1 / -1; margin: 12px 0; }
+  #tienda .product-card-open { grid-column: 1 / -1; margin: 0; width: 100%; }
+  .mobile-nav summary { min-width: 48px; }
+}
