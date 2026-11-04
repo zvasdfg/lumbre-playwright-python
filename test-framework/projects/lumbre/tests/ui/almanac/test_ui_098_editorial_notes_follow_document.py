@@ -12,6 +12,11 @@ pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.almanac, pytest.ma
         *[(n, "no corresponden a zonas exclusivas", "www.nidcd.nih.gov") for n in range(31, 37)],
         (50, "cerdo molido, a 71 °C", "www.fsis.usda.gov"),
         (52, "no una garantía de seguridad", "www.fsis.usda.gov"),
+        (49, "68–72 °C", "www.foodsafety.gov"),
+        (58, "Cambiar de cara no sustituye", "www.foodsafety.gov"),
+        ("059-cepillo", "nylon para limpieza en frío", "www.charbroil.com"),
+        *[(n, "no garantizan inocuidad", "www.foodsafety.gov") for n in (60, 61, 81, 82, 86)],
+        (74, "antes de 1 hora", "ask.fsis.usda.gov"),
     ],
 )
 def test_editorial_notes(almanac, document, expected, domain):

@@ -204,7 +204,7 @@ test("release workspace contains static inputs, never inherits backend installat
   try {
     const result = prepare(target);
     assert.equal(result.status, 0, result.stderr);
-    for (const path of ["static/main.tsx", "static/fire-almanac.tsx", "public/editorial", "scripts/check-recipes.mjs", "package-lock.json"]) {
+    for (const path of ["static/main.tsx", "static/fire-almanac.tsx", "data/almanac-pages.json", "public/editorial", "scripts/check-recipes.mjs", "scripts/almanac-pages.test.mjs", "package-lock.json"]) {
       assert.ok(existsSync(resolve(target, path)), path);
     }
     for (const path of ["node_modules", "app", "server", "next-env.d.ts", "wrangler.jsonc", ".env", ".dev.vars"]) {
@@ -228,7 +228,7 @@ test("release workspace contains static inputs, never inherits backend installat
         checkRelativeImports(found);
       }
     }
-    for (const entry of ["static/main.tsx", "static/vite.config.ts", "scripts/check-recipes.mjs", "scripts/fire-plan-model.test.mjs", "scripts/store-links.test.mjs"]) {
+    for (const entry of ["static/main.tsx", "static/vite.config.ts", "scripts/check-recipes.mjs", "scripts/fire-plan-model.test.mjs", "scripts/store-links.test.mjs", "scripts/almanac-pages.test.mjs"]) {
       checkRelativeImports(resolve(target, entry));
     }
     assert.equal(readFileSync(resolve(target, "package.json"), "utf8"), readFileSync(resolve(portal, "profiles/static/package.json"), "utf8"));

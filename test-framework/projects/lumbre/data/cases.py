@@ -24,8 +24,13 @@ PLANNER_CASES = [
     for fuel in fuels
 ]
 
-# Published edition contract: 049 is absent intentionally, not a missing asset.
-ALMANAC_DOCUMENTS = tuple(range(1, 49)) + tuple(range(50, 55))
+# Archive edition: 001–105, including two different originals printed as 059.
+# The suffix identifies the second asset; it does not renumber the printed original.
+ALMANAC_DOCUMENTS = (
+    tuple(f"{n:03d}" for n in range(1, 60))
+    + ("059-cepillo",)
+    + tuple(f"{n:03d}" for n in range(60, 106))
+)
 ALMANAC_PORTRAIT_DOCUMENTS = (11, 12, 13, 14)
 BLEND_COMPONENT_IDS = (
     "sal_kosher",

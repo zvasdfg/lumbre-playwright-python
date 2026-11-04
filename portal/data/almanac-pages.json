@@ -1,0 +1,850 @@
+[
+  {
+    "document": "001",
+    "title": "Prepara tu asador",
+    "image": "/editorial/almanac/page-001.jpeg",
+    "alt": "Infografía para preparar, limpiar y encender un asador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "002",
+    "title": "Selección de carbón",
+    "image": "/editorial/almanac/page-002.jpeg",
+    "alt": "Infografía comparativa de briquetas, carbón vegetal y quebracho",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "003",
+    "title": "Método de encendido",
+    "image": "/editorial/almanac/page-003.jpeg",
+    "alt": "Infografía del método de encendido con chimenea",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "004",
+    "title": "Distribución de carbón",
+    "image": "/editorial/almanac/page-004.jpeg",
+    "alt": "Infografía sobre fuego directo, indirecto y mixto",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "005",
+    "title": "Control de temperatura",
+    "image": "/editorial/almanac/page-005.jpeg",
+    "alt": "Infografía sobre zonas de temperatura en la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "006",
+    "title": "Técnicas de sellado",
+    "image": "/editorial/almanac/page-006.jpeg",
+    "alt": "Infografía sobre temperatura y tiempos de sellado",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "007",
+    "title": "Punto de cocción",
+    "image": "/editorial/almanac/page-007.jpeg",
+    "alt": "Infografía de temperaturas internas para distintos puntos de cocción",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "008",
+    "title": "Reposo de la carne",
+    "image": "/editorial/almanac/page-008.jpeg",
+    "alt": "Infografía sobre tiempos y beneficios del reposo de la carne",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "009",
+    "title": "Limpieza y mantenimiento",
+    "image": "/editorial/almanac/page-009.jpeg",
+    "alt": "Infografía de limpieza y mantenimiento del asador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "010",
+    "title": "Control de flama",
+    "image": "/editorial/almanac/page-010.jpeg",
+    "alt": "Infografía sobre ventilación y control de flama",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "011",
+    "title": "Qué hace realmente la sal",
+    "image": "/editorial/almanac/page-011.jpeg",
+    "alt": "Infografía sobre cómo actúa la sal en la carne",
+    "width": 1145,
+    "height": 1374
+  },
+  {
+    "document": "012",
+    "title": "Sal antes o después",
+    "image": "/editorial/almanac/page-012.jpeg",
+    "alt": "Infografía sobre cuándo salar antes, durante o después de la cocción",
+    "width": 1145,
+    "height": 1374
+  },
+  {
+    "document": "013",
+    "title": "Pimienta antes vs. después",
+    "image": "/editorial/almanac/page-013.jpeg",
+    "alt": "Infografía comparativa del uso de pimienta antes y después de cocinar",
+    "width": 1145,
+    "height": 1374
+  },
+  {
+    "document": "014",
+    "title": "El grano de pimienta",
+    "image": "/editorial/almanac/page-014.jpeg",
+    "alt": "Infografía sobre tipos, anatomía y molienda de la pimienta",
+    "width": 1145,
+    "height": 1374
+  },
+  {
+    "document": "015",
+    "title": "Tamaño de partícula",
+    "image": "/editorial/almanac/page-015.jpeg",
+    "alt": "Infografía sobre tamaños de partícula en un sazonador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "016",
+    "title": "Por qué algunos sazonadores se desprenden",
+    "image": "/editorial/almanac/page-016.jpeg",
+    "alt": "Infografía sobre adhesión del sazonador y condiciones de la superficie",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "017",
+    "title": "Cómo construir un sazonador base",
+    "image": "/editorial/almanac/page-017.jpeg",
+    "alt": "Infografía sobre estructura, proporciones de referencia y mezcla de un sazonador base",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "018",
+    "title": "Qué pasa cuando aumentas la sal 10 %",
+    "image": "/editorial/almanac/page-018.jpeg",
+    "alt": "Infografía comparativa de variaciones en la cantidad de sal",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "019",
+    "title": "Qué pasa cuando aumentas la pimienta",
+    "image": "/editorial/almanac/page-019.jpeg",
+    "alt": "Infografía sobre cantidad y molienda de pimienta en un sazonador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "020",
+    "title": "Umami en la carne",
+    "image": "/editorial/almanac/page-020.jpeg",
+    "alt": "Infografía sobre umami y su incorporación en un sazonador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "021",
+    "title": "Cómo incorporar café a un sazonador",
+    "image": "/editorial/almanac/page-021.jpeg",
+    "alt": "Infografía sobre tostado, molienda y proporción de café en mezclas secas",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "022",
+    "title": "Café claro vs. medio vs. oscuro en carne",
+    "image": "/editorial/almanac/page-022.jpeg",
+    "alt": "Infografía comparativa de tres niveles de tostado de café para carne",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "023",
+    "title": "¿Puede un ingrediente estar presente sin saber a él?",
+    "image": "/editorial/almanac/page-023.jpeg",
+    "alt": "Infografía sobre ingredientes que aportan sabor sin ser protagonistas",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "024",
+    "title": "Cómo hacer una prueba A/B de un sazonador",
+    "image": "/editorial/almanac/page-024.jpeg",
+    "alt": "Infografía sobre comparación de muestras, control de variables y registro de resultados",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "025",
+    "title": "Chiles mexicanos en sazonadores",
+    "image": "/editorial/almanac/page-025.jpeg",
+    "alt": "Infografía: Chiles mexicanos en sazonadores",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "026",
+    "title": "El ajo y cómo usarlo en sazonadores",
+    "image": "/editorial/almanac/page-026.jpeg",
+    "alt": "Infografía: El ajo y cómo usarlo en sazonadores",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "027",
+    "title": "Uso de aromáticos en un sazonador",
+    "image": "/editorial/almanac/page-027.jpeg",
+    "alt": "Infografía: Uso de aromáticos en un sazonador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "028",
+    "title": "Tipos de asador",
+    "image": "/editorial/almanac/page-028.jpeg",
+    "alt": "Infografía: Tipos de asador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "029",
+    "title": "Tipos de ahumador",
+    "image": "/editorial/almanac/page-029.jpeg",
+    "alt": "Infografía: Tipos de ahumador",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "030",
+    "title": "Tipos de humo",
+    "image": "/editorial/almanac/page-030.jpeg",
+    "alt": "Infografía: Tipos de humo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "031",
+    "title": "El dulce",
+    "image": "/editorial/almanac/page-031.jpeg",
+    "alt": "Infografía: El dulce",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "032",
+    "title": "El salado",
+    "image": "/editorial/almanac/page-032.jpeg",
+    "alt": "Infografía: El salado",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "033",
+    "title": "El ácido",
+    "image": "/editorial/almanac/page-033.jpeg",
+    "alt": "Infografía: El ácido",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "034",
+    "title": "El amargo",
+    "image": "/editorial/almanac/page-034.jpeg",
+    "alt": "Infografía: El amargo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "035",
+    "title": "El umami",
+    "image": "/editorial/almanac/page-035.jpeg",
+    "alt": "Infografía: El umami",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "036",
+    "title": "Los 5 sabores",
+    "image": "/editorial/almanac/page-036.jpeg",
+    "alt": "Infografía: Los 5 sabores",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "037",
+    "title": "Anatomía de un corte de carne",
+    "image": "/editorial/almanac/page-037.jpeg",
+    "alt": "Infografía: Anatomía de un corte de carne",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "038",
+    "title": "Grasa intramuscular vs. grasa externa",
+    "image": "/editorial/almanac/page-038.jpeg",
+    "alt": "Infografía: Grasa intramuscular vs. grasa externa",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "039",
+    "title": "Marmoleo",
+    "image": "/editorial/almanac/page-039.jpeg",
+    "alt": "Infografía: Marmoleo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "040",
+    "title": "Fibras musculares",
+    "image": "/editorial/almanac/page-040.jpeg",
+    "alt": "Infografía: Fibras musculares",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "041",
+    "title": "Tejido conectivo",
+    "image": "/editorial/almanac/page-041.jpeg",
+    "alt": "Infografía: Tejido conectivo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "042",
+    "title": "Cortes gruesos vs. cortes delgados",
+    "image": "/editorial/almanac/page-042.jpeg",
+    "alt": "Infografía: Cortes gruesos vs. cortes delgados",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "043",
+    "title": "Cortes para fuego directo",
+    "image": "/editorial/almanac/page-043.jpeg",
+    "alt": "Infografía: Cortes para fuego directo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "044",
+    "title": "Cortes enteros para fuego indirecto",
+    "image": "/editorial/almanac/page-044.jpeg",
+    "alt": "Infografía: Cortes enteros para fuego indirecto",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "045",
+    "title": "Cortes para cocción prolongada",
+    "image": "/editorial/almanac/page-045.jpeg",
+    "alt": "Infografía: Cortes para cocción prolongada",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "046",
+    "title": "Cómo elegir un corte de res",
+    "image": "/editorial/almanac/page-046.jpeg",
+    "alt": "Infografía: Cómo elegir un corte de res",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "047",
+    "title": "Res: cortes y aplicaciones",
+    "image": "/editorial/almanac/page-047.jpeg",
+    "alt": "Infografía: Res: cortes y aplicaciones",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "048",
+    "title": "Cerdo: cortes y aplicaciones",
+    "image": "/editorial/almanac/page-048.jpeg",
+    "alt": "Infografía: Cerdo: cortes y aplicaciones",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "049",
+    "title": "Pollo: pechuga vs. muslo",
+    "image": "/editorial/almanac/page-049.jpeg",
+    "alt": "Infografía: Pollo: pechuga vs. muslo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "050",
+    "title": "Cerdo: grasa, colágeno y temperatura",
+    "image": "/editorial/almanac/page-050.jpeg",
+    "alt": "Infografía: Cerdo: grasa, colágeno y temperatura",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "051",
+    "title": "Cordero: cortes y perfiles de sabor",
+    "image": "/editorial/almanac/page-051.jpeg",
+    "alt": "Infografía: Cordero: cortes y perfiles de sabor",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "052",
+    "title": "Pescado en la parrilla",
+    "image": "/editorial/almanac/page-052.jpeg",
+    "alt": "Infografía: Pescado en la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "053",
+    "title": "Proteínas vegetales a la parrilla",
+    "image": "/editorial/almanac/page-053.jpeg",
+    "alt": "Infografía: Proteínas vegetales a la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "054",
+    "title": "Cómo elegir proteína según el método de cocción",
+    "image": "/editorial/almanac/page-054.jpeg",
+    "alt": "Infografía: Cómo elegir proteína según el método de cocción",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "055",
+    "title": "La importancia de un cuchillo afilado",
+    "image": "/editorial/almanac/page-055.jpeg",
+    "alt": "Infografía: La importancia de un cuchillo afilado",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "056",
+    "title": "Pinzas vs. tenedor: cómo manipular la carne",
+    "image": "/editorial/almanac/page-056.jpeg",
+    "alt": "Infografía: Pinzas vs. tenedor: cómo manipular la carne",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "057",
+    "title": "La espátula: cuándo y para qué utilizarla",
+    "image": "/editorial/almanac/page-057.jpeg",
+    "alt": "Infografía: La espátula: cuándo y para qué utilizarla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "058",
+    "title": "La tabla de corte y su importancia",
+    "image": "/editorial/almanac/page-058.jpeg",
+    "alt": "Infografía: La tabla de corte y su importancia",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "059",
+    "title": "El sartén de hierro: propiedades, uso y mantenimiento",
+    "image": "/editorial/almanac/page-059.jpeg",
+    "alt": "Infografía: El sartén de hierro: propiedades, uso y mantenimiento",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "059",
+    "title": "El cepillo para limpiar la parrilla",
+    "image": "/editorial/almanac/page-059-cepillo.jpeg",
+    "alt": "Infografía: El cepillo para limpiar la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "060",
+    "title": "El termómetro de carne: tipos y uso correcto",
+    "image": "/editorial/almanac/page-060.jpeg",
+    "alt": "Infografía: El termómetro de carne: tipos y uso correcto",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "061",
+    "title": "Argentina: el dominio de las brasas",
+    "image": "/editorial/almanac/page-061.jpeg",
+    "alt": "Infografía: Argentina: el dominio de las brasas",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "062",
+    "title": "Brasil: el arte del espeto",
+    "image": "/editorial/almanac/page-062.jpeg",
+    "alt": "Infografía: Brasil: el arte del espeto",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "063",
+    "title": "Corea: el equilibrio entre fuego y marinado",
+    "image": "/editorial/almanac/page-063.jpeg",
+    "alt": "Infografía: Corea: el equilibrio entre fuego y marinado",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "064",
+    "title": "Japón: precisión en cada bocado",
+    "image": "/editorial/almanac/page-064.jpeg",
+    "alt": "Infografía: Japón: precisión en cada bocado",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "065",
+    "title": "Estados Unidos: BBQ, paciencia, humo y carácter",
+    "image": "/editorial/almanac/page-065.jpeg",
+    "alt": "Infografía: Estados Unidos: BBQ, paciencia, humo y carácter",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "066",
+    "title": "México: el fuego como punto de encuentro",
+    "image": "/editorial/almanac/page-066.jpeg",
+    "alt": "Infografía: México: el fuego como punto de encuentro",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "067",
+    "title": "Alemania: la parrilla en movimiento",
+    "image": "/editorial/almanac/page-067.jpeg",
+    "alt": "Infografía: Alemania: la parrilla en movimiento",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "068",
+    "title": "Colombia: el crujiente también se asa",
+    "image": "/editorial/almanac/page-068.jpeg",
+    "alt": "Infografía: Colombia: el crujiente también se asa",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "069",
+    "title": "Turquía: el dominio de la brocheta",
+    "image": "/editorial/almanac/page-069.jpeg",
+    "alt": "Infografía: Turquía: el dominio de la brocheta",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "070",
+    "title": "El costo real por porción",
+    "image": "/editorial/almanac/page-070.jpeg",
+    "alt": "Infografía: El costo real por porción",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "071",
+    "title": "Cuánto comprar para un grupo",
+    "image": "/editorial/almanac/page-071.jpeg",
+    "alt": "Infografía: Cuánto comprar para un grupo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "072",
+    "title": "Cuándo vale la pena pagar más por un corte",
+    "image": "/editorial/almanac/page-072.jpeg",
+    "alt": "Infografía: Cuándo vale la pena pagar más por un corte",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "073",
+    "title": "La merma también cuesta",
+    "image": "/editorial/almanac/page-073.jpeg",
+    "alt": "Infografía: La merma también cuesta",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "074",
+    "title": "Cómo aprovechar los sobrantes sin desperdiciar carne",
+    "image": "/editorial/almanac/page-074.jpeg",
+    "alt": "Infografía: Cómo aprovechar los sobrantes sin desperdiciar carne",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "075",
+    "title": "Cuánto cuesta realmente encender la parrilla",
+    "image": "/editorial/almanac/page-075.jpeg",
+    "alt": "Infografía: Cuánto cuesta realmente encender la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "076",
+    "title": "La temperatura de la carne dejó de subir",
+    "image": "/editorial/almanac/page-076.jpeg",
+    "alt": "Infografía: La temperatura de la carne dejó de subir",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "077",
+    "title": "Se apagó el carbón: cómo recuperar el fuego",
+    "image": "/editorial/almanac/page-077.jpeg",
+    "alt": "Infografía: Se apagó el carbón: cómo recuperar el fuego",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "078",
+    "title": "La carne quedó insípida",
+    "image": "/editorial/almanac/page-078.jpeg",
+    "alt": "Infografía: La carne quedó insípida",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "079",
+    "title": "La carne se está quemando por fuera",
+    "image": "/editorial/almanac/page-079.jpeg",
+    "alt": "Infografía: La carne se está quemando por fuera",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "080",
+    "title": "Unos cortes están listos y otros siguen crudos",
+    "image": "/editorial/almanac/page-080.jpeg",
+    "alt": "Infografía: Unos cortes están listos y otros siguen crudos",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "081",
+    "title": "Cortaste la carne y no tiene el punto esperado",
+    "image": "/editorial/almanac/page-081.jpeg",
+    "alt": "Infografía: Cortaste la carne y no tiene el punto esperado",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "082",
+    "title": "La carne cambia de color al cocinarse",
+    "image": "/editorial/almanac/page-082.jpeg",
+    "alt": "Infografía: La carne cambia de color al cocinarse",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "083",
+    "title": "¿La carne pierde sus jugos cuando la cortas?",
+    "image": "/editorial/almanac/page-083.jpeg",
+    "alt": "Infografía: ¿La carne pierde sus jugos cuando la cortas?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "084",
+    "title": "¿Las marcas de la parrilla significan mejor sellado?",
+    "image": "/editorial/almanac/page-084.jpeg",
+    "alt": "Infografía: ¿Las marcas de la parrilla significan mejor sellado?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "085",
+    "title": "¿Por qué una llamarada no significa más calor útil?",
+    "image": "/editorial/almanac/page-085.jpeg",
+    "alt": "Infografía: ¿Por qué una llamarada no significa más calor útil?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "086",
+    "title": "Mismo fuego, distinto grosor: ¿por qué cambia tanto el resultado?",
+    "image": "/editorial/almanac/page-086.jpeg",
+    "alt": "Infografía: Mismo fuego, distinto grosor: ¿por qué cambia tanto el resultado?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "087",
+    "title": "¿La sal gruesa sala mejor que la sal fina?",
+    "image": "/editorial/almanac/page-087.jpeg",
+    "alt": "Infografía: ¿La sal gruesa sala mejor que la sal fina?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "088",
+    "title": "¿Por qué la carne se pega a la parrilla?",
+    "image": "/editorial/almanac/page-088.jpeg",
+    "alt": "Infografía: ¿Por qué la carne se pega a la parrilla?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "089",
+    "title": "¿Por qué el humo cambia de color?",
+    "image": "/editorial/almanac/page-089.jpeg",
+    "alt": "Infografía: ¿Por qué el humo cambia de color?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "090",
+    "title": "¿Por qué la grasa hace que la carne sepa diferente?",
+    "image": "/editorial/almanac/page-090.jpeg",
+    "alt": "Infografía: ¿Por qué la grasa hace que la carne sepa diferente?",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "091",
+    "title": "Sudáfrica: el ritual del braai",
+    "image": "/editorial/almanac/page-091.jpeg",
+    "alt": "Infografía: Sudáfrica: el ritual del braai",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "092",
+    "title": "Filipinas: el arte del lechón",
+    "image": "/editorial/almanac/page-092.jpeg",
+    "alt": "Infografía: Filipinas: el arte del lechón",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "093",
+    "title": "Australia: la cultura del barbecue al aire libre",
+    "image": "/editorial/almanac/page-093.jpeg",
+    "alt": "Infografía: Australia: la cultura del barbecue al aire libre",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "094",
+    "title": "España: el arte de la paella al fuego",
+    "image": "/editorial/almanac/page-094.jpeg",
+    "alt": "Infografía: España: el arte de la paella al fuego",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "095",
+    "title": "Uruguay: el asado a la cruz",
+    "image": "/editorial/almanac/page-095.jpeg",
+    "alt": "Infografía: Uruguay: el asado a la cruz",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "096",
+    "title": "Perú: fuego, brasas y tradición",
+    "image": "/editorial/almanac/page-096.jpeg",
+    "alt": "Infografía: Perú: fuego, brasas y tradición",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "097",
+    "title": "Matriz del steak: textura, sabor y marmoleo",
+    "image": "/editorial/almanac/page-097.jpeg",
+    "alt": "Infografía: Matriz del steak: textura, sabor y marmoleo",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "098",
+    "title": "Matriz del cerdo: cortes, textura y grasa",
+    "image": "/editorial/almanac/page-098.jpeg",
+    "alt": "Infografía: Matriz del cerdo: cortes, textura y grasa",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "099",
+    "title": "Matriz de las maderas para cocinar",
+    "image": "/editorial/almanac/page-099.jpeg",
+    "alt": "Infografía: Matriz de las maderas para cocinar",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "100",
+    "title": "Matriz de los métodos de cocción en parrilla",
+    "image": "/editorial/almanac/page-100.jpeg",
+    "alt": "Infografía: Matriz de los métodos de cocción en parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "101",
+    "title": "Matriz de las proteínas para la parrilla",
+    "image": "/editorial/almanac/page-101.jpeg",
+    "alt": "Infografía: Matriz de las proteínas para la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "102",
+    "title": "Matriz de los carbones para la parrilla",
+    "image": "/editorial/almanac/page-102.jpeg",
+    "alt": "Infografía: Matriz de los carbones para la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "103",
+    "title": "Matriz de las grasas para cocinar en parrilla",
+    "image": "/editorial/almanac/page-103.jpeg",
+    "alt": "Infografía: Matriz de las grasas para cocinar en parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "104",
+    "title": "Matriz de las sales para la parrilla",
+    "image": "/editorial/almanac/page-104.jpeg",
+    "alt": "Infografía: Matriz de las sales para la parrilla",
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "document": "105",
+    "title": "Matriz de los vegetales para la parrilla",
+    "image": "/editorial/almanac/page-105.jpeg",
+    "alt": "Infografía: Matriz de los vegetales para la parrilla",
+    "width": 1254,
+    "height": 1254
+  }
+]

@@ -37,7 +37,7 @@ las auditorías oficiales y el resultado del despliegue de cada revisión están
 | Laboratorio | 60 ingredientes en familias, búsqueda, fichas y selección de 2–12 componentes; gramos manuales y lote máximo de 150 g; radar dinámico de los cinco sabores en boca. |
 | Blends del usuario | Alias y documento SES; guardar en la sesión, reabrir, crear variantes, eliminar e imprimir cantidades en gramos. Recomendaciones LMB-F solo desde 80 % de coincidencia de ingredientes, no de proporciones. |
 | Recetas | 100 preparaciones, filtros, búsqueda y paginación; ingredientes, pasos, tiempos, seguridad y fuentes; referencias opcionales/integradas a rubs, regreso a la misma posición y PDF. |
-| Almanaque | 53 documentos publicados más portada; selección de página, anterior/siguiente, teclado, zoom y ajuste; notas editoriales y recuperación de imágenes/módulos interrumpidos. El documento 049 no pertenece a esta edición. |
+| Almanaque | 106 láminas de archivo más portada: documentos 001–105, incluidos dos originales distintos rotulados 059 (sartén y cepillo). Índice, anterior/siguiente, teclado, zoom, notas editoriales de seguridad y recuperación de imágenes/módulos interrumpidos. Inventario y decisiones en `docs/almanac-import-2026-11-04.json`. |
 | Provisiones | Cuatro rubs LMB-F con ficha, ingredientes declarados, radar orientativo, sugerencias de uso y enlace al producto correspondiente en Tiendanube. La disponibilidad final se consulta en la tienda. |
 | Resiliencia | Módulos diferidos con recuperación explícita, diálogos con foco contenido y restaurado, manejo de almacenamiento corrupto/denegado y PDF autocontenido. |
 
@@ -294,8 +294,8 @@ automáticamente en cada deploy ni habilita transacciones.
 
 65 comportamientos UI numerados (63 portal y dos store), cinco IDs del core
 y cuatro contratos de arquitectura. La colección
-contiene 437 casos local/framework + 24 store opcionales. Incluye 48 combinaciones
-de planificador, 60 ingredientes, 100 recetas, 53 documentos a dos tamaños y ocho
+contiene 569 casos local/framework + 24 store opcionales. Incluye 48 combinaciones
+de planificador, 60 ingredientes, 100 recetas, 106 láminas del almanaque a dos tamaños y ocho
 escenarios PDF. Modelos puros incluyen 8,640 configuraciones y 1,770 pares.
 No implica todos los subconjuntos de ingredientes, gramos o secuencias posibles.
 UI-077 combina móvil/escritorio y aborto/HTTP 503: compara el espacio reservado

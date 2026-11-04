@@ -5,7 +5,7 @@ pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.almanac, pytest.ma
 
 
 @pytest.mark.case("UI-093", "Zoom enables contained image scrolling and resets on page change")
-@pytest.mark.parametrize("document", [1, 11, 54])
+@pytest.mark.parametrize("document", [1, 11, 49, 59, "059-cepillo", 74, 105])
 def test_zoom_and_reset(almanac, document):
     reader = almanac
     reader.select(document)

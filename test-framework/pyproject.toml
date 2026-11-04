@@ -44,7 +44,7 @@ markers = [
   "planner_matrix: equipment/goal/fuel browser matrix",
   "ingredients_matrix: each ingredient browser matrix",
   "recipes_matrix: all public recipe sheets browser matrix",
-  "almanac_matrix: all 53 published almanac documents at two viewports",
+  "almanac_matrix: all 106 archive almanac pages at two viewports",
   "accessibility: objective keyboard and accessible DOM contracts, not a complete WCAG audit",
   "print_pdf: self-contained generated PDF content/format contracts",
   "specialized: serialized retained scripts requiring localhost port 3001",

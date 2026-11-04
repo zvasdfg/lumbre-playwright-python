@@ -1,0 +1,2124 @@
+{
+  "revision": 1,
+  "date": "2026-11-04",
+  "scope": "Importación técnica de originales de archivo al lector online; no creación de piezas ni validación científica completa.",
+  "contentId": "UNKNOWN / PENDING; los números impresos del almanaque no son CONTENT_ID del motor editorial.",
+  "sourceFolder": "Infografias",
+  "baselineCommit": "9401fea8d4ef0fddd1069bc42189c63604cc62dc",
+  "inventoryCounts": {
+    "filesReviewed": 123,
+    "alreadyRepresented": 53,
+    "addedPages": 53,
+    "alternateFilesNotImported": 3,
+    "outsideMainSeries": 4,
+    "productSeriesExcluded": 10,
+    "finalPages": 106,
+    "distinctPrintedNumbers": 105
+  },
+  "decisions": [
+    "Se completan 049 y 055–105. Los originales 059 de sartén y cepillo son temas distintos y se conservan ambos con número impreso 059; la ruta del cepillo usa un sufijo técnico.",
+    "005: se conserva el asset existente; no se sustituye por variantes del lote.",
+    "061: se elige PNG de 1254 px; el JPG de 1536 px no incorpora un tema nuevo y no acredita mayor resolución nativa.",
+    "062: se elige la variante con revisión A; no la que muestra LUMBRE en ese campo. No se infiere cronología de archivos.",
+    "Las diez láminas de producto pertenecen a otra serie; no sustituyen a 001–004 ni se publican como capítulos educativos.",
+    "Anatomía de un parrillero, Arsenal del parrillero y dos piezas de Halloween quedan fuera de la serie numerada principal.",
+    "JPEG web a calidad 0.90, sin recorte ni reescalado. Los originales aportados y los 53 assets anteriores se preservan."
+  ],
+  "checks": {
+    "originalExistingAssets": "PASS: 53 hashes contrastados con el commit base.",
+    "unitTests": "PASS: 56",
+    "typecheck": "PASS",
+    "staticBuild": "PASS",
+    "releaseProfile": "PASS: 9",
+    "browserChecks": "PASS: 274 pruebas del lector en 390 y 1440 px; las 106 láminas cargan con dimensiones, índice, ordinal y texto alternativo correctos. Incluye notas, zoom, teclado y recuperación.",
+    "integratedPortal": "PASS: UI-078 ejecutó test-static.py y check-static-print.py, incluyendo recorrido de las 106 láminas a ambos tamaños y PDFs.",
+    "publication": "Este manifiesto registra la validación previa al despliegue. El workflow del commit y la comprobación del sitio público acreditan la publicación, no este archivo."
+  },
+  "editorialScope": {
+    "audit": "Inventario, identificación de temas, selección visual e integración; no certificación científica de todas las afirmaciones impresas.",
+    "notesAdded": [
+      "049: pollo a 74 °C, no 68–72 °C como regla doméstica.",
+      "058: tablas separadas y lavado, no basta cambiar de cara.",
+      "059 cepillo: temperatura depende del material y fabricante; nylon en frío y revisión de cerdas.",
+      "060, 061, 081, 082, 086: puntos culinarios y color no equivalen a inocuidad.",
+      "074: enfriamiento, conservación y recalentado seguros."
+    ],
+    "sources": [
+      "https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures",
+      "https://www.foodsafety.gov/keep-food-safe/4-steps-to-food-safety",
+      "https://ask.fsis.usda.gov/article/How-do-I-handle-leftovers-safely",
+      "https://ask.fsis.usda.gov/article/What-methods-of-reheating-food-are-safe",
+      "https://ask.fsis.usda.gov/article/Can-you-tell-if-meat-is-safely-done-by-its-color",
+      "https://www.charbroil.com/products/cool-clean-360-brush-9025161",
+      "https://contact-emea.weber.com/hc/en-us/articles/360052680374-Loose-bristles-on-the-cooking-grate"
+    ]
+  },
+  "newAssetBytes": 38396577,
+  "entries": [
+    {
+      "document": "049",
+      "title": "Pollo: pechuga vs. muslo",
+      "image": "/editorial/almanac/page-049.jpeg",
+      "alt": "Infografía: Pollo: pechuga vs. muslo",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000003c7081f68e0bbe5f634052d8.png",
+      "sourceSha256": "a8b1b0234d553fada2d2610d243b89738de7ff9b3c8bfce31b7d60192b15f37e",
+      "sourceIndex": 33,
+      "outputSha256": "0b52ff2063fb1b697c81bbec69739003d44edb9295e093e2ecd31ef993606aeb",
+      "outputBytes": 706627
+    },
+    {
+      "document": "055",
+      "title": "La importancia de un cuchillo afilado",
+      "image": "/editorial/almanac/page-055.jpeg",
+      "alt": "Infografía: La importancia de un cuchillo afilado",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000002be081f5ae76fd299013e5b3 (1) (1).png",
+      "sourceSha256": "655fbd39e66c03fc6708ca478ca2f18a4713d944f7f212431c620ed05420db93",
+      "sourceIndex": 25,
+      "outputSha256": "7a99e75b512c25c451b41586f3450afe3936216fbd83a38d52c4dcbbc239be29",
+      "outputBytes": 663075
+    },
+    {
+      "document": "056",
+      "title": "Pinzas vs. tenedor: cómo manipular la carne",
+      "image": "/editorial/almanac/page-056.jpeg",
+      "alt": "Infografía: Pinzas vs. tenedor: cómo manipular la carne",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000124881f5ac3e7a4b042f4ee4 (1) (1).png",
+      "sourceSha256": "a33567dccf69c84d7f0199d5fc1d75eaba560993ce9908629656a879015a0b13",
+      "sourceIndex": 13,
+      "outputSha256": "195edd5c73a4027608687b05ecaa276f6c341d3c7efc25c266b692cded87fb23",
+      "outputBytes": 662417
+    },
+    {
+      "document": "057",
+      "title": "La espátula: cuándo y para qué utilizarla",
+      "image": "/editorial/almanac/page-057.jpeg",
+      "alt": "Infografía: La espátula: cuándo y para qué utilizarla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000e070820cb42ba5c9836f0bd5 (1) (1).png",
+      "sourceSha256": "35656ea8fa149380c2b63be2112528033abbeb3b1b641f7d04a241ada4c81082",
+      "sourceIndex": 112,
+      "outputSha256": "1b6cc0c473bfcabecdb5546c43e3a4f8e801eb9e3dea7e9abf0beaf8efb95f1a",
+      "outputBytes": 633335
+    },
+    {
+      "document": "058",
+      "title": "La tabla de corte y su importancia",
+      "image": "/editorial/almanac/page-058.jpeg",
+      "alt": "Infografía: La tabla de corte y su importancia",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000cb68820d9cb783835eae4a53 (1) (1).png",
+      "sourceSha256": "b57320e11975ca1cba2d5f312d64a040b25fc5c227ecb76725cfc391954c1d49",
+      "sourceIndex": 101,
+      "outputSha256": "f8fb04ebce6d870dbfb2efb8898426826a12dee121d044d8f5bcbe7624ffa42f",
+      "outputBytes": 685851
+    },
+    {
+      "document": "059",
+      "title": "El sartén de hierro: propiedades, uso y mantenimiento",
+      "image": "/editorial/almanac/page-059.jpeg",
+      "alt": "Infografía: El sartén de hierro: propiedades, uso y mantenimiento",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000a694820d8ffa36d72f7c8d66 (1).png",
+      "sourceSha256": "dd873210fd6e01d151c8194d7296e11ab263427331884ae39581d44d9344c39d",
+      "sourceIndex": 78,
+      "outputSha256": "b604546fad79038a17b15a9d7be5a0bd6e5cd3ab08a63f51ccb5a31a578403a8",
+      "outputBytes": 641456
+    },
+    {
+      "document": "059",
+      "title": "El cepillo para limpiar la parrilla",
+      "image": "/editorial/almanac/page-059-cepillo.jpeg",
+      "alt": "Infografía: El cepillo para limpiar la parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000acf4820da69a11a2fe012f7c (1) (1).png",
+      "sourceSha256": "d170bfb70e5501ca6b33b55b19f08e4c6e8660b23bc312093e0728432671aa78",
+      "sourceIndex": 81,
+      "outputSha256": "bc80fc5cba6b61efcbbe9170d368cc03289ec49b19b25e47152bfa85745813f9",
+      "outputBytes": 712728
+    },
+    {
+      "document": "060",
+      "title": "El termómetro de carne: tipos y uso correcto",
+      "image": "/editorial/almanac/page-060.jpeg",
+      "alt": "Infografía: El termómetro de carne: tipos y uso correcto",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000009d3c81f68e14ce3ea85fa06f (1) (1).png",
+      "sourceSha256": "75906bb15236eae4841e1a52840cf7a28141f60b519572812cfd6b332d501000",
+      "sourceIndex": 69,
+      "outputSha256": "f7935e59feadbd1165c6f98e656f1393245d70bc903f5de95b11421027323c16",
+      "outputBytes": 710061
+    },
+    {
+      "document": "061",
+      "title": "Argentina: el dominio de las brasas",
+      "image": "/editorial/almanac/page-061.jpeg",
+      "alt": "Infografía: Argentina: el dominio de las brasas",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000369482308f1c51c1602e089c.png",
+      "sourceSha256": "c0412cf3fb62c50993eeab12d4fb57979c1c1bff3eaf782bd90b0e4584d8e7f8",
+      "sourceIndex": 29,
+      "outputSha256": "6e57449a85b3e69bd459e39a5647849ae4a5fa2004c4212f667b8d80adeeb09d",
+      "outputBytes": 785981
+    },
+    {
+      "document": "062",
+      "title": "Brasil: el arte del espeto",
+      "image": "/editorial/almanac/page-062.jpeg",
+      "alt": "Infografía: Brasil: el arte del espeto",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000012e08230b9375e97fd43e112 (1).png",
+      "sourceSha256": "61405f9ffda1458536670f2d2824980c057421eaa76be7536d279e3f24b956de",
+      "sourceIndex": 15,
+      "outputSha256": "34314ef11e4a8350aecf42f0fa189168f1e900bb59934581e35b2ae6204e95a6",
+      "outputBytes": 723271
+    },
+    {
+      "document": "063",
+      "title": "Corea: el equilibrio entre fuego y marinado",
+      "image": "/editorial/almanac/page-063.jpeg",
+      "alt": "Infografía: Corea: el equilibrio entre fuego y marinado",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000003b5481fdae066c4dce8917e7 (1).png",
+      "sourceSha256": "3c3e7157e09ab7e522cb7677ca94cdca371bd040dfbe521258e02824ce610e41",
+      "sourceIndex": 32,
+      "outputSha256": "f72f73f8d3316e8ace76e40af9ff571131a45fbb937ad98cb680a998524082cb",
+      "outputBytes": 794825
+    },
+    {
+      "document": "064",
+      "title": "Japón: precisión en cada bocado",
+      "image": "/editorial/almanac/page-064.jpeg",
+      "alt": "Infografía: Japón: precisión en cada bocado",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000009e6481f79eec77c8be4b5276 (1).png",
+      "sourceSha256": "69b3a43a4ad9b069249e354bff8c636c19742d29f59aa3d6a6923386ed83413e",
+      "sourceIndex": 71,
+      "outputSha256": "ebba67523473d18c2755f1a350dd54827f7e1358cfb3014bf5b5513b6b397d4c",
+      "outputBytes": 781696
+    },
+    {
+      "document": "065",
+      "title": "Estados Unidos: BBQ, paciencia, humo y carácter",
+      "image": "/editorial/almanac/page-065.jpeg",
+      "alt": "Infografía: Estados Unidos: BBQ, paciencia, humo y carácter",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000000b688230b1a67b8481012228 (1).png",
+      "sourceSha256": "9f487e7f566878395485846d8dd5b84b7d881e4d389caf2a19798b1bb78e3ebd",
+      "sourceIndex": 8,
+      "outputSha256": "e7a23c86ca453a79fe321d5bc1e88da42ad83e867928a90423fc07b160067190",
+      "outputBytes": 777370
+    },
+    {
+      "document": "066",
+      "title": "México: el fuego como punto de encuentro",
+      "image": "/editorial/almanac/page-066.jpeg",
+      "alt": "Infografía: México: el fuego como punto de encuentro",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000de8c8230be74d353ebf0e6d5 (1).png",
+      "sourceSha256": "417395ff52839cb7382a84c733a6fc657b34dd4686d26ed335d7f090ce77809f",
+      "sourceIndex": 108,
+      "outputSha256": "da01bb8ed7044cb371578069666c553ec4e98067d7aec7019bbeabfb850bed7d",
+      "outputBytes": 804391
+    },
+    {
+      "document": "067",
+      "title": "Alemania: la parrilla en movimiento",
+      "image": "/editorial/almanac/page-067.jpeg",
+      "alt": "Infografía: Alemania: la parrilla en movimiento",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000b264823091111e14854434de (1).png",
+      "sourceSha256": "68b3e89cf44e041df4f903bfef4c59b4479ca859ace945041071651171a41817",
+      "sourceIndex": 87,
+      "outputSha256": "1d82eaa5d9b1116182b6729e352661936282cd6586945ec8c1d807613766c403",
+      "outputBytes": 800711
+    },
+    {
+      "document": "068",
+      "title": "Colombia: el crujiente también se asa",
+      "image": "/editorial/almanac/page-068.jpeg",
+      "alt": "Infografía: Colombia: el crujiente también se asa",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000d9b08230be3131a8bd37aedb (1).png",
+      "sourceSha256": "65f06c2709146f8ebee284e6629cc132afe843b48313ac56560dc7a828a847b9",
+      "sourceIndex": 106,
+      "outputSha256": "97aa53559fabb90ca204582699299d6ef8cc15ee482974e519e5ec9a11268d9b",
+      "outputBytes": 827839
+    },
+    {
+      "document": "069",
+      "title": "Turquía: el dominio de la brocheta",
+      "image": "/editorial/almanac/page-069.jpeg",
+      "alt": "Infografía: Turquía: el dominio de la brocheta",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000072448230b0970ad09ee9b09d (1).png",
+      "sourceSha256": "832a94ce5be46e35d7cf7470879a0b7aa20dc87ffc7b037dc9b54b0abb6730ed",
+      "sourceIndex": 53,
+      "outputSha256": "e9daa292a9242bae7cbd7e5e4c4cd4c325441bcb0c7f4f3386c971c82795e369",
+      "outputBytes": 776090
+    },
+    {
+      "document": "070",
+      "title": "El costo real por porción",
+      "image": "/editorial/almanac/page-070.jpeg",
+      "alt": "Infografía: El costo real por porción",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000005c2c82308ee7ef758fca4347 (1).png",
+      "sourceSha256": "7836587eda04f551ca590521157f342c4d47611ae5fb20a3ca033755506fbe28",
+      "sourceIndex": 46,
+      "outputSha256": "f58611f98bedde187a9ccb535f1ff9e2dce3888ee7f146c3ba681f4c56589bb3",
+      "outputBytes": 740806
+    },
+    {
+      "document": "071",
+      "title": "Cuánto comprar para un grupo",
+      "image": "/editorial/almanac/page-071.jpeg",
+      "alt": "Infografía: Cuánto comprar para un grupo",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000624081fd963bd1875015d91d (1).png",
+      "sourceSha256": "53771ffec0052fe582bccc24b39c68ac356ec31818ad422b0bef212764d3bec3",
+      "sourceIndex": 49,
+      "outputSha256": "4e70a16cfa82e37f3d94ac49260836a8a0b2bfc983e722eb36185fb731f15c21",
+      "outputBytes": 715063
+    },
+    {
+      "document": "072",
+      "title": "Cuándo vale la pena pagar más por un corte",
+      "image": "/editorial/almanac/page-072.jpeg",
+      "alt": "Infografía: Cuándo vale la pena pagar más por un corte",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000b71081f887e530414bb6c9bd (1).png",
+      "sourceSha256": "d47eacec671fe38575cb21633c4d394de1f3fc93de634afe79db5cb456047283",
+      "sourceIndex": 89,
+      "outputSha256": "7e3b92fbc7d727357d77925c2244b4cd11839409e10602d4b1ee8625fd54d264",
+      "outputBytes": 750786
+    },
+    {
+      "document": "073",
+      "title": "La merma también cuesta",
+      "image": "/editorial/almanac/page-073.jpeg",
+      "alt": "Infografía: La merma también cuesta",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000a0d48230ad1b12b4e3a384f4 (1).png",
+      "sourceSha256": "2aa5e7f59e57640673ff038fd1981359d6a137f97e4e8c5e5b2d1107f376cf74",
+      "sourceIndex": 75,
+      "outputSha256": "b0709e51e1d9d2d08f71c18a5820534e6b23c61b5f4fe6221935a4d565a9d90f",
+      "outputBytes": 742826
+    },
+    {
+      "document": "074",
+      "title": "Cómo aprovechar los sobrantes sin desperdiciar carne",
+      "image": "/editorial/almanac/page-074.jpeg",
+      "alt": "Infografía: Cómo aprovechar los sobrantes sin desperdiciar carne",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000fc9481f692f9d8237544c268 (1).png",
+      "sourceSha256": "68ff14dc50ace77bc6c189dec82180e4155e8ed3ad40f0598172cdf4d9bb3bdd",
+      "sourceIndex": 123,
+      "outputSha256": "f11656538b0bb64cc256209c0766a2805c5c0b25bda4cad9de631839531b9ab9",
+      "outputBytes": 746124
+    },
+    {
+      "document": "075",
+      "title": "Cuánto cuesta realmente encender la parrilla",
+      "image": "/editorial/almanac/page-075.jpeg",
+      "alt": "Infografía: Cuánto cuesta realmente encender la parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000006eec81f8a2e992e4f2ac4d41 (1).png",
+      "sourceSha256": "c0113cf693716b108320ce38ab29cc94d3689efca430fefdce1bf02819f88185",
+      "sourceIndex": 51,
+      "outputSha256": "d56e0b2f63e5011ccabd98fa34633d5915230002b7297f9b330daa64393a2a35",
+      "outputBytes": 750881
+    },
+    {
+      "document": "076",
+      "title": "La temperatura de la carne dejó de subir",
+      "image": "/editorial/almanac/page-076.jpeg",
+      "alt": "Infografía: La temperatura de la carne dejó de subir",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000bf7081fdbf5b26ebdfceb523 (1).png",
+      "sourceSha256": "2a08473adc6255a55d8d032add9bd6d0777ddaca314b3e6b44b9b43e78be1ab9",
+      "sourceIndex": 96,
+      "outputSha256": "e54a4d33193b04a180d6b49137fd0101be7ac86b6a6b8259353063b61494e135",
+      "outputBytes": 733321
+    },
+    {
+      "document": "077",
+      "title": "Se apagó el carbón: cómo recuperar el fuego",
+      "image": "/editorial/almanac/page-077.jpeg",
+      "alt": "Infografía: Se apagó el carbón: cómo recuperar el fuego",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000881081fd91ff414e6478f558 (1).png",
+      "sourceSha256": "cbe11f50d2815cdebf34bee2d80f632c68cef0b5b1c69824d94a122824856a13",
+      "sourceIndex": 64,
+      "outputSha256": "71b6a8b74774427fcc7b1019834fcf16b97d00b8315656ecae9ad4d60a0fc1df",
+      "outputBytes": 736599
+    },
+    {
+      "document": "078",
+      "title": "La carne quedó insípida",
+      "image": "/editorial/almanac/page-078.jpeg",
+      "alt": "Infografía: La carne quedó insípida",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000ae3481f7b46ffb02b09b67d9 (1).png",
+      "sourceSha256": "cd883af2b3164ce66345a62ffaa7b7b202bbc164ca9595f84066cb63474434fb",
+      "sourceIndex": 82,
+      "outputSha256": "eac9c9d9fa4a59e56290c7b01be821c75ceb27bd664eaac719686aeb14167bdc",
+      "outputBytes": 749345
+    },
+    {
+      "document": "079",
+      "title": "La carne se está quemando por fuera",
+      "image": "/editorial/almanac/page-079.jpeg",
+      "alt": "Infografía: La carne se está quemando por fuera",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000028d88230a42b4c5d4fb99e80 (1).png",
+      "sourceSha256": "7bb2b468ee8197754f1f25176828b103e1e9803e18110e8ab596e6435581459e",
+      "sourceIndex": 23,
+      "outputSha256": "c03fd701831d06a38d6b92115429a43f4a9e75e85355406e20cf0ca9ddf71901",
+      "outputBytes": 771225
+    },
+    {
+      "document": "080",
+      "title": "Unos cortes están listos y otros siguen crudos",
+      "image": "/editorial/almanac/page-080.jpeg",
+      "alt": "Infografía: Unos cortes están listos y otros siguen crudos",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000009e2481fda55d127fb73e4740 (1).png",
+      "sourceSha256": "5f1152eaeebf1ab56eee30b85a80650a1bd5755611317da192e6bafef1d27ef4",
+      "sourceIndex": 70,
+      "outputSha256": "32178bd87389ebc7f02b9f8203401a0597b79642203ea8d7027b749ddf48eaae",
+      "outputBytes": 771268
+    },
+    {
+      "document": "081",
+      "title": "Cortaste la carne y no tiene el punto esperado",
+      "image": "/editorial/almanac/page-081.jpeg",
+      "alt": "Infografía: Cortaste la carne y no tiene el punto esperado",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000eebc82308453e3305c27b638 (1).png",
+      "sourceSha256": "18070742c6f509cf686476e5458a17a54912f8f2291517ff581fa13a5d53bb9a",
+      "sourceIndex": 118,
+      "outputSha256": "302f9263c3664d2e567bfaefee2cf39dd393cbfa53ea6f86d5b8ced4e51d4408",
+      "outputBytes": 777651
+    },
+    {
+      "document": "082",
+      "title": "La carne cambia de color al cocinarse",
+      "image": "/editorial/almanac/page-082.jpeg",
+      "alt": "Infografía: La carne cambia de color al cocinarse",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000003ec8230bbed95d96b8a1d82 (1).png",
+      "sourceSha256": "a1999fba4bbb7ec8b4d1d15de8bfe2b16bda521638f718de3f71f656381e57b6",
+      "sourceIndex": 3,
+      "outputSha256": "3d19a1858f6112cbd596524cae22caaf56932f4235c525fe6efdb7b1d413459d",
+      "outputBytes": 738175
+    },
+    {
+      "document": "083",
+      "title": "¿La carne pierde sus jugos cuando la cortas?",
+      "image": "/editorial/almanac/page-083.jpeg",
+      "alt": "Infografía: ¿La carne pierde sus jugos cuando la cortas?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000005c788230bc48a8cf4693d3a9 (1).png",
+      "sourceSha256": "78ca8512552f46401426eb039ce28197f8e535fa66c1a97bdd58a91a73d7b95c",
+      "sourceIndex": 47,
+      "outputSha256": "5481e9464c1be4d7a7da62a2b0633dff70e2005a41e4f39c41e6c36f39a180d7",
+      "outputBytes": 703673
+    },
+    {
+      "document": "084",
+      "title": "¿Las marcas de la parrilla significan mejor sellado?",
+      "image": "/editorial/almanac/page-084.jpeg",
+      "alt": "Infografía: ¿Las marcas de la parrilla significan mejor sellado?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000fbac823082e646fa1ece2ec6 (1).png",
+      "sourceSha256": "2fa517bcf2031a278cb321a013d9ef441440c11d3aede88d5f2a80b9eeb24710",
+      "sourceIndex": 122,
+      "outputSha256": "2fb5abd418f899c2edc03f3c8d0124e9c4735550863225243e2ce1c75eb8d65f",
+      "outputBytes": 730668
+    },
+    {
+      "document": "085",
+      "title": "¿Por qué una llamarada no significa más calor útil?",
+      "image": "/editorial/almanac/page-085.jpeg",
+      "alt": "Infografía: ¿Por qué una llamarada no significa más calor útil?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000d9e8823088e95a4ab1ce37e1 (1).png",
+      "sourceSha256": "cb1d1d2f1ca5738b20b98f9512558e6fd5f6d59a3ed7fe1d7aa4536f4fd9cc05",
+      "sourceIndex": 107,
+      "outputSha256": "b5d147db56f07236eadd502440b41dcc73c5abf31178ac26424116072842d369",
+      "outputBytes": 722377
+    },
+    {
+      "document": "086",
+      "title": "Mismo fuego, distinto grosor: ¿por qué cambia tanto el resultado?",
+      "image": "/editorial/almanac/page-086.jpeg",
+      "alt": "Infografía: Mismo fuego, distinto grosor: ¿por qué cambia tanto el resultado?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000467082309bd1f68fec0188de (1).png",
+      "sourceSha256": "14094aaac3ab7ea9eee9e1254d70ad110cdcce051de897357a5c4110b12ac220",
+      "sourceIndex": 37,
+      "outputSha256": "d31aae763dc6cbd14618449dd2d5167b4972a2db7c961bb58e6502dcf8e2acc5",
+      "outputBytes": 648920
+    },
+    {
+      "document": "087",
+      "title": "¿La sal gruesa sala mejor que la sal fina?",
+      "image": "/editorial/almanac/page-087.jpeg",
+      "alt": "Infografía: ¿La sal gruesa sala mejor que la sal fina?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000839481fd9c5f0b11acb00901 (1).png",
+      "sourceSha256": "95c8252e0e65d40f2348d5029aeb5477086667ace20b45ba983eaf709a0f4a9e",
+      "sourceIndex": 61,
+      "outputSha256": "0e5789e95aa38a7c372201779af85a1661bc4865ae02b2c6f2dab2c0a3cdf606",
+      "outputBytes": 641447
+    },
+    {
+      "document": "088",
+      "title": "¿Por qué la carne se pega a la parrilla?",
+      "image": "/editorial/almanac/page-088.jpeg",
+      "alt": "Infografía: ¿Por qué la carne se pega a la parrilla?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000265c82308ab9377d3a4c6699 (1).png",
+      "sourceSha256": "092ed9e72f2f5b3696b2d8aee3efc84163901e560fe5c4a10f44628eee256093",
+      "sourceIndex": 20,
+      "outputSha256": "997dccb835cde0faeb0b65af6f0f9fd695be472d44467e33cea810031ca1b06c",
+      "outputBytes": 707860
+    },
+    {
+      "document": "089",
+      "title": "¿Por qué el humo cambia de color?",
+      "image": "/editorial/almanac/page-089.jpeg",
+      "alt": "Infografía: ¿Por qué el humo cambia de color?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000be0881fd99c71bf0a5edb9b3 (1).png",
+      "sourceSha256": "31a94eb50f0d137ace1d7be6b743d0de7a34f5f1fc96a41210ccac7773d48d10",
+      "sourceIndex": 94,
+      "outputSha256": "6cf7e26e6c4c244fba833850f1f5a20762dbea12161f86efbd3d895b2b8f9b5e",
+      "outputBytes": 685395
+    },
+    {
+      "document": "090",
+      "title": "¿Por qué la grasa hace que la carne sepa diferente?",
+      "image": "/editorial/almanac/page-090.jpeg",
+      "alt": "Infografía: ¿Por qué la grasa hace que la carne sepa diferente?",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000008708230b03f1c7069fc9229 (1).png",
+      "sourceSha256": "75f66ae46d2c099cc5b369fda91b821989ce1bcc82aaff5885b3c1698bf78bd8",
+      "sourceIndex": 6,
+      "outputSha256": "9313a11f06317d4df9b1ac0f92bd4b599dfbc4d5ec4facb124e5b1beb67b8dc8",
+      "outputBytes": 732347
+    },
+    {
+      "document": "091",
+      "title": "Sudáfrica: el ritual del braai",
+      "image": "/editorial/almanac/page-091.jpeg",
+      "alt": "Infografía: Sudáfrica: el ritual del braai",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000005874820daaf6caebb038b1ef.png",
+      "sourceSha256": "3c8cbd685548301fc4a89ac44bc4f9b90f26378dba87c7667b07c1cf40282543",
+      "sourceIndex": 45,
+      "outputSha256": "400dd4a00fd0ad7a9f487071bfe5b773249b3bfaceed1953ffbb3633a6112f6d",
+      "outputBytes": 749699
+    },
+    {
+      "document": "092",
+      "title": "Filipinas: el arte del lechón",
+      "image": "/editorial/almanac/page-092.jpeg",
+      "alt": "Infografía: Filipinas: el arte del lechón",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000038e881f5baf67f6a8fdb20b0.png",
+      "sourceSha256": "43e300f85dd0a6285cf24eaac6fd22be83139f42e516905df6fd4b0efa7da796",
+      "sourceIndex": 31,
+      "outputSha256": "ff7d7f979c56efaf18595ada47adfb6e07b936eec1a4812beefc63d075836d5a",
+      "outputBytes": 746279
+    },
+    {
+      "document": "093",
+      "title": "Australia: la cultura del barbecue al aire libre",
+      "image": "/editorial/almanac/page-093.jpeg",
+      "alt": "Infografía: Australia: la cultura del barbecue al aire libre",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000083ec820db62ada729078733b.png",
+      "sourceSha256": "10a4ddea1bc7c54be698ce614056ada7495c50e1e58b642331d786eba6069927",
+      "sourceIndex": 62,
+      "outputSha256": "a972757c0698d519e135b14cae9ac4d6451c8b35fbed1e6ab96fc132fdb09181",
+      "outputBytes": 818864
+    },
+    {
+      "document": "094",
+      "title": "España: el arte de la paella al fuego",
+      "image": "/editorial/almanac/page-094.jpeg",
+      "alt": "Infografía: España: el arte de la paella al fuego",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000c54881fda421b24dd31e07ca.png",
+      "sourceSha256": "82c84733dc72acd12c79762471e9b81dff31d6c9246a4128bfd58ac5605b7209",
+      "sourceIndex": 100,
+      "outputSha256": "7061806e2a2e00ec9834278a1830e217dfccd025b997dd98b0c5cdae2aa84020",
+      "outputBytes": 840743
+    },
+    {
+      "document": "095",
+      "title": "Uruguay: el asado a la cruz",
+      "image": "/editorial/almanac/page-095.jpeg",
+      "alt": "Infografía: Uruguay: el asado a la cruz",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000a114820d9a174c7e4bf43240.png",
+      "sourceSha256": "4d5a573517e4289b3f135aa00ad30329ed4159868ce8834f2fd69582bb9d077e",
+      "sourceIndex": 76,
+      "outputSha256": "49c9557b58354e5e552d563dcf682b594e9c0155b7c879394a7588f68f7a0747",
+      "outputBytes": 772257
+    },
+    {
+      "document": "096",
+      "title": "Perú: fuego, brasas y tradición",
+      "image": "/editorial/almanac/page-096.jpeg",
+      "alt": "Infografía: Perú: fuego, brasas y tradición",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000047308230a78b256f84a0d6aa.png",
+      "sourceSha256": "17a22a556bd307b32899d9aec47b68246d70c3a5acce6f442fc345805ba391b0",
+      "sourceIndex": 39,
+      "outputSha256": "9d19d6144c03b1ca5501b41f7aedddaa386d2aa35ec98b7cad2a8c78540c5057",
+      "outputBytes": 815617
+    },
+    {
+      "document": "097",
+      "title": "Matriz del steak: textura, sabor y marmoleo",
+      "image": "/editorial/almanac/page-097.jpeg",
+      "alt": "Infografía: Matriz del steak: textura, sabor y marmoleo",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000092b4820c980cf2b8a931fe2b.png",
+      "sourceSha256": "f39677c6eaa7e19b3bf57cfa98dacfe168ef3c7134bf13e297aaa9c3738698e1",
+      "sourceIndex": 66,
+      "outputSha256": "88fd481b3cafd4f331a1f0b890fe71c580cab62064d98399d08c10abee0e550a",
+      "outputBytes": 763338
+    },
+    {
+      "document": "098",
+      "title": "Matriz del cerdo: cortes, textura y grasa",
+      "image": "/editorial/almanac/page-098.jpeg",
+      "alt": "Infografía: Matriz del cerdo: cortes, textura y grasa",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000e8f081f7927a6ca6579e9874.png",
+      "sourceSha256": "8fe23656b4baa51c2606926075c6cddc076129302df23098f6f3a1aae9a4960c",
+      "sourceIndex": 116,
+      "outputSha256": "ee23797a3141125b3dd1afbd54cda97fd3a2b1fe7a17f4ec6c41e2b3ecbfa55c",
+      "outputBytes": 728150
+    },
+    {
+      "document": "099",
+      "title": "Matriz de las maderas para cocinar",
+      "image": "/editorial/almanac/page-099.jpeg",
+      "alt": "Infografía: Matriz de las maderas para cocinar",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000d7f8820db3f040fe411a9a94.png",
+      "sourceSha256": "8eb20c252af61f3b526096c69d5a7bbae6018de68c6711ca57a0812f625a224c",
+      "sourceIndex": 105,
+      "outputSha256": "951e5bc5a9eceaae3ba971de5114a5828748e13e198cf769148809234c595801",
+      "outputBytes": 637236
+    },
+    {
+      "document": "100",
+      "title": "Matriz de los métodos de cocción en parrilla",
+      "image": "/editorial/almanac/page-100.jpeg",
+      "alt": "Infografía: Matriz de los métodos de cocción en parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000a098820d9aec2f49f92ba227.png",
+      "sourceSha256": "c94a26f250dc9d17926e68164a33c7120ef2831da3380fe19b5d3fe9d580c9c9",
+      "sourceIndex": 74,
+      "outputSha256": "018faa0a3cd621e85f002e2f53f4862bec0dde274c7aa93908a89a42a0378ce0",
+      "outputBytes": 721061
+    },
+    {
+      "document": "101",
+      "title": "Matriz de las proteínas para la parrilla",
+      "image": "/editorial/almanac/page-101.jpeg",
+      "alt": "Infografía: Matriz de las proteínas para la parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_000000009fe481f68aa2a8fdb4a6a169.png",
+      "sourceSha256": "24949c40afd51131bb365d0899f7271a59829eca94f07a449149029fa31f5213",
+      "sourceIndex": 73,
+      "outputSha256": "43e14cf188b3fa5b155a67e00c68f11b159b84d21a08bd94f5ab3bd9b96dbf21",
+      "outputBytes": 642659
+    },
+    {
+      "document": "102",
+      "title": "Matriz de los carbones para la parrilla",
+      "image": "/editorial/almanac/page-102.jpeg",
+      "alt": "Infografía: Matriz de los carbones para la parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000bac8820da8b0f3e06cb35a42.png",
+      "sourceSha256": "e02bcaa32a15809238bac5a137ab076642ae35f92c3fb96c237ee33594b22fd2",
+      "sourceIndex": 92,
+      "outputSha256": "d35cc13738e822bc88c7919f9b7e307e9d417b220f754ce475b6271526ca56c7",
+      "outputBytes": 635532
+    },
+    {
+      "document": "103",
+      "title": "Matriz de las grasas para cocinar en parrilla",
+      "image": "/editorial/almanac/page-103.jpeg",
+      "alt": "Infografía: Matriz de las grasas para cocinar en parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_0000000019f8820d8c01a09431710530.png",
+      "sourceSha256": "97342d1bb06b633e8aafd5be38553a837de045850a07bca51a3fe501e67243e1",
+      "sourceIndex": 17,
+      "outputSha256": "f82f49bc0b6bcdfe53f3db3544bf1e60bc7e46bb5a542615b34bf4dfcc77bddb",
+      "outputBytes": 589823
+    },
+    {
+      "document": "104",
+      "title": "Matriz de las sales para la parrilla",
+      "image": "/editorial/almanac/page-104.jpeg",
+      "alt": "Infografía: Matriz de las sales para la parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000890c820d9b047af175cbe109.png",
+      "sourceSha256": "71e308744259bac898839d7e0308d56bea4b05ff2eb960a697bc837be44d6e32",
+      "sourceIndex": 65,
+      "outputSha256": "d1c5dfa99e5664102b1286528cb4f2791b9ce7d054f7f634c1c300494cb6411f",
+      "outputBytes": 550830
+    },
+    {
+      "document": "105",
+      "title": "Matriz de los vegetales para la parrilla",
+      "image": "/editorial/almanac/page-105.jpeg",
+      "alt": "Infografía: Matriz de los vegetales para la parrilla",
+      "width": 1254,
+      "height": 1254,
+      "source": "file_00000000095c81fd89a02dba565cb733.png",
+      "sourceSha256": "abdd4438b4fcc56300fff14ac9b1714440552489f500f2acde9076add82b2bf8",
+      "sourceIndex": 7,
+      "outputSha256": "63ce689f33d0b13d8621bd2eb51e6a03e440a995f1647d9f49e564477bede1e4",
+      "outputBytes": 600008
+    }
+  ],
+  "previousAssets": [
+    {
+      "image": "/editorial/almanac/page-001.jpeg",
+      "sha256": "402607a7c3bf45ebfba89af77bb11fc2974e929dd417b3f4420bffe7ffed55dc"
+    },
+    {
+      "image": "/editorial/almanac/page-002.jpeg",
+      "sha256": "b2af0668e3e2ada80dcad946480d5158cbd92449f3592c561b5f308559f62497"
+    },
+    {
+      "image": "/editorial/almanac/page-003.jpeg",
+      "sha256": "b0d48eaf29c41da9babe99d4852652886d96819abafe32a156e0fd0b6f05e371"
+    },
+    {
+      "image": "/editorial/almanac/page-004.jpeg",
+      "sha256": "dea523af76216daa4090922474a6ceb03ab8dd282ce9b2904a0aed44de3245c1"
+    },
+    {
+      "image": "/editorial/almanac/page-005.jpeg",
+      "sha256": "a9f02ae4b8ceb43d877f692969d86b2c4cb49cff9cdae4bb919148c75b8b383e"
+    },
+    {
+      "image": "/editorial/almanac/page-006.jpeg",
+      "sha256": "d68d4f5c19d1d3aa909311720ae565dac316039b01554ecb2d0f93cdaa343ad6"
+    },
+    {
+      "image": "/editorial/almanac/page-007.jpeg",
+      "sha256": "dcb7cf8c31fd9007169a7b652dcb8a8dc257e93f264a64d5992837165758f8f0"
+    },
+    {
+      "image": "/editorial/almanac/page-008.jpeg",
+      "sha256": "25ee68c76e6a8d9c42e649cef236be1b6046711008d429752b9f457f8a27948b"
+    },
+    {
+      "image": "/editorial/almanac/page-009.jpeg",
+      "sha256": "c627a04c30c49e6d7e2302a85e23639f763a5db37e632f3ce220ddd2987bc07a"
+    },
+    {
+      "image": "/editorial/almanac/page-010.jpeg",
+      "sha256": "b2a4c24005a29dcb3952a5eed481f0d9dfabc1286d43f926953b1b7250b740a3"
+    },
+    {
+      "image": "/editorial/almanac/page-011.jpeg",
+      "sha256": "11606ba47d8c7563b66e75c4b5e560a4a64f295cd3356aa137780190dc96957b"
+    },
+    {
+      "image": "/editorial/almanac/page-012.jpeg",
+      "sha256": "c194a6085f939771748f5ca20a9ddf8a4561c21ae638acae3a888fd99286f520"
+    },
+    {
+      "image": "/editorial/almanac/page-013.jpeg",
+      "sha256": "261086f49498a5941e1654fd5411e3c56fac30cd536be37462d7fb19fd67f24c"
+    },
+    {
+      "image": "/editorial/almanac/page-014.jpeg",
+      "sha256": "6e6500197eee365e0a74ee3b0ffa3a5f6bcf6dc704f1ddf968d1bd4b968b108e"
+    },
+    {
+      "image": "/editorial/almanac/page-015.jpeg",
+      "sha256": "a0adddf8248eeaf1904254adfc723f867b5f72c967620626b2784a8834961208"
+    },
+    {
+      "image": "/editorial/almanac/page-016.jpeg",
+      "sha256": "7f60e2249df04ba21669046bc26c6775a8a080de7c0cf6046b6581ca18858b16"
+    },
+    {
+      "image": "/editorial/almanac/page-017.jpeg",
+      "sha256": "03a34210fb4c9fd4c2c9669663155ef0f1d27f0dc07080d75f9062251b4d0b12"
+    },
+    {
+      "image": "/editorial/almanac/page-018.jpeg",
+      "sha256": "333c53fd7ef60faa1e81b75009d112f3a5e0236e555be0b2d27d4013fbadfff2"
+    },
+    {
+      "image": "/editorial/almanac/page-019.jpeg",
+      "sha256": "ba10747db31770b80aed70f1c1a2763ec53bb47d46768a907e1e43737300d083"
+    },
+    {
+      "image": "/editorial/almanac/page-020.jpeg",
+      "sha256": "b93858fb9c8190095c8c5a843c661e058bd7c0300f4ae1c1d4bc82ef55f3571e"
+    },
+    {
+      "image": "/editorial/almanac/page-021.jpeg",
+      "sha256": "b527e76b9775b786bb5cde2456d131990487ba16649fdecb297e2874ef339d30"
+    },
+    {
+      "image": "/editorial/almanac/page-022.jpeg",
+      "sha256": "22ca2bd4262786ea912fb8281f70fb58fca2176a2c6d2302964447da24ea3cd9"
+    },
+    {
+      "image": "/editorial/almanac/page-023.jpeg",
+      "sha256": "c4497b5688eb03f94427fbc6e0452754524ea7968d45c1eb8af02f0b7ea413e5"
+    },
+    {
+      "image": "/editorial/almanac/page-024.jpeg",
+      "sha256": "17e2a7b2cbf1ff4786138d4880ab4def7f48c8575dfc49ac832344fcc025e263"
+    },
+    {
+      "image": "/editorial/almanac/page-025.jpeg",
+      "sha256": "edae229a09c2bbaf5e282a9631699e53b294ae493e8a1096572bb8539b2d97e5"
+    },
+    {
+      "image": "/editorial/almanac/page-026.jpeg",
+      "sha256": "4517e70ab85a9a66abc7f133a4f7939b7a3aa4ff9f7c3df45b3dc15aa3e0bd7f"
+    },
+    {
+      "image": "/editorial/almanac/page-027.jpeg",
+      "sha256": "b3c01f763edfcdc29c78bc71294cb1d3848bfabb594aede7f5758348a0ac4a3b"
+    },
+    {
+      "image": "/editorial/almanac/page-028.jpeg",
+      "sha256": "6c941c292db675b02e9b65490bb70e9d7771e367cca8988efe9da47878e2b6cd"
+    },
+    {
+      "image": "/editorial/almanac/page-029.jpeg",
+      "sha256": "ba232c7b4d7f16f34a6bedc1781b289a4c3b9f4542c77401476488168ddd00a3"
+    },
+    {
+      "image": "/editorial/almanac/page-030.jpeg",
+      "sha256": "d28a017a1af418eb048374a1b86df3c22e30507811a87898f10eb6e7739e37c5"
+    },
+    {
+      "image": "/editorial/almanac/page-031.jpeg",
+      "sha256": "dd655dc8d6c9799fe9d94a0fe74f1eecf527ff703fbf06b4942d385e92045b91"
+    },
+    {
+      "image": "/editorial/almanac/page-032.jpeg",
+      "sha256": "37254004bc1ee766ec8f1633c7dd11b985098a7db9a04725cc3c4530ee3e8abf"
+    },
+    {
+      "image": "/editorial/almanac/page-033.jpeg",
+      "sha256": "670f6afca83c90e72c851d6537755b13040635aa258239de0842bb19e4f3362f"
+    },
+    {
+      "image": "/editorial/almanac/page-034.jpeg",
+      "sha256": "7065fcb167d3181d8f301bd9cdbc5bf818482554c1552e96b07c81420d19d9b4"
+    },
+    {
+      "image": "/editorial/almanac/page-035.jpeg",
+      "sha256": "79d0e082499a7251c8af669c878b590e81415d5aa105856b1fba50fdc6ae8d0a"
+    },
+    {
+      "image": "/editorial/almanac/page-036.jpeg",
+      "sha256": "aa81826846de652f8cb20d9cb728aa4bf3dffaf35b66c5dea107fcd61a9a06be"
+    },
+    {
+      "image": "/editorial/almanac/page-037.jpeg",
+      "sha256": "c3489fd60546f241aeb3e96b6f445e40620372a887a4f570952d15a0bc5ef885"
+    },
+    {
+      "image": "/editorial/almanac/page-038.jpeg",
+      "sha256": "fc05e05715cccd544d599f06a24e4d87b54ded508ffffe3c8460d0644a28e13d"
+    },
+    {
+      "image": "/editorial/almanac/page-039.jpeg",
+      "sha256": "c230f4a5e8fed4197edffd98183ffba17c21b86c05622a3ab1301d120f09e128"
+    },
+    {
+      "image": "/editorial/almanac/page-040.jpeg",
+      "sha256": "1ee3221b27c823ed45b755f5b88ebfb615f2a3e3bdbd4640020c5f4477e44296"
+    },
+    {
+      "image": "/editorial/almanac/page-041.jpeg",
+      "sha256": "568b88bba015cbc41c596146e84a76783885b5fb4ac8ea87456a34a5fc940317"
+    },
+    {
+      "image": "/editorial/almanac/page-042.jpeg",
+      "sha256": "42f44d71fed5ae3f948d86650bc14f1559a3e7059a40f382ece6ac1b6cc31610"
+    },
+    {
+      "image": "/editorial/almanac/page-043.jpeg",
+      "sha256": "597c6546e8fb43f643cc293a05af82e9b6ef3edef531b9d1a56d5378436d2cb7"
+    },
+    {
+      "image": "/editorial/almanac/page-044.jpeg",
+      "sha256": "f9ed39ddd0d3075ca59429cf71729b18e290d8027b5967481c04b6cbcdcf6ab0"
+    },
+    {
+      "image": "/editorial/almanac/page-045.jpeg",
+      "sha256": "d8dc7292992055ad42af3f34b0c59aee6785f8ec6ec64a6afe4537223ec03832"
+    },
+    {
+      "image": "/editorial/almanac/page-046.jpeg",
+      "sha256": "e460e24458e468e595e85c4e36581bface804efde61f8c047290a4608ed6d1aa"
+    },
+    {
+      "image": "/editorial/almanac/page-047.jpeg",
+      "sha256": "13f669b2dbcc2765a59475c0311a5ea93a936ddd15beb33c340555e0f3df97a7"
+    },
+    {
+      "image": "/editorial/almanac/page-048.jpeg",
+      "sha256": "3d031a76f2664472bd2d018dd5ceab139ffa454569bc0b15a9adb24323a333e8"
+    },
+    {
+      "image": "/editorial/almanac/page-050.jpeg",
+      "sha256": "b32e651c82b1722d025e7d7a3acfe1bdb0f6d6b3d9dd203f8d1d7c04b5e68698"
+    },
+    {
+      "image": "/editorial/almanac/page-051.jpeg",
+      "sha256": "45b5009aac4a59d57e0a3b84e15dfc63d8adf44655d29aa0820eb241d71b70d2"
+    },
+    {
+      "image": "/editorial/almanac/page-052.jpeg",
+      "sha256": "01836970f91c18ee6809b9923cf0ff9aa71253541b61c7b6d13e72795e1e38b2"
+    },
+    {
+      "image": "/editorial/almanac/page-053.jpeg",
+      "sha256": "d1211a622790a14c519f3480ae22b86b6286ea4ada1afd9fb8c7980f23fa28b3"
+    },
+    {
+      "image": "/editorial/almanac/page-054.jpeg",
+      "sha256": "10a8ac5c1b59fb8ab55d393edd3c5e0d3dc6b68c2bcd7e9c6deb8fa7f8fded39"
+    }
+  ],
+  "sourceInventory": [
+    {
+      "index": 1,
+      "file": "file_00000000036481f78b22efc8ec56a728.png",
+      "sha256": "cc08c8f1c32139df69c5c82e004336983e675c51e7909aaec14b4471cdff9929",
+      "width": 1254,
+      "height": 1254,
+      "document": "004",
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 2,
+      "file": "file_00000000037881f5bffff51ed45c73df.png",
+      "sha256": "1cf60ce45174e7eb3de9767f5d8c19e136d84ae78118a1b19ccafdaacd2019c4",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 3,
+      "file": "file_0000000003ec8230bbed95d96b8a1d82 (1).png",
+      "sha256": "a1999fba4bbb7ec8b4d1d15de8bfe2b16bda521638f718de3f71f656381e57b6",
+      "width": 1254,
+      "height": 1254,
+      "document": "082",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-082.jpeg"
+    },
+    {
+      "index": 4,
+      "file": "file_00000000048081fda43e529c39dd59ba.png",
+      "sha256": "8cadd2e4070c5544d32d661af9c4fd3696c08e12288e7292b8cab5e5363acf76",
+      "width": 1145,
+      "height": 1374,
+      "document": "013",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 5,
+      "file": "file_00000000078881f6aa4e0407494debb7.png",
+      "sha256": "3d7535304b69d4804a55487c22088cc53cec35116adedea19937c8f6130c837e",
+      "width": 1254,
+      "height": 1254,
+      "document": "051",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 6,
+      "file": "file_0000000008708230b03f1c7069fc9229 (1).png",
+      "sha256": "75f66ae46d2c099cc5b369fda91b821989ce1bcc82aaff5885b3c1698bf78bd8",
+      "width": 1254,
+      "height": 1254,
+      "document": "090",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-090.jpeg"
+    },
+    {
+      "index": 7,
+      "file": "file_00000000095c81fd89a02dba565cb733.png",
+      "sha256": "abdd4438b4fcc56300fff14ac9b1714440552489f500f2acde9076add82b2bf8",
+      "width": 1254,
+      "height": 1254,
+      "document": "105",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-105.jpeg"
+    },
+    {
+      "index": 8,
+      "file": "file_000000000b688230b1a67b8481012228 (1).png",
+      "sha256": "9f487e7f566878395485846d8dd5b84b7d881e4d389caf2a19798b1bb78e3ebd",
+      "width": 1254,
+      "height": 1254,
+      "document": "065",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-065.jpeg"
+    },
+    {
+      "index": 9,
+      "file": "file_000000000d7c81f694dfff68368e62e6.png",
+      "sha256": "bab18c8d7c5c91d48b5df51a990c4119b16bfda2a891ff8ffb4e8ce467e72750",
+      "width": 1254,
+      "height": 1254,
+      "document": "024",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 10,
+      "file": "file_000000000e2081f6bd29235c942047fc.png",
+      "sha256": "175e8e4493c165ce28e759e43b2d1d8e37ea2054c67374b6088836815dc83cc6",
+      "width": 1254,
+      "height": 1254,
+      "document": "039",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 11,
+      "file": "file_000000000f9081fda655dbfcaa2cc936.png",
+      "sha256": "9be541701cdadc80545818e81b761d2303dc65cf083183319f34dd20c68e15ef",
+      "width": 1254,
+      "height": 1254,
+      "document": "008",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 12,
+      "file": "file_00000000100081f6ba7a2bca02c2a826.png",
+      "sha256": "e81fb6246135d0d3540e9f7199fa0d18e02f5706c7c1b1c6e41232545f53e4e1",
+      "width": 1254,
+      "height": 1254,
+      "document": "041",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 13,
+      "file": "file_00000000124881f5ac3e7a4b042f4ee4 (1) (1).png",
+      "sha256": "a33567dccf69c84d7f0199d5fc1d75eaba560993ce9908629656a879015a0b13",
+      "width": 1254,
+      "height": 1254,
+      "document": "056",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-056.jpeg"
+    },
+    {
+      "index": 14,
+      "file": "file_00000000127881fdbd3fac33efee941d.png",
+      "sha256": "03a4f2cf621be60b1f6b2bbdc333268e7c11998820d53422d8ba11d575ea4fcc",
+      "width": 1254,
+      "height": 1254,
+      "document": "006",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 15,
+      "file": "file_0000000012e08230b9375e97fd43e112 (1).png",
+      "sha256": "61405f9ffda1458536670f2d2824980c057421eaa76be7536d279e3f24b956de",
+      "width": 1254,
+      "height": 1254,
+      "document": "062",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-062.jpeg"
+    },
+    {
+      "index": 16,
+      "file": "file_0000000013a081fd8e4c9951e88b9382.png",
+      "sha256": "54be6608f35cbb25fb4dac8f70f1fb7cce04d92b849836633e854ded9e993719",
+      "width": 1254,
+      "height": 1254,
+      "document": "015",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 17,
+      "file": "file_0000000019f8820d8c01a09431710530.png",
+      "sha256": "97342d1bb06b633e8aafd5be38553a837de045850a07bca51a3fe501e67243e1",
+      "width": 1254,
+      "height": 1254,
+      "document": "103",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-103.jpeg"
+    },
+    {
+      "index": 18,
+      "file": "file_000000001bf481f5b5d3e98435bb57c0.png",
+      "sha256": "eb6dd2085275a641d57121ea098bcccd61613ce3e079a1e1319b592b3c7477fd",
+      "width": 1254,
+      "height": 1254,
+      "document": "062",
+      "decision": "ALTERNATE_NOT_IMPORTED"
+    },
+    {
+      "index": 19,
+      "file": "file_00000000223481fd9c869ea3a6c0722e.png",
+      "sha256": "b392294830d40225629861a45439eb302ef50a23a2c93aafc094f468370ea6ce",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_OUTSIDE_NUMBERED_SERIES"
+    },
+    {
+      "index": 20,
+      "file": "file_00000000265c82308ab9377d3a4c6699 (1).png",
+      "sha256": "092ed9e72f2f5b3696b2d8aee3efc84163901e560fe5c4a10f44628eee256093",
+      "width": 1254,
+      "height": 1254,
+      "document": "088",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-088.jpeg"
+    },
+    {
+      "index": 21,
+      "file": "file_0000000026f081f69753512ec298205f.png",
+      "sha256": "43bc3bb242e64a18e64b420badd766e4b910ab8ebc4cbbc1442fdfb2406c499b",
+      "width": 1254,
+      "height": 1254,
+      "document": "052",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 22,
+      "file": "file_0000000026f481fda125b1a2b0e2863b.png",
+      "sha256": "e5e9b25827e70f6fbeae7969d6e2105ff16d431e1182f25a0b5e2e095c87951c",
+      "width": 1254,
+      "height": 1254,
+      "document": "017",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 23,
+      "file": "file_0000000028d88230a42b4c5d4fb99e80 (1).png",
+      "sha256": "7bb2b468ee8197754f1f25176828b103e1e9803e18110e8ab596e6435581459e",
+      "width": 1254,
+      "height": 1254,
+      "document": "079",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-079.jpeg"
+    },
+    {
+      "index": 24,
+      "file": "file_0000000029e081fdb84011e55dda8ea6.png",
+      "sha256": "b977b881c4622c1d16a65b8472256361ffdca37139270cd9889afadca640ae5c",
+      "width": 1254,
+      "height": 1254,
+      "document": "001",
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 25,
+      "file": "file_000000002be081f5ae76fd299013e5b3 (1) (1).png",
+      "sha256": "655fbd39e66c03fc6708ca478ca2f18a4713d944f7f212431c620ed05420db93",
+      "width": 1254,
+      "height": 1254,
+      "document": "055",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-055.jpeg"
+    },
+    {
+      "index": 26,
+      "file": "file_000000002d2881f6ab834317412857bb.png",
+      "sha256": "4235443586226a18804dff90df152e05d336679546576a0a0de7b7a6c71595d1",
+      "width": 1254,
+      "height": 1254,
+      "document": "022",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 27,
+      "file": "file_0000000030a081f68af42ae7fa11e89c.png",
+      "sha256": "6fbd97307c079f561b9c2a24707e43a836ecab3f3c758f988ab369a323e133e1",
+      "width": 1254,
+      "height": 1254,
+      "document": "033",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 28,
+      "file": "file_00000000317482308ed9e9b73bf32578.png",
+      "sha256": "b907a0a95f9dec63ddf59480f3739de39d8822c9e0bd203f0e6f2d5f12bc4bcf",
+      "width": 1254,
+      "height": 1254,
+      "document": "002",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 29,
+      "file": "file_00000000369482308f1c51c1602e089c.png",
+      "sha256": "c0412cf3fb62c50993eeab12d4fb57979c1c1bff3eaf782bd90b0e4584d8e7f8",
+      "width": 1254,
+      "height": 1254,
+      "document": "061",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-061.jpeg"
+    },
+    {
+      "index": 30,
+      "file": "file_00000000374481f6afa97c4215aba064.png",
+      "sha256": "216f9a2fac76d2835748d8ec7e582878735b0e19bb36e35c08be7f2d6444f993",
+      "width": 1145,
+      "height": 1374,
+      "document": "011",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 31,
+      "file": "file_0000000038e881f5baf67f6a8fdb20b0.png",
+      "sha256": "43e300f85dd0a6285cf24eaac6fd22be83139f42e516905df6fd4b0efa7da796",
+      "width": 1254,
+      "height": 1254,
+      "document": "092",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-092.jpeg"
+    },
+    {
+      "index": 32,
+      "file": "file_000000003b5481fdae066c4dce8917e7 (1).png",
+      "sha256": "3c3e7157e09ab7e522cb7677ca94cdca371bd040dfbe521258e02824ce610e41",
+      "width": 1254,
+      "height": 1254,
+      "document": "063",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-063.jpeg"
+    },
+    {
+      "index": 33,
+      "file": "file_000000003c7081f68e0bbe5f634052d8.png",
+      "sha256": "a8b1b0234d553fada2d2610d243b89738de7ff9b3c8bfce31b7d60192b15f37e",
+      "width": 1254,
+      "height": 1254,
+      "document": "049",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-049.jpeg"
+    },
+    {
+      "index": 34,
+      "file": "file_000000003ccc81fd8749a2b714944384.png",
+      "sha256": "36121983db26d0bfb20429dc05b6c2b2d725e1ba209fe3df31ad374baeefad7b",
+      "width": 1254,
+      "height": 1254,
+      "document": "001",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 35,
+      "file": "file_000000003ed881f69dfd8ab6f70c6f03.png",
+      "sha256": "66a6847566e54da9b4a74f5a06648a00d3a96027f04d9dd4fc42ef819ca25b1d",
+      "width": 1254,
+      "height": 1254,
+      "document": "034",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 36,
+      "file": "file_000000003f908210ae2ddd6e113cc562.png",
+      "sha256": "35adaffeaff008d033783b3781afbc8caf8f65ab8e005edac816351893cbde5e",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_OUTSIDE_NUMBERED_SERIES"
+    },
+    {
+      "index": 37,
+      "file": "file_00000000467082309bd1f68fec0188de (1).png",
+      "sha256": "14094aaac3ab7ea9eee9e1254d70ad110cdcce051de897357a5c4110b12ac220",
+      "width": 1254,
+      "height": 1254,
+      "document": "086",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-086.jpeg"
+    },
+    {
+      "index": 38,
+      "file": "file_0000000046e0820c9790e86098ac7774.png",
+      "sha256": "4367998c63ec3c9c2ad8c86a81682374733ba7b2192c1dd0e4f17cfc2a0352ef",
+      "width": 1254,
+      "height": 1254,
+      "document": "036",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 39,
+      "file": "file_0000000047308230a78b256f84a0d6aa.png",
+      "sha256": "17a22a556bd307b32899d9aec47b68246d70c3a5acce6f442fc345805ba391b0",
+      "width": 1254,
+      "height": 1254,
+      "document": "096",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-096.jpeg"
+    },
+    {
+      "index": 40,
+      "file": "file_0000000049c081f6a6fea51d878e792c.png",
+      "sha256": "0dec6ce63940f5ea07b4d5921fc0f4a16ef1b3e82fb0d7fd1059a7b47b3ff4f3",
+      "width": 1254,
+      "height": 1254,
+      "document": "047",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 41,
+      "file": "file_00000000523c81f6a86a536093724cc1.png",
+      "sha256": "192a8ecad56e7542840728cc8a6292cbc36689c9ac5782c471849a1640851af9",
+      "width": 1254,
+      "height": 1254,
+      "document": "032",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 42,
+      "file": "file_0000000053f881f6acfbfd3c839e394f.png",
+      "sha256": "181d2f9cacefe4ddf4f798bbcbe3fd04f6aa800974bf788bbfdfda5f29920c57",
+      "width": 1254,
+      "height": 1254,
+      "document": "030",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 43,
+      "file": "file_00000000575481f680e71d4b0948fd16.png",
+      "sha256": "ab989a9272027067557473a2ecc03a2afe9779191533a4a0200ce767469a1afb",
+      "width": 1254,
+      "height": 1254,
+      "document": "042",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 44,
+      "file": "file_00000000583481f69f811d031f4e0b9e.png",
+      "sha256": "f80695762ba14db38600f7d163e8b1369eb98655b671657ed7a32b8f1e064c78",
+      "width": 1254,
+      "height": 1254,
+      "document": "045",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 45,
+      "file": "file_000000005874820daaf6caebb038b1ef.png",
+      "sha256": "3c8cbd685548301fc4a89ac44bc4f9b90f26378dba87c7667b07c1cf40282543",
+      "width": 1254,
+      "height": 1254,
+      "document": "091",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-091.jpeg"
+    },
+    {
+      "index": 46,
+      "file": "file_000000005c2c82308ee7ef758fca4347 (1).png",
+      "sha256": "7836587eda04f551ca590521157f342c4d47611ae5fb20a3ca033755506fbe28",
+      "width": 1254,
+      "height": 1254,
+      "document": "070",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-070.jpeg"
+    },
+    {
+      "index": 47,
+      "file": "file_000000005c788230bc48a8cf4693d3a9 (1).png",
+      "sha256": "78ca8512552f46401426eb039ce28197f8e535fa66c1a97bdd58a91a73d7b95c",
+      "width": 1254,
+      "height": 1254,
+      "document": "083",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-083.jpeg"
+    },
+    {
+      "index": 48,
+      "file": "file_00000000606c81f6baf558966901a173.png",
+      "sha256": "25e1e0f761ca5114a977f9c3d3ebc8f2348667536a652b2d30a4730cae25e44f",
+      "width": 1254,
+      "height": 1254,
+      "document": "020",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 49,
+      "file": "file_00000000624081fd963bd1875015d91d (1).png",
+      "sha256": "53771ffec0052fe582bccc24b39c68ac356ec31818ad422b0bef212764d3bec3",
+      "width": 1254,
+      "height": 1254,
+      "document": "071",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-071.jpeg"
+    },
+    {
+      "index": 50,
+      "file": "file_0000000068cc81fdb3fbd0a8e65898a5.png",
+      "sha256": "091ae17c0da7b0b7f93b9f411d6d2a8f8604ce44b57a6f9a4aa23269c562e73d",
+      "width": 1254,
+      "height": 1254,
+      "document": "004",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 51,
+      "file": "file_000000006eec81f8a2e992e4f2ac4d41 (1).png",
+      "sha256": "c0113cf693716b108320ce38ab29cc94d3689efca430fefdce1bf02819f88185",
+      "width": 1254,
+      "height": 1254,
+      "document": "075",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-075.jpeg"
+    },
+    {
+      "index": 52,
+      "file": "file_000000006eec8230b9f8975ad12d81e6.png",
+      "sha256": "f3c7724316b9f989902c85b38c8d6bf160b50a4f762668fbddd93f59b530109d",
+      "width": 1254,
+      "height": 1254,
+      "document": "016",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 53,
+      "file": "file_0000000072448230b0970ad09ee9b09d (1).png",
+      "sha256": "832a94ce5be46e35d7cf7470879a0b7aa20dc87ffc7b037dc9b54b0abb6730ed",
+      "width": 1254,
+      "height": 1254,
+      "document": "069",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-069.jpeg"
+    },
+    {
+      "index": 54,
+      "file": "file_00000000736081fdb4034bf87d34b1d8.png",
+      "sha256": "2128b15768a04bc136e4b6b6d1daef04b4e56f5a3e3d6fb150ff07c52e699455",
+      "width": 1254,
+      "height": 1254,
+      "document": "005",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 55,
+      "file": "file_0000000073e481f691a993dfdb97717c.png",
+      "sha256": "2a29b8c1b77d74299a7d24dc3d7907b1d338a74220920dda1c4bc07d6f270e5b",
+      "width": 1254,
+      "height": 1254,
+      "document": "031",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 56,
+      "file": "file_00000000750881f6a37c98a5cf23e2b4.png",
+      "sha256": "6a5ea5b91d3ddb37e8beb0236c918b0ee7e20a6452b34fff372ea076a3ba4273",
+      "width": 1145,
+      "height": 1374,
+      "document": "012",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 57,
+      "file": "file_000000007938820db99a59f2b9ca855f.png",
+      "sha256": "ba57d32d32d4170a0246612acc83b2d8838b7f64fd51e72a8d92cde10db89399",
+      "width": 1254,
+      "height": 1254,
+      "document": "029",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 58,
+      "file": "file_000000007b7081f693a93ecb0511dd88.png",
+      "sha256": "3777380c2caf0beb7ee45c43a6af63b476cb8564d9cc23097fdf0f73582141d2",
+      "width": 1254,
+      "height": 1254,
+      "document": "038",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 59,
+      "file": "file_0000000081a481f6b99bc6268ae7dfb7.png",
+      "sha256": "f8d9374da382bbcc206b745e8c2b2835e41bbd147be47e1d36aa686fb2bcc8ed",
+      "width": 1254,
+      "height": 1254,
+      "document": "050",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 60,
+      "file": "file_0000000082ec81fd8c77297b77a4a6f8.png",
+      "sha256": "49724d2b0ad5d499c91c5b3b7d1f0834e302c8c81aa4bc5c094c76dcba975238",
+      "width": 1254,
+      "height": 1254,
+      "document": "009",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 61,
+      "file": "file_00000000839481fd9c5f0b11acb00901 (1).png",
+      "sha256": "95c8252e0e65d40f2348d5029aeb5477086667ace20b45ba983eaf709a0f4a9e",
+      "width": 1254,
+      "height": 1254,
+      "document": "087",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-087.jpeg"
+    },
+    {
+      "index": 62,
+      "file": "file_0000000083ec820db62ada729078733b.png",
+      "sha256": "10a4ddea1bc7c54be698ce614056ada7495c50e1e58b642331d786eba6069927",
+      "width": 1254,
+      "height": 1254,
+      "document": "093",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-093.jpeg"
+    },
+    {
+      "index": 63,
+      "file": "file_00000000877481f6929c49e3e47c10ec.png",
+      "sha256": "e70a59da78cbf3033ddd4798ca387055bc87766ef8508c90279e7b87ed19259d",
+      "width": 1254,
+      "height": 1254,
+      "document": "040",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 64,
+      "file": "file_00000000881081fd91ff414e6478f558 (1).png",
+      "sha256": "cbe11f50d2815cdebf34bee2d80f632c68cef0b5b1c69824d94a122824856a13",
+      "width": 1254,
+      "height": 1254,
+      "document": "077",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-077.jpeg"
+    },
+    {
+      "index": 65,
+      "file": "file_00000000890c820d9b047af175cbe109.png",
+      "sha256": "71e308744259bac898839d7e0308d56bea4b05ff2eb960a697bc837be44d6e32",
+      "width": 1254,
+      "height": 1254,
+      "document": "104",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-104.jpeg"
+    },
+    {
+      "index": 66,
+      "file": "file_0000000092b4820c980cf2b8a931fe2b.png",
+      "sha256": "f39677c6eaa7e19b3bf57cfa98dacfe168ef3c7134bf13e297aaa9c3738698e1",
+      "width": 1254,
+      "height": 1254,
+      "document": "097",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-097.jpeg"
+    },
+    {
+      "index": 67,
+      "file": "file_0000000095f081fd9f89675b08a56448.png",
+      "sha256": "f16242f0b8e61cacf9c7fefde9dbecf323dc88da15b0f58fe0b7fdd3566f5e4f",
+      "width": 1254,
+      "height": 1254,
+      "document": "007",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 68,
+      "file": "file_00000000970481f68653acbac8526ae6.png",
+      "sha256": "4a001ddfb0ec0677700bb8a82c17ba67ba4e7c6ea3283bb8f37397b68fdc89dd",
+      "width": 1254,
+      "height": 1254,
+      "document": "054",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 69,
+      "file": "file_000000009d3c81f68e14ce3ea85fa06f (1) (1).png",
+      "sha256": "75906bb15236eae4841e1a52840cf7a28141f60b519572812cfd6b332d501000",
+      "width": 1254,
+      "height": 1254,
+      "document": "060",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-060.jpeg"
+    },
+    {
+      "index": 70,
+      "file": "file_000000009e2481fda55d127fb73e4740 (1).png",
+      "sha256": "5f1152eaeebf1ab56eee30b85a80650a1bd5755611317da192e6bafef1d27ef4",
+      "width": 1254,
+      "height": 1254,
+      "document": "080",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-080.jpeg"
+    },
+    {
+      "index": 71,
+      "file": "file_000000009e6481f79eec77c8be4b5276 (1).png",
+      "sha256": "69b3a43a4ad9b069249e354bff8c636c19742d29f59aa3d6a6923386ed83413e",
+      "width": 1254,
+      "height": 1254,
+      "document": "064",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-064.jpeg"
+    },
+    {
+      "index": 72,
+      "file": "file_000000009fd881f6ba7cf7be200093db.png",
+      "sha256": "e475694db2292565bbaea6c52ff979d2bf533ea9ac651de8569c62dda211bc06",
+      "width": 1254,
+      "height": 1254,
+      "document": "019",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 73,
+      "file": "file_000000009fe481f68aa2a8fdb4a6a169.png",
+      "sha256": "24949c40afd51131bb365d0899f7271a59829eca94f07a449149029fa31f5213",
+      "width": 1254,
+      "height": 1254,
+      "document": "101",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-101.jpeg"
+    },
+    {
+      "index": 74,
+      "file": "file_00000000a098820d9aec2f49f92ba227.png",
+      "sha256": "c94a26f250dc9d17926e68164a33c7120ef2831da3380fe19b5d3fe9d580c9c9",
+      "width": 1254,
+      "height": 1254,
+      "document": "100",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-100.jpeg"
+    },
+    {
+      "index": 75,
+      "file": "file_00000000a0d48230ad1b12b4e3a384f4 (1).png",
+      "sha256": "2aa5e7f59e57640673ff038fd1981359d6a137f97e4e8c5e5b2d1107f376cf74",
+      "width": 1254,
+      "height": 1254,
+      "document": "073",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-073.jpeg"
+    },
+    {
+      "index": 76,
+      "file": "file_00000000a114820d9a174c7e4bf43240.png",
+      "sha256": "4d5a573517e4289b3f135aa00ad30329ed4159868ce8834f2fd69582bb9d077e",
+      "width": 1254,
+      "height": 1254,
+      "document": "095",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-095.jpeg"
+    },
+    {
+      "index": 77,
+      "file": "file_00000000a69481f6a46b221d48b2925d.png",
+      "sha256": "e765474f6977550e9974441642201282d2ec84d2befeefeb047dbb2893404c74",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 78,
+      "file": "file_00000000a694820d8ffa36d72f7c8d66 (1).png",
+      "sha256": "dd873210fd6e01d151c8194d7296e11ab263427331884ae39581d44d9344c39d",
+      "width": 1254,
+      "height": 1254,
+      "document": "059",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-059.jpeg"
+    },
+    {
+      "index": 79,
+      "file": "file_00000000a78081f6b88c7ad04f689d1f.png",
+      "sha256": "296a535de28188e3559b274aa8bfb5311e647bdd422a04c1727a8debf3f82800",
+      "width": 1254,
+      "height": 1254,
+      "document": "021",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 80,
+      "file": "file_00000000ab8881fd97e17340e47d6cef.png",
+      "sha256": "04aa9220c6a2363799afe9a8dcf1ca012d6ebd45207efc2cbe5a38c1c6583d19",
+      "width": 1254,
+      "height": 1254,
+      "document": "003",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 81,
+      "file": "file_00000000acf4820da69a11a2fe012f7c (1) (1).png",
+      "sha256": "d170bfb70e5501ca6b33b55b19f08e4c6e8660b23bc312093e0728432671aa78",
+      "width": 1254,
+      "height": 1254,
+      "document": "059",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-059-cepillo.jpeg"
+    },
+    {
+      "index": 82,
+      "file": "file_00000000ae3481f7b46ffb02b09b67d9 (1).png",
+      "sha256": "cd883af2b3164ce66345a62ffaa7b7b202bbc164ca9595f84066cb63474434fb",
+      "width": 1254,
+      "height": 1254,
+      "document": "078",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-078.jpeg"
+    },
+    {
+      "index": 83,
+      "file": "file_00000000afa081f6b6bb1b2ae2278f41.png",
+      "sha256": "19faac7eb80d84bff6ba8e89d849887e735bc10c0f6599530e44eb4f487383b9",
+      "width": 1254,
+      "height": 1254,
+      "document": "044",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 84,
+      "file": "file_00000000b02081f580acd7456757ef6a.png",
+      "sha256": "ae8123775a62794dcbe3d6eb08eaa9b4941bf0d19338eaa438c80bb51537fa8d",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 85,
+      "file": "file_00000000b1bc81fd907115b245a5d8b2 (1).png",
+      "sha256": "617ad62659775a112b01ba8205576e4223acba6b635ea26517e19ea45439012b",
+      "width": 1254,
+      "height": 1254,
+      "document": "002",
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 86,
+      "file": "file_00000000b1bc81fd907115b245a5d8b2.png",
+      "sha256": "548ee2a6f6c699a22f73a895019cd26a1d91437d2e45c1a4a1cde60045e2fc95",
+      "width": 1254,
+      "height": 1254,
+      "document": "002",
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 87,
+      "file": "file_00000000b264823091111e14854434de (1).png",
+      "sha256": "68b3e89cf44e041df4f903bfef4c59b4479ca859ace945041071651171a41817",
+      "width": 1254,
+      "height": 1254,
+      "document": "067",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-067.jpeg"
+    },
+    {
+      "index": 88,
+      "file": "file_00000000b30c81fdb04fb80a2010a3fc (1).jpg",
+      "sha256": "5968eca13245992b02afebd17ac6b49f35f32de8e46a0101f85fe4e7e27a5b48",
+      "width": 1536,
+      "height": 1536,
+      "document": "061",
+      "decision": "ALTERNATE_NOT_IMPORTED"
+    },
+    {
+      "index": 89,
+      "file": "file_00000000b71081f887e530414bb6c9bd (1).png",
+      "sha256": "d47eacec671fe38575cb21633c4d394de1f3fc93de634afe79db5cb456047283",
+      "width": 1254,
+      "height": 1254,
+      "document": "072",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-072.jpeg"
+    },
+    {
+      "index": 90,
+      "file": "file_00000000b91881f6abfde7d66a3ba840.png",
+      "sha256": "1bab5ae50773eef18c42de097cb475236efca6e685953f3a242790c01bb67cff",
+      "width": 1254,
+      "height": 1254,
+      "document": "037",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 91,
+      "file": "file_00000000ba6c822fa3e8a6bed74568ae.png",
+      "sha256": "d353a4568695c225ebce7d99548c0c06263c284ebef8eda0f315a6caec99b60b",
+      "width": 1254,
+      "height": 1254,
+      "document": "026",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 92,
+      "file": "file_00000000bac8820da8b0f3e06cb35a42.png",
+      "sha256": "e02bcaa32a15809238bac5a137ab076642ae35f92c3fb96c237ee33594b22fd2",
+      "width": 1254,
+      "height": 1254,
+      "document": "102",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-102.jpeg"
+    },
+    {
+      "index": 93,
+      "file": "file_00000000bbf881f691fa676185b2401d.png",
+      "sha256": "7ca3aab0d59604bc8033f69d66b8a9004c8dc179bca1a3832788becefb0111d7",
+      "width": 1254,
+      "height": 1254,
+      "document": "043",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 94,
+      "file": "file_00000000be0881fd99c71bf0a5edb9b3 (1).png",
+      "sha256": "31a94eb50f0d137ace1d7be6b743d0de7a34f5f1fc96a41210ccac7773d48d10",
+      "width": 1254,
+      "height": 1254,
+      "document": "089",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-089.jpeg"
+    },
+    {
+      "index": 95,
+      "file": "file_00000000beec81f69e2ac802d35919c6.png",
+      "sha256": "10b888a41ab638ddd6af27ddeb60a312e2e513ca101ab2ae68e4a771d732069d",
+      "width": 1254,
+      "height": 1254,
+      "document": "053",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 96,
+      "file": "file_00000000bf7081fdbf5b26ebdfceb523 (1).png",
+      "sha256": "2a08473adc6255a55d8d032add9bd6d0777ddaca314b3e6b44b9b43e78be1ab9",
+      "width": 1254,
+      "height": 1254,
+      "document": "076",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-076.jpeg"
+    },
+    {
+      "index": 97,
+      "file": "file_00000000c08c820c9ae41cb55020a1ea.png",
+      "sha256": "c93513e09ffee170f5d8833e9881b21b985c41d648647dba9a5c78d5bc9899d5",
+      "width": 1254,
+      "height": 1254,
+      "document": "028",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 98,
+      "file": "file_00000000c1d881fdaae1ae99ea8acc79.png",
+      "sha256": "1c275cc8f008775d54c2db8cd5bbc2c5e45f915a42f92d94bedc1dfa9882bb34",
+      "width": 1254,
+      "height": 1254,
+      "document": "005",
+      "decision": "ALTERNATE_NOT_IMPORTED"
+    },
+    {
+      "index": 99,
+      "file": "file_00000000c4bc81f6ad1408f16ee0ce4f.png",
+      "sha256": "8af3130eafb107309558a9d3b7314a43bda266330086e6df8512d65ed5645d8e",
+      "width": 1254,
+      "height": 1254,
+      "document": "046",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 100,
+      "file": "file_00000000c54881fda421b24dd31e07ca.png",
+      "sha256": "82c84733dc72acd12c79762471e9b81dff31d6c9246a4128bfd58ac5605b7209",
+      "width": 1254,
+      "height": 1254,
+      "document": "094",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-094.jpeg"
+    },
+    {
+      "index": 101,
+      "file": "file_00000000cb68820d9cb783835eae4a53 (1) (1).png",
+      "sha256": "b57320e11975ca1cba2d5f312d64a040b25fc5c227ecb76725cfc391954c1d49",
+      "width": 1254,
+      "height": 1254,
+      "document": "058",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-058.jpeg"
+    },
+    {
+      "index": 102,
+      "file": "file_00000000ce78820c9e36263d844413db.png",
+      "sha256": "22755ecbd5714ecc42d7d09a77f3487dcbb0db644d2c814c4969a5d4f673aae6",
+      "width": 1254,
+      "height": 1254,
+      "document": "025",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 103,
+      "file": "file_00000000d1e881f684f24f49527076de.png",
+      "sha256": "bbaa3e4934962d3ed2492c8e7f89a2c412f4c2262cfb31966126b0cedf73530e",
+      "width": 1254,
+      "height": 1254,
+      "document": "048",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 104,
+      "file": "file_00000000d31481f69f947bc1d52a8a5b.png",
+      "sha256": "389a4b33c327ce29d50cd95856f9f31ed0174c55ed07bf955af6bbcd7b7de6b5",
+      "width": 1254,
+      "height": 1254,
+      "document": "027",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 105,
+      "file": "file_00000000d7f8820db3f040fe411a9a94.png",
+      "sha256": "8eb20c252af61f3b526096c69d5a7bbae6018de68c6711ca57a0812f625a224c",
+      "width": 1254,
+      "height": 1254,
+      "document": "099",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-099.jpeg"
+    },
+    {
+      "index": 106,
+      "file": "file_00000000d9b08230be3131a8bd37aedb (1).png",
+      "sha256": "65f06c2709146f8ebee284e6629cc132afe843b48313ac56560dc7a828a847b9",
+      "width": 1254,
+      "height": 1254,
+      "document": "068",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-068.jpeg"
+    },
+    {
+      "index": 107,
+      "file": "file_00000000d9e8823088e95a4ab1ce37e1 (1).png",
+      "sha256": "cb1d1d2f1ca5738b20b98f9512558e6fd5f6d59a3ed7fe1d7aa4536f4fd9cc05",
+      "width": 1254,
+      "height": 1254,
+      "document": "085",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-085.jpeg"
+    },
+    {
+      "index": 108,
+      "file": "file_00000000de8c8230be74d353ebf0e6d5 (1).png",
+      "sha256": "417395ff52839cb7382a84c733a6fc657b34dd4686d26ed335d7f090ce77809f",
+      "width": 1254,
+      "height": 1254,
+      "document": "066",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-066.jpeg"
+    },
+    {
+      "index": 109,
+      "file": "file_00000000decc81fdbebf329e184503c5 (1).png",
+      "sha256": "d24e157a840bef4d17b52a65128d2483562359f95777540836bec300b53b1fed",
+      "width": 1254,
+      "height": 1254,
+      "document": "003",
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 110,
+      "file": "file_00000000decc81fdbebf329e184503c5.png",
+      "sha256": "2deaeb6aa4dbcabebe4d4a6679585951b1ebd43368a50018dfd681dd18d1ebee",
+      "width": 1254,
+      "height": 1254,
+      "document": "003",
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 111,
+      "file": "file_00000000df9c81fdbbcc27985c9e3ac3.png",
+      "sha256": "d69473a15a737a6cb2c8e26eac40f5356d3579a66b921c6287c46d825f1e899c",
+      "width": 1254,
+      "height": 1254,
+      "document": "010",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 112,
+      "file": "file_00000000e070820cb42ba5c9836f0bd5 (1) (1).png",
+      "sha256": "35656ea8fa149380c2b63be2112528033abbeb3b1b641f7d04a241ada4c81082",
+      "width": 1254,
+      "height": 1254,
+      "document": "057",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-057.jpeg"
+    },
+    {
+      "index": 113,
+      "file": "file_00000000e0c881f8b365d03436814ec2.png",
+      "sha256": "22f6294de1cc559f7bd2a6086fb209209a4a529e61c6771d7fbcf99b26239f41",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_PRODUCT_SERIES"
+    },
+    {
+      "index": 114,
+      "file": "file_00000000e4cc81fd80773dfebc37944f.png",
+      "sha256": "17c343f127d5dd207b790a8ff3c0306d9288462ab45d3642650fc6deb72890ba",
+      "width": 1145,
+      "height": 1374,
+      "document": "014",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 115,
+      "file": "file_00000000e83c81f6aa98905adf46294b.png",
+      "sha256": "098f911783bc1a338365ab3d291ba705f87a3b801242114682df5686b4edbad1",
+      "width": 1254,
+      "height": 1254,
+      "document": "023",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 116,
+      "file": "file_00000000e8f081f7927a6ca6579e9874.png",
+      "sha256": "8fe23656b4baa51c2606926075c6cddc076129302df23098f6f3a1aae9a4960c",
+      "width": 1254,
+      "height": 1254,
+      "document": "098",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-098.jpeg"
+    },
+    {
+      "index": 117,
+      "file": "file_00000000ecac81f6ad911f233e4d115e.png",
+      "sha256": "f1b5a9b1ed4dccb082560a86434af212f105d4633147cfdfdabb7f6e4c804fb4",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_OUTSIDE_NUMBERED_SERIES"
+    },
+    {
+      "index": 118,
+      "file": "file_00000000eebc82308453e3305c27b638 (1).png",
+      "sha256": "18070742c6f509cf686476e5458a17a54912f8f2291517ff581fa13a5d53bb9a",
+      "width": 1254,
+      "height": 1254,
+      "document": "081",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-081.jpeg"
+    },
+    {
+      "index": 119,
+      "file": "file_00000000f13c820d8bf80f577b6bac96.png",
+      "sha256": "9cd339b44891baa563ba7549085767b797560cd2b53427d8a076678a67beed6d",
+      "width": 1254,
+      "height": 1254,
+      "document": null,
+      "decision": "EXCLUDE_OUTSIDE_NUMBERED_SERIES"
+    },
+    {
+      "index": 120,
+      "file": "file_00000000f544820ca388410e95316c56.png",
+      "sha256": "b27fa6536aa14aacd3dd322039cdb9b41682163ce36646de76bc4f9abac68395",
+      "width": 1254,
+      "height": 1254,
+      "document": "035",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 121,
+      "file": "file_00000000f7d08230ad8799b29430ae06.png",
+      "sha256": "8a3e8e0690346832f5dee4d63b4bb54b1ac4b4c3901f54f15513f287534ac88b",
+      "width": 1254,
+      "height": 1254,
+      "document": "018",
+      "decision": "KEEP_EXISTING_DOCUMENT"
+    },
+    {
+      "index": 122,
+      "file": "file_00000000fbac823082e646fa1ece2ec6 (1).png",
+      "sha256": "2fa517bcf2031a278cb321a013d9ef441440c11d3aede88d5f2a80b9eeb24710",
+      "width": 1254,
+      "height": 1254,
+      "document": "084",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-084.jpeg"
+    },
+    {
+      "index": 123,
+      "file": "file_00000000fc9481f692f9d8237544c268 (1).png",
+      "sha256": "68ff14dc50ace77bc6c189dec82180e4155e8ed3ad40f0598172cdf4d9bb3bdd",
+      "width": 1254,
+      "height": 1254,
+      "document": "074",
+      "decision": "ADD",
+      "destination": "/editorial/almanac/page-074.jpeg"
+    }
+  ]
+}

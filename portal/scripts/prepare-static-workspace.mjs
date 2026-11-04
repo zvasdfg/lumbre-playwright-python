@@ -22,6 +22,7 @@ const files = [
   "scripts/ingredient-families.test.mjs",
   "scripts/lab-formula.test.mjs",
   "scripts/store-links.test.mjs",
+  "scripts/almanac-pages.test.mjs",
 ];
 for (const file of [...files, "profiles/static/package.json", "profiles/static/package-lock.json"]) {
   if (!existsSync(resolve(portal, file))) throw new Error(`Missing static release input: ${file}`);

@@ -1,6 +1,6 @@
 # Lumbre · catálogo numerado de pruebas
 
-Revisión de código y colección: **2026-10-27**. Una sola suite activa, con la
+Revisión de código y colección: **2026-11-04**. Una sola suite activa, con la
 separación original: core reutilizable, proyecto, POMs/componentes, datos y tests.
 Este documento define casos y cobertura; el [README principal](../../../README.md)
 define instalación, ejecución local/headed/CI, destinos y evidencia de releases.
@@ -35,7 +35,7 @@ antiguo checkpoint por su hash ni se debe mezclar historia previa a la limpieza.
 En la tabla, **N** cuenta ejecuciones Chromium de la colección actual. Salvo
 STORE, todos son portal. **M** va a la matriz, **S** al grupo serial y **C** se
 repite además en Firefox/WebKit. Sin letra: lane general. C no es otro caso.
-La colección completa tiene 461 ejecuciones: 437 framework/portal y 24 STORE
+La colección completa tiene 593 ejecuciones: 569 framework/portal y 24 STORE
 opt-in. Descubrir/coleccionar no demuestra PASS.
 
 ## Casos UI, en orden de ID
@@ -93,13 +93,13 @@ opt-in. Descubrir/coleccionar no demuestra PASS.
 | UI-085 | recipes | 1 S | Ir al producto y volver a receta |
 | UI-086 | commerce | 16 STORE | Cuatro destinos de compra × dos tamaños × tarjeta/ficha |
 | UI-087 | commerce | 8 STORE | Galerías de cuatro productos × dos tamaños |
-| UI-092 | almanac | 106 M | 53 documentos × dos tamaños: asset, ordinal y overflow |
-| UI-093 | almanac | 6 | Tres documentos × dos tamaños: zoom, fit y reset |
+| UI-092 | almanac | 212 M | 106 láminas × dos tamaños: asset, ordinal, 059 duplicado y overflow |
+| UI-093 | almanac | 14 | Siete láminas × dos tamaños: zoom, fit y reset |
 | UI-094 | almanac | 2 C | Flechas, límites, Escape y foco en disparador |
 | UI-095 | almanac | 2 C | Cerrar/reabrir, scroll y backdrop de escritorio |
 | UI-096 | home | 6 C | Chunks de almanaque/receta/producto abortados/503 y recarga |
 | UI-097 | almanac | 4 | Imagen abortada/503 y recuperación al revisitar |
-| UI-098 | almanac | 18 | Nueve documentos con notas editoriales × dos tamaños |
+| UI-098 | almanac | 36 | Dieciocho láminas con notas editoriales × dos tamaños |
 | UI-099 | ingredient_lab | 12 | 3/6/12 componentes × fuego × tamaños; límite y persistencia |
 | UI-100 | fire_planner | 4 | Cocción/horneado/reposo, °C/°F y ficha tras recargar |
 | UI-101 | home | 8 C | Teclado/foco/Escape en cuatro diálogos × dos tamaños |

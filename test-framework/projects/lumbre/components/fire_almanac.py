@@ -14,12 +14,14 @@ class FireAlmanac:
 
     def select(self, document):
         # Select by displayed document ID, not its potentially different ordinal.
+        identifier = f"{document:03d}" if isinstance(document, int) else document
+        prefix = "059 · El cepillo para limpiar la parrilla" if identifier == "059-cepillo" else f"{identifier} ·"
         self.index.wait_for(state="visible")
         for option in self.index.locator("option").all():
-            if option.inner_text().startswith(f"{document:03d} ·"):
+            if option.inner_text().startswith(prefix):
                 self.index.select_option(option.get_attribute("value"))
                 return
-        raise ValueError(f"Almanac document {document:03d} is unavailable")
+        raise ValueError(f"Almanac document {identifier} is unavailable")
 
     def close(self):
         self.page.get_by_role("button", name="Cerrar almanaque", exact=True).click()

@@ -176,16 +176,19 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Página siguiente", exact=True).click()
         expect(page.get_by_test_id("almanac-page-status")).to_contain_text("1")
         almanac_index = page.get_by_label("Ir a una página del almanaque")
-        expect(almanac_index.locator("option")).to_have_count(54)
-        for number in [*range(16, 49), *range(50, 55)]:
-            almanac_index.select_option(str(number if number < 49 else number - 1))
-            expect(page.get_by_test_id("almanac-page-status")).to_contain_text(f"DOC. {number:03d}")
+        expect(almanac_index.locator("option")).to_have_count(107)
+        documents = [*(f"{n:03d}" for n in range(1, 60)), "059-cepillo", *(f"{n:03d}" for n in range(60, 106))]
+        for ordinal, document in enumerate(documents, start=1):
+            almanac_index.select_option(str(ordinal))
+            expect(page.get_by_test_id("almanac-page-status")).to_contain_text(f"DOC. {document[:3]}")
             image = page.get_by_test_id("almanac-page").locator("img")
-            expect(image).to_have_attribute("src", f"/editorial/almanac/page-{number:03d}.jpeg")
-            expect(image).to_have_js_property("naturalWidth", 1254)
+            expect(image).to_have_attribute("src", f"/editorial/almanac/page-{document}.jpeg")
+            width_expected, height_expected = (1145, 1374) if document in ("011", "012", "013", "014") else (1254, 1254)
+            expect(image).to_have_js_property("naturalWidth", width_expected)
+            expect(image).to_have_js_property("naturalHeight", height_expected)
         expect(page.get_by_role("button", name="Página siguiente", exact=True)).to_be_disabled()
         page.get_by_role("button", name="Página anterior", exact=True).click()
-        expect(page.get_by_test_id("almanac-page-status")).to_contain_text("DOC. 053")
+        expect(page.get_by_test_id("almanac-page-status")).to_contain_text("DOC. 104")
         page.get_by_role("button", name="Cerrar almanaque", exact=True).click()
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "Horizontal overflow"
         assert not api_requests, api_requests
