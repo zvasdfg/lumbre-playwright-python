@@ -98,6 +98,13 @@ Las cuatro portadas comerciales usan JPEG versionados en
 comparten esas rutas. Los archivos anteriores se conservan para rollback.
 El contrato de imágenes comprueba las cuatro rutas, bytes JPEG y respaldo previo;
 actualizar fotos de Tiendanube no equivale a desplegar el portal.
+
+Precio unitario vigente aprobado por el propietario el **3 de noviembre de 2026**:
+**$109 MXN** para LMB-F-001, LMB-F-002, LMB-F-003 y LMB-F-004 (200 g).
+`portal/data/production-products.ts` es la fuente de tarjetas, fichas e impresión;
+Tiendanube debe mantener el mismo precio de venta. $99 MXN ya no es una oferta
+vigente: sus apariciones en evidencias históricas no fijan el precio actual.
+No se cambia inventario ni se aplica un precio promocional por esta actualización.
 El contenido neto comercial de 200 g no modifica el límite independiente de 150 g
 del Laboratorio ni el peso empacado usado para calcular envíos.
 

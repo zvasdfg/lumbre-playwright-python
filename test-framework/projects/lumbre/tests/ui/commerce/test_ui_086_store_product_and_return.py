@@ -30,6 +30,12 @@ def test_store_product_and_return(page, app_url, index, name, width, entry):
     link = page.get_by_role("link", name=f"Comprar {name} en la tienda", exact=True)
     href = link.get_attribute("href")
     assert urlparse(href).netloc == "lumbre16.mitiendanube.com"
+    card = page.get_by_test_id("product-card").filter(
+        has=page.get_by_role("heading", name=name, exact=True)
+    )
+    portal_price = re.search(r"\$\s*([\d,]+)", card.locator("strong").inner_text())
+    assert portal_price
+    expected_price = int(portal_price.group(1).replace(",", ""))
     if entry == "sheet":
         page.get_by_role("button", name=f"Ver ficha de {name}", exact=True).click()
         purchase = page.get_by_role("dialog").get_by_role(
@@ -49,7 +55,7 @@ def test_store_product_and_return(page, app_url, index, name, width, entry):
         page.get_by_role("heading", name=f"LMB-F-{index:03d} · {name} · 200 g", exact=False)
     ).to_be_visible()
     expect(page.get_by_text(f"SKU: LMB-F-{index:03d}", exact=True)).to_be_visible()
-    # Stock is live: do not require zero stock or a fixed price forever.
+    # Stock is live. Price must match the portal, without freezing a historical offer.
     expect(
         page.get_by_role("button", name="Agotado", exact=True).or_(
             page.get_by_role("button", name="Agregar al carrito", exact=True)
@@ -66,6 +72,7 @@ def test_store_product_and_return(page, app_url, index, name, width, entry):
     price = page.locator("#price_display")
     expect(price).to_be_visible()
     expect(price).to_contain_text(re.compile(r"\$\s*[\d,.]+"))
+    expect(price).to_contain_text(f"${expected_price:,.2f}")
     assert int(price.get_attribute("data-product-price")) > 0
     hero = page.locator("img.js-product-slide-img").first
     expect(hero).to_be_visible()

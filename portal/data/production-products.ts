@@ -23,6 +23,7 @@ const components = {
 
 // Canonical catalog for the static portal and its public laboratory archive.
 // LMB-F-002 composition corrected by the owner on 2026-09-30: includes garlic.
+// Current unit retail price approved by the owner on 2026-11-03: 109 MXN.
 export const productionProducts = [
   { id: 121, productCode: "LMB-F-001", name: "Sazonador multiuso",
     description: "Mezcla multiuso de sal de mar, pimienta negra molida y ajo granulado para preparaciones a la parrilla.",
@@ -37,7 +38,7 @@ export const productionProducts = [
     description: "Mezcla para carne de pollo elaborada con sal de mar, pimienta negra molida, ajo granulado, comino y sumac.",
     components: [components.salt, components.pepper, components.garlic, components.cumin, components.sumac] },
 ].map(({ id, name, ...details }) => ({
-  id, name, category: "blends" as const, price: 99, stock: 0, badge: "Producción",
+  id, name, category: "blends" as const, price: 109, stock: 0, badge: "Producción",
   details: {
     ...details,
     image: `/editorial/products/r011/${details.productCode.toLowerCase()}.jpg`,

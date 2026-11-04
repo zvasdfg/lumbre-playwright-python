@@ -4,6 +4,13 @@ import { readFileSync } from "node:fs";
 import { productStoreUrl, storeUrl } from "../static/store-links.ts";
 import { productionProducts } from "../data/production-products.ts";
 
+test("all four production rubs use the current owner-approved 109 MXN unit price", () => {
+  assert.equal(productionProducts.length, 4);
+  for (const product of productionProducts) {
+    assert.equal(product.price, 109, product.details.productCode);
+  }
+});
+
 test("production covers use the approved 200 g r011 packaging and keep the original assets", () => {
   for (const product of productionProducts) {
     const code = product.details.productCode.toLowerCase();

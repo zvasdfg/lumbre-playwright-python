@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from playwright.sync_api import expect
 
@@ -19,7 +21,15 @@ def test_blends_lead_store_catalog(portal, test_log):
         test_log.values(observed_names=actual, expected_names=expected)
     with test_log.step("Check the production catalog rather than retired merchandise"):
         assert actual == expected
+        for card in cards.all():
+            expect(card.locator("strong")).to_have_text(re.compile(r"\$109\s*·\s*200 g"))
         for name in expected:
             expect(
                 portal.get_by_role("link", name=f"Comprar {name} en la tienda", exact=True)
             ).to_be_visible()
+    with test_log.step("Check the same current price in each product sheet"):
+        for name in expected:
+            portal.get_by_role("button", name=f"Ver ficha de {name}", exact=True).click()
+            dialog = portal.get_by_role("dialog")
+            expect(dialog.get_by_text("$109 MXN", exact=True)).to_be_visible()
+            dialog.get_by_role("button", name="Cerrar ficha de producto", exact=True).click()

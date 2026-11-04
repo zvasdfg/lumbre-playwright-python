@@ -20,6 +20,23 @@ only in the backup. Historical records are not current executable requirements.
 | 2026-10-13 / 7971085, UI-077 correction | CI trace showed header pointer interception and continuing scroll without navigation: the failed lab panel collapsed an 800px placeholder to roughly 65px. Controlled-loading regression reproduced all four failures against the original CI build. Shared loading/error styling and footprint restored. Local: 423 nonserial + eight serial = 431 passed; 84 compatibility; 24 independent focused Firefox repetitions; 49 model/publication and nine profile contracts. CI 38457776095 then passed every job and deployed successfully; main/lab artifact SHA-256 and two old URLs with 404 verified. |
 | 2026-10-27 / documentation and publication decision | All 12 canonical Markdown documents aligned with source, current manual laboratory and original numbered framework. Full ID catalog, execution lanes, examples and dated evidence clarified; no runtime feature or dependency change. Collection rechecked: 431 default = 208 general + 215 matrix + eight serial; 24 store opt-in; 28 compatibility per engine. Owner explicitly authorized reopening this same repository accepting retained-object risk; provider purge remains unconfirmed. Collection is not a fresh UI PASS; this delivery's actual checks/run are attributable to its commit in Actions. |
 
+## 2026-11-03 — Retail price updated to 109 MXN
+
+The owner replaced the previous 99 MXN unit price with **109 MXN** for all four
+production rubs. The shared catalog feeds cards, product sheets and printed/PDF
+sheets; there are no separate hard-coded prices to maintain in those views.
+The model contract now fixes the current price for each SKU and UI-030 checks all
+four cards and sheets. Historical publication records remain dated evidence,
+not current offers. No inventory, composition, image, shipping, dependency or
+workflow changes are part of this price update. Validation and deployment must
+be confirmed for this commit; this entry alone does not certify either.
+
+Pre-push checks passed: 53 model/publication tests, typecheck, static build,
+public-tree audit and 10 focused browser/PDF executions (UI-030 and UI-103).
+Evidence: `/tmp/lumbre-price-109-ui.xml`. The external store contract now compares
+its live price with the portal card instead of accepting any positive amount.
+Full CI and production verification remain gates, not inferred local results.
+
 ## 2026-11-03 — Approved 200 g product imagery and publication
 
 Owner approved the reviewed r011 gallery and requested publication/deployment.

@@ -39,7 +39,7 @@ def test_print_content(page, app_url, feature, request):
             "Sazonador para carne de pollo",
         )[index - 1]
         page.get_by_role("button", name=f"Ver ficha de {name}", exact=True).click()
-        tokens = [name, f"LMB-F-{index:03d}", "Al llevarlo al fuego"]
+        tokens = [name, f"LMB-F-{index:03d}", "$109 MXN", "Al llevarlo al fuego"]
     elif feature == "recipe":
         card = page.get_by_test_id("recipe-card").first
         title = card.locator("h3").inner_text()
