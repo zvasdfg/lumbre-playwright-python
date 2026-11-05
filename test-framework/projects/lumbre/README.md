@@ -93,7 +93,7 @@ opt-in. Descubrir/coleccionar no demuestra PASS.
 | UI-085 | recipes | 1 S | Ir al producto y volver a receta |
 | UI-086 | commerce | 16 STORE | Cuatro destinos de compra × dos tamaños × tarjeta/ficha |
 | UI-087 | commerce | 8 STORE | Galerías de cuatro productos × dos tamaños |
-| UI-092 | almanac | 212 M | 106 láminas × dos tamaños: asset, ordinal, 059 duplicado y overflow |
+| UI-092 | almanac | 210 M | 105 láminas normalizadas × dos tamaños: asset cuadrado, ordinal,059 único y overflow |
 | UI-093 | almanac | 14 | Siete láminas × dos tamaños: zoom, fit y reset |
 | UI-094 | almanac | 2 C | Flechas, límites, Escape y foco en disparador |
 | UI-095 | almanac | 2 C | Cerrar/reabrir, scroll y backdrop de escritorio |
@@ -139,7 +139,7 @@ seriales. accessibility/print_pdf seleccionan contratos transversales.
 | Selección de CI | Ejecuciones |
 | --- | --- |
 | framework_unit or (portal and not matrix and not specialized) | 214 |
-| portal and matrix | 215: planner 48 + ingredientes 60 + recetas 1 + almanaque 106 |
+| portal and matrix | 214: planner 48 + ingredientes 60 + recetas 1 + almanaque 105 |
 | portal and specialized | 8 |
 | portal and cross_browser | 28 por motor; ya incluidas en Chromium general |
 | store | 24, ejecución manual de solo lectura |

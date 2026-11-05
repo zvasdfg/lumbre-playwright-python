@@ -24,9 +24,9 @@ def test_interrupted_image(almanac, failure):
     expect(reader.image).to_have_js_property("naturalWidth", 0)
     assert interrupted
     reader.select(12)
-    expect(reader.image).to_have_js_property("naturalWidth", 1145)
+    expect(reader.image).to_have_js_property("naturalWidth", 1254)
     reader.page.unroute(path, respond)
     reader.select(11)
-    expect(reader.image).to_have_js_property("naturalWidth", 1145)
+    expect(reader.image).to_have_js_property("naturalWidth", 1254)
     expect(reader.status).to_contain_text("DOC. 011")
     reader.close()

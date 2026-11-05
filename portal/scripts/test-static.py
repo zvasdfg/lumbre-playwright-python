@@ -176,14 +176,14 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Página siguiente", exact=True).click()
         expect(page.get_by_test_id("almanac-page-status")).to_contain_text("1")
         almanac_index = page.get_by_label("Ir a una página del almanaque")
-        expect(almanac_index.locator("option")).to_have_count(107)
-        documents = [*(f"{n:03d}" for n in range(1, 60)), "059-cepillo", *(f"{n:03d}" for n in range(60, 106))]
+        expect(almanac_index.locator("option")).to_have_count(106)
+        documents = [f"{n:03d}" for n in range(1, 106)]
         for ordinal, document in enumerate(documents, start=1):
             almanac_index.select_option(str(ordinal))
             expect(page.get_by_test_id("almanac-page-status")).to_contain_text(f"DOC. {document[:3]}")
             image = page.get_by_test_id("almanac-page").locator("img")
             expect(image).to_have_attribute("src", f"/editorial/almanac/page-{document}.jpeg")
-            width_expected, height_expected = (1145, 1374) if document in ("011", "012", "013", "014") else (1254, 1254)
+            width_expected, height_expected = (1254, 1254)
             expect(image).to_have_js_property("naturalWidth", width_expected)
             expect(image).to_have_js_property("naturalHeight", height_expected)
         expect(page.get_by_role("button", name="Página siguiente", exact=True)).to_be_disabled()

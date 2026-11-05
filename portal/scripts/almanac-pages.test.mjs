@@ -1,8 +1,23 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
+import { createHash } from "node:crypto";
 
 const pages = JSON.parse(readFileSync(new URL("../data/almanac-pages.json", import.meta.url)));
+const release = JSON.parse(readFileSync(new URL("../data/almanac-release.json", import.meta.url)));
+
+test("all105 web assets match the reviewed normalization release hashes", () => {
+  assert.equal(release.revision, "r017");
+  assert.equal(release.count, 105);
+  assert.deepEqual(release.entries.map(e => e.document), pages.map(p => p.document));
+  assert.equal(release.entries.filter(e => e.revision === "r017").length, 6);
+  for (const entry of release.entries) {
+    const bytes = readFileSync(new URL(`../public${entry.image}`, import.meta.url));
+    assert.equal(createHash("sha256").update(bytes).digest("hex"), entry.sha256, entry.document);
+    assert.match(entry.masterSha256, /^[a-f0-9]{64}$/);
+    assert.equal(bytes.length, entry.bytes, entry.document);
+  }
+});
 
 function jpegDimensions(bytes) {
   assert.equal(bytes.readUInt16BE(0), 0xffd8, "JPEG signature");
@@ -19,21 +34,21 @@ function jpegDimensions(bytes) {
   throw new Error("JPEG has no supported frame header");
 }
 
-test("archive has 001–105 plus the second original 059, in reading order", () => {
-  assert.equal(pages.length, 106);
+test("normalized archive has exactly 001–105, excluding the duplicate brush", () => {
+  assert.equal(pages.length, 105);
   const expected = Array.from({length: 105}, (_, i) => String(i + 1).padStart(3, "0"));
-  expected.splice(59, 0, "059");
   assert.deepEqual(pages.map(p => p.document), expected);
-  assert.equal(new Set(pages.map(p => p.image)).size, 106);
+  assert.equal(new Set(pages.map(p => p.image)).size, 105);
   const sharedNumber = pages.filter(p => p.document === "059");
   assert.match(sharedNumber[0].title, /sartén/);
-  assert.match(sharedNumber[1].title, /cepillo/);
-  assert.equal(sharedNumber[1].image, "/editorial/almanac/page-059-cepillo.jpeg");
+  assert.equal(sharedNumber.length, 1);
+  assert.ok(pages.every(p => !p.image.includes("cepillo")));
 });
 
 test("every page has a complete, correctly sized, bounded web asset and useful alternative text", () => {
   for (const page of pages) {
-    assert.match(page.image, /^\/editorial\/almanac\/page-\d{3}(?:-cepillo)?\.jpeg$/);
+    assert.match(page.image, /^\/editorial\/almanac\/page-\d{3}\.jpeg$/);
+    assert.deepEqual([page.width, page.height], [1254, 1254], "Uniform square web export");
     assert.ok(page.title.length > 3 && page.alt.length > 15, page.image);
     const bytes = readFileSync(new URL(`../public${page.image}`, import.meta.url));
     assert.deepEqual(jpegDimensions(bytes), [page.width, page.height], page.document);
@@ -41,10 +56,10 @@ test("every page has a complete, correctly sized, bounded web asset and useful a
     assert.equal(bytes.subarray(-2).toString("hex"), "ffd9", "Complete JPEG");
   }
   const files = readdirSync(new URL("../public/editorial/almanac/", import.meta.url));
-  assert.equal(files.filter(f => /^page-.*\.jpeg$/.test(f)).length, 106);
+  assert.equal(files.filter(f => /^page-.*\.jpeg$/.test(f)).length, 105);
 });
 
-test("deferred trigger and reader share the catalog and duplicate numbers have unique React keys", () => {
+test("deferred trigger and reader share the catalog and explain the illustrative taste maps", () => {
   for (const file of ["deferred-almanac.tsx", "fire-almanac.tsx"]) {
     const code = readFileSync(new URL(`../static/${file}`, import.meta.url), "utf8");
     assert.match(code, /import almanacPages/);
@@ -54,5 +69,10 @@ test("deferred trigger and reader share the catalog and duplicate numbers have u
   }
   const reader = readFileSync(new URL("../static/fire-almanac.tsx", import.meta.url), "utf8");
   assert.match(reader, /key=\{page\.image\}/);
-  assert.match(reader, /dos originales distintos con el número 059/);
+  assert.match(reader, /Mapa tradicional ilustrativo/);
+  assert.match(reader, /no representan zonas anatómicas exclusivas/);
+  assert.doesNotMatch(reader, /dos originales distintos|porcentajes de la lámina 036|page-059-cepillo/);
+  for (const page of pages.filter(p => +p.document >= 31 && +p.document <= 36)) {
+    assert.match(page.alt, /Mapa tradicional ilustrativo/);
+  }
 });

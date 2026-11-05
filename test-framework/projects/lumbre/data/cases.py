@@ -24,14 +24,9 @@ PLANNER_CASES = [
     for fuel in fuels
 ]
 
-# Archive edition: 001–105, including two different originals printed as 059.
-# The suffix identifies the second asset; it does not renumber the printed original.
-ALMANAC_DOCUMENTS = (
-    tuple(f"{n:03d}" for n in range(1, 60))
-    + ("059-cepillo",)
-    + tuple(f"{n:03d}" for n in range(60, 106))
-)
-ALMANAC_PORTRAIT_DOCUMENTS = (11, 12, 13, 14)
+# Normalized edition: one square web asset per printed document001–105.
+# The duplicate059 brush is excluded; original artwork remains in the source archive.
+ALMANAC_DOCUMENTS = tuple(f"{n:03d}" for n in range(1, 106))
 BLEND_COMPONENT_IDS = (
     "sal_kosher",
     "pimienta_negra",

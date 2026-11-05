@@ -8,13 +8,12 @@ pytestmark = [pytest.mark.ui, pytest.mark.portal, pytest.mark.almanac, pytest.ma
 @pytest.mark.parametrize(
     "document, expected, domain",
     [
-        (1, "Láminas originales de archivo", "www.fsis.usda.gov"),
-        *[(n, "no corresponden a zonas exclusivas", "www.nidcd.nih.gov") for n in range(31, 37)],
+        (1, "Láminas normalizadas de archivo", "www.fsis.usda.gov"),
+        *[(n, "no representan zonas anatómicas exclusivas", "www.nidcd.nih.gov") for n in range(31, 37)],
         (50, "cerdo molido, a 71 °C", "www.fsis.usda.gov"),
         (52, "no una garantía de seguridad", "www.fsis.usda.gov"),
-        (49, "68–72 °C", "www.foodsafety.gov"),
+        (49, "74 °C internos", "www.foodsafety.gov"),
         (58, "Cambiar de cara no sustituye", "www.foodsafety.gov"),
-        ("059-cepillo", "nylon para limpieza en frío", "www.charbroil.com"),
         *[(n, "no garantizan inocuidad", "www.foodsafety.gov") for n in (60, 61, 81, 82, 86)],
         (74, "antes de 1 hora", "ask.fsis.usda.gov"),
     ],
@@ -28,6 +27,6 @@ def test_editorial_notes(almanac, document, expected, domain):
     expect(link).to_have_attribute("target", "_blank")
     assert "noreferrer" in link.get_attribute("rel")
     almanac.select(54)
-    expect(note).to_contain_text("Láminas originales de archivo")
+    expect(note).to_contain_text("Láminas normalizadas de archivo")
     expect(note).not_to_contain_text(expected) if document != 1 else None
     almanac.close()

@@ -107,23 +107,20 @@ export default function FireAlmanac({ initiallyOpen = false }: { initiallyOpen?:
 
             <aside className="almanac-editorial-note" aria-label="Nota editorial">
               {currentPage?.document === "049"
-                ? <>Seguridad: cocina tanto pechuga como muslo de pollo a 74 °C internos, medidos con termómetro. El rango de 68–72 °C de la pechuga en el original no sustituye esta recomendación. <a href="https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures" target="_blank" rel="noreferrer">Referencia: FoodSafety.gov.</a></>
+                ? <>Seguridad: cocina tanto pechuga como muslo de pollo a 74 °C internos, medidos con termómetro. Comprueba la parte más gruesa, sin tocar hueso. <a href="https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures" target="_blank" rel="noreferrer">Referencia: FoodSafety.gov.</a></>
                 : currentPage?.document === "050"
                 ? <>Seguridad: cocina cortes enteros de cerdo a 63 °C internos y deja reposar 3 minutos; cerdo molido, a 71 °C. Los rangos inferiores ilustrados no sustituyen esta recomendación. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noreferrer">Referencia: USDA.</a></>
                 : currentPage?.document === "052"
                 ? <>Seguridad: la referencia para pescado es 63 °C internos. Los rangos inferiores de esta lámina describen puntos culinarios, no una garantía de seguridad. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noreferrer">Referencia: USDA.</a></>
                 : currentPage?.document === "058"
                 ? <>Higiene: usa tablas separadas para alimentos crudos y listos para comer. Cambiar de cara no sustituye lavar la tabla y los utensilios entre usos. <a href="https://www.foodsafety.gov/keep-food-safe/4-steps-to-food-safety" target="_blank" rel="noreferrer">Referencia: FoodSafety.gov.</a></>
-                : currentPage?.image.endsWith("page-059-cepillo.jpeg")
-                ? <>Seguridad: no apliques la indicación de 200–300 °C a todos los cepillos. Usa cada material a la temperatura indicada por su fabricante; el nylon para limpieza en frío no se usa sobre una parrilla caliente. Revisa que no queden cerdas sueltas antes de cocinar. <a href="https://www.charbroil.com/products/cool-clean-360-brush-9025161" target="_blank" rel="noreferrer">Consultar uso del nylon.</a></>
                 : currentPage && ["060", "061", "081", "082", "086"].includes(currentPage.document)
                 ? <>Seguridad: el color y los puntos culinarios ilustrados no garantizan inocuidad. Como referencia doméstica: cortes enteros de res, cerdo y cordero, 63 °C y 3 minutos de reposo; carne molida, 71 °C; aves, 74 °C; pescado, 63 °C. Comprueba con termómetro. <a href="https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures" target="_blank" rel="noreferrer">Consultar temperaturas seguras.</a></>
                 : currentPage?.document === "074"
                 ? <>Seguridad: refrigera los sobrantes antes de 2 horas; antes de 1 hora si el ambiente supera 32 °C. Consúmelos refrigerados en 3–4 días y recaliéntalos a 74 °C internos. El olor o el color no bastan para confirmar seguridad. <a href="https://ask.fsis.usda.gov/article/How-do-I-handle-leftovers-safely" target="_blank" rel="noreferrer">Referencia: USDA.</a></>
                 : currentPage && Number(currentPage.document) >= 31 && Number(currentPage.document) <= 36
-                ? <>Original de archivo: los sabores no corresponden a zonas exclusivas de la lengua. Los porcentajes de la lámina 036 no son una fórmula validada. <a href="https://www.nidcd.nih.gov/sites/default/files/Documents/order/taste-disorders.pdf" target="_blank" rel="noreferrer">Referencia: NIDCD.</a></>
-                : <>Láminas originales de archivo. Los tiempos y puntos de cocción ilustrados no sustituyen una guía de seguridad alimentaria ni el manual del equipo. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noreferrer">Consultar temperaturas seguras.</a></>}
-              {currentPage?.document === "059" && <span> Numeración de archivo: existen dos originales distintos con el número 059, sartén y cepillo; ambos se conservan en el índice.</span>}
+                ? <>Mapa tradicional ilustrativo: los colores no representan zonas anatómicas exclusivas. Los distintos tipos de células gustativas están distribuidos por la lengua. No es una fórmula ni una escala de sensibilidad. <a href="https://www.nidcd.nih.gov/health/taste-disorders" target="_blank" rel="noreferrer">Referencia: NIDCD.</a></>
+                : <>Láminas normalizadas de archivo. Los tiempos y puntos de cocción ilustrados no sustituyen una guía de seguridad alimentaria ni el manual del equipo. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noreferrer">Consultar temperaturas seguras.</a></>}
             </aside>
 
             <div className={`almanac-book${zoomed ? " is-zoomed" : ""}`} data-testid="almanac-book">

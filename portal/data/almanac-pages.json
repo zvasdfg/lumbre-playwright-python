@@ -84,32 +84,32 @@
     "title": "Qué hace realmente la sal",
     "image": "/editorial/almanac/page-011.jpeg",
     "alt": "Infografía sobre cómo actúa la sal en la carne",
-    "width": 1145,
-    "height": 1374
+    "width": 1254,
+    "height": 1254
   },
   {
     "document": "012",
     "title": "Sal antes o después",
     "image": "/editorial/almanac/page-012.jpeg",
     "alt": "Infografía sobre cuándo salar antes, durante o después de la cocción",
-    "width": 1145,
-    "height": 1374
+    "width": 1254,
+    "height": 1254
   },
   {
     "document": "013",
     "title": "Pimienta antes vs. después",
     "image": "/editorial/almanac/page-013.jpeg",
     "alt": "Infografía comparativa del uso de pimienta antes y después de cocinar",
-    "width": 1145,
-    "height": 1374
+    "width": 1254,
+    "height": 1254
   },
   {
     "document": "014",
     "title": "El grano de pimienta",
     "image": "/editorial/almanac/page-014.jpeg",
     "alt": "Infografía sobre tipos, anatomía y molienda de la pimienta",
-    "width": 1145,
-    "height": 1374
+    "width": 1254,
+    "height": 1254
   },
   {
     "document": "015",
@@ -243,7 +243,7 @@
     "document": "031",
     "title": "El dulce",
     "image": "/editorial/almanac/page-031.jpeg",
-    "alt": "Infografía: El dulce",
+    "alt": "Documento031: El dulce. Mapa tradicional ilustrativo del gusto; los colores no representan zonas anatómicas exclusivas.",
     "width": 1254,
     "height": 1254
   },
@@ -251,7 +251,7 @@
     "document": "032",
     "title": "El salado",
     "image": "/editorial/almanac/page-032.jpeg",
-    "alt": "Infografía: El salado",
+    "alt": "Documento032: El salado. Mapa tradicional ilustrativo del gusto; los colores no representan zonas anatómicas exclusivas.",
     "width": 1254,
     "height": 1254
   },
@@ -259,7 +259,7 @@
     "document": "033",
     "title": "El ácido",
     "image": "/editorial/almanac/page-033.jpeg",
-    "alt": "Infografía: El ácido",
+    "alt": "Documento033: El ácido. Mapa tradicional ilustrativo del gusto; los colores no representan zonas anatómicas exclusivas.",
     "width": 1254,
     "height": 1254
   },
@@ -267,7 +267,7 @@
     "document": "034",
     "title": "El amargo",
     "image": "/editorial/almanac/page-034.jpeg",
-    "alt": "Infografía: El amargo",
+    "alt": "Documento034: El amargo. Mapa tradicional ilustrativo del gusto; los colores no representan zonas anatómicas exclusivas.",
     "width": 1254,
     "height": 1254
   },
@@ -275,7 +275,7 @@
     "document": "035",
     "title": "El umami",
     "image": "/editorial/almanac/page-035.jpeg",
-    "alt": "Infografía: El umami",
+    "alt": "Documento035: El umami. Mapa tradicional ilustrativo del gusto; los colores no representan zonas anatómicas exclusivas.",
     "width": 1254,
     "height": 1254
   },
@@ -283,7 +283,7 @@
     "document": "036",
     "title": "Los 5 sabores",
     "image": "/editorial/almanac/page-036.jpeg",
-    "alt": "Infografía: Los 5 sabores",
+    "alt": "Documento036: Los 5 sabores. Mapa tradicional ilustrativo del gusto; los colores no representan zonas anatómicas exclusivas.",
     "width": 1254,
     "height": 1254
   },
@@ -468,14 +468,6 @@
     "title": "El sartén de hierro: propiedades, uso y mantenimiento",
     "image": "/editorial/almanac/page-059.jpeg",
     "alt": "Infografía: El sartén de hierro: propiedades, uso y mantenimiento",
-    "width": 1254,
-    "height": 1254
-  },
-  {
-    "document": "059",
-    "title": "El cepillo para limpiar la parrilla",
-    "image": "/editorial/almanac/page-059-cepillo.jpeg",
-    "alt": "Infografía: El cepillo para limpiar la parrilla",
     "width": 1254,
     "height": 1254
   },
