@@ -7,10 +7,14 @@ const pages = JSON.parse(readFileSync(new URL("../data/almanac-pages.json", impo
 const release = JSON.parse(readFileSync(new URL("../data/almanac-release.json", import.meta.url)));
 
 test("all105 web assets match the reviewed normalization release hashes", () => {
-  assert.equal(release.revision, "r017");
+  assert.equal(release.revision, "r023");
   assert.equal(release.count, 105);
   assert.deepEqual(release.entries.map(e => e.document), pages.map(p => p.document));
-  assert.equal(release.entries.filter(e => e.revision === "r017").length, 6);
+  assert.deepEqual(release.correctionsFromPreviousReview, {revision: "r022", corrected: 23, reusedUnchanged: 82});
+  assert.equal(release.reviewedMasterManifestSha256, "91df0b07e7104e992fe68b84fd1258e6194da30c8adc84af2ac1cfe6259c6682");
+  const correctedDocuments = ["002", "011", "012", "013", "014", "016", "017", "018", "024", "025", "026", "027", "028", "038", "041", "050", "053", "058", "059", "060", "092", "093", "105"];
+  assert.deepEqual(release.entries.filter(e => e.revision === "r023").map(e => e.document), correctedDocuments);
+  assert.equal(release.entries.filter(e => e.revision === "r022").length, 82);
   for (const entry of release.entries) {
     const bytes = readFileSync(new URL(`../public${entry.image}`, import.meta.url));
     assert.equal(createHash("sha256").update(bytes).digest("hex"), entry.sha256, entry.document);

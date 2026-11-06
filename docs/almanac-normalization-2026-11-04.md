@@ -1,5 +1,7 @@
 # Normalización del almanaque r017
 
+Registro histórico. La selección vigente es [r023](almanac-normalization-r023.md); se conserva aquí la evidencia y el alcance de r017.
+
 Colección vigente:105 documentos únicos001–105. El documento059 es el sartén. Se excluye la lámina del cepillo que repetía el mismo número; no se renumeran otras piezas. El inventario de importación previo se conserva como registro histórico, no como selección vigente.
 
 Se publican encabezados, fondo y paleta normalizados, conservando las ilustraciones, tipografías rasterizadas, matrices y retículas originales. Banderas con color tenue y color funcional cuando corresponde. Las correcciones de contenido ya revisadas se conservan, incluida la matriz105.

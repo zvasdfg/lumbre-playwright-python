@@ -1,8 +1,8 @@
 {
-  "revision": "r017",
-  "date": "2026-11-04",
+  "revision": "r023",
+  "date": "2026-11-05",
   "count": 105,
-  "scope": "Normalized headers/background/palette; retained native artwork; six traditional illustrative taste maps; selected audited content corrections",
+  "scope": "Approved local header, background, palette and legibility normalization; 23 HIGH/MEDIUM design corrections over r022; native artwork and approved matrices retained; no new scientific audit",
   "excluded": [
     {
       "document": "059",
@@ -17,1157 +17,1163 @@
     {
       "document": "001",
       "contentId": "LMB-ALM-004",
-      "revision": "r013",
-      "masterSha256": "46f833367dd78b13df984b1a5f6b484dd9fda7e9d42917ce6c093ba9a712f6fc",
+      "revision": "r022",
+      "masterSha256": "9bf7c4a867ee707eade5e5f7fa937e40f3254d8507065701f3a03b4e266c5e20",
       "image": "/editorial/almanac/page-001.jpeg",
-      "sha256": "8063a995cb4bac17c75fe616634a934efee9f2594742a5d06657b66ace8e0e6a",
+      "sha256": "43699255342b3b4b462b0e991c6ef82ff3909d757915ef01e41e84ff040ff9f8",
       "width": 1254,
       "height": 1254,
-      "bytes": 482206
+      "bytes": 411971
     },
     {
       "document": "002",
       "contentId": "LMB-ALM-005",
-      "revision": "r013",
-      "masterSha256": "3af96ae62969dd67765237fd26da1193ba3e7699dbc64009bd987246d3b4e5cd",
+      "revision": "r023",
+      "masterSha256": "2a253a124eb4bd24a5d21b8621ec7a47f3bdaa112318557a712a825080941ba1",
       "image": "/editorial/almanac/page-002.jpeg",
-      "sha256": "6d19e8168572608658f4fb1c6c835bc4f00e81017e74bcbe22f7dcd372d3c743",
+      "sha256": "8c16822f2517cd72c25c5c204cfd9afa533b8a3010b6ddcc6cffccd881f50d5e",
       "width": 1254,
       "height": 1254,
-      "bytes": 524104
+      "bytes": 433109
     },
     {
       "document": "003",
       "contentId": "LMB-ALM-006",
-      "revision": "r013",
-      "masterSha256": "34d7b6777f4602c572de42057c864dcccd871a57f3896f1b4b5d57a0e1bc324f",
+      "revision": "r022",
+      "masterSha256": "335986356982de453fba57db12d8ea4a96fb605cc67a6acbcca87de2198155a4",
       "image": "/editorial/almanac/page-003.jpeg",
-      "sha256": "e0b2a2427bacdfd570e632124bcdc663aaa93a757da2a4e6b95c47b394053d87",
+      "sha256": "7383a735702f70f0f6a6aa1bb085a1db24fdf922e6ebceb45da6c397312d8ead",
       "width": 1254,
       "height": 1254,
-      "bytes": 517336
+      "bytes": 419703
     },
     {
       "document": "004",
       "contentId": "LMB-ALM-007",
-      "revision": "r013",
-      "masterSha256": "ce76323004796c6939c991f255446721c14eaaa9eb481ab2658839f5f858b721",
+      "revision": "r022",
+      "masterSha256": "8d28c40a8ad01fc07b7923b5dada181fb774bb304fa10915c274a2ee67ec4d11",
       "image": "/editorial/almanac/page-004.jpeg",
-      "sha256": "9fc54d560e25fb8c6133b0fdf6bc0b7a86609d99896006b0d7876c84b521c03e",
+      "sha256": "b9bfa5ba426c6af6541d30346f08262da1c55a348b577acbf9631cab7a617504",
       "width": 1254,
       "height": 1254,
-      "bytes": 545620
+      "bytes": 465570
     },
     {
       "document": "005",
       "contentId": "LMB-ALM-008",
-      "revision": "r013",
-      "masterSha256": "0086cf4343d765a7b842990157ed112a2666876706ac62e2dafec500159bb98f",
+      "revision": "r022",
+      "masterSha256": "d92ce31abe79c81039e81a3c551f96144685446fc8a75aae0ea5219ffd4c5f8d",
       "image": "/editorial/almanac/page-005.jpeg",
-      "sha256": "65f1114c9c0d86562bf855e17235deb1575ca0d54eada7507de5131994767bb0",
+      "sha256": "ab59afb7dd9b34890ad88a584d5cb92739c683ed303e8667e579caf7a27df0bd",
       "width": 1254,
       "height": 1254,
-      "bytes": 619009
+      "bytes": 522531
     },
     {
       "document": "006",
       "contentId": "LMB-ALM-009",
-      "revision": "r013",
-      "masterSha256": "bc5bb558590ec969717047d964b624e30d1a0d3f0874f218154f95baa253dd38",
+      "revision": "r022",
+      "masterSha256": "d3bcb061e3f5b0ba9b8ab82cfcf762c9f3fc055fcb80bbbf5513be2822c632b3",
       "image": "/editorial/almanac/page-006.jpeg",
-      "sha256": "2d2f67b9cfc369ff3fd60aff37facc7c4bf5fa12cc620e24a4385bb7725e38cc",
+      "sha256": "89247e6e593d67881b225a10508336a8ff0ad22954d9e9f92ae5b99ad602be26",
       "width": 1254,
       "height": 1254,
-      "bytes": 558957
+      "bytes": 541685
     },
     {
       "document": "007",
       "contentId": "LMB-ALM-010",
-      "revision": "r016",
-      "masterSha256": "334498b8f470b99d73e7632123eb3b42b98fbd5cc7c006d318a81123d91c92cf",
+      "revision": "r022",
+      "masterSha256": "1f711339baeae05bf3ca90d55c491a7fcc7730f6bf1966776b6c5ef59e66c1a5",
       "image": "/editorial/almanac/page-007.jpeg",
-      "sha256": "23a91e84d11708128d718b165a2a6802ce40590a7ab37aea5d48e326248a708d",
+      "sha256": "ae4e8016d5f00a6b1c0890b5a9dfa201fc4c18d1026c45ebb037ff07dc8d0e8a",
       "width": 1254,
       "height": 1254,
-      "bytes": 535610
+      "bytes": 499302
     },
     {
       "document": "008",
       "contentId": "LMB-ALM-011",
-      "revision": "r013",
-      "masterSha256": "3fdfc104d4a2acea71bef4363f73a1bf52c28f841fd74b182a40d0a01eb49e1f",
+      "revision": "r022",
+      "masterSha256": "fb0c666f5131c6920bb6adf9628a7f0dffffa4fc9d023776ae3ba00b06063986",
       "image": "/editorial/almanac/page-008.jpeg",
-      "sha256": "e604fb2f7755b3ed8824d658529e2f8a220b01d16b06f7695bc90a68070bde86",
+      "sha256": "2b8791bbcdca0d69047649248d47bcb626b7eb9e53f40be8e6611f24a9a28fbe",
       "width": 1254,
       "height": 1254,
-      "bytes": 505734
+      "bytes": 490461
     },
     {
       "document": "009",
       "contentId": "LMB-ALM-012",
-      "revision": "r013",
-      "masterSha256": "7f8872b9de70e10020c992bdd89b6ee634ddd0b3e7fd5518bc5e31259880a0b3",
+      "revision": "r022",
+      "masterSha256": "390faaf4eaf676cbca993471a64ed488bd0c3b64c307aded7d8338556cff6f7f",
       "image": "/editorial/almanac/page-009.jpeg",
-      "sha256": "7fd57845248ce22d05aa3d2a8df11ffe6c325eaea8ab79e2859cabbb8d63dc51",
+      "sha256": "5ce296fb30f3e6f83c879ffa481ea197d782053102ed6b58926d3f2598154708",
       "width": 1254,
       "height": 1254,
-      "bytes": 489862
+      "bytes": 472647
     },
     {
       "document": "010",
       "contentId": "LMB-ALM-013",
-      "revision": "r013",
-      "masterSha256": "c6b11d01c1bec82d7326213576912b463c24894fff29fd8517d94d3474810a5e",
+      "revision": "r022",
+      "masterSha256": "085d5a8e80d928a168750b6bf03f73931cfc2d611e3c90196dd6d2e05e43678d",
       "image": "/editorial/almanac/page-010.jpeg",
-      "sha256": "818b6c997746c3e3f3bffa90696308642d0ca32e80df4b6ada279cf2bd3da7ef",
+      "sha256": "5d1284cd9d2a0bcfa871638b638a727eb8bd2f9d63437b7b546749a8b13da904",
       "width": 1254,
       "height": 1254,
-      "bytes": 431402
+      "bytes": 423998
     },
     {
       "document": "011",
       "contentId": "LMB-ALM-014",
-      "revision": "r013",
-      "masterSha256": "6df357bf277efe586d100e9426afce5147c3abafc32b780d9b9677d0356dc12a",
+      "revision": "r023",
+      "masterSha256": "c09b2802feecaa0caa8173489fb5a2b5d4397cd099b4b81d88458d7b5508c1a1",
       "image": "/editorial/almanac/page-011.jpeg",
-      "sha256": "53bbb5b2bff4dee294eccb80f20e6d18d5d9305f8aa1af0b621b5424fb9bafbe",
+      "sha256": "d79de1637d8ef926206d2d36d622290cfc6a0afaac78749f8c186653d51a41fb",
       "width": 1254,
       "height": 1254,
-      "bytes": 302819
+      "bytes": 317541
     },
     {
       "document": "012",
       "contentId": "LMB-ALM-015",
-      "revision": "r013",
-      "masterSha256": "2c5bffd33f16c74a336cb8bbb7547756aee6f3dbf1bcff20eb81c340ad7ee2e6",
+      "revision": "r023",
+      "masterSha256": "d061e834269ea615d888b786552c5afa67018ef4349761b762bf91f88bd72549",
       "image": "/editorial/almanac/page-012.jpeg",
-      "sha256": "2969ceb07ad9e0e0f6e8c024b9bb6c01b7dc6ac2f4c8e0f9c1d19751e904b23f",
+      "sha256": "c650ae65919374ed1cca0f0aa83e8dfdf98c665b47e1b92c6cb9907feee7117d",
       "width": 1254,
       "height": 1254,
-      "bytes": 306593
+      "bytes": 326179
     },
     {
       "document": "013",
       "contentId": "LMB-ALM-001",
-      "revision": "r016",
-      "masterSha256": "201f235ecd6e489b4e7c22fd47941080f90fc100f781241fd7449ca912d0a1f2",
+      "revision": "r023",
+      "masterSha256": "74e976a9ef65c36ce7965e44b555249045c32e389a1a60c412c1e89a6b4636f6",
       "image": "/editorial/almanac/page-013.jpeg",
-      "sha256": "d5d4c016ca65d1d423cd2b940ad7969b39b66868bf65369f128d5a7a64272707",
+      "sha256": "6488dd7edc32c8f96fb459bf95ccedf01dd690d919cd048919127c577e7a853a",
       "width": 1254,
       "height": 1254,
-      "bytes": 359312
+      "bytes": 387870
     },
     {
       "document": "014",
       "contentId": "LMB-ALM-016",
-      "revision": "r013",
-      "masterSha256": "914f1f4fffba6e9fa3b08230cb31e9b1fb2cc23916d7a2de617cd71d66108aeb",
+      "revision": "r023",
+      "masterSha256": "3d36bca8b37808c911f452a06967cb33c7439d847d4f7249d62d6613e0726950",
       "image": "/editorial/almanac/page-014.jpeg",
-      "sha256": "f5977874a54144f84a561946a6e3d8355f8c866ba089ffa524c4bc531b3e7d9e",
+      "sha256": "03c6003a3adc8fc759e5e6a35a4e654c2f19a982504b1f744c87655fc3fda56a",
       "width": 1254,
       "height": 1254,
-      "bytes": 387295
+      "bytes": 411088
     },
     {
       "document": "015",
       "contentId": "LMB-ALM-017",
-      "revision": "r013",
-      "masterSha256": "5137c29769828a33ea54fd1e81b989aeb8b00fa449469ff950d23bc56ba439c0",
+      "revision": "r022",
+      "masterSha256": "16665fb1c825b5375de6a7102866b67c387f7c5724112503451991a541519b57",
       "image": "/editorial/almanac/page-015.jpeg",
-      "sha256": "f34a73e8bf1e5c46ccafd752a5fbd272f7400b6533e636c98083b63464b75957",
+      "sha256": "6284190b366963fa145cca662943dc9e8a13c70971210bb4f9757e9236939a03",
       "width": 1254,
       "height": 1254,
-      "bytes": 483607
+      "bytes": 455068
     },
     {
       "document": "016",
       "contentId": "LMB-ALM-018",
-      "revision": "r013",
-      "masterSha256": "b962897932a77ec8229a5e26c38e22ae3b0a4e18e4566ee503c31fe2d8542c44",
+      "revision": "r023",
+      "masterSha256": "217ea5d9368c00275b84cf4d2c46d589e8b1694092c7ee923a64d6c909a8e526",
       "image": "/editorial/almanac/page-016.jpeg",
-      "sha256": "a1ea85be8ba07e748fd74b5a56eed75a450e658e9fdf57fddb113f74c5d9433c",
+      "sha256": "8ad818de45b2b141257044da35ac20d10d138f663ad809ca548a78b736603018",
       "width": 1254,
       "height": 1254,
-      "bytes": 470450
+      "bytes": 439855
     },
     {
       "document": "017",
       "contentId": "LMB-ALM-019",
-      "revision": "r013",
-      "masterSha256": "c9e9caf5b3afd35c40339cb824c6ccc8dbee23def18639aeaa2b2a44817da752",
+      "revision": "r023",
+      "masterSha256": "784861f556800dc17ef948f4bcb461a4687a188949bfadb2d28e4c17d21a1fae",
       "image": "/editorial/almanac/page-017.jpeg",
-      "sha256": "9bdbe7eaf2f38ef2d46171ad628089386adc4edcf0bc7d10ae5e216291dd3e37",
+      "sha256": "e7029c8e73809110aecd79255c34dd41a6e75b56bcc4b8dbcbcb7549e4cb9b5e",
       "width": 1254,
       "height": 1254,
-      "bytes": 452278
+      "bytes": 426375
     },
     {
       "document": "018",
       "contentId": "LMB-ALM-020",
-      "revision": "r013",
-      "masterSha256": "ece0a032b67e6bc9aba5058b0f5e362ed8381a10e9883868365d2a01e08cf6a8",
+      "revision": "r023",
+      "masterSha256": "cc1e4b9b428bde4038be6fb0a943fb34fdea3df1256ea4cc15762378cb0a53c2",
       "image": "/editorial/almanac/page-018.jpeg",
-      "sha256": "927088c6f617ba82bc7c0f2bb2c2ec81693535007ddaeec508cdd8223a7810c0",
+      "sha256": "916bf3f142c82581d72fac293ba5f9266c062f33d29ee233fdecd03c6f6ed06c",
       "width": 1254,
       "height": 1254,
-      "bytes": 454800
+      "bytes": 429641
     },
     {
       "document": "019",
       "contentId": "LMB-ALM-021",
-      "revision": "r013",
-      "masterSha256": "420d7c6cb4a210a1d4da9a27a25af9fd6e2fd9bf82a5afe67aa1c0e55ddedacf",
+      "revision": "r022",
+      "masterSha256": "4c664d40875f0303d0c2ee80cc705ae19104251fd9f54214ebf4ef087148be2c",
       "image": "/editorial/almanac/page-019.jpeg",
-      "sha256": "961a440cc4ae8da63e0d2b8bcf4373761927458910bbbaac2f1355171d3060a9",
+      "sha256": "3ebfd9120f056e8ef0ab2336415333b7c99541ca4bf10e7c7ca1443e6b1a9374",
       "width": 1254,
       "height": 1254,
-      "bytes": 475861
+      "bytes": 455674
     },
     {
       "document": "020",
       "contentId": "LMB-ALM-022",
-      "revision": "r013",
-      "masterSha256": "8a6de4400db6a801389eb39e32ececa27aa2d650d563e007d15068ea9c623785",
+      "revision": "r022",
+      "masterSha256": "135c9388a103c709f8a1dbb029d851527acf59e2a8cbd1a045e34478b2724cbe",
       "image": "/editorial/almanac/page-020.jpeg",
-      "sha256": "352aec85777dabb8eefc006be2a0a787b677945ef79388d5a9296e4864c567d5",
+      "sha256": "f40d30ea87df077c8f6056e96fe8f887ae689cd2e17aab3cddd7d10b5bd69954",
       "width": 1254,
       "height": 1254,
-      "bytes": 463249
+      "bytes": 445745
     },
     {
       "document": "021",
       "contentId": "LMB-ALM-023",
-      "revision": "r013",
-      "masterSha256": "6aa3057b444f34b015c847d03b3b1a8aa393c09f5735814a3fc43c5cdf2fdf58",
+      "revision": "r022",
+      "masterSha256": "31f3e69f09bab5ffe8011ab291e44a39e47a01d0230efaee45b48841d5500191",
       "image": "/editorial/almanac/page-021.jpeg",
-      "sha256": "21f39ea91ba83f0cdb9a96b362abfea69f057453f4c69dae4de248dac37de409",
+      "sha256": "17baa7929aa7715ec14ecdbe97e8441a0b1b18f13bf4e50d7090d5dfaa4400a1",
       "width": 1254,
       "height": 1254,
-      "bytes": 474833
+      "bytes": 461776
     },
     {
       "document": "022",
       "contentId": "LMB-ALM-024",
-      "revision": "r013",
-      "masterSha256": "c993ddea94339284b74902ded505b9b507d2704dfa31690a68bb04771bc70efc",
+      "revision": "r022",
+      "masterSha256": "4cc2488634f0f2031d1c4dedb71ea7b1be45b28950ff59a4b0ec5f752b760f7e",
       "image": "/editorial/almanac/page-022.jpeg",
-      "sha256": "0967225995c0f89ad785c88636c560d64daabfb821580508c74267ed8ba6c77d",
+      "sha256": "7e9f3a4a97c9b1d5bf0ba908ad83e4b9fa9d2dc5afdbd94926726d613f4e151f",
       "width": 1254,
       "height": 1254,
-      "bytes": 492511
+      "bytes": 473030
     },
     {
       "document": "023",
       "contentId": "LMB-ALM-025",
-      "revision": "r013",
-      "masterSha256": "703e2b0bf6b632cfe25768909c4a24fe216411ed2c8b31b07ae6afa066385a39",
+      "revision": "r022",
+      "masterSha256": "6a562aa5276a08c456160f5a48e115dd53991b586b08d327a8b219b8c9e4157b",
       "image": "/editorial/almanac/page-023.jpeg",
-      "sha256": "052ddbb38e53b916a6275fab4325f17ae539a7cf48192322c07b08f86649ce0a",
+      "sha256": "da42c1da77b274bf4d184cb4dd57e49ab110d3b63587f13a65a2aaa244be023f",
       "width": 1254,
       "height": 1254,
-      "bytes": 487631
+      "bytes": 479589
     },
     {
       "document": "024",
       "contentId": "LMB-ALM-026",
-      "revision": "r013",
-      "masterSha256": "e3c712f1d4cfac1fdbc4204060c3011cfa0615f0abf92581bf169f4ccc0468ba",
+      "revision": "r023",
+      "masterSha256": "798d3f11c82f1fc1cc9fb17b1938a827093f5025f119fd9eeb8a4beed70f021e",
       "image": "/editorial/almanac/page-024.jpeg",
-      "sha256": "a4e574575bdf483fef5f10cda0c22dba228c0cb4b3540c3b5808d6fd1919d098",
+      "sha256": "99aab47168a3b2498d7ca8502210a40fe3700c310005120196f0d6a404ec3aa7",
       "width": 1254,
       "height": 1254,
-      "bytes": 490093
+      "bytes": 455984
     },
     {
       "document": "025",
       "contentId": "LMB-ALM-027",
-      "revision": "r013",
-      "masterSha256": "89fb26da71ec0f2ed9ff6d8b38853b7efc096e5ae3cac55db43a59e91b480b28",
+      "revision": "r023",
+      "masterSha256": "f3e0eafb6e8447cc779e5329a2090e6085b12ce7c4574b94d496850659442e3f",
       "image": "/editorial/almanac/page-025.jpeg",
-      "sha256": "51c6378ae643aaff7b619c5107e06796133a07c3d311f3baeb1a41c17dcbfd3f",
+      "sha256": "c85924dd9c49e4ba08e0e4bcea548763456e8a402467498e27a7fa86cbdfc701",
       "width": 1254,
       "height": 1254,
-      "bytes": 480119
+      "bytes": 469886
     },
     {
       "document": "026",
       "contentId": "LMB-ALM-028",
-      "revision": "r013",
-      "masterSha256": "47d33f99f0c71444856f116660bc30494e3efe99c77df0eeb36dfae1cd779dfb",
+      "revision": "r023",
+      "masterSha256": "29aec8d45b3f36a92fd82d69f080e30e45efc9ebe3b79184168e6a0ff6888fa4",
       "image": "/editorial/almanac/page-026.jpeg",
-      "sha256": "a0ddea40c04586e711e1976aaed16230e9c87230f26111025f1896a66ff9d271",
+      "sha256": "9dcadbaf7da2e9c39440722d3e5756f57a25927697526c1aa41cdd61a32bd654",
       "width": 1254,
       "height": 1254,
-      "bytes": 460362
+      "bytes": 445791
     },
     {
       "document": "027",
       "contentId": "LMB-ALM-029",
-      "revision": "r013",
-      "masterSha256": "9dbb84aed6bbdf1e752276b0d4cf3a792516af2aaf10411b45405a91ea8eb831",
+      "revision": "r023",
+      "masterSha256": "a2756808ee5f590eab0b1916f3b43bc7f85f939b98bc77eb8bd557b55c5c72fd",
       "image": "/editorial/almanac/page-027.jpeg",
-      "sha256": "3feb5ad33338fec38448959fd82e5676dc57088e50c31b63391d6b54aca85844",
+      "sha256": "1c0800fdfd225d4e23b85f9ad5744d8e22f167f4fbd56a53ccda759bb5c36bee",
       "width": 1254,
       "height": 1254,
-      "bytes": 482106
+      "bytes": 463433
     },
     {
       "document": "028",
       "contentId": "LMB-ALM-030",
-      "revision": "r013",
-      "masterSha256": "5a6e3557095b2a1b4bcea654f0ee6d72b97d64a288a81d9b2cc2cede1d820a52",
+      "revision": "r023",
+      "masterSha256": "e60aeddd003e372c9859a3ee86c8965f26857d982537ad2c562c0bd432b226c4",
       "image": "/editorial/almanac/page-028.jpeg",
-      "sha256": "a6acf60b3eef3f9c6912279bb309f49def80a71cdc81746fbc3b8ac05e3d6def",
+      "sha256": "29a33c6f10924195ac263bf724048a13faffd151604450226c6669a0d01ec0b8",
       "width": 1254,
       "height": 1254,
-      "bytes": 488848
+      "bytes": 458896
     },
     {
       "document": "029",
       "contentId": "LMB-ALM-031",
-      "revision": "r013",
-      "masterSha256": "e3c396e437b2d06a7c93ca29f8e0dfd147ea66de829530fec4cfb6d6e729b170",
+      "revision": "r022",
+      "masterSha256": "50ae422fd2019ff7fafb1b6f9ffdb53ae2ac9b9debfbb97be46a0f2192e5e0c7",
       "image": "/editorial/almanac/page-029.jpeg",
-      "sha256": "c31fd6faece04cc6084bacf7bba9e16d0888812f6b1cbed7b4fc0cc569da3442",
+      "sha256": "48ee91cbf48b631658740c2f47056ae4d412566b6762876b85479678ecd16aef",
       "width": 1254,
       "height": 1254,
-      "bytes": 484021
+      "bytes": 455403
     },
     {
       "document": "030",
       "contentId": "LMB-ALM-032",
-      "revision": "r013",
-      "masterSha256": "ab9d263810d620bd876dfe625e9a8394c823e33c6b6238138a1f6d02d5991407",
+      "revision": "r022",
+      "masterSha256": "b0fc2518545324624d48c39bc41595d160dcd146d9ae0cf5fd7f766bc85c93af",
       "image": "/editorial/almanac/page-030.jpeg",
-      "sha256": "1ea30da9d7558e47f133d0f6b775c14c878774574490968d66acc200e10ee74f",
+      "sha256": "2335d5d4a96d51eb0982a95e8f3321a8739db0530c1140afb74b283f6fd20440",
       "width": 1254,
       "height": 1254,
-      "bytes": 482994
+      "bytes": 468475
     },
     {
       "document": "031",
       "contentId": "LMB-ALM-033",
-      "revision": "r017",
-      "masterSha256": "929399ddf4d11a323331d00e069989063569f76a93221e352bd36ac4d70bdda2",
+      "revision": "r022",
+      "masterSha256": "b6380f1f74534cb2561af1118fe470f3e5b2adf23d37788461bb4b45d14b94a9",
       "image": "/editorial/almanac/page-031.jpeg",
-      "sha256": "60d62b2f0c162970b6f366ec6b5e653549c0fc0c0132cf42914ea79bf1794db1",
+      "sha256": "04ea4f3247d1f2668063524bb0eb634f40de4623bf6ddb5a25839fbe4f020d65",
       "width": 1254,
       "height": 1254,
-      "bytes": 461427
+      "bytes": 468030
     },
     {
       "document": "032",
       "contentId": "LMB-ALM-034",
-      "revision": "r017",
-      "masterSha256": "d1e975a96460e397bce296802a374cbd63ece2ab09eb0a6b65d979e6c958e375",
+      "revision": "r022",
+      "masterSha256": "bf537045de98623de6b080cbbf488453d15f73fe56c904364c57199c7a1a879a",
       "image": "/editorial/almanac/page-032.jpeg",
-      "sha256": "88b1756d6c2d4ed4912f370fc6e3b3f656d3537751ff41fc29c35e310c5de12f",
+      "sha256": "23b245b10ef273cab87b38f60b362476dbe1d919b16ad2e6c4be23b1bc823cb8",
       "width": 1254,
       "height": 1254,
-      "bytes": 455603
+      "bytes": 457773
     },
     {
       "document": "033",
       "contentId": "LMB-ALM-035",
-      "revision": "r017",
-      "masterSha256": "58eb93b45a4e4d5f1c705d4febfac7009cce208ecadb0dc3250ae6191550dabf",
+      "revision": "r022",
+      "masterSha256": "9f8af4386b7066893d5ccf360f37c2332709ab807bc2280336eae9d2e7b8db77",
       "image": "/editorial/almanac/page-033.jpeg",
-      "sha256": "2b3135477159b9bba17df66a71faccf0e3e93f3b2ce0d56c7f62b4a1f6b2adaf",
+      "sha256": "c4cc9fe69c2aa8ed719f6aff8da3afe401eb90ba2094c2244285a0a4a8f416ac",
       "width": 1254,
       "height": 1254,
-      "bytes": 443771
+      "bytes": 427670
     },
     {
       "document": "034",
       "contentId": "LMB-ALM-036",
-      "revision": "r017",
-      "masterSha256": "586c9f5ba0a4deed7c4c3e4220eab963266a2b49f7cbba6e86f4208b660bdf1b",
+      "revision": "r022",
+      "masterSha256": "81d0019903b248aac244268e6430cade41e42b819339b7d36e914b2e93852e45",
       "image": "/editorial/almanac/page-034.jpeg",
-      "sha256": "a298cf56144d92bd7b176d3f48c60d743bc790909b054b6f88391d11e0f22cd2",
+      "sha256": "7013a64ed945722d2cf2a622e83b73d91ce15d605a56e75d035ab17d41453d5c",
       "width": 1254,
       "height": 1254,
-      "bytes": 437163
+      "bytes": 418613
     },
     {
       "document": "035",
       "contentId": "LMB-ALM-037",
-      "revision": "r017",
-      "masterSha256": "f022cd81ffe259000c6e2c4ec545947ca5326115ca3b84330af4b1a55db5f04b",
+      "revision": "r022",
+      "masterSha256": "e1f51b970c56e2d922137b7e6f95170eb13053a5f907684a5e960a404390f839",
       "image": "/editorial/almanac/page-035.jpeg",
-      "sha256": "0b4ffd9046583e29be5438125dbe37826f75c2bb2cda8f26a8e3e24f8bccd82c",
+      "sha256": "58ab7625385ca5c139bbd249e5cf47d41dc811fc2ee86b893c9aeef8315a20f6",
       "width": 1254,
       "height": 1254,
-      "bytes": 424625
+      "bytes": 404185
     },
     {
       "document": "036",
       "contentId": "LMB-ALM-038",
-      "revision": "r017",
-      "masterSha256": "ae8b179ae4264a29dcc8bd9267ef0aa707e6bdb2c6951cbe946ed948777434db",
+      "revision": "r022",
+      "masterSha256": "c592dd45db14a053a1d6e5e7edb53cc4898863cb8860d83e90a3b307e9b98b2f",
       "image": "/editorial/almanac/page-036.jpeg",
-      "sha256": "800ae3cd13e378d9a21e59c146fbeadf8b3a0c7bab779d9f5ec46616600825a8",
+      "sha256": "1e55105393cf92a19e6f2d8c4d3a343c5b4d91443aedb04815b41fc5db50b731",
       "width": 1254,
       "height": 1254,
-      "bytes": 374346
+      "bytes": 356479
     },
     {
       "document": "037",
       "contentId": "LMB-ALM-039",
-      "revision": "r014",
-      "masterSha256": "93322cf28aa75d409d50c680f697ec8cd9f99275d8440ec8a778dddc76b90944",
+      "revision": "r022",
+      "masterSha256": "f2bb00ff12df55d968b2b8def2416fdc77506a6c3c6eb0549ef417039128d456",
       "image": "/editorial/almanac/page-037.jpeg",
-      "sha256": "5c97b92ca4458037e01c819d2a8e0cd2eeb8d6a8dbb0c64caae538a9e256147e",
+      "sha256": "04b5c65a65367b335a714479037cefa4aff412db515f3ab0018f72012c6fb3f0",
       "width": 1254,
       "height": 1254,
-      "bytes": 548701
+      "bytes": 525845
     },
     {
       "document": "038",
       "contentId": "LMB-ALM-040",
-      "revision": "r014",
-      "masterSha256": "f7208195ad6c2515c099c20a38fb15f12b1083d814890cffae8b167d3228801d",
+      "revision": "r023",
+      "masterSha256": "0d7ed1602576fa8fabfe0f68a1f32050d0c827ab8adafdbfae50cbdb558539b4",
       "image": "/editorial/almanac/page-038.jpeg",
-      "sha256": "e09a745bceb1235b3dcee2c2e4b544e6288452f848295f616c5ea1009201be17",
+      "sha256": "9d8cad178915124f8c7f3603cddfcc953a7bcf64089a529ea31c63e9da07cfa7",
       "width": 1254,
       "height": 1254,
-      "bytes": 569052
+      "bytes": 529951
     },
     {
       "document": "039",
       "contentId": "LMB-ALM-041",
-      "revision": "r014",
-      "masterSha256": "2fa0cec7ff810d3a907fbc43757e4845082c02ad0f7e681dec636100b038fb82",
+      "revision": "r022",
+      "masterSha256": "6d1a2ae86e204243c747a0c1c613a7695355f95d1d591f21efacd886884b87cb",
       "image": "/editorial/almanac/page-039.jpeg",
-      "sha256": "12da86491f3cb6b957d45ea760eaedadd7ab0c37e81d815685c6444cb7bcce65",
+      "sha256": "a52f4cb6926cc0d48270dfba6d5ec3fadd83d36b48e20270feba145c0a33798e",
       "width": 1254,
       "height": 1254,
-      "bytes": 537385
+      "bytes": 522469
     },
     {
       "document": "040",
       "contentId": "LMB-ALM-042",
-      "revision": "r014",
-      "masterSha256": "664d4d1d1e3041fc1be36f5bc0f4b72780ea71c601d9dc4d07a159a2cf33eaad",
+      "revision": "r022",
+      "masterSha256": "4e35ecb3b0a6ef46c5976abfdb5ed11f431352a1efe94f80dc49c40e2cae27cb",
       "image": "/editorial/almanac/page-040.jpeg",
-      "sha256": "b2a134ea68c3670d224d3f14282c6c3e43521ac39e4c66ea85720e00d6a8d906",
+      "sha256": "e1fccd82a11420bdb584ff1925d439ee9f49f8218c29a8c36fa394753c838110",
       "width": 1254,
       "height": 1254,
-      "bytes": 558161
+      "bytes": 542850
     },
     {
       "document": "041",
       "contentId": "LMB-ALM-043",
-      "revision": "r014",
-      "masterSha256": "94d75ed6afe4a16a2d7f851e815632538cc5ccf618ad85d5d8f73d9838ca4b81",
+      "revision": "r023",
+      "masterSha256": "df6dcfa38f5efd97e30acec4fcb5b525d0f9db8d10c0346a2c2a8e0c9cc668ff",
       "image": "/editorial/almanac/page-041.jpeg",
-      "sha256": "0352fcd098ae82dfa90349ff35221dd433aa7f04315eee9cdc19364ebe427177",
+      "sha256": "db307be476bb542c3e359746819cdc4caf01819250e35ac4585f5f051daf52a6",
       "width": 1254,
       "height": 1254,
-      "bytes": 522945
+      "bytes": 490412
     },
     {
       "document": "042",
       "contentId": "LMB-ALM-044",
-      "revision": "r014",
-      "masterSha256": "cd79c36130b650d48821b346b955e3e0e64995e4aa09720e4aed0da8571c2d25",
+      "revision": "r022",
+      "masterSha256": "7b0dd658a9c2490a0c19aedcbf2065e156c59e66a077ee14e806c79b943222b1",
       "image": "/editorial/almanac/page-042.jpeg",
-      "sha256": "c9859cdf48d0c266681b6a47912849eaf75423a26dd8457004ad48c317df35a0",
+      "sha256": "cca2d7d09cd27551865d5d83cf1218cda122245461b8b8c0697cecd6a0901f7e",
       "width": 1254,
       "height": 1254,
-      "bytes": 540887
+      "bytes": 516510
     },
     {
       "document": "043",
       "contentId": "LMB-ALM-045",
-      "revision": "r014",
-      "masterSha256": "5dd8433dfe04dcfbecb64e81378bf6ad1ab4d38cf1c1b2b166c68475cd058aa9",
+      "revision": "r022",
+      "masterSha256": "4deb80e5de66bee33a6d95f3cfab98703ebc54d58ce5357fda7f34dd7ce93ad1",
       "image": "/editorial/almanac/page-043.jpeg",
-      "sha256": "f274db52ba99c826ca7500f7bc51890939892c5b5ee9a09d9f072c50c903151f",
+      "sha256": "efe362660607672426b8475dcb81c49ee49aa208fb0270a12ef3570ae35432b3",
       "width": 1254,
       "height": 1254,
-      "bytes": 579661
+      "bytes": 553260
     },
     {
       "document": "044",
       "contentId": "LMB-ALM-046",
-      "revision": "r014",
-      "masterSha256": "d3b660e775320c40bd07bfb3255553c602100f6be47837eee0a597a571c77ddb",
+      "revision": "r022",
+      "masterSha256": "f71d9ea4619b297f9bf8cbf86c0a1a2a4c1c231be340e4d84104a03136e8c3d2",
       "image": "/editorial/almanac/page-044.jpeg",
-      "sha256": "3bfa6b5847f55ca1f75f2d9748459e1c5f978a18c1f08b486ddb4adaa16c35af",
+      "sha256": "807ee66b14638f4036ce95c1156835e2fc8ba1916edec4c4827bf91f28886fed",
       "width": 1254,
       "height": 1254,
-      "bytes": 599381
+      "bytes": 576973
     },
     {
       "document": "045",
       "contentId": "LMB-ALM-047",
-      "revision": "r014",
-      "masterSha256": "dc5c19b6e26803004db6bfcf615cbd0b05638aa90bea576ae9523d360c69a9dc",
+      "revision": "r022",
+      "masterSha256": "fa3d1f3042aee20400a91591225a343027983af01f04914e83175926e8138ba5",
       "image": "/editorial/almanac/page-045.jpeg",
-      "sha256": "6ceb8b771e807c9273f4537c125233edba0fe1d88b860ba4493f3ab5e61ca2d0",
+      "sha256": "b3bc03c90f020ef7d64fba70b342f26385d4d5f4efc69ce6dfbd043cbe5457ec",
       "width": 1254,
       "height": 1254,
-      "bytes": 574361
+      "bytes": 542945
     },
     {
       "document": "046",
       "contentId": "LMB-ALM-048",
-      "revision": "r014",
-      "masterSha256": "93a5786634b4c9dd5ad293698640d2dfe144e357277223014a51373d911888b9",
+      "revision": "r022",
+      "masterSha256": "ae4081d4d999628efb218e49e817c2a7069b19b5d6a06e7175fbb0a0b9654fee",
       "image": "/editorial/almanac/page-046.jpeg",
-      "sha256": "9a9e3c6d78b2c3c743158c53749251f88be727530a122c519aaaacdada30b0d7",
+      "sha256": "df3c40351b4393775173b14e7b0da4d550f5ad4db99b28c51ed6262291794b1c",
       "width": 1254,
       "height": 1254,
-      "bytes": 574534
+      "bytes": 564819
     },
     {
       "document": "047",
       "contentId": "LMB-ALM-049",
-      "revision": "r014",
-      "masterSha256": "df8a83ef6575fca3aaa2fc29378b60f2ec51458aa13b4902aa026a7b4cd172f7",
+      "revision": "r022",
+      "masterSha256": "00b24ddd069df8c2d183d0fac167b884c2088735302eaf616f3dc2d910ff1a8c",
       "image": "/editorial/almanac/page-047.jpeg",
-      "sha256": "9ebf570f229fcd4d28325a87f9bd77e94e1307393136673b5de77e5a474970a0",
+      "sha256": "b94563ed8e0a58cc362aff7c7e5136e63e0306e197c071814af7a7df930e66f0",
       "width": 1254,
       "height": 1254,
-      "bytes": 527667
+      "bytes": 504349
     },
     {
       "document": "048",
       "contentId": "LMB-ALM-050",
-      "revision": "r014",
-      "masterSha256": "6f5ffc57bb3dce4f66b0b9ed2530c7f87c36adf673e7632b9eba31c7e60b1fc0",
+      "revision": "r022",
+      "masterSha256": "21553133c1251d753694b37a5b5a08bbefd81428eb6ee6148db75bcc3fd9ad0c",
       "image": "/editorial/almanac/page-048.jpeg",
-      "sha256": "042d75d05e4a4e79e0207425b74276e11f276e134ba9a70eeefe0e5f6198bba2",
+      "sha256": "8287c28835987fc6a742b91eb4bf2e5fa401a0e1bf0e5660cfb9444c3cc198a8",
       "width": 1254,
       "height": 1254,
-      "bytes": 535625
+      "bytes": 519341
     },
     {
       "document": "049",
       "contentId": "LMB-ALM-051",
-      "revision": "r016",
-      "masterSha256": "43f28dd34553e47ec6ab5834d5919c12d05008c3f87244fbb0c361756e1e9512",
+      "revision": "r022",
+      "masterSha256": "a2fb64e4c0a6f9dc5c48dd981b4287f67465946afa30b502df7a855da105a62d",
       "image": "/editorial/almanac/page-049.jpeg",
-      "sha256": "5e12bb74c47ac90bee6a3be6b44ddca715e8e73fc5a9087e6716338d52b116e5",
+      "sha256": "7309b8db56021a6effc9ac251ddd97a8798084447b816705a062cb68b153dab8",
       "width": 1254,
       "height": 1254,
-      "bytes": 523486
+      "bytes": 509278
     },
     {
       "document": "050",
       "contentId": "LMB-ALM-052",
-      "revision": "r014",
-      "masterSha256": "a1144e14295766fcf0c6d7f893a157cbda523bed2bc3a149f4e876f4ae5c874b",
+      "revision": "r023",
+      "masterSha256": "c3848d6a892679263275a764b02bfd6d779acafc4388b264a8cf9ed3562b1e96",
       "image": "/editorial/almanac/page-050.jpeg",
-      "sha256": "cc1936a54d8e2d956256e78cc0a02de873fe8a41eefe4a0bfe4c26f0ddbfb914",
+      "sha256": "40c70aa26bbc13404ac2be2c79f184a03b2ffb24e12ae50c4234b8abf2e8fcef",
       "width": 1254,
       "height": 1254,
-      "bytes": 557099
+      "bytes": 541149
     },
     {
       "document": "051",
       "contentId": "LMB-ALM-053",
-      "revision": "r014",
-      "masterSha256": "e4c803f3a2100ef63212fb9cf9083a1cef01cdf4061278c6eb0c7d2112208e47",
+      "revision": "r022",
+      "masterSha256": "ffb0ac755d6e3fb2fe46c3bcaa1076a6cd3e6a99020ba4092dfba6d21f784951",
       "image": "/editorial/almanac/page-051.jpeg",
-      "sha256": "51f46c1ab61ede24f1fb8b713b5570c354eb16aad9e7f7aa322b8ed7329457ca",
+      "sha256": "6820498a0826f7a485e4e147399397f7a26dec1866543877651828fe5b53a344",
       "width": 1254,
       "height": 1254,
-      "bytes": 548844
+      "bytes": 528369
     },
     {
       "document": "052",
       "contentId": "LMB-ALM-054",
-      "revision": "r014",
-      "masterSha256": "3068f4a429b656b3b71a8c75b4580520a20fd467599093e9cbbac9603036c1c1",
+      "revision": "r022",
+      "masterSha256": "6e72cf99f0a870629cf7580bda0ca00952b36e52321f3e3a94844c470f879962",
       "image": "/editorial/almanac/page-052.jpeg",
-      "sha256": "d4e101c93603ff3560e121a0d8f9864f8c50ce3388b895009ed03e68dea7a298",
+      "sha256": "42288845a1c6ed921b197b145bc930d54a34631e796ed77ce0f0e003c881f3be",
       "width": 1254,
       "height": 1254,
-      "bytes": 547732
+      "bytes": 536360
     },
     {
       "document": "053",
       "contentId": "LMB-ALM-055",
-      "revision": "r013",
-      "masterSha256": "f10fd9dcad4931fea4c9644915a5024d3116934eef455381f29d4a699196f3e4",
+      "revision": "r023",
+      "masterSha256": "2dd4bf0a3b5b91eb31bf0aef177aa3c769b189175d6648d4f5ca1eb592b7fe6e",
       "image": "/editorial/almanac/page-053.jpeg",
-      "sha256": "5e608cc770aeeed41baabe234dde6c761b5f46742b486e42b3306cc226468cbe",
+      "sha256": "6478cfa90a9228ccab3cd67ee77fd9118c0475ab7f59bfbdbc74d8c41ceb83bd",
       "width": 1254,
       "height": 1254,
-      "bytes": 480880
+      "bytes": 482778
     },
     {
       "document": "054",
       "contentId": "LMB-ALM-056",
-      "revision": "r014",
-      "masterSha256": "d830795aba69c4721bf102bdb0812c65c2c0cd2b906b8c7496546de2446568fa",
+      "revision": "r022",
+      "masterSha256": "1bcb104eb20ed5b72f1645566a2793f317c7a2dbb2989255307eacdad4430ee3",
       "image": "/editorial/almanac/page-054.jpeg",
-      "sha256": "50939088ca314123fe69cba7d58c929312c6077f64f5a0feea2528c04530f7e4",
+      "sha256": "287ad1f4897ad35874609cee5504fe69d226e12f5e81a66aeae881f52f219812",
       "width": 1254,
       "height": 1254,
-      "bytes": 426412
+      "bytes": 411969
     },
     {
       "document": "055",
       "contentId": "LMB-ALM-057",
-      "revision": "r013",
-      "masterSha256": "7de542a054580897f9ee61fd827abbdfa011382216d96b0baada06654e023eec",
+      "revision": "r022",
+      "masterSha256": "1426e03a079e79ac57594f6d2344650eb1cf4efb51fdd04b9b7a74c46a17e08a",
       "image": "/editorial/almanac/page-055.jpeg",
-      "sha256": "380aa87982d4dda5d1029fe93e973380bdb9e6e0b77176831fce348a33bdbaf1",
+      "sha256": "567393447423cbd85589e7cb14a8675d85f99a1547c01bf3410865e9dd2efd9e",
       "width": 1254,
       "height": 1254,
-      "bytes": 478519
+      "bytes": 493643
     },
     {
       "document": "056",
       "contentId": "LMB-ALM-058",
-      "revision": "r013",
-      "masterSha256": "a3e8c721e807befcaa551a71f04ee5540e7d50cb80104b9020af1f17fd79576c",
+      "revision": "r022",
+      "masterSha256": "77bcd9fd9f59a817248a0e3960f7e1584c6ccb16ccf6d2a54240b7972456da28",
       "image": "/editorial/almanac/page-056.jpeg",
-      "sha256": "0c3bad409f85fe1ab033e01ba7af7339e693ba22cafe0bb4c4a43b0b37fbb5d8",
+      "sha256": "924592db9294efdf15fc651b72409424521216a50d24998df19555672dc3903d",
       "width": 1254,
       "height": 1254,
-      "bytes": 481977
+      "bytes": 498200
     },
     {
       "document": "057",
       "contentId": "LMB-ALM-059",
-      "revision": "r013",
-      "masterSha256": "821480fc8ed636da36576fa55efb21d8b52c2a69bc1e9e64fa51ead6edbe75d1",
+      "revision": "r022",
+      "masterSha256": "6baa85801b70dc269f1c8697e802e58af16662b5496b633e0af0222fcf7e121b",
       "image": "/editorial/almanac/page-057.jpeg",
-      "sha256": "9848cfb81e4bc545f8ee38287553f508be05756abc5809cb52b24c83b6c0a7fb",
+      "sha256": "3697d9555a302333e39c28888098d8783a4e0db6cdf3c7887afd91f105dd7afd",
       "width": 1254,
       "height": 1254,
-      "bytes": 464383
+      "bytes": 488535
     },
     {
       "document": "058",
       "contentId": "LMB-ALM-060",
-      "revision": "r013",
-      "masterSha256": "a4ef2e9fb8909dca9d3a41b89728938bda4b7f2516e66e2bd6fba0eb5762193d",
+      "revision": "r023",
+      "masterSha256": "4d180b9452d7f8e8b81a22246a8bfde137cb64123492cf701766c741790d7ac4",
       "image": "/editorial/almanac/page-058.jpeg",
-      "sha256": "b3a56c7761cedcffd28bda7f4848c5b26b8bd9f05a104ce71374c33c5b8355da",
+      "sha256": "7a975976cdce7a81c45d857a3c4039eeab85ee194c4937f881a074101c778ccb",
       "width": 1254,
       "height": 1254,
-      "bytes": 497584
+      "bytes": 516278
     },
     {
       "document": "059",
       "contentId": "LMB-ALM-061",
-      "revision": "r013",
-      "masterSha256": "7ebb8c1b364fc458d0160a266543d7365eb07b12b2d535a79199d2053447eb74",
+      "revision": "r023",
+      "masterSha256": "7f5ccb343f98a23bf1d4fa36826696eea7fc88be2a0ba9a37257dda8c79d6b06",
       "image": "/editorial/almanac/page-059.jpeg",
-      "sha256": "119d2c9c9ac490d1e96d448863aafe83f3555f43e2d4d6c9a7d6dcc8864121d3",
+      "sha256": "5e55e52d240998ee0ef160ee5d05f3c493a6a1ff58bcc467f6ae8f9fae46a653",
       "width": 1254,
       "height": 1254,
-      "bytes": 458962
+      "bytes": 495164
     },
     {
       "document": "060",
       "contentId": "LMB-ALM-062",
-      "revision": "r016",
-      "masterSha256": "ba71ac7a3ea87766d7049a8375c48d92027c31f405d525a0f6f884f966301b50",
+      "revision": "r023",
+      "masterSha256": "15a3966ecbdfa0323fa4d7f7f38c5009dab86b0e6075d557506e3fe17c9f05a5",
       "image": "/editorial/almanac/page-060.jpeg",
-      "sha256": "9495a50e8539023b470cc5c77489b069a65ce88b1922e74963604d13de537158",
+      "sha256": "1a829f28f2b068d8824e4c47d83746bca8e5d28a28e7b076378b569dad7f82d0",
       "width": 1254,
       "height": 1254,
-      "bytes": 517290
+      "bytes": 544524
     },
     {
       "document": "061",
       "contentId": "LMB-ALM-063",
-      "revision": "r016",
-      "masterSha256": "875de862ee28b8afdd5567b35ec922b1efac62f4dcda836868235b1eed513442",
+      "revision": "r022",
+      "masterSha256": "0427e89bfe4083a58f3c5e4b15fcd11c59d932f8b0e1dff743a48b3e35696e92",
       "image": "/editorial/almanac/page-061.jpeg",
-      "sha256": "59612494c3379f686f42ce1bf3d3bc39da43e42c16a3785a43d007f1eaa3b260",
+      "sha256": "f249dd33ec2733c226e2bc1b96d3daf13c51dabeaf6610ff5d579f2b1b93d643",
       "width": 1254,
       "height": 1254,
-      "bytes": 596800
+      "bytes": 608264
     },
     {
       "document": "062",
       "contentId": "LMB-ALM-064",
-      "revision": "r015",
-      "masterSha256": "9fa4bc3692b3b351e076d190f4ccbc52d270c31568c0762adcd53cfdfe14ccee",
+      "revision": "r022",
+      "masterSha256": "0defb3f3eda3453cf604322b82d09b9d0d01c1c111b851ab48ffb51f5ead3d52",
       "image": "/editorial/almanac/page-062.jpeg",
-      "sha256": "27d77726fc9681642a661bad92a2160defdecd9764361f721ce7d72e9f6fa667",
+      "sha256": "2ee3b4d7a901cf831697eabc9b0760247246b65745abf2d31f830e34b468603f",
       "width": 1254,
       "height": 1254,
-      "bytes": 531004
+      "bytes": 545342
     },
     {
       "document": "063",
       "contentId": "LMB-ALM-065",
-      "revision": "r014",
-      "masterSha256": "3e04f4b30f3d7a43fd71fc237bbcaf99b788a682bf4069fceb4d5936b6dd08c9",
+      "revision": "r022",
+      "masterSha256": "16a25e1f4e21ca4d959dc4ea91a99b60f958fc08b2a9ba8de04c245bb895846a",
       "image": "/editorial/almanac/page-063.jpeg",
-      "sha256": "fe1bc3bd4e08430dc2170d8a8420bf5390efab4793201d89f0b702d923d69131",
+      "sha256": "0e19bb907d94e256b8c1721b40b0551559b9db49568665ef505e787fe60c5774",
       "width": 1254,
       "height": 1254,
-      "bytes": 567399
+      "bytes": 587413
     },
     {
       "document": "064",
       "contentId": "LMB-ALM-066",
-      "revision": "r014",
-      "masterSha256": "c60a4c4402db346a0b4a4755b9e129ed299662f0d537e26330f32264324aa6b7",
+      "revision": "r022",
+      "masterSha256": "7c75f1d8c704b58fe47965cdf44723bef2f07d37e87fe128e9042a796a4a04fb",
       "image": "/editorial/almanac/page-064.jpeg",
-      "sha256": "3157032f45fb31916f0bd30fa595fad7744d8594e033302e1e53fe4607572a2b",
+      "sha256": "96f89f22d99459ebbd855df3107ce14687443c6251dd0dbe00e6333b484e56cd",
       "width": 1254,
       "height": 1254,
-      "bytes": 558498
+      "bytes": 581050
     },
     {
       "document": "065",
       "contentId": "LMB-ALM-067",
-      "revision": "r014",
-      "masterSha256": "e86cfd88e0c986c1bf2a41f148e3be109c688d025159e6f855eb8ef4349412ba",
+      "revision": "r022",
+      "masterSha256": "137b618fce5b9c75a2423d9926f89c1e3f1e35ad4b4372f42c7646a4b1d6003e",
       "image": "/editorial/almanac/page-065.jpeg",
-      "sha256": "6ed5ec8ec30b2c86fcc1702b348009efdfce2a494a3bdcbc3329c0a7b16e1b17",
+      "sha256": "d2bf66e5e1cf91eadf99fed7a2e8a41e0ec5529f6eacaf979dbb5e6459509f0a",
       "width": 1254,
       "height": 1254,
-      "bytes": 572559
+      "bytes": 599525
     },
     {
       "document": "066",
       "contentId": "LMB-ALM-068",
-      "revision": "r014",
-      "masterSha256": "4a2d0ce75eecd29d7db52bac52a43639b56cc0d004dcb9071a86ad218779a089",
+      "revision": "r022",
+      "masterSha256": "1ddae644b39ad9d7cc736b0ae713132e9594a8b922ad182ca3e727a2b9dd777c",
       "image": "/editorial/almanac/page-066.jpeg",
-      "sha256": "a4712f165b34255efc1303f754fde8f3ab17e62b34e1c28f07df7ae94793d034",
+      "sha256": "2c664331ff8ff843873198209ce2610a87e5fcf2055655ecd0863e38d53c2523",
       "width": 1254,
       "height": 1254,
-      "bytes": 582616
+      "bytes": 606391
     },
     {
       "document": "067",
       "contentId": "LMB-ALM-069",
-      "revision": "r014",
-      "masterSha256": "768a9ab4df7811e1d6f6bd6cf427fbd6f10d5f5bee13507641c9d3357a240a9c",
+      "revision": "r022",
+      "masterSha256": "f9b887ff29c9af4cb257abab4bc264f2f709aef84f79768d26109721371e666a",
       "image": "/editorial/almanac/page-067.jpeg",
-      "sha256": "b37168bff4340afe8563efa4ca119f7e423c7acf9e4d36a642d7d14528c35822",
+      "sha256": "40dc955f89cc0301bca51adc4bbab077e42d9cb90ed9541d56ee2fbd6e23178e",
       "width": 1254,
       "height": 1254,
-      "bytes": 616086
+      "bytes": 627080
     },
     {
       "document": "068",
       "contentId": "LMB-ALM-070",
-      "revision": "r014",
-      "masterSha256": "997081177a3da7a90c0f7c0e085561619cd77066b2587b6001619950a1b24d2a",
+      "revision": "r022",
+      "masterSha256": "1fac1da8a4e105f05af786c73d15752c18a48fdafca1ffe6458420f587cdc253",
       "image": "/editorial/almanac/page-068.jpeg",
-      "sha256": "6b05b8cf2b7e3e20ff1df6ca0384bc94e3532e7e35c5f90cf6888b5b58ead02d",
+      "sha256": "0464da6fbc83a38cbda5d2557ac9b00dcc87b4eba60d2b7c201e7ca0959eb7d7",
       "width": 1254,
       "height": 1254,
-      "bytes": 624764
+      "bytes": 636202
     },
     {
       "document": "069",
       "contentId": "LMB-ALM-071",
-      "revision": "r014",
-      "masterSha256": "17e22dc503c33ccfda9af16ed3be074b0dce1bba081860c325cf134ab63378cb",
+      "revision": "r022",
+      "masterSha256": "e69dc439f6ec0812dc5c533ae8c8ef57f10ea0e1328da50d2bbff4a2de6c258e",
       "image": "/editorial/almanac/page-069.jpeg",
-      "sha256": "1fc80623d803c76a9137e65f1fc71c55a70c3e5b3310222fea00fc4f7fbad9a0",
+      "sha256": "8c54fc0dce2eb18bab0350dd5bf637040375b46a00761f1da98a18939a88b846",
       "width": 1254,
       "height": 1254,
-      "bytes": 580695
+      "bytes": 598426
     },
     {
       "document": "070",
       "contentId": "LMB-ALM-072",
-      "revision": "r014",
-      "masterSha256": "4f9ce21c4a22bfcb924609d5e627bfc8d82297cf1052b69344d20f64a22fcb74",
+      "revision": "r022",
+      "masterSha256": "ea159ba42356d0faf10ba62330cd393b4ab91e00998245b8255c29eb83bd16fc",
       "image": "/editorial/almanac/page-070.jpeg",
-      "sha256": "a2804bff7ee5584bbe24ca0d8d308af2f93ae2272f0819894473842838baa304",
+      "sha256": "12254b852ed3a640f2513320786d80055d7afbd9c88339dd5a3938d78af7836a",
       "width": 1254,
       "height": 1254,
-      "bytes": 550145
+      "bytes": 563563
     },
     {
       "document": "071",
       "contentId": "LMB-ALM-073",
-      "revision": "r014",
-      "masterSha256": "c192cdc8900cd60337d3097a45e8ae51b19aed708d20a371af1c6514aa99d634",
+      "revision": "r022",
+      "masterSha256": "74fae779d5362baea2aa048497be44d4a4cf7d9435f3a2c5a001532d8f5b2427",
       "image": "/editorial/almanac/page-071.jpeg",
-      "sha256": "4c1b4a8353813d11eb2993c8a51a5dee9525b489d83c6360c00ffc3ceff9eb01",
+      "sha256": "88a03ebcf37c54aa6153466b4bc305c3e08513c0b778e0ecc3f96ce0146f81b8",
       "width": 1254,
       "height": 1254,
-      "bytes": 526432
+      "bytes": 540726
     },
     {
       "document": "072",
       "contentId": "LMB-ALM-074",
-      "revision": "r014",
-      "masterSha256": "e2e921ccfd03c67756ff88442789696f04decb28a1c609575f30ba050bc0e666",
+      "revision": "r022",
+      "masterSha256": "fcac29cdf8976e07dac974d367be93a64c004e2d31b1fad550abdf5f785fc1dd",
       "image": "/editorial/almanac/page-072.jpeg",
-      "sha256": "cac1edd642a5bd872af8e50f871da03dcc523bccfec30072ea4eb626cff06d16",
+      "sha256": "e3efaeaf359ecdc09f94a55d386050acc572d59b157625f518e111f0c2a9b630",
       "width": 1254,
       "height": 1254,
-      "bytes": 587001
+      "bytes": 607329
     },
     {
       "document": "073",
       "contentId": "LMB-ALM-075",
-      "revision": "r014",
-      "masterSha256": "d9a5a8e616848da70aacf17a16b97f73951e9d36b45dabea499a9cfc3847db5f",
+      "revision": "r022",
+      "masterSha256": "3f7fc12afa743954ebb416f2381397363b03229c11092fa9bfba2252dd5a7741",
       "image": "/editorial/almanac/page-073.jpeg",
-      "sha256": "5cd854333397848a213401324e174d8babc4a3bf59a1c60a1c2ee700976b651f",
+      "sha256": "063c8e1d216335da98b1923c14e414e9ffb6c7587d5718f4d10ddf2afb7479be",
       "width": 1254,
       "height": 1254,
-      "bytes": 564227
+      "bytes": 580713
     },
     {
       "document": "074",
       "contentId": "LMB-ALM-076",
-      "revision": "r013",
-      "masterSha256": "950719e1aba884a44562cc383fa9ef2acf3afe1cd1a3d828847a15a72ed4de94",
+      "revision": "r022",
+      "masterSha256": "b835d3ff4d2cda9c9031a4c720cb112f9a2e910f0841dda87c44c3b9fcf4bb4e",
       "image": "/editorial/almanac/page-074.jpeg",
-      "sha256": "47c3773c6ac3ef64d1f7a14120c5efa34d50929b95a416a0b18fe69649a9d693",
+      "sha256": "f3404d5922bc6f390d6f72a8e0b26e10c7e1d6b025e90788129cf3a96e72a644",
       "width": 1254,
       "height": 1254,
-      "bytes": 554550
+      "bytes": 579475
     },
     {
       "document": "075",
       "contentId": "LMB-ALM-077",
-      "revision": "r013",
-      "masterSha256": "11cf4fa8890387499ab2f7f81219cbbe407f719e579163d59a1e58103d927d6d",
+      "revision": "r022",
+      "masterSha256": "2be25f57326ec03738add77e4f8f5fdf3f8b5f73bbf84a05a5bf6a666c5eb843",
       "image": "/editorial/almanac/page-075.jpeg",
-      "sha256": "4c5737def2ce4dd8d7fb35aced2ecb443ceb9cf0918476eaef659e50ca769128",
+      "sha256": "5a13512780533c585abeefa5e92b2c644f87cb36b5f497417736bf13dee3fcf3",
       "width": 1254,
       "height": 1254,
-      "bytes": 552708
+      "bytes": 580722
     },
     {
       "document": "076",
       "contentId": "LMB-ALM-078",
-      "revision": "r013",
-      "masterSha256": "5b821c3ded6c2d888a17aa96f4097cebecdf62519e9e23161ed7e0411968fe51",
+      "revision": "r022",
+      "masterSha256": "3ebd6f2b37fa72d02bea13a8fdea1f4a99a7785e4c6e7f3d3d7fd7a348825cbe",
       "image": "/editorial/almanac/page-076.jpeg",
-      "sha256": "f6d032d429cb8a9dc6db0b32440ddcaeffe7c9c5c7edf99396fcd0388707f6bb",
+      "sha256": "98a26110af818d23cb66f57d46cee2beca3135801d269a4e33879d9f9df7c2eb",
       "width": 1254,
       "height": 1254,
-      "bytes": 533818
+      "bytes": 562444
     },
     {
       "document": "077",
       "contentId": "LMB-ALM-079",
-      "revision": "r013",
-      "masterSha256": "19c3ce4dd315a6ac5d9f319fdfcdcc08f600ca8875c8c22e81bdf62ca31d5387",
+      "revision": "r022",
+      "masterSha256": "8c6618666edffb32af8cfb79023e09ff248a0b5f69411688feec9e2fe9065aa2",
       "image": "/editorial/almanac/page-077.jpeg",
-      "sha256": "46bf98741e56b031a644dffc44a700a60ccdd4537ef4bdaa2a2d028554105c81",
+      "sha256": "bb1cfa80e26003a239d576383d0f9f89385b6182533449a90e2627e43abcfe5a",
       "width": 1254,
       "height": 1254,
-      "bytes": 541721
+      "bytes": 564830
     },
     {
       "document": "078",
       "contentId": "LMB-ALM-080",
-      "revision": "r013",
-      "masterSha256": "1dbd0ee13de16129a4d55fbc987204abe5901b3643c18188b2deb17d6c3b9849",
+      "revision": "r022",
+      "masterSha256": "dddc5a54356c1eced25df8b4ea0682bcfa9259c0b99aa5a4f65a2afcdc3af9dc",
       "image": "/editorial/almanac/page-078.jpeg",
-      "sha256": "e75347cdf62b33ccf42931b6a68af7e76df2339422781d11c07cc2c1a1804485",
+      "sha256": "07b885329e0792a7f37fcac2b442dd1a44a508e2bcc88b91acf7b75b10d6453b",
       "width": 1254,
       "height": 1254,
-      "bytes": 531157
+      "bytes": 549572
     },
     {
       "document": "079",
       "contentId": "LMB-ALM-081",
-      "revision": "r013",
-      "masterSha256": "d4ba95a7c398e4e119a719b1dcc04dde7a396c408a33a7579e08384b19da5b49",
+      "revision": "r022",
+      "masterSha256": "4d389af4ebbfa41040a3e940f7b44c8e55cd71ecac42df08e519217269538a85",
       "image": "/editorial/almanac/page-079.jpeg",
-      "sha256": "73109ff770f243ae56f8573a7a95a7cf7e12840dbd64db295e57b62eb24fad1d",
+      "sha256": "6b55a0e2a480b5e1f254dfb93c7f5dad2e11e6843271816c89516b80d285ecb9",
       "width": 1254,
       "height": 1254,
-      "bytes": 561211
+      "bytes": 588649
     },
     {
       "document": "080",
       "contentId": "LMB-ALM-082",
-      "revision": "r013",
-      "masterSha256": "6b58164f368d7a189d771b15312b577769932b1404b23e9901968f59290378a5",
+      "revision": "r022",
+      "masterSha256": "ce0938afe5a571bc0acbf1023b351f27ddc8afe510e75882fca67b99bf2a9b3e",
       "image": "/editorial/almanac/page-080.jpeg",
-      "sha256": "6eb1aec3666c81900c66d5b020a38831481c3101cba0423ebd6ea15654cdc2dd",
+      "sha256": "1f3367fe774f36cd258765e1c6490f7445d19f0a32f71e3f3511f94092b78d87",
       "width": 1254,
       "height": 1254,
-      "bytes": 572388
+      "bytes": 599627
     },
     {
       "document": "081",
       "contentId": "LMB-ALM-083",
-      "revision": "r013",
-      "masterSha256": "a0644f8ee1cbc05c9239abf311ddf7e64b47b4731f7363a6b3d222080274c863",
+      "revision": "r022",
+      "masterSha256": "f711a41574cf744ad82485a91887b7c98cbd03f190d9942b95a9bbfe06ca574f",
       "image": "/editorial/almanac/page-081.jpeg",
-      "sha256": "24314836c4597421ef18852089d6e0f4a03f024ae7b51e14432e7eae1b10faa9",
+      "sha256": "4f2a469d4f43bb67ade1a9bc127e2db577e88bd5f0f3cfa5fb007e5075835a8d",
       "width": 1254,
       "height": 1254,
-      "bytes": 566877
+      "bytes": 598116
     },
     {
       "document": "082",
       "contentId": "LMB-ALM-084",
-      "revision": "r014",
-      "masterSha256": "7e080667161f3555ce7cfd0779a5f324880948e61f1f411223c73d7aec6d9f63",
+      "revision": "r022",
+      "masterSha256": "747a15febac2546220e31a1935b6c35e662715737e0a87ab7a8a1de0fab70a35",
       "image": "/editorial/almanac/page-082.jpeg",
-      "sha256": "835acf246b6d72421fe29181d824368272a889e4f72bce02b8aa236a43aad411",
+      "sha256": "e35107a1763b84f1dde5e9d9132b6e2fcaa588131adaad2880d71f96c63bc364",
       "width": 1254,
       "height": 1254,
-      "bytes": 577583
+      "bytes": 602360
     },
     {
       "document": "083",
       "contentId": "LMB-ALM-085",
-      "revision": "r013",
-      "masterSha256": "3bc0e236761ac1c7f5a8e689392b95073d31731b81c553b4890ac9785856d6c4",
+      "revision": "r022",
+      "masterSha256": "ab46290754627c7c20d98ee06302adfee20b7434285764efda584262928b51a9",
       "image": "/editorial/almanac/page-083.jpeg",
-      "sha256": "227c95ef5252688c7a10db7d174614c3671e42967a47154cd86e748c9a668797",
+      "sha256": "2c4877a8fe2609cacd54a92fbbdeaa0b38135c831a8eecc696223189d8a9bc62",
       "width": 1254,
       "height": 1254,
-      "bytes": 512655
+      "bytes": 540076
     },
     {
       "document": "084",
       "contentId": "LMB-ALM-086",
-      "revision": "r013",
-      "masterSha256": "585e81d43894f0704e5c0b6ee45c8a975b05e3307c2d9d0c1c2c6afaf5f08272",
+      "revision": "r022",
+      "masterSha256": "063c26e85d7ee841af94d5fd115289b9649eaeba6398acb8f5420b4867144488",
       "image": "/editorial/almanac/page-084.jpeg",
-      "sha256": "691b7dde69ff2484c10c17fdc01ad086c92c73e77a4c6b66c18d61c01fcc9709",
+      "sha256": "dcda40503756125a1b1c38ce7750223ce6737a3f5809a36ea3e096baf46111c6",
       "width": 1254,
       "height": 1254,
-      "bytes": 528665
+      "bytes": 562920
     },
     {
       "document": "085",
       "contentId": "LMB-ALM-087",
-      "revision": "r013",
-      "masterSha256": "67abb7e419bc642916f699523cadf9e381eb8493b28de15d1eb4b53b5cc8871d",
+      "revision": "r022",
+      "masterSha256": "4b446b548ce17c1461438597a576eef73ecee17abdda70afc280f0314d23ae9b",
       "image": "/editorial/almanac/page-085.jpeg",
-      "sha256": "b092568b444668c0e6999a7f8e7a808d6ab13de40f6f6c67193127a4135e5460",
+      "sha256": "48697f34afa3b1845884b5d300a66b88d35476206cb28106f2742eab4061c2d5",
       "width": 1254,
       "height": 1254,
-      "bytes": 543004
+      "bytes": 572112
     },
     {
       "document": "086",
       "contentId": "LMB-ALM-088",
-      "revision": "r014",
-      "masterSha256": "c79605700491fe36b9d8c1ce056e6ffecad9c187da07f77d022821136c6438a1",
+      "revision": "r022",
+      "masterSha256": "5a16b1a64561e549e8f001b0eb54504548058449a8e9bd8df3676627c0e6d25a",
       "image": "/editorial/almanac/page-086.jpeg",
-      "sha256": "ba35b1ad93a3f7d1889b7b94392727672a6bab31f235d83c7d68c2f9265a2872",
+      "sha256": "77d805212ee1827b3c610bb66f39814559f38fb6d007d31ade507543d1a2e7aa",
       "width": 1254,
       "height": 1254,
-      "bytes": 486392
+      "bytes": 524467
     },
     {
       "document": "087",
       "contentId": "LMB-ALM-089",
-      "revision": "r013",
-      "masterSha256": "9bda015ffe50be03b9e804c5ce5330687bcf39770559f11eabe74058517c2cf0",
+      "revision": "r022",
+      "masterSha256": "e8b241eb8e78ec4cfd5d1d31a7bd2032c5d03c78414ce90e8cc22857117d517f",
       "image": "/editorial/almanac/page-087.jpeg",
-      "sha256": "4d6c4abef0ef3c6edf6c53782d6d1f77606018980404011221635d5d767868f8",
+      "sha256": "58955664f9c400aaecdaa35acdfe121b29d606a1c999ee11786b46e1faca6f70",
       "width": 1254,
       "height": 1254,
-      "bytes": 467482
+      "bytes": 502933
     },
     {
       "document": "088",
       "contentId": "LMB-ALM-090",
-      "revision": "r013",
-      "masterSha256": "8949f1ed112dc3058dc33d8b2c4ed1ee81064f1766eac6b155512606bf5e0c7e",
+      "revision": "r022",
+      "masterSha256": "183222096bcfb6dc6040cc6ebf638d4ad48abeaaf1798770020789181a03c3b3",
       "image": "/editorial/almanac/page-088.jpeg",
-      "sha256": "d66ea5cbe0a863130396e3e25d3cd4ffe041edda6a8dd66aefb187b6e4b02317",
+      "sha256": "134b7f03124a6d4366e8f8d95f70a38f4e25f575ada43275cddab15ad8ac0bd9",
       "width": 1254,
       "height": 1254,
-      "bytes": 517179
+      "bytes": 552538
     },
     {
       "document": "089",
       "contentId": "LMB-ALM-091",
-      "revision": "r016",
-      "masterSha256": "d43378838b2981a62a463902c3cb309c708ff11de104c977d2976256286ee5d0",
+      "revision": "r022",
+      "masterSha256": "44d994a752c0e84b5d431e1d3056e678a5d887379557d246726c75a6e7a9171a",
       "image": "/editorial/almanac/page-089.jpeg",
-      "sha256": "9342126f03005e5d2a0058908ef9e674cfab0199f54262c3e21ccc50bc0ad13b",
+      "sha256": "3a90fcec53a38926803ddb784ee997d0788fe79f2fd7dca15946fc00d983a3f3",
       "width": 1254,
       "height": 1254,
-      "bytes": 519211
+      "bytes": 551154
     },
     {
       "document": "090",
       "contentId": "LMB-ALM-092",
-      "revision": "r014",
-      "masterSha256": "350f4d85704fc9826c8605b2c9fa8d7f958ea56a4845d0ca83dc0c33e32404d2",
+      "revision": "r022",
+      "masterSha256": "651872ef0fb68338db719d736120c7667d774cc49b1cad8e9237bf56cca734bd",
       "image": "/editorial/almanac/page-090.jpeg",
-      "sha256": "86fdbd23dd8683dde414e8e25450a2dd8c97a61ffcb6bd0afdda378d1016c186",
+      "sha256": "617a5f70d42f7ff4e3043e6f2b6723d523d57382d46d2f76d62a64b5b35b3c3a",
       "width": 1254,
       "height": 1254,
-      "bytes": 567033
+      "bytes": 601132
     },
     {
       "document": "091",
       "contentId": "LMB-ALM-093",
-      "revision": "r014",
-      "masterSha256": "479c4775010b4782706b664b20e613186e4b237e6e1c5167c96c611164c7696a",
+      "revision": "r022",
+      "masterSha256": "60aba90527f0a6cb79d2ad51b78b81b9970928288bcfa88f95100e6ddf16929e",
       "image": "/editorial/almanac/page-091.jpeg",
-      "sha256": "edab23156dd767d4109e5c35a384b8b883c6989233c51ab998e74d386f89840b",
+      "sha256": "1c4d41a7399fddc87252f6b6a21d649291b32688bec86ac6733368b6dedebe78",
       "width": 1254,
       "height": 1254,
-      "bytes": 566856
+      "bytes": 598222
     },
     {
       "document": "092",
       "contentId": "LMB-ALM-094",
-      "revision": "r014",
-      "masterSha256": "af85ff0ae4ede79ecfa4c5e804711decb4cd5af2e031e8018c3630361db67075",
+      "revision": "r023",
+      "masterSha256": "a2139442890c4a0c1d425d481e1c60e543c534dba07421e71e1f9561a03f1e73",
       "image": "/editorial/almanac/page-092.jpeg",
-      "sha256": "db46a9eb54a1291dd66e0fd5b9b801d7d757c8c113424a651e956d159ac1a838",
+      "sha256": "86a0bf280f32b1935f3866f6c4948315e1d2eadd0cfc3f6fac2dbae94debfba6",
       "width": 1254,
       "height": 1254,
-      "bytes": 581034
+      "bytes": 588195
     },
     {
       "document": "093",
       "contentId": "LMB-ALM-095",
-      "revision": "r014",
-      "masterSha256": "b6997b31aaa3768d85d73533afd02b3bb57be264c75a3c780f247d9aae21400c",
+      "revision": "r023",
+      "masterSha256": "07647a93f3243be463bf0e957f073ad2d547a3f4b880e5210a88819b529222e0",
       "image": "/editorial/almanac/page-093.jpeg",
-      "sha256": "9c2faecea5413bf1b1aa12ad5ee359b2a7ef81ef4c2f2373f68e4f65332fd8fb",
+      "sha256": "81de9ef3fc1cdca57841225039f3665acc9fd032057add290df656c62cc5e393",
       "width": 1254,
       "height": 1254,
-      "bytes": 632294
+      "bytes": 658292
     },
     {
       "document": "094",
       "contentId": "LMB-ALM-096",
-      "revision": "r014",
-      "masterSha256": "37e1ce0202b9572d31fe31fe80db8bc76f77cd835c82a2d8f79d6d51b2105e79",
+      "revision": "r022",
+      "masterSha256": "7a42c632337ed78642c5e72488dbc4c5c4b65e937fe07fc01120aa7dc4bdd591",
       "image": "/editorial/almanac/page-094.jpeg",
-      "sha256": "e07ba58aee307a716af69bcb3725a02a41a8a80953a826b0472fd3b72ca3f807",
+      "sha256": "c6d9246dd5d64fbf846e4111ccca436fbac2dedbdae29d9769c8d3d2896474c4",
       "width": 1254,
       "height": 1254,
-      "bytes": 648060
+      "bytes": 676274
     },
     {
       "document": "095",
       "contentId": "LMB-ALM-097",
-      "revision": "r014",
-      "masterSha256": "23d055d7f9d919ba1c90c2d9f4552add8d8f9174e90f21bb683eae03c494e1be",
+      "revision": "r022",
+      "masterSha256": "ca1841174aa8428833bcbdd99c8c4c84f4f3000ff49cc72b66d321579745fece",
       "image": "/editorial/almanac/page-095.jpeg",
-      "sha256": "b13c4b8499129b505f3dd96f9519ba60e58a103526518967c48008f3c532e6fd",
+      "sha256": "4b6d706df0424daf75dc0f4df744c1ed6e6c8929b57a03aa06721c275e151911",
       "width": 1254,
       "height": 1254,
-      "bytes": 586235
+      "bytes": 619290
     },
     {
       "document": "096",
       "contentId": "LMB-ALM-098",
-      "revision": "r014",
-      "masterSha256": "125a7af5bd73ea9c0c5fd79fddcf5b8202ffa1d9f570a4a1a606aa8e0b1a26f2",
+      "revision": "r022",
+      "masterSha256": "ca6a54e1a49d85179f49e4e33c6d48971c0d9e1bc268424f9bbe8767b5dae0b4",
       "image": "/editorial/almanac/page-096.jpeg",
-      "sha256": "f0793ba96ad8a515e768c60480a01bf3289b8ba0328ec2f6cd267196a1a968cd",
+      "sha256": "cb47cdeedccd681cb0a8339fe53147367e700ac68d89ecdbae76cc82d8bc1c8c",
       "width": 1254,
       "height": 1254,
-      "bytes": 618003
+      "bytes": 662092
     },
     {
       "document": "097",
       "contentId": "LMB-ALM-099",
-      "revision": "r014",
-      "masterSha256": "0135935264fbe17ab3dbaabd539483b392fc66dbf70c98487684a1a6bddf59b2",
+      "revision": "r022",
+      "masterSha256": "1b203a024480d43e98df1a429db621a6c9a1a809d2b7c09b3cfd324c48bdb5b5",
       "image": "/editorial/almanac/page-097.jpeg",
-      "sha256": "70eb3b918167bf4fe97daad0f002f24f1d575548b487a0935e0faad7b06861f4",
+      "sha256": "22727c5c520a3c7e515390451612edd6f6f2d64c02b1f3a176c55abee42cf97e",
       "width": 1254,
       "height": 1254,
-      "bytes": 596277
+      "bytes": 602225
     },
     {
       "document": "098",
       "contentId": "LMB-ALM-100",
-      "revision": "r014",
-      "masterSha256": "fffcedb557bca0d4c389179ef35237271218530e2533f81ee9700f5cd34ee18b",
+      "revision": "r022",
+      "masterSha256": "7aaf70f90573af1b902b23b3cdbfd53e7ecf492995b010bc34f465bd645bb4af",
       "image": "/editorial/almanac/page-098.jpeg",
-      "sha256": "52bc2e5388c4327426ac2aaa8aa0c4c393703b51b4afb8e3cc6c4053db568949",
+      "sha256": "9295750fd3218d43fbbc4e7a825ffa997ce97c86e94c65aa762d1778484b9b63",
       "width": 1254,
       "height": 1254,
-      "bytes": 560792
+      "bytes": 566266
     },
     {
       "document": "099",
       "contentId": "LMB-ALM-101",
-      "revision": "r013",
-      "masterSha256": "a1bfde5ae0fa323809f71fc9a603ad33ab91bf4b0946768cec2ea61c6c65bb69",
+      "revision": "r022",
+      "masterSha256": "75e1cfe6353b79d582b90ef93d12ae30a39ae1d90e7fea6a13693efa0a456438",
       "image": "/editorial/almanac/page-099.jpeg",
-      "sha256": "a40af15fb3186b8b78f68c7785f5b41ed14e3c1a083423c61a9c7d85fc1f9c79",
+      "sha256": "37b260db2fbbc91b9f23bd2f5860dcbc28385ccde530d47fdda0ea7e8f997ff3",
       "width": 1254,
       "height": 1254,
-      "bytes": 460704
+      "bytes": 468328
     },
     {
       "document": "100",
       "contentId": "LMB-ALM-102",
-      "revision": "r013",
-      "masterSha256": "ee9d8bb0844520ea5c380823e1cf38ec7a3b2b73d1adf889484879b8de509665",
+      "revision": "r022",
+      "masterSha256": "4985410e9b8e5a386fec2d7009810b60ab8428da2d76b55809bb41be1351fad8",
       "image": "/editorial/almanac/page-100.jpeg",
-      "sha256": "a240dc62d2dd1b1d14032898f71bb72b5c11298be2bf7d4b4f59740358e6e25a",
+      "sha256": "29a44a978e3c966d8e6dea8242872fc3b35cc6612c85a0f0da2a15004b73772a",
       "width": 1254,
       "height": 1254,
-      "bytes": 538106
+      "bytes": 550429
     },
     {
       "document": "101",
       "contentId": "LMB-ALM-103",
-      "revision": "r013",
-      "masterSha256": "354f216f5278b1c18056b4912eea86475983f6cae3f1f0509868d580767b608d",
+      "revision": "r022",
+      "masterSha256": "26046b42edf651b3ff8c0304f47ef1d3092f2f687e5bf52e01ed3ad7efa9390d",
       "image": "/editorial/almanac/page-101.jpeg",
-      "sha256": "2f7f6aff49888832df768bb5072f16f897e72ce6fcb47e024338acce84b299bd",
+      "sha256": "6b6465690a4e602ce8a3e71f66b9761b9481cd3e933aa4a3c1a1456ec7cafe98",
       "width": 1254,
       "height": 1254,
-      "bytes": 462609
+      "bytes": 476018
     },
     {
       "document": "102",
       "contentId": "LMB-ALM-104",
-      "revision": "r013",
-      "masterSha256": "1223970e97cbca4c908bf69ef18fac8b3588a0045249eb34a59fff7be2b1e585",
+      "revision": "r022",
+      "masterSha256": "066f444bead9cf165f6c21ca7937dc610adb03902fcf773c6223ddfbc582d2cd",
       "image": "/editorial/almanac/page-102.jpeg",
-      "sha256": "d9208e0c7795cca3363ac85a0c9dee9112d5ed75d5fa15bbc7b1ed4031cd6941",
+      "sha256": "89118fb2ea8a767721d04cc5ef84b1199350571e75c3d6e6ea83579ac54f90ed",
       "width": 1254,
       "height": 1254,
-      "bytes": 460709
+      "bytes": 476312
     },
     {
       "document": "103",
       "contentId": "LMB-ALM-105",
-      "revision": "r013",
-      "masterSha256": "9e27c854b384bf4fafc46270eabadf8b803bd233d313a0714ee8b334a1621b93",
+      "revision": "r022",
+      "masterSha256": "312c2cd1904244ac59194d6a816e33a9e2a52ba928a27e840e5e6fbdeedb2b7e",
       "image": "/editorial/almanac/page-103.jpeg",
-      "sha256": "53b7e2a914b058f7ec6863f12075e24a8a1bbf83276bf4e074cd539041ec5444",
+      "sha256": "7c5bcffb220f38b78e4fd6d338b7c514e3546834d6a275d80d29a134d5943201",
       "width": 1254,
       "height": 1254,
-      "bytes": 429519
+      "bytes": 448714
     },
     {
       "document": "104",
       "contentId": "LMB-ALM-106",
-      "revision": "r013",
-      "masterSha256": "b5d1c3501aac4025c501b1118b20835eb7665755ae9260b4bdb3e729370d7496",
+      "revision": "r022",
+      "masterSha256": "279caa1cacbe9816b7ad131dbeb9eb1e809ce6d285c93563197aa0c5c06500bc",
       "image": "/editorial/almanac/page-104.jpeg",
-      "sha256": "ec9e4fa6e439cdb554682269933db1c2d4708401dfbcdc7cb079427695e1cb00",
+      "sha256": "9b0a8352e7a2e14ba29129111bcd5004a1bfe6b1249bb9dfecd11afeecf84352",
       "width": 1254,
       "height": 1254,
-      "bytes": 397966
+      "bytes": 417292
     },
     {
       "document": "105",
       "contentId": "LMB-ALM-003",
-      "revision": "r016",
-      "masterSha256": "3cd2d16d875fe163dc152fbb5ef5ded581d52b9c2e5591988b2c53af2fc7824a",
+      "revision": "r023",
+      "masterSha256": "b14bc19b3fa21bb6b679800036cdf4175666ca5591d2d32cc039b0caf8582d40",
       "image": "/editorial/almanac/page-105.jpeg",
-      "sha256": "d866a7e02745c1533f076218b979fafb2a8353412d2c92dc49b22fc4d1999b2b",
+      "sha256": "0c4e8ce860e19848ad35d012a41956ced70a8b89debec29af02f70c547a169ce",
       "width": 1254,
       "height": 1254,
-      "bytes": 444397
+      "bytes": 455945
     }
-  ]
+  ],
+  "reviewedMasterManifestSha256": "91df0b07e7104e992fe68b84fd1258e6194da30c8adc84af2ac1cfe6259c6682",
+  "correctionsFromPreviousReview": {
+    "revision": "r022",
+    "corrected": 23,
+    "reusedUnchanged": 82
+  }
 }
